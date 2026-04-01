@@ -276,44 +276,41 @@ export default function TranslateWorkbench() {
             </div>
 
             {/* Comparison Canvas */}
-            <div className="flex-1 flex gap-6 p-10 bg-[#ebeef1] overflow-hidden">
-              {/* Original View */}
-              <div className="flex-1 flex flex-col gap-2">
-                <span className="text-[10px] font-bold text-[#5a6064] uppercase tracking-widest text-center">
-                  Original ({sourceLang})
-                </span>
-                <div className="flex-1 relative bg-white shadow-xl rounded-lg overflow-hidden flex items-center justify-center" style={{ transform: `scale(${zoom / 100})`, transformOrigin: "center" }}>
-                  <img
-                    alt="Original Comic Panel"
-                    className="max-w-full max-h-full object-contain"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrqwCvr4u6lLJro2yZnUVvS_GxBmnt4S-3952C8fh_1XNIBpXnK4igZgLtDC0NTtJaI4ArH9Y_ISpTFIDyynWlHr06LWuTn_OOEg5kXFMPIVIFhNozBhDsv23nzJjzeoLS7pe--GA0XfDv_YPqW4CwOCHw56RwozYwvYL-iTno2HB8Fmi1wR8-cRk-7qeNrRVN5sp_22VzPwbv9oPQP5XgiJ0X0KgDDv1AjR9NGfKz0pfTVeKV65SSnPNpUmlnjRYq1KVGoCQ"
-                  />
-                  <div className="absolute inset-0 bg-black/5"></div>
+            <div className="flex-1 flex gap-2 px-4 py-8 bg-[#ebeef1] overflow-hidden">
+              {/* Original：整组靠右，标题与图片同一竖直中轴 */}
+              <div className="flex flex-1 min-h-0 min-w-0 justify-end">
+                <div className="flex h-full min-h-0 max-w-full flex-col items-center gap-2 self-end">
+                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-widest text-[#5a6064]">
+                    Original ({sourceLang})
+                  </span>
+                  <div
+                    className="relative flex max-w-full min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
+                    style={{ transform: `scale(${zoom / 100})`, transformOrigin: "right center" }}
+                  >
+                    <img
+                      alt="Original Comic Panel"
+                      className="max-h-full max-w-full object-contain"
+                      src="/08_original.jpeg"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Translated View */}
-              <div className="flex-1 flex flex-col gap-2">
-                <span className="text-[10px] font-bold text-[#0053dd] uppercase tracking-widest text-center">
-                  Translated ({targetLang})
-                </span>
-                <div className="flex-1 relative bg-white shadow-xl rounded-lg overflow-hidden flex items-center justify-center" style={{ transform: `scale(${zoom / 100})`, transformOrigin: "center" }}>
-                  <img
-                    alt="Translated Comic Panel"
-                    className="max-w-full max-h-full object-contain opacity-40 mix-blend-multiply"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrqwCvr4u6lLJro2yZnUVvS_GxBmnt4S-3952C8fh_1XNIBpXnK4igZgLtDC0NTtJaI4ArH9Y_ISpTFIDyynWlHr06LWuTn_OOEg5kXFMPIVIFhNozBhDsv23nzJjzeoLS7pe--GA0XfDv_YPqW4CwOCHw56RwozYwvYL-iTno2HB8Fmi1wR8-cRk-7qeNrRVN5sp_22VzPwbv9oPQP5XgiJ0X0KgDDv1AjR9NGfKz0pfTVeKV65SSnPNpUmlnjRYq1KVGoCQ"
-                  />
-                  {/* Floating Text Overlays */}
-                  <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-3/4 p-3 bg-white/90 backdrop-blur-sm rounded-lg border-2 border-[#0053dd] shadow-xl cursor-move hover:shadow-2xl transition-shadow">
-                    <p className="text-center font-bold text-lg leading-tight text-[#2d3337]">Wait! I can explain everything!</p>
-                    <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#0053dd] text-white rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-1/4 right-8 w-1/3 p-2 bg-white/90 backdrop-blur-sm rounded-lg border-2 border-[#0053dd] shadow-xl cursor-move hover:shadow-2xl transition-shadow">
-                    <p className="text-center font-bold text-sm leading-tight text-[#2d3337] italic">He... he did what?!</p>
+              {/* Translated：整组靠左，标题与图片同一竖直中轴 */}
+              <div className="flex flex-1 min-h-0 min-w-0 justify-start">
+                <div className="flex h-full min-h-0 max-w-full flex-col items-center gap-2 self-start">
+                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-widest text-[#0053dd]">
+                    Translated ({targetLang})
+                  </span>
+                  <div
+                    className="relative flex max-w-full min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
+                    style={{ transform: `scale(${zoom / 100})`, transformOrigin: "left center" }}
+                  >
+                    <img
+                      alt="Translated Comic Panel"
+                      className="max-h-full max-w-full object-contain"
+                      src="/08_processed.jpg"
+                    />
                   </div>
                 </div>
               </div>
@@ -324,14 +321,6 @@ export default function TranslateWorkbench() {
           <section className="h-32 shrink-0 flex gap-4">
             {/* Action Column */}
             <div className="w-48 flex flex-col gap-2">
-              <button className="flex-1 flex items-center justify-start px-4 gap-3 bg-[#dee3e7] text-[#2d3337] font-bold rounded-xl hover:bg-[#d5dbdf] transition-all group text-xs">
-                <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center shadow-sm group-hover:bg-[#0053dd] group-hover:text-white transition-colors">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                  </svg>
-                </div>
-                <span>Upload Artwork</span>
-              </button>
               <button className="flex-1 flex items-center justify-start px-4 gap-3 bg-[#0053dd] text-white font-bold rounded-xl hover:opacity-90 transition-all text-xs">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
