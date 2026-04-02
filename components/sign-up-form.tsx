@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,7 +34,7 @@ export function SignUpForm({
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const repeatPassword = formData.get("repeatPassword") as string;
-    const supabase = createClient();
+
     setIsLoading(true);
     setError(null);
 
@@ -46,21 +45,33 @@ export function SignUpForm({
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+      // 调用服务端注册 API
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
-      if (error) throw error;
+
+      const data = await response.json();
+
+      if (!data.success) {
+        // 处理错误响应
+        throw new Error(data.error?.message || "注册失败");
+      }
+
+      // 注册成功，跳转到成功页面
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "发生错误，请重试");
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <div className={cn("w-full", className)} {...props}>
@@ -82,9 +93,10 @@ export function SignUpForm({
               </Label>
               <Input
                 id="sign-up-email"
+                name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="邮箱"
+                placeholder="your@email.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -98,10 +110,12 @@ export function SignUpForm({
               </Label>
               <Input
                 id="sign-up-password"
+                name="password"
                 type="password"
                 autoComplete="new-password"
-                placeholder="密码"
+                placeholder="至少8个字符"
                 required
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
@@ -114,10 +128,12 @@ export function SignUpForm({
               </Label>
               <Input
                 id="sign-up-repeat-password"
+                name="repeatPassword"
                 type="password"
                 autoComplete="new-password"
                 placeholder="再次输入密码"
                 required
+                minLength={8}
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}
                 className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"

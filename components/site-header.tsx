@@ -32,9 +32,12 @@ export function SiteHeader() {
         const { data } = await supabase.auth.getClaims();
         const user = data?.claims;
 
+        console.log("checkAuth, user", user);
+
         if (!cancelled) setAuthState(user ? "authed" : "anon");
-      } catch {
+      } catch (err) {
         // 异常时保守处理：当作未登录
+        console.error("checkAuth error", err);
         if (!cancelled) setAuthState("anon");
       }
     }
@@ -46,7 +49,7 @@ export function SiteHeader() {
   }, []);
 
   const handleUserCenterClick = useCallback(() => {
-    router.push(authState === "authed" ? "/home" : "/auth/login-register");
+    router.push(authState === "authed" ? "/home" : "/auth/login");
   }, [authState, router]);
 
   return (

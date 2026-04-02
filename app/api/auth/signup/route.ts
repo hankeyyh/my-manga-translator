@@ -1,0 +1,111 @@
+/**
+ * API Route: 用户注册
+ * POST /api/auth/signup
+ *
+ * 功能：
+ * 1. 在服务端创建新用户
+ * 2. 自动初始化用户积分（赠送20积分）
+ * 3. 发送邮箱验证邮件
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { signUp } from '@/lib/services/auth/auth.service';
+import type { SignUpResponse } from '@/lib/services/auth/auth.types';
+
+// ============================================================================
+// 请求验证模式
+// ============================================================================
+
+const signUpSchema = z.object({
+  email: z.email('Invalid email address'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(100, 'Password must be less than 100 characters'),
+  metadata: z
+    .object({
+      name: z.string().optional(),
+      avatar: z.url().optional(),
+    })
+    .optional(),
+});
+
+// ============================================================================
+// API Handler
+// ============================================================================
+
+/**
+ * POST /api/auth/signup
+ * 用户注册接口
+ */
+export async function POST(request: NextRequest) {
+  try {
+    // 1. 解析请求体
+    const body = await request.json();
+
+    // 2. 验证请求数据
+    const validationResult = signUpSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      const response: SignUpResponse = {
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Invalid request data',
+          details: validationResult.error.issues,
+        },
+      };
+
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    // 3. 调用注册服务
+    const { email, password, metadata } = validationResult.data;
+    const authResponse = await signUp({
+      email,
+      password,
+      metadata,
+    });
+
+    // 4. 处理注册错误
+    if (authResponse.error) {
+      const response: SignUpResponse = {
+        success: false,
+        error: {
+          code: authResponse.error.code || 'SIGNUP_FAILED',
+          message: authResponse.error.message,
+        },
+      };
+
+      return NextResponse.json(
+        response,
+        { status: authResponse.error.status || 400 }
+      );
+    }
+
+    // 5. 返回成功响应
+    const response: SignUpResponse = {
+      success: true,
+      data: {
+        user: authResponse.user,
+        session: authResponse.session,
+      },
+    };
+
+    return NextResponse.json(response, { status: 201 });
+  } catch (error) {
+    // 6. 捕获未知错误
+    console.error('Signup error:', error);
+
+    const response: SignUpResponse = {
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Internal server error',
+      },
+    };
+
+    return NextResponse.json(response, { status: 500 });
+  }
+}
