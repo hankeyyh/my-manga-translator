@@ -15,6 +15,10 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Form from "next/form";
+
+const linkClass =
+  "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
 
 export function SignUpForm({
   className,
@@ -27,14 +31,16 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  async function handleSignUp(formData: FormData) {
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const repeatPassword = formData.get("repeatPassword") as string;
     const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError("密码不匹配");
       setIsLoading(false);
       return;
     }
@@ -57,62 +63,88 @@ export function SignUpForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+    <div className={cn("w-full", className)} {...props}>
+      <Card className="rounded-xl border-gray-200 bg-white shadow-sm">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-center text-2xl font-bold tracking-tight text-gray-900">
+            注册
+          </CardTitle>
+          <CardDescription className="text-center text-sm text-gray-500">
+            创建新账号并开始使用
+          </CardDescription>
         </CardHeader>
+
         <CardContent>
-          <form onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
-                <Input
-                  id="repeat-password"
-                  type="password"
-                  required
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
-              </Button>
+          <Form action={handleSignUp} className="flex flex-col gap-5">
+            <div className="grid gap-2">
+              <Label htmlFor="sign-up-email" className="text-gray-700">
+                邮箱
+              </Label>
+              <Input
+                id="sign-up-email"
+                type="email"
+                autoComplete="email"
+                placeholder="邮箱"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
+              />
             </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
-                Login
+
+            <div className="grid gap-2">
+              <Label htmlFor="sign-up-password" className="text-gray-700">
+                密码
+              </Label>
+              <Input
+                id="sign-up-password"
+                type="password"
+                autoComplete="new-password"
+                placeholder="密码"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="sign-up-repeat-password" className="text-gray-700">
+                确认密码
+              </Label>
+              <Input
+                id="sign-up-repeat-password"
+                type="password"
+                autoComplete="new-password"
+                placeholder="再次输入密码"
+                required
+                value={repeatPassword}
+                onChange={(e) => setRepeatPassword(e.target.value)}
+                className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
+              />
+            </div>
+
+            {error && (
+              <p className="text-center text-sm text-red-600" role="alert">
+                {error}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              className="h-11 w-full rounded-lg bg-[#0053dd] text-base font-semibold text-white hover:bg-[#0046b8]"
+              disabled={isLoading}
+            >
+              {isLoading ? "请稍候…" : "注册"}
+            </Button>
+
+            <div className="pt-1 text-center text-sm text-gray-600">
+              已有账号？{" "}
+              <Link href="/auth/login" className={linkClass}>
+                去登录
               </Link>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
