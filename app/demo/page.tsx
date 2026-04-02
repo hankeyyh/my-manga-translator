@@ -576,7 +576,7 @@ export default function ComicCuratorDemo() {
           </div>
         </section>
 
-        <section className="bg-[#f1f4f7] px-8 py-32">
+        <section className="bg-[#f8f9fb] px-8 py-32">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-16 text-center font-headline text-4xl font-bold text-[#2d3337] md:text-5xl">
               Frequently asked questions

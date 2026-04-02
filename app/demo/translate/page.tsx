@@ -396,7 +396,7 @@ export default function TranslateWorkbench() {
                       fill
                       priority
                       sizes="50vw"
-                      src="/08_original.jpeg"
+                      src="/op-1178-raw.jpg"
                     />
                   </div>
                 </div>
@@ -421,7 +421,7 @@ export default function TranslateWorkbench() {
                       fill
                       priority
                       sizes="50vw"
-                      src="/08_processed.jpg"
+                      src="/op-1178-en.png"
                     />
                   </div>
                 </div>
