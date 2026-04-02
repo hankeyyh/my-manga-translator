@@ -31,6 +31,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import {
+  SiteHeader,
+} from "@/components/site-header";
 import { cn } from "@/lib/utils";
 
 const manrope = Manrope({
@@ -102,54 +105,9 @@ export default function ComicCuratorDemo() {
         "bg-[#f8f9fb] font-body text-[#2d3337]",
       )}
     >
-      <nav className="sticky top-0 z-50 w-full bg-[#f8f9fb] font-headline text-sm font-medium tracking-tight">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-8 py-4">
-          <div className="text-xl font-bold tracking-tighter text-[#2d3337]">
-            ComicCurator
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              className="border-b-2 border-[#0053dd] pb-1 font-bold text-[#0053dd]"
-              href="#"
-            >
-              功能页
-            </Link>
-            <Link
-              className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-              href="#"
-            >
-              价格
-            </Link>
-            <Link
-              className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-              href="#"
-            >
-              Blog
-            </Link>
-            <Link
-              className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-              href="#"
-            >
-              FAQ
-            </Link>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link
-              className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-              href="#"
-            >
-              Join Discord
-            </Link>
-            <Button
-              className="scale-95 rounded-xl bg-[#3370FF] px-6 py-2.5 font-headline font-semibold shadow-sm hover:bg-[#3370FF]/90"
-            >
-              登录/个人中心
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
-      <main>
+      <main className="pt-16">
         <section className="relative flex h-[614px] min-h-[500px] w-full items-end overflow-hidden">
           <Image
             alt=""
@@ -417,7 +375,7 @@ export default function ComicCuratorDemo() {
           </div>
         </section>
 
-        <section className="bg-[#f8f9fb] px-8 py-24">
+        <section className="scroll-mt-16 bg-[#f8f9fb] px-8 py-24" id="pricing">
           <div className="mx-auto max-w-7xl">
             <div className="mb-16 text-center">
               <h2 className="mb-4 font-headline text-4xl font-bold text-[#2d3337] md:text-5xl">
@@ -576,7 +534,7 @@ export default function ComicCuratorDemo() {
           </div>
         </section>
 
-        <section className="bg-[#f8f9fb] px-8 py-32">
+        <section className="scroll-mt-16 bg-[#f8f9fb] px-8 py-32" id="faq">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-16 text-center font-headline text-4xl font-bold text-[#2d3337] md:text-5xl">
               Frequently asked questions

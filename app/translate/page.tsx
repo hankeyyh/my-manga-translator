@@ -2,10 +2,8 @@
 
 import { Manrope, Inter } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import {
-  BookOpen,
   CheckCircle2,
   ChevronDown,
   Download,
@@ -34,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SiteHeader } from "@/components/site-header";
 import { cn } from "@/lib/utils";
 
 const manrope = Manrope({
@@ -101,60 +100,7 @@ export default function TranslateWorkbench() {
       )}
     >
       <main className="flex h-screen flex-col bg-[#f8f9fb] pt-16">
-        <header className="fixed top-0 z-50 w-full border-b border-white/40 bg-[#f8f9fb]/80 shadow-sm backdrop-blur-xl">
-          <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-8">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0053dd] text-white">
-                  <BookOpen className="h-5 w-5" />
-                </div>
-                <span className="font-headline text-xl font-bold tracking-tighter text-[#2d3337]">
-                  ComicCurator
-                </span>
-              </div>
-              <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-                <Link
-                  className="border-b-2 border-[#0053dd] pb-1 font-bold text-[#0053dd]"
-                  href="/demo"
-                >
-                  Workbench (功能页)
-                </Link>
-                <Link
-                  className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                  href="/demo"
-                >
-                  Pricing (价格)
-                </Link>
-                <Link
-                  className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                  href="/demo"
-                >
-                  Blog
-                </Link>
-                <Link
-                  className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                  href="/demo"
-                >
-                  FAQ
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button className="scale-95 rounded-full bg-[#0053dd] px-5 py-2 text-sm font-bold text-white hover:bg-[#0053dd]/90">
-                Join Discord
-              </Button>
-              <Button
-                className="h-10 w-10 rounded-full bg-[#dee3e7] hover:bg-[#f1f4f7]"
-                size="icon"
-                variant="secondary"
-              >
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </Button>
-            </div>
-          </div>
-        </header>
+        <SiteHeader />
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden p-6">
           <section className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">

@@ -27,6 +27,9 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import {
+  SiteHeader,
+} from "@/components/site-header";
 import { cn } from "@/lib/utils";
 
 const manrope = Manrope({
@@ -89,58 +92,14 @@ export default function HomePage() {
         "min-h-screen bg-[#f8f9fb] font-body text-[#2d3337]",
       )}
     >
-      <header className="fixed top-0 z-50 w-full border-b border-white/40 bg-[#f8f9fb]/80 shadow-sm backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-8 text-sm font-medium tracking-tight">
-          <div className="flex items-center gap-12">
-            <Link
-              className="font-headline text-xl font-bold tracking-tighter text-[#2d3337]"
-              href="/"
-            >
-              ComicCurator
-            </Link>
-            <nav className="hidden items-center gap-8 md:flex">
-              <Link
-                className="border-b-2 border-[#0053dd] pb-1 font-bold text-[#0053dd]"
-                href="/demo"
-              >
-                Workbench
-              </Link>
-              <Link
-                className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                href="/demo"
-              >
-                Pricing
-              </Link>
-              <Link
-                className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                href="/demo"
-              >
-                Blog
-              </Link>
-              <Link
-                className="text-[#2d3337] transition-colors hover:text-[#0053dd]"
-                href="/demo"
-              >
-                FAQ
-              </Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button
-              className="gap-2 rounded-lg px-5 py-2 text-[#2d3337] hover:bg-[#f1f4f7]"
-              variant="ghost"
-            >
-              <User className="h-5 w-5" />
-              Profile
-            </Button>
-            <Button className="rounded-lg bg-[#0053dd] px-6 py-2 font-bold text-white hover:bg-[#0053dd]/90">
-              Join Discord
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
-      <main className="mx-auto max-w-7xl px-8 py-12 pt-24">
+      <main
+        className={cn(
+          "mx-auto max-w-7xl px-8 py-12",
+          "pt-16",
+        )}
+      >
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
           <div className="space-y-8 md:col-span-4 lg:col-span-3">
             <Card className="flex flex-col items-center border border-[#adb3b7]/15 text-center">
