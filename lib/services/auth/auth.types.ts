@@ -5,6 +5,8 @@
 
 import { User as SupabaseUser, Session as SupabaseSession } from '@supabase/supabase-js';
 
+import type { ApiResponse } from '@/lib/types/api';
+
 // ============================================================================
 // 用户相关类型
 // ============================================================================
@@ -100,17 +102,14 @@ export interface SignUpRequest {
 }
 
 /**
- * 注册响应
+ * 注册接口成功时的 data
  */
-export interface SignUpResponse {
-  success: boolean;
-  data?: {
-    user: User | null;
-    session: Session | null;
-  };
-  error?: {
-    code: string;
-    message: string;
-    details?: any;
-  };
+export interface SignUpSuccessData {
+  user: User | null;
+  session: Session | null;
 }
+
+/**
+ * POST /api/auth/signup 响应体（失败时 data 恒为 null）
+ */
+export type SignUpResponse = ApiResponse<SignUpSuccessData>;

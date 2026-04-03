@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { authService } from '@/lib/services/auth/auth.service';
 import type { SignUpResponse } from '@/lib/services/auth/auth.types';
+import { API_SUCCESS_CODE } from '@/lib/types/api';
 
 // ============================================================================
 // 请求验证模式
@@ -48,13 +49,11 @@ export async function POST(request: NextRequest) {
     const validationResult = signUpSchema.safeParse(body);
 
     if (!validationResult.success) {
+      const firstIssue = validationResult.error.issues[0];
       const response: SignUpResponse = {
-        success: false,
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Invalid request data',
-          details: validationResult.error.issues,
-        },
+        code: 'VALIDATION_ERROR',
+        message: firstIssue?.message ?? 'Invalid request data',
+        data: null,
       };
 
       return NextResponse.json(response, { status: 400 });
@@ -67,11 +66,9 @@ export async function POST(request: NextRequest) {
     // 4. 处理注册错误
     if (authResponse.error) {
       const response: SignUpResponse = {
-        success: false,
-        error: {
-          code: authResponse.error.code || 'SIGNUP_FAILED',
-          message: authResponse.error.message,
-        },
+        code: authResponse.error.code || 'SIGNUP_FAILED',
+        message: authResponse.error.message,
+        data: null,
       };
 
       return NextResponse.json(
@@ -82,7 +79,8 @@ export async function POST(request: NextRequest) {
 
     // 5. 返回成功响应
     const response: SignUpResponse = {
-      success: true,
+      code: API_SUCCESS_CODE,
+      message: 'OK',
       data: {
         user: authResponse.user,
         session: authResponse.session,
@@ -95,11 +93,9 @@ export async function POST(request: NextRequest) {
     console.error('Signup error:', error);
 
     const response: SignUpResponse = {
-      success: false,
-      error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Internal server error',
-      },
+      code: 'INTERNAL_ERROR',
+      message: 'Internal server error',
+      data: null,
     };
 
     return NextResponse.json(response, { status: 500 });
