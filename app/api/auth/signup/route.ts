@@ -10,7 +10,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { signUp } from '@/lib/services/auth/auth.service';
+import { authService } from '@/lib/services/auth/auth.service';
 import type { SignUpResponse } from '@/lib/services/auth/auth.types';
 
 // ============================================================================
@@ -62,11 +62,7 @@ export async function POST(request: NextRequest) {
 
     // 3. 调用注册服务
     const { email, password, metadata } = validationResult.data;
-    const authResponse = await signUp({
-      email,
-      password,
-      metadata,
-    });
+    const authResponse = await authService.signUp(email, password, metadata);
 
     // 4. 处理注册错误
     if (authResponse.error) {

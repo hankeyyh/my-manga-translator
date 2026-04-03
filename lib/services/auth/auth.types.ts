@@ -51,6 +51,42 @@ export interface AuthError {
 }
 
 // ============================================================================
+// AuthService 规格类型（见 prds/technical_specification.md）
+// ============================================================================
+
+export type OAuthProvider = 'google' | 'github';
+
+export type EmailOtpType = 'signup' | 'email_change' | 'magiclink' | 'recovery';
+
+export interface SignInWithOAuthOptions {
+  redirectTo?: string;
+  scopes?: string;
+}
+
+export interface UserUpdateData {
+  email?: string;
+  password?: string;
+  data?: UserMetadata;
+}
+
+/**
+ * 认证服务接口
+ * 负责用户认证、会话管理和用户信息操作
+ */
+export interface AuthService {
+  signUp(email: string, password: string, metadata?: UserMetadata): Promise<AuthResponse>;
+  signIn(email: string, password: string): Promise<AuthResponse>;
+  signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<AuthResponse>;
+  signOut(): Promise<void>;
+  getCurrentUser(): Promise<User | null>;
+  getSession(): Promise<Session | null>;
+  updateUser(data: UserUpdateData): Promise<User>;
+  resetPassword(email: string): Promise<void>;
+  updatePassword(newPassword: string): Promise<User>;
+  verifyOtp(email: string, token: string, type: EmailOtpType): Promise<AuthResponse>;
+}
+
+// ============================================================================
 // 注册相关类型
 // ============================================================================
 

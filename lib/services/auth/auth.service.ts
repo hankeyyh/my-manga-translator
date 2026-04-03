@@ -1,77 +1,112 @@
 /**
- * 认证服务 - 服务端注册功能
- * 负责用户注册和初始化用户积分
+ * 认证服务
+ * 负责用户认证、会话管理和用户信息操作
  * 基于 Supabase Auth 实现
  */
 
 import { createClient } from '@/lib/supabase/server';
-import type { SignUpRequest, AuthResponse } from './auth.types';
+import type {
+  AuthResponse,
+  AuthService,
+  EmailOtpType,
+  OAuthProvider,
+  SignInWithOAuthOptions,
+  User,
+  UserMetadata,
+  UserUpdateData,
+} from './auth.types';
+
+const NOT_IMPLEMENTED_ERROR: AuthResponse = {
+  user: null,
+  session: null,
+  error: {
+    message: 'Not implemented',
+    code: 'NOT_IMPLEMENTED',
+  },
+};
+
+function emailConfirmRedirectUrl(): string | undefined {
+  const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+  return base;
+}
 
 /**
- * 用户注册（服务端）
- * @param request - 注册请求参数
- * @returns 认证响应
+ * 认证服务单例（当前仅实现 signUp，其余方法占位）
  */
-export async function signUp(request: SignUpRequest): Promise<AuthResponse> {
-  const supabase = await createClient();
+export const authService: AuthService = {
+  async signUp(email: string, password: string, metadata?: UserMetadata): Promise<AuthResponse> {
+    const supabase = await createClient();
 
-  try {
-    // 1. 调用 Supabase Auth 注册用户
-    const { data, error } = await supabase.auth.signUp({
-      email: request.email,
-      password: request.password,
-      options: {
-        data: request.metadata || {},
-        emailRedirectTo: process.env.NEXT_PUBLIC_SITE_URL,
-      },
-    });
+    try {
+      const redirectTo = emailConfirmRedirectUrl();
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: metadata ?? {},
+          ...(redirectTo ? { emailRedirectTo: redirectTo } : {}),
+        },
+      });
 
-    // 2. 处理注册错误
-    if (error) {
+      if (error) {
+        return {
+          user: null,
+          session: null,
+          error: {
+            message: error.message,
+            status: error.status,
+            code: error.code,
+          },
+        };
+      }
+
+      return {
+        user: data.user,
+        session: data.session,
+        error: undefined,
+      };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       return {
         user: null,
         session: null,
         error: {
-          message: error.message,
-          status: error.status,
-          code: error.code,
+          message: errorMessage,
+          code: 'INTERNAL_ERROR',
         },
       };
     }
+  },
 
-    // 3. 如果用户创建成功，初始化用户积分（赠送20积分）
-    // if (data.user) {
-    //   const { error: creditsError } = await supabase
-    //     .from('user_credits')
-    //     .insert({
-    //       user_id: data.user.id,
-    //       balance: 20,
-    //       total_earned: 20,
-    //       total_used: 0,
-    //     });
+  async signIn(email: string, password: string): Promise<AuthResponse> {
+    return { ...NOT_IMPLEMENTED_ERROR };
+  },
 
-    //   if (creditsError) {
-    //     console.error('Failed to initialize user credits:', creditsError);
-    //     // 不影响注册流程，仅记录错误
-    //   }
-    // }
+  async signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<AuthResponse> {
+    return { ...NOT_IMPLEMENTED_ERROR };
+  },
 
-    // 4. 返回成功响应
-    return {
-      user: data.user,
-      session: data.session,
-      error: undefined,
-    };
-  } catch (err) {
-    // 5. 捕获未知错误
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-    return {
-      user: null,
-      session: null,
-      error: {
-        message: errorMessage,
-        code: 'INTERNAL_ERROR',
-      },
-    };
-  }
-}
+  async signOut(): Promise<void> { },
+
+  async getCurrentUser(): Promise<User | null> {
+    return null;
+  },
+
+  async getSession() {
+    return null;
+  },
+
+  async updateUser(data: UserUpdateData): Promise<User> {
+    throw new Error('AuthService.updateUser is not implemented yet');
+  },
+
+  async resetPassword(email: string): Promise<void> { },
+
+  async updatePassword(newPassword: string): Promise<User> {
+    throw new Error('AuthService.updatePassword is not implemented yet');
+  },
+
+  async verifyOtp(email: string, token: string, type: EmailOtpType): Promise<AuthResponse> {
+    return { ...NOT_IMPLEMENTED_ERROR };
+  },
+};
