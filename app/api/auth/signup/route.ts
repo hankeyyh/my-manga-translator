@@ -10,8 +10,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { authService } from '@/lib/services/auth/auth.service';
-import type { SignUpResponse } from '@/lib/services/auth/auth.types';
+import { authService } from '@/lib/services/auth/auth-service';
+import type { SignUpResponse } from '@/lib/services/auth/auth-types';
 import { API_SUCCESS_CODE } from '@/lib/types/api';
 
 // ============================================================================

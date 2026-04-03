@@ -14,7 +14,7 @@ import type {
   User,
   UserMetadata,
   UserUpdateData,
-} from './auth.types';
+} from './auth-types';
 
 const NOT_IMPLEMENTED_ERROR: AuthResponse = {
   user: null,
