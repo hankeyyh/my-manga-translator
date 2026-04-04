@@ -9,3 +9,10 @@ export interface ApiResponse<T = unknown> {
 
 /** 业务成功码（与 HTTP 状态码独立，供客户端判断） */
 export const API_SUCCESS_CODE = '0';
+
+// repo, service 通用返回类型
+export type Result<TData, TError = Error> = {
+    data: TData | null
+    error: TError | null
+}
+

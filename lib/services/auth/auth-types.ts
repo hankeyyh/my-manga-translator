@@ -1,11 +1,12 @@
 /**
  * 认证服务类型定义 - 注册功能
- * 基于 Supabase Auth 实现
+ * 基于 Supabase Auth 实现，使用 Entity 层进行数据抽象
  */
 
-import { User as SupabaseUser, Session as SupabaseSession } from '@supabase/supabase-js';
+import { Session as SupabaseSession } from '@supabase/supabase-js';
+import { UserEntity } from '@/lib/entities/user-entity';
 
-import type { ApiResponse } from '@/lib/types/api';
+import type { ApiResponse, Result } from '@/lib/types';
 
 // ============================================================================
 // 用户相关类型
@@ -21,11 +22,6 @@ export interface UserMetadata {
 }
 
 /**
- * 用户对象（使用 Supabase User）
- */
-export type User = SupabaseUser;
-
-/**
  * 会话对象（使用 Supabase Session）
  */
 export type Session = SupabaseSession;
@@ -38,7 +34,7 @@ export type Session = SupabaseSession;
  * 认证响应
  */
 export interface AuthResponse {
-  user: User | null;
+  user: UserEntity | null;
   session: Session | null;
   error?: AuthError;
 }
@@ -51,6 +47,7 @@ export interface AuthError {
   status?: number;
   code?: string;
 }
+
 
 // ============================================================================
 // AuthService 规格类型（见 prds/technical_specification.md）
@@ -74,17 +71,14 @@ export interface UserUpdateData {
 /**
  * 认证服务接口
  * 负责用户认证、会话管理和用户信息操作
+ * 所有方法返回 Entity 类型，而非 Supabase 原生类型
  */
 export interface AuthService {
-  signUp(email: string, password: string, metadata?: UserMetadata): Promise<AuthResponse>;
+  signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>>;
   signIn(email: string, password: string): Promise<AuthResponse>;
   signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<AuthResponse>;
   signOut(): Promise<void>;
-  getCurrentUser(): Promise<User | null>;
-  getSession(): Promise<Session | null>;
-  updateUser(data: UserUpdateData): Promise<User>;
-  resetPassword(email: string): Promise<void>;
-  updatePassword(newPassword: string): Promise<User>;
+  getCurrentUser(): Promise<Result<UserEntity>>;
   verifyOtp(email: string, token: string, type: EmailOtpType): Promise<AuthResponse>;
 }
 
@@ -102,11 +96,18 @@ export interface SignUpRequest {
 }
 
 /**
+ * 用户实体的可序列化版本（用于 API 响应）
+ */
+export interface UserDTO {
+  id: string;
+  email: string;
+}
+
+/**
  * 注册接口成功时的 data
  */
 export interface SignUpSuccessData {
-  user: User | null;
-  session: Session | null;
+  user: UserDTO | null;
 }
 
 /**

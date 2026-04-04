@@ -12,7 +12,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { authService } from '@/lib/services/auth/auth-service';
 import type { SignUpResponse } from '@/lib/services/auth/auth-types';
-import { API_SUCCESS_CODE } from '@/lib/types/api';
+import { API_SUCCESS_CODE } from '@/lib/types';
+import { UserMapper } from '@/lib/mappers/user-mapper';
 
 // ============================================================================
 // 请求验证模式
@@ -41,63 +42,41 @@ const signUpSchema = z.object({
  * 用户注册接口
  */
 export async function POST(request: NextRequest) {
-  try {
-    // 1. 解析请求体
-    const body = await request.json();
+  // 1. 解析请求体
+  const body = await request.json();
 
-    // 2. 验证请求数据
-    const validationResult = signUpSchema.safeParse(body);
+  // 2. 验证请求数据
+  const validationResult = signUpSchema.safeParse(body);
 
-    if (!validationResult.success) {
-      const firstIssue = validationResult.error.issues[0];
-      const response: SignUpResponse = {
-        code: 'VALIDATION_ERROR',
-        message: firstIssue?.message ?? 'Invalid request data',
-        data: null,
-      };
-
-      return NextResponse.json(response, { status: 400 });
-    }
-
-    // 3. 调用注册服务
-    const { email, password, metadata } = validationResult.data;
-    const authResponse = await authService.signUp(email, password, metadata);
-
-    // 4. 处理注册错误
-    if (authResponse.error) {
-      const response: SignUpResponse = {
-        code: authResponse.error.code || 'SIGNUP_FAILED',
-        message: authResponse.error.message,
-        data: null,
-      };
-
-      return NextResponse.json(
-        response,
-        { status: authResponse.error.status || 400 }
-      );
-    }
-
-    // 5. 返回成功响应
+  if (!validationResult.success) {
+    const firstIssue = validationResult.error.issues[0];
     const response: SignUpResponse = {
-      code: API_SUCCESS_CODE,
-      message: 'OK',
-      data: {
-        user: authResponse.user,
-        session: authResponse.session,
-      },
-    };
-
-    return NextResponse.json(response, { status: 201 });
-  } catch (error) {
-    // 6. 捕获未知错误
-    console.error('Signup error:', error);
-
-    const response: SignUpResponse = {
-      code: 'INTERNAL_ERROR',
-      message: 'Internal server error',
+      code: 'VALIDATION_ERROR',
+      message: firstIssue?.message ?? 'Invalid request data',
       data: null,
     };
 
-    return NextResponse.json(response, { status: 500 });
+    return NextResponse.json(response, { status: 400 });
   }
+
+  // 3. 调用注册服务
+  const { email, password, metadata } = validationResult.data;
+  const authResponse = await authService.signUp(email, password, metadata);
+
+  // 4. 处理注册错误
+  if (authResponse.error) {
+    const response: SignUpResponse = { code: 'SIGNUP_FAILED', message: authResponse.error.message, data: null };
+    return NextResponse.json(response, { status: 400 });
+  }
+
+  // 5. 返回成功响应（将 Entity 转换为 JSON 可序列化格式）
+  const response: SignUpResponse = {
+    code: API_SUCCESS_CODE,
+    message: 'OK',
+    data: {
+      user: authResponse.data ? UserMapper.toDTO(authResponse.data) : null,
+    },
+  };
+
+  return NextResponse.json(response, { status: 201 });
 }
