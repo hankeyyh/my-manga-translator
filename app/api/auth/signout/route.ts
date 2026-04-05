@@ -6,12 +6,12 @@
  * 1. 登出当前用户
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authService } from "@/lib/services/auth/auth-service";
 import { SignOutResponse } from "@/lib/services/auth/auth-types";
 import { SUCCESS_CODE } from "@/lib/types";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
     const authResponse = await authService.signOut();
     if (authResponse.error) {
         const response: SignOutResponse = { code: 'SIGNOUT_FAILED', message: authResponse.error.message, data: null };

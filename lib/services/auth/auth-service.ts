@@ -6,7 +6,6 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type {
-    AuthResponse,
     AuthService,
     OAuthProvider,
     SignInWithOAuthOptions,
