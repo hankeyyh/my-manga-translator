@@ -3,7 +3,7 @@
  * 基于 Supabase Auth 实现，使用 Entity 层进行数据抽象
  */
 
-import { Session as SupabaseSession } from '@supabase/supabase-js';
+import { EmailOtpType, Session as SupabaseSession } from '@supabase/supabase-js';
 import { UserEntity } from '@/lib/entities/user-entity';
 
 import type { ApiResponse, Result } from '@/lib/types';
@@ -55,8 +55,6 @@ export interface AuthError {
 
 export type OAuthProvider = 'google' | 'github';
 
-export type EmailOtpType = 'signup' | 'email_change' | 'magiclink' | 'recovery';
-
 export interface SignInWithOAuthOptions {
   redirectTo?: string;
   scopes?: string;
@@ -75,11 +73,11 @@ export interface UserUpdateData {
  */
 export interface AuthService {
   signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>>;
-  signIn(email: string, password: string): Promise<AuthResponse>;
-  signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<AuthResponse>;
-  signOut(): Promise<void>;
+  signIn(email: string, password: string): Promise<Result<UserEntity>>;
+  signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<Result<UserEntity>>;
+  signOut(): Promise<Result<void>>;
   getCurrentUser(): Promise<Result<UserEntity>>;
-  verifyOtp(email: string, token: string, type: EmailOtpType): Promise<AuthResponse>;
+  verifyOtp(tokenHash: string, type: EmailOtpType): Promise<Result<UserEntity>>;
 }
 
 // ============================================================================
@@ -110,7 +108,15 @@ export interface SignUpSuccessData {
   user: UserDTO | null;
 }
 
+export interface SignInSuccessData {
+  user: UserDTO | null;
+}
+
 /**
  * POST /api/auth/signup 响应体（失败时 data 恒为 null）
  */
 export type SignUpResponse = ApiResponse<SignUpSuccessData>;
+
+export type SignInResponse = ApiResponse<SignInSuccessData>;
+
+export type SignOutResponse = ApiResponse<void>;

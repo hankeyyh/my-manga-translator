@@ -6,75 +6,72 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type {
-  AuthResponse,
-  AuthService,
-  EmailOtpType,
-  OAuthProvider,
-  SignInWithOAuthOptions,
-  UserMetadata,
-  UserUpdateData,
+	AuthResponse,
+	AuthService,
+	OAuthProvider,
+	SignInWithOAuthOptions,
+	UserMetadata,
 } from './auth-types';
 import { UserRepository } from '@/lib/repositories/user-repository';
 import { UserEntity } from '@/lib/entities/user-entity';
 import { Result } from '@/lib/types';
-
-const NOT_IMPLEMENTED_ERROR: AuthResponse = {
-  user: null,
-  session: null,
-  error: {
-    message: 'Not implemented',
-    code: 'NOT_IMPLEMENTED',
-  },
-};
+import { EmailOtpType } from '@supabase/supabase-js';
 
 function emailConfirmRedirectUrl(): string | undefined {
-  const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
-  return base;
+	const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+	return base;
 }
 
 /**
  * 认证服务单例（使用 Repository 层）
  */
 export const authService: AuthService = {
-  async signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>> {
-    const supabase = await createClient();
+	async signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>> {
+		// 验证邮箱格式
+		const emailValidation = UserEntity.validateEmail(email);
+		if (!emailValidation.valid) {
+			return {
+				data: null,
+				error: new Error(emailValidation.error!),
+			};
+		}
+		const redirectTo = emailConfirmRedirectUrl();
 
-    // 验证邮箱格式
-    const emailValidation = UserEntity.validateEmail(email);
-    if (!emailValidation.valid) {
-      return {
-        data: null,
-        error: new Error(emailValidation.error!),
-      };
-    }
+		// 创建认证用户
+		const supabase = await createClient();
+		const userRepo = new UserRepository(supabase);
+		return await userRepo.signUp(email, password, metadata, redirectTo);
+	},
 
-    // 初始化仓储
-    const userRepo = new UserRepository(supabase);
+	async signIn(email: string, password: string): Promise<Result<UserEntity>> {
+		const supabase = await createClient();
+		const userRepo = new UserRepository(supabase);
+		return await userRepo.signIn(email, password);
+	},
 
-    const redirectTo = emailConfirmRedirectUrl();
+	async signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<Result<UserEntity>> {
+		return {
+			data: null,
+			error: new Error('Not implemented'),
+		};
+	},
 
-    // 1. 创建认证用户
-    return await userRepo.signUp(email, password, metadata, redirectTo);
-  },
+	async signOut(): Promise<Result<void>> {
+		const supabase = await createClient();
+		const userRepo = new UserRepository(supabase);
+		return await userRepo.signOut();
+	},
 
-  async signIn(email: string, password: string): Promise<AuthResponse> {
-    return { ...NOT_IMPLEMENTED_ERROR };
-  },
-
-  async signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<AuthResponse> {
-    return { ...NOT_IMPLEMENTED_ERROR };
-  },
-
-  async signOut(): Promise<void> { },
-
-  async getCurrentUser(): Promise<Result<UserEntity>> {
-    const supabase = await createClient();
-    const userRepo = new UserRepository(supabase);
-    return await userRepo.getCurrentUser();
-  },
+	async getCurrentUser(): Promise<Result<UserEntity>> {
+		const supabase = await createClient();
+		const userRepo = new UserRepository(supabase);
+		return await userRepo.getCurrentUser();
+	},
 
 
-  async verifyOtp(email: string, token: string, type: EmailOtpType): Promise<AuthResponse> {
-    return { ...NOT_IMPLEMENTED_ERROR };
-  },
+	async verifyOtp(tokenHash: string, type: EmailOtpType): Promise<Result<UserEntity>> {
+		const supabase = await createClient();
+		const userRepo = new UserRepository(supabase);
+		return await userRepo.verifyOtp(tokenHash, type);
+	},
 };
