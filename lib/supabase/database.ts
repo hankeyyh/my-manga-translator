@@ -461,11 +461,11 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
-  public: {
-    Enums: {},
-  },
+    graphql_public: {
+        Enums: {},
+    },
+    public: {
+        Enums: {},
+    },
 } as const
 
