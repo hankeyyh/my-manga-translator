@@ -1,9 +1,29 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { CreditCard, History, LogOut, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export function HomeAccountNav() {
+    const router = useRouter();
+    const [signingOut, setSigningOut] = useState(false);
+
+    async function handleSignOut() {
+        if (signingOut) return;
+        setSigningOut(true);
+        try {
+            const res = await fetch("/api/auth/signout", { method: "POST" });
+            if (res.ok) {
+                router.push("/");
+            }
+        } finally {
+            setSigningOut(false);
+        }
+    }
+
     return (
         <nav
             aria-label="Account"
@@ -41,14 +61,14 @@ export function HomeAccountNav() {
             </Button>
             <div className="mt-4 border-t border-[#dee3e7] pt-4">
                 <Button
-                    asChild
                     className="h-auto w-full justify-start gap-3 rounded-lg px-4 py-3 text-[#a83836] hover:bg-[#fa746f]/10"
+                    disabled={signingOut}
+                    onClick={handleSignOut}
+                    type="button"
                     variant="ghost"
                 >
-                    <Link href="#">
-                        <LogOut className="h-5 w-5" />
-                        <span className="text-sm">退出登录</span>
-                    </Link>
+                    <LogOut className="h-5 w-5" />
+                    <span className="text-sm">退出登录</span>
                 </Button>
             </div>
         </nav>

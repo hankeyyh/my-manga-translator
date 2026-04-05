@@ -64,15 +64,16 @@ export default function HomePage() {
             className={cn(
                 manrope.variable,
                 inter.variable,
-                "min-h-screen bg-[#f8f9fb] font-body text-[#2d3337]",
+                "flex min-h-screen flex-col bg-[#f8f9fb] font-body text-[#2d3337]",
             )}
         >
             <SiteHeader />
+            {/* fixed 顶栏不占文档流，占位保证 flex 布局下页脚能贴齐视口底 */}
+            <div aria-hidden className="h-16 shrink-0" />
 
             <main
                 className={cn(
-                    "mx-auto max-w-7xl px-8 py-12",
-                    "pt-16",
+                    "mx-auto w-full max-w-7xl flex-1 px-8 py-12",
                 )}
             >
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-12">

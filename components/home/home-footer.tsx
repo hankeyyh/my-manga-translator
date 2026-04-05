@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function HomeFooter() {
     return (
-        <footer className="mt-12 w-full border-t border-slate-200 bg-[#f1f4f7] px-8 py-12">
+        <footer className="mt-12 w-full shrink-0 border-t border-slate-200 bg-[#f1f4f7] px-8 py-12">
             <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
                 <div className="font-headline font-bold text-slate-900">ComicCurator</div>
                 <div className="flex flex-wrap justify-center gap-6">
