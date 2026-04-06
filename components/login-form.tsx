@@ -3,11 +3,11 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,123 +21,123 @@ const linkClass =
 	"font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
 
 export function LoginForm({
-    className,
-    ...props
+	className,
+	...props
 }: React.ComponentPropsWithoutRef<"div">) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
-    async function handleLogin(formData: FormData) {
-        const email = formData.get("login-email") as string;
-        const password = formData.get("login-password") as string;
-        setIsLoading(true);
-        setError(null);
+	async function handleLogin(formData: FormData) {
+		const email = formData.get("login-email") as string;
+		const password = formData.get("login-password") as string;
+		setIsLoading(true);
+		setError(null);
 
-        try {
-            const response = await fetch("/api/auth/signin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }),
-            });
+		try {
+			const response = await fetch("/api/auth/signin", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email, password }),
+			});
 
-            const data = await response.json();
-            if (data.code !== SUCCESS_CODE) {
-                throw new Error(data.message || "登录失败");
-            }
-            router.push("/");
-        } catch (error: unknown) {
-            setError(error instanceof Error ? error.message : "发生错误，请重试");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+			const data = await response.json();
+			if (data.code !== SUCCESS_CODE) {
+				throw new Error(data.message || "登录失败");
+			}
+			router.push("/");
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "发生错误，请重试");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    return (
-        <div className={cn("w-full", className)} {...props}>
-            <Card className="rounded-xl border-gray-200 bg-white shadow-sm">
-                <CardHeader className="pb-6">
-                    <CardTitle className="text-center text-2xl font-bold tracking-tight text-gray-900">
+	return (
+		<div className={cn("w-full", className)} {...props}>
+			<Card className="rounded-xl border-gray-200 bg-white shadow-sm">
+				<CardHeader className="pb-6">
+					<CardTitle className="text-center text-2xl font-bold tracking-tight text-gray-900">
 						登录
-                    </CardTitle>
-                    <CardDescription className="text-center text-sm text-gray-500">
+					</CardTitle>
+					<CardDescription className="text-center text-sm text-gray-500">
 						使用邮箱和密码登录你的账号
-                    </CardDescription>
-                </CardHeader>
+					</CardDescription>
+				</CardHeader>
 
-                <CardContent>
-                    <Form action={handleLogin} className="flex flex-col gap-5">
-                        <div className="grid gap-2">
-                            <Label htmlFor="login-email" className="text-gray-700">
+				<CardContent>
+					<Form action={handleLogin} className="flex flex-col gap-5">
+						<div className="grid gap-2">
+							<Label htmlFor="login-email" className="text-gray-700">
 								邮箱
-                            </Label>
-                            <Input
-                                id="login-email"
-                                name="login-email"
-                                type="email"
-                                autoComplete="email"
-                                placeholder="邮箱"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
-                            />
-                        </div>
+							</Label>
+							<Input
+								id="login-email"
+								name="login-email"
+								type="email"
+								autoComplete="email"
+								placeholder="邮箱"
+								required
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
+							/>
+						</div>
 
-                        <div className="grid gap-2">
-                            <div className="flex items-center gap-3">
-                                <Label htmlFor="login-password" className="text-gray-700">
+						<div className="grid gap-2">
+							<div className="flex items-center gap-3">
+								<Label htmlFor="login-password" className="text-gray-700">
 									密码
-                                </Label>
-                                <Link href="/auth/forgot-password" className={cn("ml-auto text-sm", linkClass)}>
+								</Label>
+								<Link href="/auth/forgot-password" className={cn("ml-auto text-sm", linkClass)}>
 									忘记密码？
-                                </Link>
-                            </div>
-                            <Input
-                                id="login-password"
-                                name="login-password"
-                                type="password"
-                                autoComplete="current-password"
-                                placeholder="密码"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
-                            />
-                        </div>
+								</Link>
+							</div>
+							<Input
+								id="login-password"
+								name="login-password"
+								type="password"
+								autoComplete="current-password"
+								placeholder="密码"
+								required
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								className="h-11 rounded-lg border-gray-200 bg-white text-base placeholder:text-gray-400 md:text-sm"
+							/>
+						</div>
 
-                        {error && (
-                            <p className="text-center text-sm text-red-600" role="alert">
-                                {error}
-                            </p>
-                        )}
+						{error && (
+							<p className="text-center text-sm text-red-600" role="alert">
+								{error}
+							</p>
+						)}
 
-                        <Button
-                            type="submit"
-                            className="h-11 w-full rounded-lg bg-[#0053dd] text-base font-semibold text-white hover:bg-[#0046b8]"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "请稍候…" : "登录"}
-                        </Button>
+						<Button
+							type="submit"
+							className="h-11 w-full rounded-lg bg-[#0053dd] text-base font-semibold text-white hover:bg-[#0046b8]"
+							disabled={isLoading}
+						>
+							{isLoading ? "请稍候…" : "登录"}
+						</Button>
 
-                        <div className="pt-1 text-center text-sm text-gray-600">
+						<div className="pt-1 text-center text-sm text-gray-600">
 							还没有账号？{" "}
-                            <Link href="/auth/sign-up" className={linkClass}>
+							<Link href="/auth/sign-up" className={linkClass}>
 								去注册
-                            </Link>
-                        </div>
+							</Link>
+						</div>
 
-                        <div className="pt-2">
-                            <div className="flex items-center gap-3">
-                                <div className="h-px flex-1 bg-gray-200" />
-                                <span className="text-xs text-gray-500">或使用</span>
-                                <div className="h-px flex-1 bg-gray-200" />
-                            </div>
-                            <Button
+						<div className="pt-2">
+							<div className="flex items-center gap-3">
+								<div className="h-px flex-1 bg-gray-200" />
+								<span className="text-xs text-gray-500">或使用</span>
+								<div className="h-px flex-1 bg-gray-200" />
+							</div>
+							<Button
                                 type="button"
                                 variant="outline"
                                 className="mt-4 h-11 w-full gap-3 rounded-lg border-gray-200 bg-white text-base font-semibold text-gray-900 hover:bg-gray-50"
@@ -170,10 +170,10 @@ export function LoginForm({
                                 </svg>
 								使用 Google 登录
                             </Button>
-                        </div>
-                    </Form>
-                </CardContent>
-            </Card>
-        </div>
-    );
+						</div>
+					</Form>
+				</CardContent>
+			</Card>
+		</div>
+	);
 }
