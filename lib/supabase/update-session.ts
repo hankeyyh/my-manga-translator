@@ -7,7 +7,7 @@ export async function updateSession(request: NextRequest) {
         request,
     });
 
-    // If the env vars are not set, skip proxy check. You can remove this
+    // If the env vars are not set, skip session refresh. You can remove this
     // once you setup the project.
     if (!hasEnvVars) {
         return supabaseResponse;
@@ -49,9 +49,10 @@ export async function updateSession(request: NextRequest) {
 
     if (
         request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+        !user &&
+        !request.nextUrl.pathname.startsWith("/login") &&
+        !request.nextUrl.pathname.startsWith("/auth") &&
+        !request.nextUrl.pathname.startsWith("/api")
     ) {
     // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone();
