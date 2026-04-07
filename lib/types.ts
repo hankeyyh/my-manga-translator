@@ -16,3 +16,14 @@ export type Result<TData, TError = Error> = {
     error: TError | null
 }
 
+// OAuth 登录选项
+export type SignInWithOAuthOptions = {
+  /** A URL to send the user to after they are confirmed. */
+  redirectTo?: string
+  /** A space-separated list of scopes granted to the OAuth application. */
+  scopes?: string
+  /** An object of query params */
+  queryParams?: { [key: string]: string }
+  /** If set to true does not immediately redirect the current browser context to visit the OAuth authorization page for the provider. */
+  skipBrowserRedirect?: boolean
+}

@@ -57,6 +57,29 @@ export function LoginForm({
 		}
 	};
 
+	async function handleLoginWithGoogle() {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const response = await fetch("/api/auth/signin-oauth", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ provider: "google" }),
+			});
+			const data = await response.json();
+			if (data.code !== SUCCESS_CODE) {
+				throw new Error(data.message || "登录失败");
+			}
+			window.location.href = data.data.url;
+		} catch (error: unknown) {
+			setError(error instanceof Error ? error.message : "发生错误，请重试");
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
 	return (
 		<div className={cn("w-full", className)} {...props}>
 			<Card className="rounded-xl border-gray-200 bg-white shadow-sm">
@@ -138,11 +161,13 @@ export function LoginForm({
 								<div className="h-px flex-1 bg-gray-200" />
 							</div>
 							<Button
-                                type="button"
-                                variant="outline"
-                                className="mt-4 h-11 w-full gap-3 rounded-lg border-gray-200 bg-white text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                aria-label="使用 Google 登录（仅 UI）"
-                            >
+								type="button"
+								variant="outline"
+								className="mt-4 h-11 w-full gap-3 rounded-lg border-gray-200 bg-white text-base font-semibold text-gray-900 hover:bg-gray-50"
+								aria-label="使用 Google 登录"
+								disabled={isLoading}
+								onClick={handleLoginWithGoogle}
+							>
                                 <svg
                                     width="18"
                                     height="18"

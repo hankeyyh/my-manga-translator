@@ -3,7 +3,7 @@
  * 基于 Supabase Auth 实现，使用 Entity 层进行数据抽象
  */
 
-import { EmailOtpType, Session as SupabaseSession } from '@supabase/supabase-js';
+import { EmailOtpType, Provider, Session as SupabaseSession } from '@supabase/supabase-js';
 import { UserEntity } from '@/lib/entities/user-entity';
 
 import type { ApiResponse, Result } from '@/lib/types';
@@ -53,12 +53,7 @@ export interface AuthError {
 // AuthService 规格类型（见 prds/technical_specification.md）
 // ============================================================================
 
-export type OAuthProvider = 'google' | 'github';
-
-export interface SignInWithOAuthOptions {
-  redirectTo?: string;
-  scopes?: string;
-}
+export type OAuthProvider = Provider;
 
 export interface UserUpdateData {
   email?: string;
@@ -74,10 +69,11 @@ export interface UserUpdateData {
 export interface AuthService {
   signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>>;
   signIn(email: string, password: string): Promise<Result<UserEntity>>;
-  signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<Result<UserEntity>>;
+  signInWithGoogle(): Promise<Result<string | null>>;
   signOut(): Promise<Result<void>>;
   getCurrentUser(): Promise<Result<UserEntity>>;
   verifyOtp(tokenHash: string, type: EmailOtpType): Promise<Result<UserEntity>>;
+  exchangeCodeForSession(code: string): Promise<Result<UserEntity>>;
 }
 
 // ============================================================================

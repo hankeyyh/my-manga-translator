@@ -7,8 +7,6 @@
 import { createClient } from '@/lib/supabase/server';
 import type {
     AuthService,
-    OAuthProvider,
-    SignInWithOAuthOptions,
     UserMetadata,
 } from './auth-types';
 import { UserRepository } from '@/lib/repositories/user-repository';
@@ -16,11 +14,26 @@ import { UserEntity } from '@/lib/entities/user-entity';
 import { Result } from '@/lib/types';
 import { EmailOtpType } from '@supabase/supabase-js';
 
+// 设置confirm邮件中的next重定向链接
 function emailConfirmRedirectUrl(): string | undefined {
     const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
     return base;
 }
 
+// oauth登录后，重定向到confirm url
+function getConfirmUrl(next: string): string {
+    const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
+    return `${base}/api/auth/confirm?next=${encodeURIComponent(next)}`;
+}
+
+function getGoogleOAuthQueryParams(): { prompt?: string } {
+    if (process.env.NODE_ENV === 'development') {
+        // 每次登录显示账号选择，授权页面
+        return { prompt: 'consent select_account' };
+    } else {
+        return {};
+    }
+}
 /**
  * 认证服务单例（使用 Repository 层）
  */
@@ -48,11 +61,14 @@ export const authService: AuthService = {
         return await userRepo.signIn(email, password);
     },
 
-    async signInWithProvider(provider: OAuthProvider, options?: SignInWithOAuthOptions): Promise<Result<UserEntity>> {
-        return {
-            data: null,
-            error: new Error('Not implemented'),
-        };
+    async signInWithGoogle(): Promise<Result<string | null>> {
+        const supabase = await createClient();
+        const userRepo = new UserRepository(supabase);
+        const result = await userRepo.signInWithOAuth("google", {
+            redirectTo: getConfirmUrl('/'),
+            queryParams: getGoogleOAuthQueryParams(),
+        })
+        return result;
     },
 
     async signOut(): Promise<Result<void>> {
@@ -72,5 +88,11 @@ export const authService: AuthService = {
         const supabase = await createClient();
         const userRepo = new UserRepository(supabase);
         return await userRepo.verifyOtp(tokenHash, type);
+    },
+
+    async exchangeCodeForSession(code: string): Promise<Result<UserEntity>> {
+        const supabase = await createClient();
+        const userRepo = new UserRepository(supabase);
+        return await userRepo.exchangeCodeForSession(code);
     },
 };

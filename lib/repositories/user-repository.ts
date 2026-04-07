@@ -3,10 +3,10 @@
  * 封装 auth.users 的所有认证操作
  */
 
-import type { EmailOtpType, SupabaseClient } from '@supabase/supabase-js';
+import type { EmailOtpType, Provider, SupabaseClient } from '@supabase/supabase-js';
 import { UserEntity } from '@/lib/entities/user-entity';
 import { UserMapper } from '@/lib/mappers/user-mapper';
-import { Result } from '@/lib/types';
+import { Result, SignInWithOAuthOptions } from '@/lib/types';
 
 /**
  * User 仓储类
@@ -15,13 +15,13 @@ export class UserRepository {
     constructor(private supabase: SupabaseClient) { }
 
     /**
-	 * 创建新用户（注册）
-	 * @param email 邮箱
-	 * @param password 密码
-	 * @param metadata 元数据
-	 * @param emailRedirectTo 邮箱确认重定向地址
-	 * @returns UserEntity
-	 */
+     * 创建新用户（注册）
+     * @param email 邮箱
+     * @param password 密码
+     * @param metadata 元数据
+     * @param emailRedirectTo 邮箱确认重定向地址
+     * @returns UserEntity
+     */
     async signUp(email: string, password: string, metadata?: Record<string, any>, emailRedirectTo?: string): Promise<Result<UserEntity>> {
         const { data, error } = await this.supabase.auth.signUp({
             email,
@@ -80,6 +80,38 @@ export class UserRepository {
         };
     }
 
+    async signInWithOAuth(provider: Provider, options?: SignInWithOAuthOptions): Promise<Result<string | null>> {
+        const { data, error } = await this.supabase.auth.signInWithOAuth({
+            provider,
+            options
+        })
+        if (error) {
+            console.error('OAuth 登录失败: ', error);
+            return {
+                data: null,
+                error: new Error(`OAuth 登录失败: ${error.message}`),
+            };
+        }
+        console.debug('OAuth 登录成功: ', data);
+        return {
+            data: data?.url ?? null,
+            error: null,
+        }
+    }
+
+    async exchangeCodeForSession(code: string): Promise<Result<UserEntity>> {
+        const { data, error } = await this.supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+            console.error('Exchange code for session failed: ', error);
+            return {
+                data: null,
+                error: new Error(`Exchange code for session failed: ${error.message}`),
+            };
+        }
+        
+        return { data: UserMapper.fromUserToEntity(data.user), error: null };
+    }
+
     async signOut(): Promise<Result<void>> {
         const { error } = await this.supabase.auth.signOut();
         if (error) {
@@ -93,9 +125,9 @@ export class UserRepository {
     }
 
     /**
-	 * 获取当前登录用户
-	 * @returns UserEntity | null
-	 */
+     * 获取当前登录用户
+     * @returns UserEntity | null
+     */
     async getCurrentUser(): Promise<Result<UserEntity>> {
         const { data, error } = await this.supabase.auth.getClaims();
 
