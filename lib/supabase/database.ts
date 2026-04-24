@@ -34,201 +34,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      credits_transactions: {
-        Row: {
-          amount: number
-          balance_after: number
-          created_at: string
-          description: string | null
-          id: number
-          payment_id: number | null
-          task_id: number | null
-          transaction_type: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          balance_after: number
-          created_at?: string
-          description?: string | null
-          id?: number
-          payment_id?: number | null
-          task_id?: number | null
-          transaction_type: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          balance_after?: number
-          created_at?: string
-          description?: string | null
-          id?: number
-          payment_id?: number | null
-          task_id?: number | null
-          transaction_type?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "credits_transactions_payment_id_fkey"
-            columns: ["payment_id"]
-            isOneToOne: false
-            referencedRelation: "payment_history"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "credits_transactions_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "translation_tasks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      payment_history: {
-        Row: {
-          amount: number
-          completed_at: string | null
-          created_at: string
-          credits_purchased: number
-          id: number
-          metadata: Json | null
-          payment_method: string | null
-          payment_provider: string | null
-          plan_type: string | null
-          status: string
-          transaction_id: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          completed_at?: string | null
-          created_at?: string
-          credits_purchased: number
-          id?: number
-          metadata?: Json | null
-          payment_method?: string | null
-          payment_provider?: string | null
-          plan_type?: string | null
-          status?: string
-          transaction_id?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          completed_at?: string | null
-          created_at?: string
-          credits_purchased?: number
-          id?: number
-          metadata?: Json | null
-          payment_method?: string | null
-          payment_provider?: string | null
-          plan_type?: string | null
-          status?: string
-          transaction_id?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      translation_cache: {
-        Row: {
-          accessed_at: string
-          ai_model: string | null
-          created_at: string
-          engine_type: string
-          extracted_text: Json | null
-          hit_count: number
-          id: number
-          image_hash: string
-          result_url: string
-          source_lang: string
-          target_lang: string
-          translated_text: Json | null
-          updated_at: string
-        }
-        Insert: {
-          accessed_at?: string
-          ai_model?: string | null
-          created_at?: string
-          engine_type: string
-          extracted_text?: Json | null
-          hit_count?: number
-          id?: number
-          image_hash: string
-          result_url: string
-          source_lang: string
-          target_lang: string
-          translated_text?: Json | null
-          updated_at?: string
-        }
-        Update: {
-          accessed_at?: string
-          ai_model?: string | null
-          created_at?: string
-          engine_type?: string
-          extracted_text?: Json | null
-          hit_count?: number
-          id?: number
-          image_hash?: string
-          result_url?: string
-          source_lang?: string
-          target_lang?: string
-          translated_text?: Json | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       translation_images: {
         Row: {
-          created_at: string
+          completed_at: string | null
+          created_at: string | null
           error_message: string | null
-          extracted_text: Json | null
-          id: number
-          original_hash: string | null
-          original_url: string
-          page_number: number
-          processing_time: number | null
+          folder_name: string | null
+          id: string
+          image_index: number
+          max_retries: number | null
+          metadata: Json | null
+          original_image_height: number | null
+          original_image_path: string
+          original_image_size: number | null
+          original_image_width: number | null
+          result_image_path: string | null
+          retry_count: number | null
+          started_at: string | null
           status: string
-          task_id: number
-          translated_text: Json | null
-          translated_url: string | null
-          updated_at: string
+          task_id: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          completed_at?: string | null
+          created_at?: string | null
           error_message?: string | null
-          extracted_text?: Json | null
-          id?: number
-          original_hash?: string | null
-          original_url: string
-          page_number: number
-          processing_time?: number | null
-          status?: string
-          task_id: number
-          translated_text?: Json | null
-          translated_url?: string | null
-          updated_at?: string
+          folder_name?: string | null
+          id?: string
+          image_index: number
+          max_retries?: number | null
+          metadata?: Json | null
+          original_image_height?: number | null
+          original_image_path: string
+          original_image_size?: number | null
+          original_image_width?: number | null
+          result_image_path?: string | null
+          retry_count?: number | null
+          started_at?: string | null
+          status: string
+          task_id: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          completed_at?: string | null
+          created_at?: string | null
           error_message?: string | null
-          extracted_text?: Json | null
-          id?: number
-          original_hash?: string | null
-          original_url?: string
-          page_number?: number
-          processing_time?: number | null
+          folder_name?: string | null
+          id?: string
+          image_index?: number
+          max_retries?: number | null
+          metadata?: Json | null
+          original_image_height?: number | null
+          original_image_path?: string
+          original_image_size?: number | null
+          original_image_width?: number | null
+          result_image_path?: string | null
+          retry_count?: number | null
+          started_at?: string | null
           status?: string
-          task_id?: number
-          translated_text?: Json | null
-          translated_url?: string | null
-          updated_at?: string
+          task_id?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -242,88 +107,49 @@ export type Database = {
       }
       translation_tasks: {
         Row: {
-          ai_model: string | null
           completed_at: string | null
-          created_at: string
-          credits_consumed: number | null
-          download_url: string | null
-          engine_type: string
-          error_message: string | null
-          expires_at: string | null
-          id: number
-          image_count: number | null
-          source_lang: string
+          completed_images: number
+          config: Json
+          created_at: string | null
+          failed_images: number
+          id: string
+          metadata: Json | null
+          progress: number | null
           started_at: string | null
           status: string
-          target_lang: string
-          updated_at: string
-          user_id: string
+          total_images: number
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          ai_model?: string | null
           completed_at?: string | null
-          created_at?: string
-          credits_consumed?: number | null
-          download_url?: string | null
-          engine_type?: string
-          error_message?: string | null
-          expires_at?: string | null
-          id?: number
-          image_count?: number | null
-          source_lang?: string
+          completed_images?: number
+          config?: Json
+          created_at?: string | null
+          failed_images?: number
+          id?: string
+          metadata?: Json | null
+          progress?: number | null
           started_at?: string | null
-          status?: string
-          target_lang?: string
-          updated_at?: string
-          user_id: string
+          status: string
+          total_images?: number
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          ai_model?: string | null
           completed_at?: string | null
-          created_at?: string
-          credits_consumed?: number | null
-          download_url?: string | null
-          engine_type?: string
-          error_message?: string | null
-          expires_at?: string | null
-          id?: number
-          image_count?: number | null
-          source_lang?: string
+          completed_images?: number
+          config?: Json
+          created_at?: string | null
+          failed_images?: number
+          id?: string
+          metadata?: Json | null
+          progress?: number | null
           started_at?: string | null
           status?: string
-          target_lang?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_credits: {
-        Row: {
-          balance: number
-          created_at: string
-          id: number
-          total_earned: number
-          total_used: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          balance?: number
-          created_at?: string
-          id?: number
-          total_earned?: number
-          total_used?: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          balance?: number
-          created_at?: string
-          id?: number
-          total_earned?: number
-          total_used?: number
-          updated_at?: string
-          user_id?: string
+          total_images?: number
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -461,11 +287,11 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-    graphql_public: {
-        Enums: {},
-    },
-    public: {
-        Enums: {},
-    },
+  graphql_public: {
+    Enums: {},
+  },
+  public: {
+    Enums: {},
+  },
 } as const
 
