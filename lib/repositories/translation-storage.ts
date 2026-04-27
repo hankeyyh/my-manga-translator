@@ -64,6 +64,27 @@ export class TranslationStorageRepository {
     }
 
     /**
+     * 下载文件
+     */
+    async downloadFile(filePath: string): Promise<Result<Blob>> {
+        const { data, error } = await this.supabase.storage
+            .from(this.bucketName)
+            .download(filePath);
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`Failed to download file: ${error.message}`),
+            };
+        }
+
+        return {
+            data: data,
+            error: null,
+        };
+    }
+
+    /**
    * 删除文件，仅管理员能操作
    */
     async deleteFiles(filePaths: string[]): Promise<Result<void>> {

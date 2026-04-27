@@ -1,5 +1,7 @@
-import { TranslationConfig } from "./translation-types";
+import { Result } from "@/lib/types";
+import { TranslationConfig, TranslationImage } from "./translation-types";
 
+export const MAX_TRANSLATION_RETRIES = 3;
 export class TranslationService {
     private baseUrl: string;
     private modalStorage = "manga-results";
@@ -11,7 +13,7 @@ export class TranslationService {
     /**
    * ===== 调用模型翻译服务 =====
    */
-    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<{ folderName: string }> {
+    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<Result<{ folderName: string }>> {
         const formData = new FormData();
         formData.append('image', imageBlob);
         formData.append('config', JSON.stringify({
@@ -28,13 +30,19 @@ export class TranslationService {
         );
 
         if (!response.ok) {
-            throw new Error(`Translation API error: ${response.statusText}`);
+            return {
+                data: null,
+                error: new Error(`Translation API error: ${response.statusText}`),
+            };
         }
 
         // 解析流式响应获取 folderName
         const folderName = await this.parseFolderNameFromStream(response);
 
-        return { folderName };
+        return {
+            data: { folderName },
+            error: null,
+        };
     }
 
     /**
@@ -90,11 +98,12 @@ export class TranslationService {
     async checkResultReady(folderName: string): Promise<boolean> {
         try {
             const response = await fetch(
-                `${this.baseUrl}/result/${folderName}/final.png`,
+                this.getResultUrl(folderName),
                 { method: 'HEAD' }
             );
             return response.ok;
         } catch (error) {
+            console.error('❌ checkResultReady error:', error);
             return false;
         }
     }
@@ -109,13 +118,23 @@ export class TranslationService {
     /**
      * 下载翻译结果
      */
-    async downloadResult(folderName: string): Promise<Blob> {  
+    async downloadResult(folderName: string): Promise<Result<Blob>> {  
         const response = await fetch(this.getResultUrl(folderName));
 
         if (!response.ok) {
-            throw new Error(`Failed to download result: ${response.statusText}`);
+            return {
+                data: null,
+                error: new Error(`Failed to download result: ${response.statusText}`),
+            };
         }
 
-        return await response.blob();
+        return {
+            data: await response.blob(),
+            error: null,
+        };
+    }
+
+    getImageRetryCount(image: TranslationImage): number {
+        return Math.min((image.retryCount || 0) + 1, MAX_TRANSLATION_RETRIES);
     }
 }

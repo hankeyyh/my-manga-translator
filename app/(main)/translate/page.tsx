@@ -2,7 +2,7 @@
 
 import { Manrope, Inter } from "next/font/google";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     CheckCircle2,
     ChevronDown,
@@ -33,7 +33,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site-header";
+import { TranslationConfig } from "@/lib/services/translate/translation-types";
 import { cn } from "@/lib/utils";
+import { TaskStatus as TaskState } from "@/lib/services/translate/translation-types";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -50,6 +52,29 @@ const inter = Inter({
 const ENGINES = ["GPT-4o Vision", "GPT-4o mini", "Claude 3.5 Sonnet"] as const;
 const STYLES = ["WildWords BB", "Standard", "Artistic"] as const;
 
+interface ResultImage {
+    id: string;
+    url: string;
+}
+
+interface TaskStatusResponse {
+    id: string;
+    status: TaskState;
+    total_images: number;
+    completed_images: number;
+    failed_images: number;
+    progress: number;
+    created_at: string;
+    completed_at?: string;
+}
+
+interface LocalPage {
+    id: string;
+    label: string;
+    file: File;
+    previewUrl: string;
+}
+
 export default function TranslateWorkbench() {
     const [zoom, setZoom] = useState(100);
     const [showSettings, setShowSettings] = useState(false);
@@ -61,33 +86,175 @@ export default function TranslateWorkbench() {
     /** 左侧竖条：0 设置 1 历史 2 图层 3 魔法棒 4 帮助 */
     const [leftTool, setLeftTool] = useState(0);
 
-    const thumbnails = [
-        {
-            id: 1,
-            label: "PAGE 01",
-            status: "active" as const,
-            image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDVgPiUCUOaLyzK97yM_eskfUDY5SdtoRxSM2x3xk2O3wMrJbAYt-PlT9a38tNB7B8kvBH4ilidXeI_Wl8zxJYLF3O1qAX_EL6XhAsP9MGXt10AuYLQKlLqoMYAci_GEO-tbc9P67ncL4n9OprdHIz7bYAS3GBK11TvMjol6SDlTt0db3XoAysE-90Pwrwt26BJfeuW51Xjyn2w8JWeBPFDzHtBvNIoo71QPMWD4lRtSZCQwSUio4lgfQnGirbet7ISZC9FN8U",
-        },
-        {
-            id: 2,
-            label: "PAGE 02",
-            status: "completed" as const,
-            image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDywl8KjHUH1F0ck3WN6-3N2phaKoEjSP3NhuxqeIBFrLQjfu9A0-oe4GYpY2R3Dt_ek8Wj3cU48aTxeLMJAJC0UWlcvMiu626E3PRYGRK-DUHziRHvfLa8fKkymVpshh-CM085fL6Gz6bQrXX_qvsdtqyxvM9TmirhQ2jc72xLvAX2nsQKDqQfYRcNOG5RuFXRoDwpxI4bTxoCg7eUpdizrIFr8_RXIHJVNDrEZhE4bzTLU3L0YCeQOetpBXp94Ui7u7sL548",
-        },
-        {
-            id: 3,
-            label: "PAGE 03",
-            status: "processing" as const,
-            progress: 65,
-            image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBR5Tj7_TwjuUmLbMM3Be1DvbRvahwb8SJjNGwcJtVinj9OgjP2MwolPmPVeuBjRPYl6uCDiCB982HdnD_pwyI8e2ubeNr-1VVhApEGYofqp6RAfjBikD6mefZlovyNXth1kUmTAtXg9eJUrqDW1UR_caYJndn-lHDH7OLHsOUjCWWkuqsz38OV_pbXav1nMvJKeiZehW10ZmXK2Vmopljxv9OmhwhB7Hae-SOMTttdg2dLlgmBLDDGSbglYH7c9n2Qb1q46W8",
-        },
-    ];
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const pagesRef = useRef<LocalPage[]>([]);
+    const [pages, setPages] = useState<LocalPage[]>([]);
+    const [taskId, setTaskId] = useState<string | null>(null);
+    const [taskStatus, setTaskStatus] = useState<TaskStatusResponse | null>(null);
+    const [resultImages, setResultImages] = useState<ResultImage[]>([]);
+    const [loadingResult, setLoadingResult] = useState(false);
+    const [resultError, setResultError] = useState<string | null>(null);
+    const [polling, setPolling] = useState(false);
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const zoomIn = () => setZoom((z) => Math.min(z + 25, 200));
     const zoomOut = () => setZoom((z) => Math.max(z - 25, 50));
+
+    const openFilePicker = () => fileInputRef.current?.click();
+
+    const onPickFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const picked = Array.from(event.target.files ?? []);
+        if (picked.length === 0) {
+            return;
+        }
+
+        setPages((prev) => {
+            const next = [...prev];
+            for (const file of picked) {
+                next.push({
+                    id: crypto.randomUUID(),
+                    label: `PAGE ${String(next.length + 1).padStart(2, "0")}`,
+                    file,
+                    previewUrl: URL.createObjectURL(file),
+                });
+            }
+            return next;
+        });
+
+        event.target.value = "";
+    };
+
+    useEffect(() => {
+        pagesRef.current = pages;
+    }, [pages]);
+
+    useEffect(() => {
+        return () => {
+            for (const page of pagesRef.current) {
+                URL.revokeObjectURL(page.previewUrl);
+            }
+        };
+    }, []);
+
+    const selectedPage = pages[activeTab] ?? null;
+
+    const translatedSrc = useMemo(() => {
+        if (selectedPage && resultImages[activeTab]) {
+            return resultImages[activeTab].url;
+        }
+        return null;
+    }, [activeTab, resultImages, selectedPage]);
+
+    const fetchResultImages = async (id: string) => {
+        setLoadingResult(true);
+        setResultError(null);
+
+        try {
+            const response = await fetch(`/api/translate/result/${id}`);
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to fetch result images");
+            }
+            setResultImages(data.resultImages ?? []);
+        } catch (error) {
+            setResultError(error instanceof Error ? error.message : "Unknown error");
+        } finally {
+            setLoadingResult(false);
+        }
+    };
+
+    const submitTask = async () => {
+        if (pages.length === 0 || submitLoading) {
+            return;
+        }
+
+        setSubmitLoading(true);
+        setSubmitError(null);
+        setResultError(null);
+        setResultImages([]);
+        setTaskStatus(null);
+        setTaskId(null);
+        setPolling(false);
+
+        try {
+            const formData = new FormData();
+            for (const page of pages) {
+                formData.append("images", page.file);
+            }
+            const config: TranslationConfig = {
+                translator: "chatgpt",
+                target_lang: targetLang,
+                source_lang: sourceLang,
+                text_style: style === "Standard" ? "standard" : style === "Artistic" ? "artistic" : "manga",
+            };
+            formData.append("config", JSON.stringify(config));
+
+            const response = await fetch("/api/translate/submit", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await response.json();
+            if (!response.ok || !data.taskId) {
+                throw new Error(data.error || "Failed to submit translation");
+            }
+
+            setTaskId(data.taskId);
+            setPolling(true);
+            setActiveTab(0);
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : "Unknown error");
+        } finally {
+            setSubmitLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!polling || !taskId) {
+            return;
+        }
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/translate/task/${taskId}`);
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || "Failed to poll task status");
+                }
+                setTaskStatus(data);
+
+                if (data.status === "completed") {
+                    setPolling(false);
+                    await fetchResultImages(taskId);
+                } else if (data.status === "failed") {
+                    setPolling(false);
+                }
+            } catch (error) {
+                setPolling(false);
+                setResultError(error instanceof Error ? error.message : "Unknown error");
+            }
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [polling, taskId]);
+
+    const thumbnails = useMemo(() => {
+        return pages.map((page, index) => {
+            const hasResult = Boolean(resultImages[index]);
+            const isProcessing = polling || submitLoading;
+            return {
+                id: page.id,
+                label: page.label,
+                status: hasResult
+                    ? ("completed" as const)
+                    : isProcessing
+                      ? ("processing" as const)
+                      : ("active" as const),
+                progress: taskStatus?.progress,
+                image: page.previewUrl,
+            };
+        });
+    }, [pages, resultImages, polling, submitLoading, taskStatus?.progress]);
 
     const isThumbSelected = (index: number) => activeTab === index;
 
@@ -217,7 +384,7 @@ export default function TranslateWorkbench() {
                                     <CardContent className="flex flex-col gap-3 p-4">
                                         <div className="flex flex-col gap-0.5">
                                             <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                        Translation Engine
+                                                Translation Engine
                                             </Label>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -249,7 +416,7 @@ export default function TranslateWorkbench() {
                                         <div className="flex gap-8 border-t border-[#dee3e7] pt-3">
                                             <div className="flex flex-col gap-0.5">
                                                 <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                          Languages
+                                                    Languages
                                                 </Label>
                                                 <div className="flex items-center gap-2 text-sm font-bold">
                                                     <Input
@@ -267,7 +434,7 @@ export default function TranslateWorkbench() {
                                             </div>
                                             <div className="flex flex-col gap-0.5">
                                                 <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                          Style
+                                                    Style
                                                 </Label>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
@@ -326,7 +493,7 @@ export default function TranslateWorkbench() {
                             <div className="flex min-h-0 min-w-0 flex-1 justify-end">
                                 <div className="flex h-full min-h-0 w-full max-w-full flex-col items-center justify-end gap-2">
                                     <span className="shrink-0 font-headline text-[10px] font-bold uppercase tracking-widest text-[#5a6064]">
-                    Original ({sourceLang})
+                                        Original ({sourceLang})
                                     </span>
                                     <div
                                         className="relative flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
@@ -335,15 +502,18 @@ export default function TranslateWorkbench() {
                                             transformOrigin: "right center",
                                         }}
                                     >
-                                        <Image
-                                            alt="Original Comic Panel"
-                                            className="object-contain"
-                                            fetchPriority="high"
-                                            fill
-                                            priority
-                                            sizes="50vw"
-                                            src="/op-1178-raw.jpg"
-                                        />
+                                        {selectedPage?.previewUrl ? (
+                                            <Image
+                                                alt="Original Comic Panel"
+                                                className="object-contain"
+                                                fetchPriority="high"
+                                                fill
+                                                priority
+                                                sizes="50vw"
+                                                src={selectedPage.previewUrl}
+                                                unoptimized
+                                            />
+                                        ) : null}
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +521,7 @@ export default function TranslateWorkbench() {
                             <div className="flex min-h-0 min-w-0 flex-1 justify-start">
                                 <div className="flex h-full min-h-0 w-full max-w-full flex-col items-center justify-start gap-2">
                                     <span className="shrink-0 font-headline text-[10px] font-bold uppercase tracking-widest text-[#0053dd]">
-                    Translated ({targetLang})
+                                        Translated ({targetLang})
                                     </span>
                                     <div
                                         className="relative flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
@@ -360,15 +530,18 @@ export default function TranslateWorkbench() {
                                             transformOrigin: "left center",
                                         }}
                                     >
-                                        <Image
-                                            alt="Translated Comic Panel"
-                                            className="object-contain"
-                                            fetchPriority="high"
-                                            fill
-                                            priority
-                                            sizes="50vw"
-                                            src="/op-1178-en.png"
-                                        />
+                                        {translatedSrc ? (
+                                            <Image
+                                                alt="Translated Comic Panel"
+                                                className="object-contain"
+                                                fetchPriority="high"
+                                                fill
+                                                priority
+                                                sizes="50vw"
+                                                src={translatedSrc}
+                                                unoptimized
+                                            />
+                                        ) : null}
                                     </div>
                                 </div>
                             </div>
@@ -377,17 +550,36 @@ export default function TranslateWorkbench() {
 
                     <section className="flex h-32 shrink-0 gap-4">
                         <div className="flex w-48 flex-col gap-2">
-                            <Button className="flex-1 justify-start gap-3 rounded-xl bg-[#0053dd] text-xs font-bold text-white hover:bg-[#0053dd]/90">
-                                <Phone className="h-4 w-4" />
-                Start All
+                            <Button
+                                className="flex-1 justify-start gap-3 rounded-xl bg-[#0053dd] text-xs font-bold text-white hover:bg-[#0053dd]/90"
+                                disabled={pages.length === 0 || submitLoading || polling}
+                                onClick={submitTask}
+                            >
+                                {submitLoading || polling ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Phone className="h-4 w-4" />
+                                )}
+                                Start All
                             </Button>
                             <Button
                                 className="flex-1 justify-start gap-3 rounded-xl border-[#dee3e7] text-xs font-bold text-[#5a6064] hover:border-[#0053dd] hover:text-[#0053dd]"
                                 variant="outline"
                             >
                                 <Download className="h-4 w-4" />
-                Download All
+                                Download All
                             </Button>
+                            {(submitError || resultError) && (
+                                <p className="line-clamp-2 text-[10px] text-red-500">
+                                    {submitError ?? resultError}
+                                </p>
+                            )}
+                            {taskStatus && (
+                                <p className="line-clamp-2 text-[10px] text-[#5a6064]">
+                                    {taskStatus.completed_images}/{taskStatus.total_images} •{" "}
+                                    {taskStatus.progress}%
+                                </p>
+                            )}
                         </div>
 
                         <div
@@ -413,7 +605,7 @@ export default function TranslateWorkbench() {
                                         className={cn(
                                             "relative mb-1 flex-1 overflow-hidden rounded-lg",
                                             thumb.status === "completed" &&
-                        "grayscale group-hover:grayscale-0",
+                                            "grayscale group-hover:grayscale-0",
                                         )}
                                     >
                                         {thumb.status === "processing" && (
@@ -463,14 +655,23 @@ export default function TranslateWorkbench() {
 
                             <button
                                 className="flex h-full w-24 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-[#dee3e7] bg-white transition-colors hover:border-[#0053dd] group"
+                                onClick={openFilePicker}
                                 type="button"
                             >
                                 <Plus className="h-5 w-5 text-[#dee3e7] transition-colors group-hover:text-[#0053dd]" />
                                 <span className="font-headline text-[9px] font-bold text-[#5a6064]">
-                  Add Page
+                                    Add Page
                                 </span>
                             </button>
                         </div>
+                        <input
+                            ref={fileInputRef}
+                            accept="image/*"
+                            className="hidden"
+                            multiple
+                            onChange={onPickFiles}
+                            type="file"
+                        />
                     </section>
                 </div>
             </main>
