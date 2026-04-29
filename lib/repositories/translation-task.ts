@@ -1,28 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { CreateTaskParams, TaskStatus, TranslationImage, TranslationTask, TranslationTaskDetail, UpdateTaskParams } from '@/lib/services/translate/translation-types';
-import type { Json, Tables, TablesInsert, TablesUpdate } from '@/lib/supabase/database';
+import type { Json, TablesInsert, TablesUpdate } from '@/lib/supabase/database';
 import { Result } from '../types';
-
-function mapTranslationTaskRowToTranslationTask(data: Tables<'translation_tasks'>): TranslationTask {
-    return {
-        id: data.id,
-        userId: data.user_id ?? '',
-        status: data.status as TranslationTask['status'],
-        // 统计信息
-        totalImages: data.total_images,
-        completedImages: data.completed_images,
-        failedImages: data.failed_images,
-        progress: data.progress ?? 0,
-
-        config: data.config as TranslationTask['config'],
-
-        createdAt: data.created_at ?? new Date().toISOString(),
-        startedAt: data.started_at ?? undefined,
-        completedAt: data.completed_at ?? undefined,
-        updatedAt: data.updated_at ?? new Date().toISOString(),
-        metadata: (data.metadata as TranslationTask['metadata']) ?? undefined,
-    };
-}
+import { mapTranslationImageRowToTranslationImage, mapTranslationTaskRowToTranslationTask } from './common';
 
 export class TranslationTaskRepository {
     constructor(private supabase: SupabaseClient) { }
@@ -122,7 +102,7 @@ export class TranslationTaskRepository {
         return {
             data: {
                 ...mapTranslationTaskRowToTranslationTask(data),
-                images: data.translation_images as TranslationImage[],
+                images: data.translation_images.map(mapTranslationImageRowToTranslationImage),
             },
             error: null,
         };

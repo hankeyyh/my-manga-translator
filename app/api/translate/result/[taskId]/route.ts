@@ -42,11 +42,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const resultImagePaths = taskDetail.images.filter(isValidImage).map((img) => img.resultImagePath!);
     const signedUrlsResult = await storageRepo.createSignedUrls(resultImagePaths, 3600);
     if (signedUrlsResult.error) {
-        return NextResponse.json({ error: signedUrlsResult.error.message }, { status: 500 });
+        console.error('❌ Failed to create signed URLs:', signedUrlsResult.error);
+        return NextResponse.json({ error: "Failed to create signed URLs: " + signedUrlsResult.error.message }, { status: 500 });
     }
     const signedUrls = signedUrlsResult.data;
     if (!signedUrls) {
-        return NextResponse.json({ error: 'Failed to create signed URLs' }, { status: 500 });
+        console.error('❌ Signed URLs are null:', resultImagePaths);
+        return NextResponse.json({ error: 'Signed URLs are null' }, { status: 500 });
     }
 
     const resultImages = [];
@@ -54,6 +56,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     for (const image of taskDetail.images) {
         if (!isValidImage(image)) {
             continue;
+        }
+        if (!signedUrls[j]) {
+            console.error('❌ Signed URL is empty:', image.resultImagePath);
         }
         resultImages.push({
             id: image.id,
