@@ -16,10 +16,7 @@ export class TranslationService {
     async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<Result<{ folderName: string }>> {
         const formData = new FormData();
         formData.append('image', imageBlob);
-        formData.append('config', JSON.stringify({
-            ...config,
-            _web_frontend_optimized: true,
-        }));
+        formData.append('config', JSON.stringify(this.buildApiConfig(config)));
 
         const response = await fetch(
             `${this.baseUrl}/translate/with-form/image/stream/web`,
@@ -30,6 +27,7 @@ export class TranslationService {
         );
 
         if (!response.ok) {
+            console.error('❌ submitTranslation error:', response.statusText);
             return {
                 data: null,
                 error: new Error(`Translation API error: ${response.statusText}`),
@@ -38,6 +36,12 @@ export class TranslationService {
 
         // 解析流式响应获取 folderName
         const folderName = await this.parseFolderNameFromStream(response);
+        if (!folderName) {
+            return {
+                data: null,
+                error: new Error('Folder name not found'),
+            };
+        }
 
         return {
             data: { folderName },
@@ -46,36 +50,101 @@ export class TranslationService {
     }
 
     /**
+   * 将前端扁平配置映射为后端 Config 所需的嵌套结构
+   */
+    private buildApiConfig(config: TranslationConfig) {
+        return {
+            _web_frontend_optimized: true,
+            ...(config.upscaler ? { upscale: { upscaler: config.upscaler } } : {}),
+            ...(config.detector ? { detector: { detector: config.detector } } : {}),
+            ...(config.ocr ? { ocr: { ocr: config.ocr } } : {}),
+            ...(config.inpainter ? { inpainter: { inpainter: config.inpainter } } : {}),
+            ...(config.renderer ? { render: { renderer: config.renderer } } : {}),
+            ...(config.translator || config.target_lang || config.source_lang
+                ? {
+                    translator: {
+                        ...(config.translator ? { translator: config.translator } : {}),
+                        ...(config.target_lang ? { target_lang: config.target_lang } : {}),
+                        ...(config.source_lang ? { source_lang: config.source_lang } : {}),
+                    },
+                }
+                : {}),
+        };
+    }
+
+    /**
    * 从流式响应中解析 folderName
    * 注意: 这个实现需要根据实际的响应格式调整
    */
+    private extractFolderNameFromProgressText(text: string): string {
+        // 后端会发送类似:
+        // - rendering_folder:<folderName>
+        // - final_ready:<folderName>
+        // 兼容历史可能的 folder_name/folder-name 形式。
+        const patterns = [
+            /(?:rendering_folder|final_ready)\s*:\s*([a-zA-Z0-9_-]+)/i,
+            /folder[_-]?name["\s:]+([a-zA-Z0-9_-]+)/i,
+        ];
+        for (const pattern of patterns) {
+            const match = text.match(pattern);
+            if (match?.[1]) return match[1];
+        }
+        return "";
+    }
+
     private async parseFolderNameFromStream(response: Response): Promise<string> {
         const reader = response.body?.getReader();
         if (!reader) throw new Error('No response body');
 
         let folderName = '';
+        let buffer: Uint8Array<ArrayBufferLike> = new Uint8Array(0);
+        const decoder = new TextDecoder();
+
+        const concatUint8Array = (
+            a: Uint8Array<ArrayBufferLike>,
+            b: Uint8Array<ArrayBufferLike>
+        ): Uint8Array<ArrayBufferLike> => {
+            const merged = new Uint8Array(a.length + b.length);
+            merged.set(a, 0);
+            merged.set(b, a.length);
+            return merged;
+        };
 
         try {
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
+                if (!value || value.length === 0) continue;
 
                 // 解析流式数据: [1 byte status][4 bytes size][n bytes data]
-                const status = value[0];
-                const size = new DataView(value.buffer).getUint32(1);
-                const data = value.slice(5, 5 + size);
+                // 注意：一个 chunk 可能包含多个包，也可能是半包，需要缓存并拼包。
+                buffer = concatUint8Array(buffer, value);
 
-                if (status === 0) {
-                    // 结果数据,可能包含 folderName
-                    // 如果响应头包含 folderName,从这里提取
-                    const text = new TextDecoder().decode(data);
-                    const match = text.match(/folder[_-]?name["\s:]+([a-zA-Z0-9_-]+)/i);
-                    if (match) {
-                        folderName = match[1];
+                while (buffer.length >= 5) {
+                    const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+                    const status = buffer[0];
+                    const size = view.getUint32(1, false); // big-endian
+                    const frameSize = 5 + size;
+
+                    if (buffer.length < frameSize) break;
+
+                    const data = buffer.slice(5, frameSize);
+                    buffer = buffer.slice(frameSize);
+
+                    if (status === 1) {
+                        // 进度消息里可能包含 folder 名称。
+                        const text = decoder.decode(data);
+                        const extracted = this.extractFolderNameFromProgressText(text);
+                        if (extracted) {
+                            folderName = extracted;
+                            // 已拿到 folderName，无需继续解析后续流
+                            return folderName;
+                        }
+                    } else if (status === 2) {
+                        const errorMsg = decoder.decode(data);
+                        console.error("error:", errorMsg);
+                        throw new Error(errorMsg);
                     }
-                } else if (status === 2) {
-                    // 错误
-                    throw new Error(new TextDecoder().decode(data));
                 }
             }
         } finally {
@@ -84,9 +153,9 @@ export class TranslationService {
 
         // 如果无法从流中解析,尝试从响应头获取
         if (!folderName) {
+            console.debug("response.headers:", response.headers);
             folderName = response.headers.get('X-Result-Folder') ||
-                response.headers.get('X-Folder-Name') ||
-                `task_${Date.now()}`;
+                response.headers.get('X-Folder-Name') || '';
         }
 
         return folderName;

@@ -1,3 +1,4 @@
+import "@/setup-env";
 import { TranslationImageRepository } from "@/lib/repositories/translation-image";
 import { TranslationStorageRepository } from "@/lib/repositories/translation-storage";
 import { TranslationTaskRepository } from "@/lib/repositories/translation-task";
@@ -125,6 +126,7 @@ class TranslationWorker {
             return;
         }
         const originalImage = downloadOriginalImageResult.data!;
+        console.debug("originalImage:", originalImage);
 
         // 5. 提交到 Modal 服务
         const submitResult = await translationService.submitTranslation(originalImage, config);
@@ -134,6 +136,7 @@ class TranslationWorker {
             return;
         }
         const folderName = submitResult.data?.folderName!;
+        console.debug("algo server folderName:", folderName);
 
         // 6. 更新 folderName
         const updateFolderNameResult = await imageRepo.updateImage(imageId, {

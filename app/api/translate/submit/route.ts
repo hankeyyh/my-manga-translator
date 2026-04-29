@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
         config,
     });
     if (taskResult.error) {
+        console.error(taskResult.error);
         return NextResponse.json({ error: taskResult.error.message }, { status: 500 });
     }
     const task = taskResult.data!;
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
     }
     const imagesResult = await imageRepo.createImages(imageParams);
     if (imagesResult.error) {
+        console.error(imagesResult.error);
         return NextResponse.json({ error: imagesResult.error.message }, { status: 500 });
     }
 

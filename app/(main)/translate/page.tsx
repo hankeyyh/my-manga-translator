@@ -51,6 +51,8 @@ const inter = Inter({
 
 const ENGINES = ["GPT-4o Vision", "GPT-4o mini", "Claude 3.5 Sonnet"] as const;
 const STYLES = ["WildWords BB", "Standard", "Artistic"] as const;
+const POLL_INTERVAL_MS = 5000;
+const POLL_MAX_WAIT_MS = 5 * 60 * 1000;
 
 interface ResultImage {
     id: string;
@@ -183,7 +185,7 @@ export default function TranslateWorkbench() {
                 formData.append("images", page.file);
             }
             const config: TranslationConfig = {
-                translator: "chatgpt",
+                translator: "youdao",
                 target_lang: targetLang,
                 source_lang: sourceLang,
                 text_style: style === "Standard" ? "standard" : style === "Artistic" ? "artistic" : "manga",
@@ -214,7 +216,14 @@ export default function TranslateWorkbench() {
             return;
         }
 
+        const startedAt = Date.now();
         const interval = setInterval(async () => {
+            if (Date.now() - startedAt >= POLL_MAX_WAIT_MS) {
+                setPolling(false);
+                setResultError("轮询超时（超过 5 分钟），请稍后重试。");
+                return;
+            }
+
             try {
                 const response = await fetch(`/api/translate/task/${taskId}`);
                 const data = await response.json();
@@ -233,7 +242,7 @@ export default function TranslateWorkbench() {
                 setPolling(false);
                 setResultError(error instanceof Error ? error.message : "Unknown error");
             }
-        }, 5000);
+        }, POLL_INTERVAL_MS);
 
         return () => clearInterval(interval);
     }, [polling, taskId]);
@@ -258,6 +267,7 @@ export default function TranslateWorkbench() {
 
     const isThumbSelected = (index: number) => activeTab === index;
 
+    // TODO 要把用户已上传的图片加载出来
     return (
         <div
             className={cn(

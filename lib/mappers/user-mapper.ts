@@ -15,18 +15,18 @@ export class UserMapper {
    */
     static fromClaimsToEntity(claims: JwtPayload): UserEntity {
         return new UserEntity(
-            claims.id,
-      claims.email!,
+            claims.sub,
+            claims.email!,
         );
     }
 
     static fromUserToEntity(user: SupabaseUser): UserEntity {
         return new UserEntity(
             user.id,
-      user.email!,
+            user.email!,
         );
     }
-  
+
     /**
    * 将 UserEntity 转换为可序列化的 DTO（用于 API 响应）
    */
