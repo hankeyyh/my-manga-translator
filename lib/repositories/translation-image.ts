@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { CreateImageParams, TranslationImage, UpdateImageParams } from '../services/translate/translation-types';
-import type { Json, TablesInsert, TablesUpdate } from '../supabase/database';
+import type { Json, Tables, TablesInsert, TablesUpdate } from '../supabase/database';
 import { Result } from '../types';
 import { mapTranslationImageRowToTranslationImage } from './common';
 
@@ -292,6 +292,37 @@ export class TranslationImageRepository {
 
         return {
             data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
+            error: null,
+        };
+    }
+
+    /**
+   * 获取用户已完成翻译的图片（用于历史记录）
+   */
+    async getUserCompletedImages(userId: string, limit: number = 200): Promise<Result<TranslationImage[]>> {
+        const { data, error } = await this.supabase
+            .from('translation_images')
+            .select('*, translation_tasks!inner(user_id, status)')
+            .eq('translation_tasks.user_id', userId)
+            .eq('translation_tasks.status', 'completed')
+            .eq('status', 'completed')
+            .not('result_image_path', 'is', null)
+            .order('created_at', { ascending: false })
+            .limit(limit);
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`获取用户历史图片失败: ${error.message}`),
+            };
+        }
+
+        const images = (data ?? []).map((item) =>
+            mapTranslationImageRowToTranslationImage(item as unknown as Tables<'translation_images'>),
+        );
+
+        return {
+            data: images,
             error: null,
         };
     }

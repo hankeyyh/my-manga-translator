@@ -59,6 +59,12 @@ interface ResultImage {
     url: string;
 }
 
+interface HistoryImage extends ResultImage {
+    taskId: string;
+    imageIndex: number;
+    createdAt?: string;
+}
+
 interface TaskStatusResponse {
     id: string;
     status: TaskState;
@@ -94,8 +100,11 @@ export default function TranslateWorkbench() {
     const [taskId, setTaskId] = useState<string | null>(null);
     const [taskStatus, setTaskStatus] = useState<TaskStatusResponse | null>(null);
     const [resultImages, setResultImages] = useState<ResultImage[]>([]);
+    const [historyImages, setHistoryImages] = useState<HistoryImage[]>([]);
     const [loadingResult, setLoadingResult] = useState(false);
     const [resultError, setResultError] = useState<string | null>(null);
+    const [historyLoading, setHistoryLoading] = useState(false);
+    const [historyError, setHistoryError] = useState<string | null>(null);
     const [polling, setPolling] = useState(false);
     const [submitLoading, setSubmitLoading] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
@@ -163,6 +172,24 @@ export default function TranslateWorkbench() {
             setResultError(error instanceof Error ? error.message : "Unknown error");
         } finally {
             setLoadingResult(false);
+        }
+    };
+
+    const fetchHistoryImages = async () => {
+        setHistoryLoading(true);
+        setHistoryError(null);
+
+        try {
+            const response = await fetch("/api/translate/history");
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to fetch translation history");
+            }
+            setHistoryImages(data.images ?? []);
+        } catch (error) {
+            setHistoryError(error instanceof Error ? error.message : "Unknown error");
+        } finally {
+            setHistoryLoading(false);
         }
     };
 
@@ -235,6 +262,7 @@ export default function TranslateWorkbench() {
                 if (data.status === "completed") {
                     setPolling(false);
                     await fetchResultImages(taskId);
+                    await fetchHistoryImages();
                 } else if (data.status === "failed") {
                     setPolling(false);
                 }
@@ -246,6 +274,10 @@ export default function TranslateWorkbench() {
 
         return () => clearInterval(interval);
     }, [polling, taskId]);
+
+    useEffect(() => {
+        void fetchHistoryImages();
+    }, []);
 
     const thumbnails = useMemo(() => {
         return pages.map((page, index) => {
@@ -276,11 +308,11 @@ export default function TranslateWorkbench() {
                 "font-body text-[#2d3337]",
             )}
         >
-            <main className="flex h-screen flex-col bg-[#f8f9fb] pt-16">
+            <main className="flex min-h-screen flex-col bg-[#f8f9fb] pt-16">
                 <SiteHeader />
 
-                <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden p-6">
-                    <section className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
+                <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-6">
+                    <section className="relative flex h-[75vh] min-h-[420px] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
                         <div
                             className={cn(
                                 "absolute left-5 top-1/2 z-20 flex -translate-y-1/2 items-start gap-0",
@@ -682,6 +714,74 @@ export default function TranslateWorkbench() {
                             onChange={onPickFiles}
                             type="file"
                         />
+                    </section>
+
+                    <section className="shrink-0 rounded-2xl bg-[#e8edf0] p-5">
+                        <div className="mb-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <h2 className="font-headline text-2xl font-bold text-[#2d3337]">
+                                    Translation History
+                                </h2>
+                                <Button
+                                    className="h-8 rounded-full border-[#d6dce1] bg-white px-4 text-xs font-semibold text-[#5a6064] hover:bg-white"
+                                    variant="outline"
+                                >
+                                    Auto-delete after: 1 week
+                                </Button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    className="h-8 rounded-md border-[#d6dce1] bg-white px-4 text-xs font-semibold text-[#5a6064] hover:bg-white"
+                                    variant="outline"
+                                >
+                                    Amount
+                                </Button>
+                                <Button className="h-8 rounded-md bg-[#0053dd] px-4 text-xs font-semibold text-white hover:bg-[#0053dd]/90">
+                                    Bulk Download
+                                </Button>
+                            </div>
+                        </div>
+
+                        {historyLoading ? (
+                            <div className="flex h-40 items-center justify-center rounded-xl bg-[#dfe5ea]">
+                                <Loader2 className="h-5 w-5 animate-spin text-[#5a6064]" />
+                            </div>
+                        ) : historyError ? (
+                            <p className="rounded-xl bg-[#dfe5ea] p-4 text-sm text-red-500">
+                                {historyError}
+                            </p>
+                        ) : historyImages.length === 0 ? (
+                            <p className="rounded-xl bg-[#dfe5ea] p-4 text-sm text-[#5a6064]">
+                                暂无翻译历史
+                            </p>
+                        ) : (
+                            <div
+                                className={cn(
+                                    "max-h-[720px] overflow-y-auto pr-1",
+                                    "[scrollbar-width:thin]",
+                                    "[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#c9d1d8]",
+                                )}
+                            >
+                                <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+                                {historyImages.map((item, index) => (
+                                    <div
+                                        key={item.id}
+                                        className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-[#d6dce1] bg-white"
+                                    >
+                                        <Image
+                                            alt={`History Image ${item.imageIndex + 1}`}
+                                            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                                            fill
+                                            loading="eager"
+                                            sizes="(max-width: 1024px) 33vw, 180px"
+                                            src={item.url}
+                                            unoptimized
+                                        />
+                                    </div>
+                                ))}
+                                </div>
+                            </div>
+                        )}
                     </section>
                 </div>
             </main>

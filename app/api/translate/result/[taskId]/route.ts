@@ -1,7 +1,7 @@
+import { isValidImage } from "@/lib/repositories/common";
 import { TranslationStorageRepository } from "@/lib/repositories/translation-storage";
 import { TranslationTaskRepository } from "@/lib/repositories/translation-task";
 import { authService } from "@/lib/services/auth/auth-service";
-import { TranslationImage } from "@/lib/services/translate/translation-types";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -83,6 +83,3 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
 }
 
-function isValidImage(image: TranslationImage): boolean {
-    return image.status === 'completed' && image.resultImagePath !== undefined;
-}

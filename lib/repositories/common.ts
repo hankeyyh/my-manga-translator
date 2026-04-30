@@ -27,7 +27,9 @@ export function mapTranslationImageRowToTranslationImage(data: Tables<'translati
         updatedAt: data.updated_at ?? new Date().toISOString(),
         metadata: (data.metadata as TranslationImage['metadata']) ?? undefined,
     };
-}export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation_tasks'>): TranslationTask {
+}
+
+export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation_tasks'>): TranslationTask {
     return {
         id: data.id,
         userId: data.user_id ?? '',
@@ -46,5 +48,9 @@ export function mapTranslationImageRowToTranslationImage(data: Tables<'translati
         updatedAt: data.updated_at ?? new Date().toISOString(),
         metadata: (data.metadata as TranslationTask['metadata']) ?? undefined,
     };
+}
+
+export function isValidImage(image: TranslationImage): boolean {
+    return image.status === 'completed' && image.resultImagePath !== undefined;
 }
 
