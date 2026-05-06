@@ -9,7 +9,7 @@ import {
     HomeProUpsellCard,
 } from "@/components/home";
 import { SiteHeader } from "@/components/site-header";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 const manrope = Manrope({
     subsets: ["latin"],

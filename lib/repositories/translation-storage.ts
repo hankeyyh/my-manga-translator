@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { getFileExtension } from '../utils';
+import { getFileExtension } from '../utils/utils';
 import { Result } from '../types';
 
 export class TranslationStorageRepository {

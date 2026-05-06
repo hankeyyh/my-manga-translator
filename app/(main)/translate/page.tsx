@@ -34,7 +34,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site-header";
 import { TranslationConfig } from "@/lib/services/translate/translation-types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { TaskStatus as TaskState } from "@/lib/services/translate/translation-types";
 
 const manrope = Manrope({

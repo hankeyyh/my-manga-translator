@@ -32,6 +32,7 @@ export async function GET() {
         return NextResponse.json({ images: [] });
     }
 
+    // 3. 创建签名URL
     const storageRepo = new TranslationStorageRepository(supabase);
     const signedUrlsResult = await storageRepo.createSignedUrls(resultPaths, 3600);
     if (signedUrlsResult.error || !signedUrlsResult.data) {

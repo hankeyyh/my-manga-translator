@@ -6,7 +6,7 @@ import { BookOpen } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { createClient } from "@/lib/supabase/client";
 
 /** 与 translate 页一致的导航项，便于首页锚点与路由复用 */

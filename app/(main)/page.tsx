@@ -3,7 +3,9 @@
 import { Manrope, Inter } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import {
     ArrowRight,
     CheckCircle2,
@@ -34,7 +36,9 @@ import { Label } from "@/components/ui/label";
 import {
     SiteHeader,
 } from "@/components/site-header";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
+import { UserRepository } from "@/lib/repositories/user-repository";
+import type { SubscriptionTier } from "@/lib/utils/subscription-prices";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -59,6 +63,7 @@ const SOURCE_OPTIONS = ["Japanese", "Korean", "Chinese"];
 const TARGET_OPTIONS = ["English", "Spanish", "French"];
 
 export default function ComicCuratorDemo() {
+    const router = useRouter();
     const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
     const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
     const [sourceLang, setSourceLang] = useState("Japanese");
@@ -96,6 +101,40 @@ export default function ComicCuratorDemo() {
         "Yes! Join our Discord to connect with 50k+ comic enthusiasts and get support from our community.",
         },
     ];
+
+    async function handlePayment(tier: SubscriptionTier) {
+        try {
+            const supabase = createClient();
+            const userRepo = new UserRepository(supabase);
+            const userResult = await userRepo.getCurrentUser();
+            if (userResult.error || !userResult.data) {
+                router.push("/auth/login");
+                return;
+            }
+            const res = await fetch("/api/checkout-sessions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tier,
+                    billing: billingCycle,
+                }),
+            });
+            const data = (await res.json()) as { url?: string; error?: string };
+            if (res.status === 401) {
+                router.push("/auth/login");
+                return;
+            }
+            if (!res.ok) {
+                console.error("Payment error", data.error ?? res.statusText);
+                return;
+            }
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (error) {
+            console.error("Payment error", error);
+        }
+    }
 
     return (
         <div
@@ -428,6 +467,7 @@ export default function ComicCuratorDemo() {
                                 <Button
                                     className="mb-10 rounded-xl border-2 border-[#3370FF] bg-transparent font-headline font-bold text-[#3370FF] hover:bg-[#3370FF] hover:text-white"
                                     variant="outline"
+                                    onClick={() => handlePayment("basic")}
                                 >
                   Get Started
                                 </Button>
@@ -473,6 +513,7 @@ export default function ComicCuratorDemo() {
                                 </CardHeader>
                                 <Button
                                     className="mb-10 rounded-xl bg-[#3370FF] font-headline font-bold text-white shadow-lg shadow-[#3370FF]/30 hover:scale-[1.02] hover:bg-[#3370FF]/90 active:scale-95"
+                                    onClick={() => handlePayment("pro")}
                                 >
                   Get Started
                                 </Button>
@@ -510,6 +551,7 @@ export default function ComicCuratorDemo() {
                                 <Button
                                     className="mb-10 rounded-xl border-2 border-[#3370FF] bg-transparent font-headline font-bold text-[#3370FF] hover:bg-[#3370FF] hover:text-white"
                                     variant="outline"
+                                    onClick={() => handlePayment("ultra")}
                                 >
                   Get Started
                                 </Button>
