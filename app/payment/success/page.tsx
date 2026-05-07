@@ -1,10 +1,20 @@
+import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 import { UserRepository } from "@/lib/repositories/user-repository";
-import Stripe from "stripe";
 import { PaymentService } from "@/lib/services/payment/payment-service";
-import { redirect } from "next/navigation";
+import SuccessDisplay from "@/components/payment/payment-success";
 
-export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string }> }) {
+export default function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string }> }) {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <PaymentSuccessDetail searchParams={searchParams} />
+        </Suspense>
+    )
+}
+
+async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ session_id: string }> }) {
     const { session_id: sessionId } = await searchParams;
 
     const supabase = await createClient();
@@ -20,13 +30,7 @@ export default async function PaymentSuccessPage({ searchParams }: { searchParam
     }
     if (status === "complete") {
         return (
-            <section id="success">
-                <p>
-                    We appreciate your business! A confirmation email will be sent to{' '}
-                    {email}. If you have any questions, please email{' '}
-                    <a href="mailto:orders@example.com">orders@example.com</a>.
-                </p>
-            </section>
+            <SuccessDisplay email={email ?? ""} />
         )
     }
 }
