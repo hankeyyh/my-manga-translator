@@ -36,7 +36,7 @@ import { Label } from "@/components/ui/label";
 import {
     SiteHeader,
 } from "@/components/site-header";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/components/utils";
 import { UserRepository } from "@/lib/repositories/user-repository";
 import type { SubscriptionTier } from "@/lib/utils/subscription-prices";
 

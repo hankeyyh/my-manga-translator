@@ -2,7 +2,7 @@ import "@/setup-env";
 import { TranslationImageRepository } from "@/lib/repositories/translation-image";
 import { TranslationStorageRepository } from "@/lib/repositories/translation-storage";
 import { TranslationTaskRepository } from "@/lib/repositories/translation-task";
-import { MAX_TRANSLATION_RETRIES, TranslationService } from "@/lib/services/translate/translation";
+import { MAX_TRANSLATION_RETRIES, TranslationService } from "@/lib/services/translate/translation-service";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 
 const POLL_INTERVAL = 5000; // 5 秒
