@@ -4,7 +4,7 @@ import { Manrope, Inter } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
     ArrowRight,
@@ -53,11 +53,11 @@ const inter = Inter({
 });
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2940&auto=format&fit=crop";
+    "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2940&auto=format&fit=crop";
 const BENTO_IMAGE =
-  "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2942&auto=format&fit=crop";
+    "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2942&auto=format&fit=crop";
 const GLOSSARY_IMAGE =
-  "https://images.unsplash.com/photo-1611457194403-d3aca4cf9d11?q=80&w=2942&auto=format&fit=crop";
+    "https://images.unsplash.com/photo-1611457194403-d3aca4cf9d11?q=80&w=2942&auto=format&fit=crop";
 
 const SOURCE_OPTIONS = ["Japanese", "Korean", "Chinese"];
 const TARGET_OPTIONS = ["English", "Spanish", "French"];
@@ -69,36 +69,39 @@ export default function ComicCuratorDemo() {
     const [sourceLang, setSourceLang] = useState("Japanese");
     const [targetLang, setTargetLang] = useState("English");
 
+    const tt = useRef(null);
+
+
     const faqs = [
         {
             question: "Can I try ComicCurator for free first?",
             answer:
-        "Yes! We offer a free trial with limited translation credits to help you experience our service.",
+                "Yes! We offer a free trial with limited translation credits to help you experience our service.",
         },
         {
             question: "How do translation credits work?",
             answer:
-        "Each translation consumes credits based on the complexity and length of the content. Credits refresh monthly with your subscription.",
+                "Each translation consumes credits based on the complexity and length of the content. Credits refresh monthly with your subscription.",
         },
         {
             question: "Can I use these credits across multiple devices?",
             answer:
-        "Absolutely! Your account and credits are accessible from any device where you're logged in.",
+                "Absolutely! Your account and credits are accessible from any device where you're logged in.",
         },
         {
             question: "Why do I need to login with email or Google?",
             answer:
-        "Login ensures your translations are saved and synced across devices, and helps us provide personalized service.",
+                "Login ensures your translations are saved and synced across devices, and helps us provide personalized service.",
         },
         {
             question: "Does ComicCurator have an API?",
             answer:
-        "Yes! Ultra plan includes enterprise API access for integration with your own applications.",
+                "Yes! Ultra plan includes enterprise API access for integration with your own applications.",
         },
         {
             question: "Do you have a Discord community?",
             answer:
-        "Yes! Join our Discord to connect with 50k+ comic enthusiasts and get support from our community.",
+                "Yes! Join our Discord to connect with 50k+ comic enthusiasts and get support from our community.",
         },
     ];
 
@@ -119,7 +122,7 @@ export default function ComicCuratorDemo() {
                     billing: billingCycle,
                 }),
             });
-            const data = (await res.json()) as { url?: string; error?: string };
+            const data = (await res.json()) as { url?: string; error?: string; };
             if (res.status === 401) {
                 router.push("/auth/login");
                 return;
@@ -163,11 +166,11 @@ export default function ComicCuratorDemo() {
                     <div className="relative mx-auto w-full max-w-[1920px] px-8 pb-16 lg:pb-24">
                         <div className="max-w-3xl">
                             <h1 className="mb-6 font-headline text-5xl font-extrabold leading-[1.1] tracking-tight text-white lg:text-7xl">
-                AI-Powered Comic Translation
+                                AI-Powered Comic Translation
                             </h1>
                             <p className="max-w-xl text-xl font-medium leading-relaxed text-white/90">
-                Preserving the soul of visual storytelling through context-aware
-                artificial intelligence and smart redraw technology.
+                                Preserving the soul of visual storytelling through context-aware
+                                artificial intelligence and smart redraw technology.
                             </p>
                         </div>
                     </div>
@@ -180,16 +183,16 @@ export default function ComicCuratorDemo() {
                                 <div className="flex flex-1 flex-col gap-8">
                                     <div>
                                         <CardTitle className="mb-2 font-headline text-3xl font-bold text-[#2d3337]">
-                      Quick Translation Preview
+                                            Quick Translation Preview
                                         </CardTitle>
                                         <CardDescription className="font-body text-base text-[#5a6064]">
-                      Start your journey from raw panels to translated masterpieces.
+                                            Start your journey from raw panels to translated masterpieces.
                                         </CardDescription>
                                     </div>
                                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div className="flex flex-col gap-2">
                                             <Label className="ml-2 font-body text-xs font-bold uppercase tracking-widest text-[#5a6064]">
-                        Source Language
+                                                Source Language
                                             </Label>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -219,7 +222,7 @@ export default function ComicCuratorDemo() {
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <Label className="ml-2 font-body text-xs font-bold uppercase tracking-widest text-[#5a6064]">
-                        Target Language
+                                                Target Language
                                             </Label>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -253,7 +256,7 @@ export default function ComicCuratorDemo() {
                                         size="lg"
                                     >
                                         <Star className="h-6 w-6" />
-                    Start Automatic Translation
+                                        Start Automatic Translation
                                     </Button>
                                 </div>
                                 <div className="flex-1">
@@ -265,10 +268,10 @@ export default function ComicCuratorDemo() {
                                             <UploadCloud className="h-10 w-10 text-[#3370FF]" />
                                         </div>
                                         <p className="mb-2 font-headline text-xl font-bold text-[#2d3337]">
-                      Drop comic panels here
+                                            Drop comic panels here
                                         </p>
                                         <p className="max-w-[240px] text-center font-body text-[#5a6064]">
-                      Support for JPG, PNG, and WebP. Max 20MB per file.
+                                            Support for JPG, PNG, and WebP. Max 20MB per file.
                                         </p>
                                     </button>
                                 </div>
@@ -286,12 +289,12 @@ export default function ComicCuratorDemo() {
                                 </div>
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-4 font-headline text-2xl font-bold">
-                    Context-Aware AI
+                                        Context-Aware AI
                                     </CardTitle>
                                     <CardDescription className="font-body text-base leading-relaxed text-[#5a6064]">
-                    Our models don&apos;t just translate words; they understand
-                    narrative flow, character relationships, and cultural nuances
-                    within every panel.
+                                        Our models don&apos;t just translate words; they understand
+                                        narrative flow, character relationships, and cultural nuances
+                                        within every panel.
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
@@ -301,12 +304,12 @@ export default function ComicCuratorDemo() {
                                 </div>
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-4 font-headline text-2xl font-bold">
-                    Smart Redrawing
+                                        Smart Redrawing
                                     </CardTitle>
                                     <CardDescription className="font-body text-base leading-relaxed text-[#5a6064]">
-                    Advanced in-painting technology automatically fills in artwork
-                    behind removed text, maintaining the original artist&apos;s
-                    brushstrokes.
+                                        Advanced in-painting technology automatically fills in artwork
+                                        behind removed text, maintaining the original artist&apos;s
+                                        brushstrokes.
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
@@ -316,12 +319,12 @@ export default function ComicCuratorDemo() {
                                 </div>
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-4 font-headline text-2xl font-bold">
-                    Style Preservation
+                                        Style Preservation
                                     </CardTitle>
                                     <CardDescription className="font-body text-base leading-relaxed text-[#5a6064]">
-                    We analyze original typography and SFX styles to render
-                    translated text that looks like it was part of the first
-                    printing.
+                                        We analyze original typography and SFX styles to render
+                                        translated text that looks like it was part of the first
+                                        printing.
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
@@ -342,25 +345,25 @@ export default function ComicCuratorDemo() {
                                 />
                                 <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-10">
                                     <Badge className="mb-4 w-fit border-0 bg-[#3370FF]/20 px-4 py-1 font-body text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md hover:bg-[#3370FF]/30">
-                    Pro Feature
+                                        Pro Feature
                                     </Badge>
                                     <h4 className="mb-2 font-headline text-3xl font-bold text-white">
-                    Lossless Upscaling
+                                        Lossless Upscaling
                                     </h4>
                                     <p className="max-w-md font-body text-white/70">
-                    Restore low-resolution scans to modern webtoon standards with a
-                    single click.
+                                        Restore low-resolution scans to modern webtoon standards with a
+                                        single click.
                                     </p>
                                 </div>
                             </div>
                             <Card className="col-span-12 flex flex-col justify-between rounded-[2rem] border-0 bg-[#3370FF] p-10 text-white shadow-none md:col-span-4">
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-6 font-headline text-3xl font-bold leading-tight text-white">
-                    Join 50k+ Curators
+                                        Join 50k+ Curators
                                     </CardTitle>
                                     <CardDescription className="font-body text-base text-white/80">
-                    The largest community of comic enthusiasts, translators, and
-                    creators sharing their passion.
+                                        The largest community of comic enthusiasts, translators, and
+                                        creators sharing their passion.
                                     </CardDescription>
                                 </CardHeader>
                                 <div className="flex -space-x-4">
@@ -368,7 +371,7 @@ export default function ComicCuratorDemo() {
                                     <div className="h-12 w-12 rounded-full border-4 border-[#3370FF] bg-slate-400" />
                                     <div className="h-12 w-12 rounded-full border-4 border-[#3370FF] bg-slate-500" />
                                     <div className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-[#3370FF] bg-slate-200 text-xs font-bold text-[#3370FF]">
-                    +12k
+                                        +12k
                                     </div>
                                 </div>
                             </Card>
@@ -376,10 +379,10 @@ export default function ComicCuratorDemo() {
                                 <Languages className="mb-4 h-12 w-12 text-[#3370FF]" />
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-2 font-headline text-2xl font-bold">
-                    40+ Languages
+                                        40+ Languages
                                     </CardTitle>
                                     <CardDescription className="font-body text-base text-[#5a6064]">
-                    Supporting major global languages including specialized dialects.
+                                        Supporting major global languages including specialized dialects.
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
@@ -395,17 +398,17 @@ export default function ComicCuratorDemo() {
                                 </div>
                                 <CardContent className="p-0">
                                     <CardTitle className="mb-2 font-headline text-2xl font-bold">
-                    Visual Glossary
+                                        Visual Glossary
                                     </CardTitle>
                                     <CardDescription className="font-body text-base text-[#5a6064]">
-                    Maintain consistency across series with character name tracking
-                    and recurring phrase detection.
+                                        Maintain consistency across series with character name tracking
+                                        and recurring phrase detection.
                                     </CardDescription>
                                     <Button
                                         className="mt-4 gap-2 p-0 font-body font-bold text-[#3370FF] hover:gap-4 hover:bg-transparent hover:text-[#3370FF]"
                                         variant="link"
                                     >
-                    Learn more
+                                        Learn more
                                         <ArrowRight className="h-5 w-5" />
                                     </Button>
                                 </CardContent>
@@ -418,10 +421,10 @@ export default function ComicCuratorDemo() {
                     <div className="mx-auto max-w-7xl">
                         <div className="mb-16 text-center">
                             <h2 className="mb-4 font-headline text-4xl font-bold text-[#2d3337] md:text-5xl">
-                Choose Your Plan
+                                Choose Your Plan
                             </h2>
                             <p className="mx-auto max-w-2xl text-lg text-[#5a6064]">
-                Unlock professional-grade translation tools tailored for your needs.
+                                Unlock professional-grade translation tools tailored for your needs.
                             </p>
                             <div className="mt-8 inline-flex rounded-full border border-[#adb3b7]/20 bg-[#ebeef1] p-1">
                                 <Button
@@ -434,7 +437,7 @@ export default function ComicCuratorDemo() {
                                     onClick={() => setBillingCycle("monthly")}
                                     variant="ghost"
                                 >
-                  Monthly
+                                    Monthly
                                 </Button>
                                 <Button
                                     className={cn(
@@ -446,7 +449,7 @@ export default function ComicCuratorDemo() {
                                     onClick={() => setBillingCycle("yearly")}
                                     variant="ghost"
                                 >
-                  Yearly (Save 20%)
+                                    Yearly (Save 20%)
                                 </Button>
                             </div>
                         </div>
@@ -454,14 +457,14 @@ export default function ComicCuratorDemo() {
                             <Card className="flex flex-col rounded-[2rem] border border-[#adb3b7]/10 bg-white p-10 shadow-sm transition-shadow hover:shadow-xl">
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-2 font-headline text-xl font-bold">
-                    Basic
+                                        Basic
                                     </CardTitle>
                                     <div className="mb-6 flex items-baseline gap-1">
                                         <span className="font-headline text-4xl font-extrabold">$8</span>
                                         <span className="font-body text-[#5a6064]">/monthly</span>
                                     </div>
                                     <CardDescription className="mb-8 font-body text-sm font-medium text-[#5a6064]">
-                    1800 translations/mo
+                                        1800 translations/mo
                                     </CardDescription>
                                 </CardHeader>
                                 <Button
@@ -469,7 +472,7 @@ export default function ComicCuratorDemo() {
                                     variant="outline"
                                     onClick={() => handlePayment("basic")}
                                 >
-                  Get Started
+                                    Get Started
                                 </Button>
                                 <ul className="flex flex-col gap-4">
                                     {[
@@ -491,7 +494,7 @@ export default function ComicCuratorDemo() {
 
                             <Card className="relative z-10 flex scale-105 flex-col rounded-[2rem] border-4 border-[#3370FF] bg-white p-10 shadow-xl">
                                 <Badge className="absolute -top-5 left-1/2 -translate-x-1/2 border-0 bg-[#3370FF] px-6 py-1 font-body text-xs font-bold uppercase tracking-widest text-white hover:bg-[#3370FF]">
-                  Recommended
+                                    Recommended
                                 </Badge>
                                 <CardHeader className="p-0">
                                     <div className="mb-2 flex items-start justify-between">
@@ -500,7 +503,7 @@ export default function ComicCuratorDemo() {
                                             className="border-0 bg-[#fa746f]/10 px-2 py-0.5 font-body text-[10px] font-bold uppercase tracking-tighter text-[#a83836] hover:bg-[#fa746f]/20"
                                             variant="secondary"
                                         >
-                      Save 4%
+                                            Save 4%
                                         </Badge>
                                     </div>
                                     <div className="mb-6 flex items-baseline gap-1">
@@ -508,14 +511,14 @@ export default function ComicCuratorDemo() {
                                         <span className="font-body text-[#5a6064]">/monthly</span>
                                     </div>
                                     <CardDescription className="mb-8 font-body text-sm font-medium text-[#5a6064]">
-                    7000 translations/mo
+                                        7000 translations/mo
                                     </CardDescription>
                                 </CardHeader>
                                 <Button
                                     className="mb-10 rounded-xl bg-[#3370FF] font-headline font-bold text-white shadow-lg shadow-[#3370FF]/30 hover:scale-[1.02] hover:bg-[#3370FF]/90 active:scale-95"
                                     onClick={() => handlePayment("pro")}
                                 >
-                  Get Started
+                                    Get Started
                                 </Button>
                                 <ul className="flex flex-col gap-4">
                                     {[
@@ -538,14 +541,14 @@ export default function ComicCuratorDemo() {
                             <Card className="flex flex-col rounded-[2rem] border border-[#adb3b7]/10 bg-white p-10 shadow-sm transition-shadow hover:shadow-xl">
                                 <CardHeader className="p-0">
                                     <CardTitle className="mb-2 font-headline text-xl font-bold">
-                    Ultra
+                                        Ultra
                                     </CardTitle>
                                     <div className="mb-6 flex items-baseline gap-1">
                                         <span className="font-headline text-4xl font-extrabold">$80</span>
                                         <span className="font-body text-[#5a6064]">/monthly</span>
                                     </div>
                                     <CardDescription className="mb-8 font-body text-sm font-medium text-[#5a6064]">
-                    Unlimited translations
+                                        Unlimited translations
                                     </CardDescription>
                                 </CardHeader>
                                 <Button
@@ -553,7 +556,7 @@ export default function ComicCuratorDemo() {
                                     variant="outline"
                                     onClick={() => handlePayment("ultra")}
                                 >
-                  Get Started
+                                    Get Started
                                 </Button>
                                 <ul className="flex flex-col gap-4">
                                     {[
@@ -579,7 +582,7 @@ export default function ComicCuratorDemo() {
                 <section className="scroll-mt-16 bg-[#f8f9fb] px-8 py-32" id="faq">
                     <div className="mx-auto max-w-3xl">
                         <h2 className="mb-16 text-center font-headline text-4xl font-bold text-[#2d3337] md:text-5xl">
-              Frequently asked questions
+                            Frequently asked questions
                         </h2>
                         <div className="flex flex-col border-t border-[#adb3b7]/20">
                             {faqs.map((faq, index) => (
@@ -616,7 +619,7 @@ export default function ComicCuratorDemo() {
                                 className="font-body font-bold text-[#3370FF] hover:bg-transparent hover:underline"
                                 variant="link"
                             >
-                Contact our support team
+                                Contact our support team
                             </Button>
                         </div>
                     </div>
@@ -627,10 +630,10 @@ export default function ComicCuratorDemo() {
                 <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center justify-between gap-8 md:flex-row">
                     <div className="flex flex-col gap-4">
                         <div className="font-headline text-xl font-bold text-slate-900">
-              ComicCurator
+                            ComicCurator
                         </div>
                         <p className="font-body text-sm tracking-wide text-slate-500">
-              © 2024 ComicCurator. The Digital Curator for Visual Storytelling.
+                            © 2024 ComicCurator. The Digital Curator for Visual Storytelling.
                         </p>
                     </div>
                     <div className="flex flex-wrap justify-center gap-8 font-body text-sm tracking-wide">
@@ -638,25 +641,25 @@ export default function ComicCuratorDemo() {
                             className="text-slate-500 transition-all hover:text-[#3370FF]"
                             href="#"
                         >
-              Privacy Policy
+                            Privacy Policy
                         </Link>
                         <Link
                             className="text-slate-500 transition-all hover:text-[#3370FF]"
                             href="#"
                         >
-              Terms of Service
+                            Terms of Service
                         </Link>
                         <Link
                             className="text-slate-500 transition-all hover:text-[#3370FF]"
                             href="#"
                         >
-              API Documentation
+                            API Documentation
                         </Link>
                         <Link
                             className="text-slate-500 transition-all hover:text-[#3370FF]"
                             href="#"
                         >
-              Contact Support
+                            Contact Support
                         </Link>
                     </div>
                     <div className="flex gap-4">

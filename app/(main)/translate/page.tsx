@@ -289,8 +289,8 @@ export default function TranslateWorkbench() {
                 status: hasResult
                     ? ("completed" as const)
                     : isProcessing
-                      ? ("processing" as const)
-                      : ("active" as const),
+                        ? ("processing" as const)
+                        : ("active" as const),
                 progress: taskStatus?.progress,
                 image: page.previewUrl,
             };
@@ -763,22 +763,22 @@ export default function TranslateWorkbench() {
                                 )}
                             >
                                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-                                {historyImages.map((item, index) => (
-                                    <div
-                                        key={item.id}
-                                        className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-[#d6dce1] bg-white"
-                                    >
-                                        <Image
-                                            alt={`History Image ${item.imageIndex + 1}`}
-                                            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                                            fill
-                                            loading="eager"
-                                            sizes="(max-width: 1024px) 33vw, 180px"
-                                            src={item.url}
-                                            unoptimized
-                                        />
-                                    </div>
-                                ))}
+                                    {historyImages.map((item, index) => (
+                                        <div
+                                            key={item.id}
+                                            className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-[#d6dce1] bg-white"
+                                        >
+                                            <Image
+                                                alt={`History Image ${item.imageIndex + 1}`}
+                                                className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                                                fill
+                                                loading="eager"
+                                                sizes="(max-width: 1024px) 33vw, 180px"
+                                                src={item.url}
+                                                unoptimized
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}

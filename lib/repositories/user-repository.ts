@@ -63,7 +63,7 @@ export class UserRepository {
             return {
                 data: null,
                 error: new Error(`登录失败: ${error.message}`),
-            }
+            };
         }
 
         if (!data?.user) {
@@ -84,7 +84,7 @@ export class UserRepository {
         const { data, error } = await this.supabase.auth.signInWithOAuth({
             provider,
             options
-        })
+        });
         if (error) {
             console.error('OAuth 登录失败: ', error);
             return {
@@ -96,7 +96,7 @@ export class UserRepository {
         return {
             data: data?.url ?? null,
             error: null,
-        }
+        };
     }
 
     async exchangeCodeForSession(code: string): Promise<Result<UserEntity>> {
@@ -108,7 +108,7 @@ export class UserRepository {
                 error: new Error(`Exchange code for session failed: ${error.message}`),
             };
         }
-        
+
         return { data: UserMapper.fromUserToEntity(data.user), error: null };
     }
 

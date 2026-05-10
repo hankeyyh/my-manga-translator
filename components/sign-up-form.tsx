@@ -18,7 +18,7 @@ import Form from "next/form";
 import { SUCCESS_CODE } from "@/lib/types";
 
 const linkClass =
-  "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
+    "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
 
 export function SignUpForm({
     className,
@@ -78,10 +78,10 @@ export function SignUpForm({
             <Card className="rounded-xl border-gray-200 bg-white shadow-sm">
                 <CardHeader className="pb-6">
                     <CardTitle className="text-center text-2xl font-bold tracking-tight text-gray-900">
-            注册
+                        注册
                     </CardTitle>
                     <CardDescription className="text-center text-sm text-gray-500">
-            创建新账号并开始使用
+                        创建新账号并开始使用
                     </CardDescription>
                 </CardHeader>
 
@@ -89,7 +89,7 @@ export function SignUpForm({
                     <Form action={handleSignUp} className="flex flex-col gap-5">
                         <div className="grid gap-2">
                             <Label htmlFor="sign-up-email" className="text-gray-700">
-                邮箱
+                                邮箱
                             </Label>
                             <Input
                                 id="sign-up-email"
@@ -106,7 +106,7 @@ export function SignUpForm({
 
                         <div className="grid gap-2">
                             <Label htmlFor="sign-up-password" className="text-gray-700">
-                密码
+                                密码
                             </Label>
                             <Input
                                 id="sign-up-password"
@@ -124,7 +124,7 @@ export function SignUpForm({
 
                         <div className="grid gap-2">
                             <Label htmlFor="sign-up-repeat-password" className="text-gray-700">
-                确认密码
+                                确认密码
                             </Label>
                             <Input
                                 id="sign-up-repeat-password"
@@ -155,9 +155,9 @@ export function SignUpForm({
                         </Button>
 
                         <div className="pt-1 text-center text-sm text-gray-600">
-              已有账号？{" "}
+                            已有账号？{" "}
                             <Link href="/auth/login" className={linkClass}>
-                去登录
+                                去登录
                             </Link>
                         </div>
                     </Form>

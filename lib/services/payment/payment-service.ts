@@ -3,6 +3,9 @@ import { SubscriptionTier, BillingCycle, resolveSubscriptionPriceId } from "../.
 import { Result } from "@/lib/types";
 import { UserRepository } from "@/lib/repositories/user-repository";
 
+/**
+ * 处理stripe支付，账单
+ */
 export class PaymentService {
     constructor(private stripe: Stripe, private userRepo: UserRepository) {}
 
