@@ -5,7 +5,6 @@ import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -72,10 +71,11 @@ export default function SuccessDisplay({ email }: Props) {
                 <div className="w-full max-w-md">
                     <Card
                         className={cn(
+                            "gap-4 py-4",
                             "overflow-hidden rounded-3xl border-[#eef0f3] bg-white shadow-[0_4px_20px_rgba(15,23,42,0.08)]",
                         )}
                     >
-                        <CardHeader className="items-center space-y-4 pb-2 text-center">
+                        <CardHeader className="justify-items-center gap-4 pb-2 text-center">
                             <div className="flex size-14 items-center justify-center rounded-full bg-[#3370FF]/10">
                                 <CheckCircle2
                                     aria-hidden
@@ -91,7 +91,7 @@ export default function SuccessDisplay({ email }: Props) {
                                 Subscription Success
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-3 pb-6 text-center text-sm leading-relaxed text-[#2d3337]/85">
+                        <CardContent className="space-y-3 pb-0 text-center text-sm leading-relaxed text-[#2d3337]/85">
                             <p>
                                 Thanks for your subscription! A confirmation
                                 email will be sent to{" "}
@@ -104,7 +104,7 @@ export default function SuccessDisplay({ email }: Props) {
                                 Redirecting to the translator in {seconds}s…
                             </p>
                         </CardContent>
-                        <CardFooter className="flex justify-center pb-8 pt-0">
+                        <CardFooter className="flex justify-center pb-4 pt-0">
                             <Button
                                 className="bg-gradient-to-br from-[#3370FF] to-[#2e6dfc] font-headline text-base font-bold text-white shadow-lg shadow-[#3370FF]/20 hover:from-[#3370FF]/90 hover:to-[#2e6dfc]/90"
                                 onClick={handleClick}
