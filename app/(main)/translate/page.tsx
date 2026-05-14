@@ -212,10 +212,10 @@ export default function TranslateWorkbench() {
                 formData.append("images", page.file);
             }
             const config: TranslationConfig = {
-                translator: "youdao",
-                target_lang: targetLang,
-                source_lang: sourceLang,
-                text_style: style === "Standard" ? "standard" : style === "Artistic" ? "artistic" : "manga",
+                translator: {
+                    translator: "youdao",
+                    target_lang: targetLang,
+                },
             };
             formData.append("config", JSON.stringify(config));
 

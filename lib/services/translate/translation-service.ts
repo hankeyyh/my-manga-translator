@@ -13,10 +13,10 @@ export class TranslationService {
     /**
    * ===== 调用模型翻译服务 =====
    */
-    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<Result<{ folderName: string }>> {
+    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<Result<{ folderName: string; }>> {
         const formData = new FormData();
         formData.append('image', imageBlob);
-        formData.append('config', JSON.stringify(this.buildApiConfig(config)));
+        formData.append('config', JSON.stringify(config));
 
         const response = await fetch(
             `${this.baseUrl}/translate/with-form/image/stream/web`,
@@ -46,29 +46,6 @@ export class TranslationService {
         return {
             data: { folderName },
             error: null,
-        };
-    }
-
-    /**
-   * 将前端扁平配置映射为后端 Config 所需的嵌套结构
-   */
-    private buildApiConfig(config: TranslationConfig) {
-        return {
-            _web_frontend_optimized: true,
-            ...(config.upscaler ? { upscale: { upscaler: config.upscaler } } : {}),
-            ...(config.detector ? { detector: { detector: config.detector } } : {}),
-            ...(config.ocr ? { ocr: { ocr: config.ocr } } : {}),
-            ...(config.inpainter ? { inpainter: { inpainter: config.inpainter } } : {}),
-            ...(config.renderer ? { render: { renderer: config.renderer } } : {}),
-            ...(config.translator || config.target_lang || config.source_lang
-                ? {
-                    translator: {
-                        ...(config.translator ? { translator: config.translator } : {}),
-                        ...(config.target_lang ? { target_lang: config.target_lang } : {}),
-                        ...(config.source_lang ? { source_lang: config.source_lang } : {}),
-                    },
-                }
-                : {}),
         };
     }
 
@@ -187,7 +164,7 @@ export class TranslationService {
     /**
      * 下载翻译结果
      */
-    async downloadResult(folderName: string): Promise<Result<Blob>> {  
+    async downloadResult(folderName: string): Promise<Result<Blob>> {
         const response = await fetch(this.getResultUrl(folderName));
 
         if (!response.ok) {
