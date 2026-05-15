@@ -248,6 +248,7 @@ export default function TranslateWorkbench() {
             if (Date.now() - startedAt >= POLL_MAX_WAIT_MS) {
                 setPolling(false);
                 setResultError("轮询超时（超过 5 分钟），请稍后重试。");
+                clearInterval(interval);
                 return;
             }
 
@@ -261,13 +262,16 @@ export default function TranslateWorkbench() {
 
                 if (data.status === "completed") {
                     setPolling(false);
+                    clearInterval(interval);
                     await fetchResultImages(taskId);
                     await fetchHistoryImages();
                 } else if (data.status === "failed") {
+                    clearInterval(interval);
                     setPolling(false);
                 }
             } catch (error) {
                 setPolling(false);
+                clearInterval(interval);
                 setResultError(error instanceof Error ? error.message : "Unknown error");
             }
         }, POLL_INTERVAL_MS);
@@ -299,7 +303,6 @@ export default function TranslateWorkbench() {
 
     const isThumbSelected = (index: number) => activeTab === index;
 
-    // TODO 要把用户已上传的图片加载出来
     return (
         <div
             className={cn(
@@ -312,7 +315,8 @@ export default function TranslateWorkbench() {
                 <SiteHeader />
 
                 <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-6">
-                    <section className="relative flex h-[75vh] min-h-[420px] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
+                    {/* 结果展示区 */}
+                    <div className="relative flex h-[75vh] min-h-[420px] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
                         <div
                             className={cn(
                                 "absolute left-5 top-1/2 z-20 flex -translate-y-1/2 items-start gap-0",
@@ -588,9 +592,10 @@ export default function TranslateWorkbench() {
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section className="flex h-32 shrink-0 gap-4">
+                    {/* 任务栏 */}
+                    <div className="flex gap-4">
                         <div className="flex w-48 flex-col gap-2">
                             <Button
                                 className="flex-1 justify-start gap-3 rounded-xl bg-[#0053dd] text-xs font-bold text-white hover:bg-[#0053dd]/90"
@@ -610,6 +615,13 @@ export default function TranslateWorkbench() {
                             >
                                 <Download className="h-4 w-4" />
                                 Download All
+                            </Button>
+                            <Button
+                                className="flex-1 justify-start gap-3 rounded-xl border-[#dee3e7] text-xs font-bold text-[#5a6064] hover:border-[#0053dd] hover:text-[#0053dd]"
+                                variant="outline"
+                                onClick={() => { setPages([]); }}
+                            >
+                                New Task
                             </Button>
                             {(submitError || resultError) && (
                                 <p className="line-clamp-2 text-[10px] text-red-500">
@@ -632,16 +644,17 @@ export default function TranslateWorkbench() {
                             )}
                         >
                             {thumbnails.map((thumb, index) => (
-                                <button
+                                <Button
                                     key={thumb.id}
                                     className={cn(
-                                        "group relative flex h-full w-24 shrink-0 cursor-pointer flex-col rounded-xl p-1.5 transition-all",
+                                        "group relative flex h-full w-24 shrink-0 flex-col items-stretch justify-start gap-0 rounded-xl p-1.5 font-normal text-left shadow-none transition-all hover:bg-white hover:text-inherit focus-visible:ring-offset-0",
                                         isThumbSelected(index)
                                             ? "border-2 border-[#0053dd] bg-white"
                                             : "border border-transparent bg-white hover:border-[#dee3e7]",
                                     )}
                                     onClick={() => setActiveTab(index)}
                                     type="button"
+                                    variant="ghost"
                                 >
                                     <div
                                         className={cn(
@@ -692,19 +705,20 @@ export default function TranslateWorkbench() {
                                     {thumb.status !== "active" && (
                                         <div className="pointer-events-none absolute inset-0 rounded-xl bg-[#0053dd]/5 opacity-0 transition-opacity group-hover:opacity-100" />
                                     )}
-                                </button>
+                                </Button>
                             ))}
 
-                            <button
-                                className="flex h-full w-24 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-[#dee3e7] bg-white transition-colors hover:border-[#0053dd] group"
+                            <Button
+                                className="group flex h-full w-24 shrink-0 flex-col gap-1 rounded-xl border-dashed border-[#dee3e7] bg-white shadow-none hover:border-[#0053dd] hover:bg-white"
                                 onClick={openFilePicker}
                                 type="button"
+                                variant="outline"
                             >
                                 <Plus className="h-5 w-5 text-[#dee3e7] transition-colors group-hover:text-[#0053dd]" />
                                 <span className="font-headline text-[9px] font-bold text-[#5a6064]">
                                     Add Page
                                 </span>
-                            </button>
+                            </Button>
                         </div>
                         <input
                             ref={fileInputRef}
@@ -714,9 +728,10 @@ export default function TranslateWorkbench() {
                             onChange={onPickFiles}
                             type="file"
                         />
-                    </section>
+                    </div>
 
-                    <section className="shrink-0 rounded-2xl bg-[#e8edf0] p-5">
+                    {/* 翻译历史 */}
+                    <div className="shrink-0 rounded-2xl bg-[#e8edf0] p-5">
                         <div className="mb-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <h2 className="font-headline text-2xl font-bold text-[#2d3337]">
@@ -782,7 +797,7 @@ export default function TranslateWorkbench() {
                                 </div>
                             </div>
                         )}
-                    </section>
+                    </div>
                 </div>
             </main>
         </div>
