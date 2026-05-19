@@ -1,55 +1,44 @@
-import { isValidImage } from "@/lib/repositories/common";
-import { TranslationImageRepository } from "@/lib/repositories/translation-image";
-import { TranslationStorageRepository } from "@/lib/repositories/translation-storage";
-import { authService } from "@/lib/services/auth/auth-service";
-import { createClient } from "@/lib/supabase/server";
+import { TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
+import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
+import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
+import { UserRepository } from "@/lib/repositories/auth/user-repository";
+import { TranslationService } from "@/lib/services/translate/translation-service";
+import { createServerClient } from "@/lib/utils/supabase/server";
+import { ApiTranslationTaskImage } from "@/types/api";
+import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { TranslationImageView } from "@/types/dto/translation-image";
 import { NextResponse } from "next/server";
 
+function toApiTranslationTaskImage(img: TranslationImageView): ApiTranslationTaskImage {
+    return {
+        id: img.id,
+        status: img.status,
+        taskId: img.taskId,
+        imageIndex: img.imageIndex,
+        originalImageUrl: img.originalImageUrl,
+        resultImageUrl: img.resultImageUrl,
+        errorMessage: img.errorMessage,
+    };
+}
+
 export async function GET() {
-    // 1. 验证用户
-    const userResult = await authService.getCurrentUser();
-    if (userResult.error) {
-        return NextResponse.json({ error: userResult.error.message }, { status: 401 });
+    const supabase = await createServerClient();
+    const translationService = new TranslationService(
+        new UserRepository(supabase),
+        new TranslationTaskRepository(supabase),
+        new TranslationImageRepository(supabase),
+        new TranslationStorageRepository(supabase),
+    );
+
+    const result = await translationService.getUserTranslationHistory();
+    if (result.code === UNAUTHORIZED_ERROR_CODE) {
+        return NextResponse.json({ error: result.error!.message }, { status: 401 });
+    }
+    if (result.code !== SUCCESS_CODE || result.data === null) {
+        return NextResponse.json({ error: result.error?.message ?? "Internal Server Error" }, { status: 500 });
     }
 
-    const user = userResult.data;
-    if (!user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // 2. 获取用户已完成翻译的图片
-    const supabase = await createClient();
-    const imageRepo = new TranslationImageRepository(supabase);
-    const historyResult = await imageRepo.getUserCompletedImages(user.id);
-    if (historyResult.error) {
-        return NextResponse.json({ error: historyResult.error.message }, { status: 500 });
-    }
-
-    const rows = historyResult.data ?? [];
-    const resultPaths = rows.filter(isValidImage).map((item) => item.resultImagePath!);
-
-    if (resultPaths.length === 0) {
-        return NextResponse.json({ images: [] });
-    }
-
-    // 3. 创建签名URL
-    const storageRepo = new TranslationStorageRepository(supabase);
-    const signedUrlsResult = await storageRepo.createSignedUrls(resultPaths, 3600);
-    if (signedUrlsResult.error || !signedUrlsResult.data) {
-        return NextResponse.json(
-            { error: signedUrlsResult.error?.message ?? "Failed to create signed URLs" },
-            { status: 500 },
-        );
-    }
-    const signedUrls = signedUrlsResult.data;
-
-    const images = rows.map((item, index) => ({
-        id: item.id,
-        taskId: item.taskId,
-        imageIndex: item.imageIndex,
-        createdAt: item.createdAt,
-        url: signedUrls[index] ?? "",
-    }));
-
-    return NextResponse.json({ images: images.filter((item) => item.url) });
+    return NextResponse.json({
+        images: result.data.map(toApiTranslationTaskImage),
+    });
 }

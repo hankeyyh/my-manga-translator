@@ -1,17 +1,18 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
-import type { CreateImageParams } from "@/lib/services/translate/translation-types";
-import { loadRouteMethod } from "@/test/helpers/route-loader";
+import type { CreateImageParams } from "@/lib/repositories/translate/translation-image";
+import { loadRouteMethod } from "../../helper.test";
 
 type CurrentUserResult = {
-    data: { id: string; email?: string } | null;
+    data: { id: string; email?: string; } | null;
     error: Error | null;
 };
-type TaskResult = { data: { id: string } | null; error: Error | null };
-type UploadResult = { data: string | null; error: Error | null };
-type CreateImagesResult = { data: { id: string }[] | null; error: Error | null };
+type TaskResult = { data: { id: string; } | null; error: Error | null; };
+type UploadResult = { data: string | null; error: Error | null; };
+type CreateImagesResult = { data: { id: string; }[] | null; error: Error | null; };
 
 const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
+const getCurrentUserFromRepoMock = jest.fn<() => Promise<CurrentUserResult>>();
 const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();
 const createTaskMock = jest.fn<
     (params: {
@@ -46,9 +47,17 @@ async function loadPost() {
                 }),
             },
             {
-                moduleName: "@/lib/supabase/server",
+                moduleName: "@/lib/utils/supabase/server",
                 factory: () => ({
-                    createClient: createClientMock,
+                    createServerClient: createClientMock,
+                }),
+            },
+            {
+                moduleName: "@/lib/repositories/user-repository",
+                factory: () => ({
+                    UserRepository: jest.fn().mockImplementation(() => ({
+                        getCurrentUser: getCurrentUserFromRepoMock,
+                    })),
                 }),
             },
             {
@@ -101,6 +110,10 @@ describe("translate submit route", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         getCurrentUserMock.mockResolvedValue({
+            data: { id: "user-1", email: "user-1@example.com" },
+            error: null,
+        });
+        getCurrentUserFromRepoMock.mockResolvedValue({
             data: { id: "user-1", email: "user-1@example.com" },
             error: null,
         });

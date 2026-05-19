@@ -1,11 +1,13 @@
-import { TranslationImage, type TranslationTask } from "../services/translate/translation-types";
-import type { Tables } from "../supabase/database";
+import { type TranslationTask } from "@/types/do/translation-task";
+import { TranslationImage } from "@/types/do/translation-image";
+import type { Tables } from "../../types/database";
 
 
 export function mapTranslationImageRowToTranslationImage(data: Tables<'translation_images'>): TranslationImage {
     return {
         id: data.id,
         taskId: data.task_id,
+        filename: data.filename,
         imageIndex: data.image_index,
         status: data.status as TranslationImage['status'],
         // 输入数据
@@ -50,7 +52,4 @@ export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation
     };
 }
 
-export function isValidImage(image: TranslationImage): boolean {
-    return image.status === 'completed' && image.resultImagePath !== undefined;
-}
 

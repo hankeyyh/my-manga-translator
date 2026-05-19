@@ -8,8 +8,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { authService } from "@/lib/services/auth/auth-service";
-import { SignInResponse } from "@/lib/services/auth/auth-types";
-import { SUCCESS_CODE } from "@/lib/types";
+import { SignInResponse } from '@/types/api';
+import { SUCCESS_CODE } from "@/types/api";
 import { UserMapper } from "@/lib/mappers/user-mapper";
 
 

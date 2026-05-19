@@ -1,8 +1,31 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { CreateImageParams, TranslationImage, UpdateImageParams } from '../services/translate/translation-types';
-import type { Json, Tables, TablesInsert, TablesUpdate } from '../supabase/database';
-import { Result } from '../types';
-import { mapTranslationImageRowToTranslationImage } from './common';
+import { ImageStatus, TranslationImage } from "@/types/do/translation-image";
+import type { Json, Tables, TablesInsert, TablesUpdate } from '../../../types/database';
+import { Result } from "@/types/do/common";
+import { mapTranslationImageRowToTranslationImage } from '../common';
+
+// 创建图片参数
+export interface CreateImageParams {
+    taskId: string;
+    filename: string;
+    imageIndex: number;
+    originalImagePath: string;
+    originalImageSize?: number;
+    originalImageWidth?: number;
+    originalImageHeight?: number;
+}
+
+// 更新图片参数
+export interface UpdateImageParams {
+    status?: ImageStatus;
+    folderName?: string;
+    resultImagePath?: string;
+    errorMessage?: string;
+    retryCount?: number;
+    startedAt?: string;
+    completedAt?: string;
+    metadata?: Record<string, any>;
+}
 
 export class TranslationImageRepository {
     constructor(private supabase: SupabaseClient) { }
@@ -13,6 +36,7 @@ export class TranslationImageRepository {
     async createImage(params: CreateImageParams): Promise<Result<TranslationImage>> {
         const insertData: TablesInsert<'translation_images'> = {
             task_id: params.taskId,
+            filename: params.filename,
             image_index: params.imageIndex,
             status: 'pending',
             original_image_path: params.originalImagePath,
@@ -59,6 +83,7 @@ export class TranslationImageRepository {
 
         const insertData: TablesInsert<'translation_images'>[] = params.map((param) => ({
             task_id: param.taskId,
+            filename: param.filename,
             image_index: param.imageIndex,
             status: 'pending',
             original_image_path: param.originalImagePath,
@@ -105,7 +130,7 @@ export class TranslationImageRepository {
             return {
                 data: null,
                 error: new Error(`获取图片详情失败: ${error.message}`),
-            }
+            };
         }
         if (!data) {
             return {

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
 import { UserEntity } from "@/lib/entities/user-entity";
-import { loadRouteMethod } from "@/test/helpers/route-loader";
+import { loadRouteMethod } from "../helper.test";
 
 type CurrentUserResult = {
     data: UserEntity | null;
@@ -9,7 +9,7 @@ type CurrentUserResult = {
 };
 
 const checkoutSessionsCreate = jest.fn<
-    (...args: unknown[]) => Promise<{ url: string }>
+    (...args: unknown[]) => Promise<{ url: string; }>
 >();
 
 const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();

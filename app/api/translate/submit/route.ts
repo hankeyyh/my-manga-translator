@@ -1,74 +1,45 @@
-import { TranslationImageRepository } from "@/lib/repositories/translation-image";
-import { TranslationStorageRepository } from "@/lib/repositories/translation-storage";
-import { TranslationTaskRepository } from "@/lib/repositories/translation-task";
+import { TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
+import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
+import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
+import { UserRepository } from "@/lib/repositories/auth/user-repository";
 import { authService } from "@/lib/services/auth/auth-service";
-import { CreateImageParams, TranslationConfig } from "@/lib/services/translate/translation-types";
-import { createClient } from "@/lib/supabase/server";
+import { TranslationService } from "@/lib/services/translate/translation-service";
+import { TranslationConfig } from "@/types/do/translation-config";
+import { CHECK_PARAM_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { createServerClient } from "@/lib/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-    // 1. 验证用户登录
-    const result = await authService.getCurrentUser()
-    if (result.error) {
-        return NextResponse.json({ error: result.error.message }, { status: 401 });
-    }
-    const user = result.data;
-    if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // 2. 解析请求 (支持多图片)
+    // 1. 解析请求 (支持多图片)
     const formData = await request.formData();
     const images = formData.getAll("images") as File[];
     const configStr = formData.get("config") as string;
-
-    if (!images || images.length === 0) {
-        return NextResponse.json({ error: 'No images provided' }, { status: 400 });
-    }
-    for (const image of images) {
-        if (image.size > 10 * 1024 * 1024) {
-            return NextResponse.json({ error: 'Image size too large, max size is 10MB' }, { status: 400 });
-        }
+    let config: TranslationConfig;
+    try {
+        config = JSON.parse(configStr) as TranslationConfig;
+    } catch (err) {
+        return NextResponse.json({ error: 'config invalid' }, { status: 400 });
     }
 
-    const config = JSON.parse(configStr) as TranslationConfig;
-
-    // 3. 创建任务记录
-    const supabase = await createClient();
-    const taskRepo = new TranslationTaskRepository(supabase);
-    const taskResult = await taskRepo.createTask({
-        userId: user.id,
-        totalImages: images.length,
-        config,
-    });
-    if (taskResult.error) {
-        console.error(taskResult.error);
-        return NextResponse.json({ error: taskResult.error.message }, { status: 500 });
+    // 2. 创建任务、上传图片并保存记录
+    const supabase = await createServerClient();
+    const translationService = new TranslationService(
+        new UserRepository(supabase),
+        new TranslationTaskRepository(supabase),
+        new TranslationImageRepository(supabase),
+        new TranslationStorageRepository(supabase),
+    );
+    const submitResult = await translationService.submitTranslationTask(images, config);
+    if (submitResult.code === UNAUTHORIZED_ERROR_CODE) {
+        return NextResponse.json({ error: submitResult.error!.message }, { status: 401 });
     }
-    const task = taskResult.data!;
-
-    // 4. 批量上传图片到 Storage 并创建图片记录
-    const storageRepo = new TranslationStorageRepository(supabase);
-    const imageRepo = new TranslationImageRepository(supabase);
-    const imageParams: CreateImageParams[] = [];
-    for (let i = 0; i < images.length; i++) {
-        const uploadResult = await storageRepo.uploadOriginalImage(user.id, task.id, i, images[i]);
-        if (uploadResult.error) {
-            return NextResponse.json({ error: uploadResult.error.message }, { status: 500 });
-        }
-        imageParams.push({
-            taskId: task.id,
-            imageIndex: i,
-            originalImagePath: uploadResult.data!,
-            originalImageSize: images[i].size,
-        });
+    if (submitResult.code === CHECK_PARAM_ERROR_CODE) {
+        return NextResponse.json({ error: submitResult.error!.message }, { status: 400 });
     }
-    const imagesResult = await imageRepo.createImages(imageParams);
-    if (imagesResult.error) {
-        console.error(imagesResult.error);
-        return NextResponse.json({ error: imagesResult.error.message }, { status: 500 });
+    if (submitResult.code !== SUCCESS_CODE || !submitResult.data) {
+        return NextResponse.json({ error: submitResult.error?.message ?? 'Internal Server Error' }, { status: 500 });
     }
 
-    // 5. 返回任务 ID
-    return NextResponse.json({ taskId: task.id }, { status: 200 });
+    // 3. 返回任务 ID
+    return NextResponse.json({ taskId: submitResult.data }, { status: 200 });
 }

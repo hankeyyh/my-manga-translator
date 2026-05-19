@@ -1,5 +1,5 @@
-import {describe, expect, test} from '@jest/globals';
-import { createServiceRoleClient } from '../supabase/server';
+import { describe, expect, test } from '@jest/globals';
+import { createServiceRoleClient } from "../../utils/supabase/admin";
 import { TranslationStorageRepository } from './translation-storage';
 
 const supabase = createServiceRoleClient();
@@ -15,8 +15,8 @@ describe("uploadOriginalImage", () => {
         const delResult = await storageRepo.deleteFiles(["user1/task1/1-original.jpg"]);
         expect(delResult.error).toBeNull();
         expect(delResult.data).toBeNull();
-    })
-})
+    });
+});
 
 describe("uploadResultImage", () => {
     const testFile = new File([], "test.jpg", { type: "image/jpeg" });
@@ -29,8 +29,8 @@ describe("uploadResultImage", () => {
         const delResult = await storageRepo.deleteFiles(["user1/task1/1-result.png"]);
         expect(delResult.error).toBeNull();
         expect(delResult.data).toBeNull();
-    })
-})
+    });
+});
 
 describe("downloadFile", () => {
     const testFile = new File([], "test.jpg", { type: "image/jpeg" });
@@ -47,8 +47,8 @@ describe("downloadFile", () => {
         const delResult = await storageRepo.deleteFiles(["user1/task1/1-original.jpg"]);
         expect(delResult.error).toBeNull();
         expect(delResult.data).toBeNull();
-    })
-})
+    });
+});
 
 describe("createSignedUrls", () => {
     const testFile = new File([], "test.jpg", { type: "image/jpeg" });
@@ -65,5 +65,5 @@ describe("createSignedUrls", () => {
         const delResult = await storageRepo.deleteFiles(["user1/task1/1-original.jpg"]);
         expect(delResult.error).toBeNull();
         expect(delResult.data).toBeNull();
-    })
-})
+    });
+});

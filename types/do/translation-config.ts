@@ -1,3 +1,4 @@
+
 type Upscaler = 'waifu2x' | 'esrgan' | '4xultrasharp';
 type Detector = 'default' | 'dbconvnext' | 'ctd' | 'craft' | 'paddle' | 'none';
 type Ocr = '32px' | '48px' | '48px_ctc' | 'mocr';
@@ -8,8 +9,8 @@ type Colorizer = 'none' | 'mc2';
 type Renderer = 'default' | 'manga2eng' | 'manga2eng_pillow' | 'none';
 type Alignment = 'auto' | 'left' | 'center' | 'right';
 type Direction = 'auto' | 'horizontal' | 'vertical';
-
 /** 与 manga-image-translator `UpscaleConfig` 对齐的放大选项 */
+
 export interface UpscaleConfig {
     /** 使用的放大器；需设置 `upscale_ratio` 才会生效 */
     upscaler?: Upscaler;
@@ -18,8 +19,8 @@ export interface UpscaleConfig {
     /** 检测前对图像的放大倍数，有助于文字检测 */
     upscale_ratio?: number | null;
 }
-
 /** 与 manga-image-translator `RenderConfig` 对齐的渲染选项 */
+
 export interface RenderConfig {
     /** 译文字体排版渲染器；部分选项会忽略其它参数 */
     renderer?: Renderer;
@@ -51,8 +52,8 @@ export interface RenderConfig {
     /** 分镜与 text_region 的从右到左阅读顺序 */
     rtl?: boolean;
 }
-
 /** 与 manga-image-translator `TranslatorConfig` 对齐的翻译器与译后检查选项 */
+
 export interface TranslatorConfig {
     /** 使用的语言翻译服务 */
     translator?: Translator;
@@ -87,8 +88,8 @@ export interface TranslatorConfig {
     /** 比例检查：译文中目标语言字符占比下限 */
     post_check_target_lang_threshold?: number;
 }
-
 /** 与 manga-image-translator `DetectorConfig` 对齐的文本检测选项 */
+
 export interface DetectorConfig {
     /** 用于从图像生成文字掩膜的检测器；漫画场景勿用 craft，该模型并非为此设计 */
     detector?: Detector;
@@ -109,8 +110,8 @@ export interface DetectorConfig {
     /** 将文字骨架扩展为边界框时的比例 */
     unclip_ratio?: number;
 }
-
 /** 与 manga-image-translator `InpainterConfig` 对齐的修复/抹字选项 */
+
 export interface InpainterConfig {
     /** 使用的图像修复模型 */
     inpainter?: Inpainter;
@@ -119,8 +120,8 @@ export interface InpainterConfig {
     /** LaMa 等修复模型的数值精度；能用 bf16 时优先 bf16 */
     inpainting_precision?: InpaintPrecision;
 }
-
 /** 与 manga-image-translator `ColorizerConfig` 对齐的上色选项 */
+
 export interface ColorizerConfig {
     /** 上色阶段图像边长；-1 表示使用原图全尺寸 */
     colorization_size?: number;
@@ -129,8 +130,8 @@ export interface ColorizerConfig {
     /** 使用的上色模型 */
     colorizer?: Colorizer;
 }
-
 /** 与 manga-image-translator `OcrConfig` 对齐的 OCR 选项 */
+
 export interface OcrConfig {
     /** Manga OCR 推理时是否合并 bbox */
     use_mocr_merge?: boolean;
@@ -146,8 +147,8 @@ export interface OcrConfig {
     /** 文本区域最低置信度；为 null 时使用模型默认 */
     prob?: number | null;
 }
-
 /** 与 manga-image-translator `Config` 对齐的管线配置（嵌套子配置） */
+
 export interface TranslationConfig {
     /** 按正则按文字内容过滤区域，例 `'.*badtext.*'` */
     filter_text?: string | null;
@@ -164,107 +165,4 @@ export interface TranslationConfig {
     kernel_size?: number;
     /** 扩展文字 mask 以消除原图遗留文字像素 */
     mask_dilation_offset?: number;
-}
-
-
-// 任务状态 (主表)
-export type TaskStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'partial';
-
-// 图片状态 (从表)
-export type ImageStatus = 'pending' | 'processing' | 'completed' | 'failed';
-
-// 任务记录 (主表)
-export interface TranslationTask {
-    id: string;
-    userId: string;
-    status: TaskStatus;
-
-    // 统计信息
-    totalImages: number;
-    completedImages: number;
-    failedImages: number;
-    progress: number;
-
-    config: TranslationConfig;
-
-    createdAt: string;
-    startedAt?: string;
-    completedAt?: string;
-    updatedAt: string;
-    metadata?: Record<string, any>;
-}
-
-// 图片记录 (从表)
-export interface TranslationImage {
-    id: string;
-    taskId: string;
-    imageIndex: number;
-    status: ImageStatus;
-
-    // 输入数据
-    originalImagePath: string;
-    originalImageSize?: number;
-    originalImageWidth?: number;
-    originalImageHeight?: number;
-
-    // 输出数据
-    folderName?: string;
-    resultImagePath?: string;
-
-    // 错误处理
-    errorMessage?: string;
-    retryCount: number;
-    maxRetries: number;
-
-    createdAt: string;
-    startedAt?: string;
-    completedAt?: string;
-    updatedAt: string;
-    metadata?: Record<string, any>;
-}
-
-// 创建任务参数
-export interface CreateTaskParams {
-    userId: string;
-    totalImages: number;
-    config: TranslationConfig;
-}
-
-// 创建图片参数
-export interface CreateImageParams {
-    taskId: string;
-    imageIndex: number;
-    originalImagePath: string;
-    originalImageSize?: number;
-    originalImageWidth?: number;
-    originalImageHeight?: number;
-}
-
-// 更新任务参数 (很少使用,因为有触发器自动更新)
-export interface UpdateTaskParams {
-    status?: TaskStatus;
-    progress?: number;
-    totalImages?: number;
-    completedImages?: number;
-    failedImages?: number;
-    startedAt?: string;
-    completedAt?: string;
-    metadata?: Record<string, any>;
-}
-
-// 更新图片参数
-export interface UpdateImageParams {
-    status?: ImageStatus;
-    folderName?: string;
-    resultImagePath?: string;
-    errorMessage?: string;
-    retryCount?: number;
-    startedAt?: string;
-    completedAt?: string;
-    metadata?: Record<string, any>;
-}
-
-// 任务详情 (含图片列表)
-export interface TranslationTaskDetail extends TranslationTask {
-    images: TranslationImage[];
 }

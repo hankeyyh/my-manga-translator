@@ -39,6 +39,7 @@ export type Database = {
           completed_at: string | null
           created_at: string | null
           error_message: string | null
+          filename: string
           folder_name: string | null
           id: string
           image_index: number
@@ -59,6 +60,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           error_message?: string | null
+          filename?: string
           folder_name?: string | null
           id?: string
           image_index: number
@@ -79,6 +81,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           error_message?: string | null
+          filename?: string
           folder_name?: string | null
           id?: string
           image_index?: number

@@ -10,8 +10,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { authService } from '@/lib/services/auth/auth-service';
-import type { SignUpResponse } from '@/lib/services/auth/auth-types';
-import { SUCCESS_CODE } from '@/lib/types';
+import type { SignUpResponse } from '@/types/api';
+import { SUCCESS_CODE } from "@/types/api";
 import { UserMapper } from '@/lib/mappers/user-mapper';
 
 // 参数校验

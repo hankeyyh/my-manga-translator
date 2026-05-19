@@ -1,8 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { CreateTaskParams, TaskStatus, TranslationImage, TranslationTask, TranslationTaskDetail, UpdateTaskParams } from '@/lib/services/translate/translation-types';
-import type { Json, TablesInsert, TablesUpdate } from '@/lib/supabase/database';
-import { Result } from '../types';
-import { mapTranslationImageRowToTranslationImage, mapTranslationTaskRowToTranslationTask } from './common';
+import type { TranslationTaskDetail } from "@/types/do/translation-task";
+import type { TaskStatus, TranslationTask } from "@/types/do/translation-task";
+import type { TranslationImage } from "@/types/do/translation-image";
+import type { Json, TablesInsert, TablesUpdate } from '@/types/database';
+import { Result } from "@/types/do/common";
+import { mapTranslationImageRowToTranslationImage, mapTranslationTaskRowToTranslationTask } from '../common';
+import { TranslationConfig } from '@/types/do/translation-config';
 
 export class TranslationTaskRepository {
     constructor(private supabase: SupabaseClient) { }
@@ -221,3 +224,24 @@ export class TranslationTaskRepository {
         };
     }
 }
+
+// 创建任务参数
+
+export interface CreateTaskParams {
+    userId: string;
+    totalImages: number;
+    config: TranslationConfig;
+}
+
+// 更新任务参数 (很少使用,因为有触发器自动更新)
+export interface UpdateTaskParams {
+    status?: TaskStatus;
+    progress?: number;
+    totalImages?: number;
+    completedImages?: number;
+    failedImages?: number;
+    startedAt?: string;
+    completedAt?: string;
+    metadata?: Record<string, any>;
+}
+

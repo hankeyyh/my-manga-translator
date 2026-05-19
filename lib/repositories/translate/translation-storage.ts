@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { getFileExtension } from "../utils/file";
-import { Result } from '../types';
+import { getFileExtension } from "../../utils/file";
+import { Result } from "@/types/do/common";
 
 export class TranslationStorageRepository {
     private bucketName = 'translation_storage';
@@ -13,7 +13,8 @@ export class TranslationStorageRepository {
      */
     async uploadOriginalImage(userId: string, taskId: string, imageIdx: number, image: File): Promise<Result<string>> {
         const extension = getFileExtension(image) ?? 'jpg';
-        const fileName = `${userId}/${taskId}/${imageIdx}-original.${extension}`;
+        const today = new Date().toISOString().slice(0, 10);
+        const fileName = `${userId}/${today}/input/${taskId}_${imageIdx}.${extension}`;
 
         const { data, error } = await this.supabase.storage
             .from(this.bucketName)
@@ -40,7 +41,8 @@ export class TranslationStorageRepository {
    * 上传翻译结果图片
    */
     async uploadResultImage(userId: string, taskId: string, imageIdx: number, resultBlob: Blob): Promise<Result<string>> {
-        const fileName = `${userId}/${taskId}/${imageIdx}-result.png`;
+        const today = new Date().toISOString().slice(0, 10);
+        const fileName = `${userId}/${today}/output/${taskId}_${imageIdx}.png`;
 
         const { data, error } = await this.supabase.storage
             .from(this.bucketName)

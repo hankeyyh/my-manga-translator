@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createBrowserClient } from "@/lib/utils/supabase/client";
 import {
     ArrowRight,
     CheckCircle2,
@@ -37,8 +37,8 @@ import {
     SiteHeader,
 } from "@/components/site-header";
 import { cn } from "@/components/utils";
-import { UserRepository } from "@/lib/repositories/user-repository";
-import type { SubscriptionTier } from "@/lib/utils/subscription-prices";
+import { UserRepository } from "@/lib/repositories/auth/user-repository";
+import type { SubscriptionTier } from "@/lib/services/payment/subscription-prices";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -107,7 +107,7 @@ export default function ComicCuratorDemo() {
 
     async function handlePayment(tier: SubscriptionTier) {
         try {
-            const supabase = createClient();
+            const supabase = createBrowserClient();
             const userRepo = new UserRepository(supabase);
             const userResult = await userRepo.getCurrentUser();
             if (userResult.error || !userResult.data) {

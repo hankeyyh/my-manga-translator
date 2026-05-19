@@ -33,9 +33,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site-header";
-import { TranslationConfig } from "@/lib/services/translate/translation-types";
+import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
+import { TranslationConfig } from "@/types/do/translation-config";
+import {
+    ApiGetTranslationTaskResponse,
+    ApiTranslationTaskImage,
+} from "@/types/api";
 import { cn } from "@/components/utils";
-import { TaskStatus as TaskState } from "@/lib/services/translate/translation-types";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -54,36 +58,17 @@ const STYLES = ["WildWords BB", "Standard", "Artistic"] as const;
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_WAIT_MS = 5 * 60 * 1000;
 
-interface ResultImage {
-    id: string;
-    url: string;
-}
-
-interface HistoryImage extends ResultImage {
-    taskId: string;
-    imageIndex: number;
-    createdAt?: string;
-}
-
-interface TaskStatusResponse {
-    id: string;
-    status: TaskState;
-    total_images: number;
-    completed_images: number;
-    failed_images: number;
-    progress: number;
-    created_at: string;
-    completed_at?: string;
-}
-
 interface LocalPage {
     id: string;
-    label: string;
     file: File;
     previewUrl: string;
 }
 
-export default function TranslateWorkbench() {
+function isTaskEnded(task: Pick<ApiGetTranslationTaskResponse, "status">) {
+    return TASK_ENDED_STATUSES.includes(task.status);
+}
+
+export default function TranslatePage() {
     const [zoom, setZoom] = useState(100);
     const [showSettings, setShowSettings] = useState(false);
     const [engine, setEngine] = useState<string>(ENGINES[0]);
@@ -98,9 +83,9 @@ export default function TranslateWorkbench() {
     const pagesRef = useRef<LocalPage[]>([]);
     const [pages, setPages] = useState<LocalPage[]>([]);
     const [taskId, setTaskId] = useState<string | null>(null);
-    const [taskStatus, setTaskStatus] = useState<TaskStatusResponse | null>(null);
-    const [resultImages, setResultImages] = useState<ResultImage[]>([]);
-    const [historyImages, setHistoryImages] = useState<HistoryImage[]>([]);
+    const [taskStatus, setTaskStatus] = useState<ApiGetTranslationTaskResponse | null>(null);
+    const [resultImages, setResultImages] = useState<ApiTranslationTaskImage[]>([]);
+    const [historyImages, setHistoryImages] = useState<ApiTranslationTaskImage[]>([]);
     const [loadingResult, setLoadingResult] = useState(false);
     const [resultError, setResultError] = useState<string | null>(null);
     const [historyLoading, setHistoryLoading] = useState(false);
@@ -113,7 +98,7 @@ export default function TranslateWorkbench() {
     const zoomOut = () => setZoom((z) => Math.max(z - 25, 50));
 
     const openFilePicker = () => fileInputRef.current?.click();
-
+    // 选择待翻译图片
     const onPickFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
         const picked = Array.from(event.target.files ?? []);
         if (picked.length === 0) {
@@ -123,11 +108,12 @@ export default function TranslateWorkbench() {
         setPages((prev) => {
             const next = [...prev];
             for (const file of picked) {
+                // 内存url，类似 blob:http://127.0.0.1:3001/b52458d4-b4e8-4889-bfa2-c590518f5eee
+                const previewUrl = URL.createObjectURL(file);
                 next.push({
                     id: crypto.randomUUID(),
-                    label: `PAGE ${String(next.length + 1).padStart(2, "0")}`,
                     file,
-                    previewUrl: URL.createObjectURL(file),
+                    previewUrl: previewUrl,
                 });
             }
             return next;
@@ -136,6 +122,7 @@ export default function TranslateWorkbench() {
         event.target.value = "";
     };
 
+    // 回收blob url
     useEffect(() => {
         pagesRef.current = pages;
     }, [pages]);
@@ -150,30 +137,13 @@ export default function TranslateWorkbench() {
 
     const selectedPage = pages[activeTab] ?? null;
 
+    // 点选任务栏图片，展示翻译后结果
     const translatedSrc = useMemo(() => {
         if (selectedPage && resultImages[activeTab]) {
-            return resultImages[activeTab].url;
+            return resultImages[activeTab].resultImageUrl;
         }
         return null;
     }, [activeTab, resultImages, selectedPage]);
-
-    const fetchResultImages = async (id: string) => {
-        setLoadingResult(true);
-        setResultError(null);
-
-        try {
-            const response = await fetch(`/api/translate/result/${id}`);
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to fetch result images");
-            }
-            setResultImages(data.resultImages ?? []);
-        } catch (error) {
-            setResultError(error instanceof Error ? error.message : "Unknown error");
-        } finally {
-            setLoadingResult(false);
-        }
-    };
 
     const fetchHistoryImages = async () => {
         setHistoryLoading(true);
@@ -185,7 +155,7 @@ export default function TranslateWorkbench() {
             if (!response.ok) {
                 throw new Error(data.error || "Failed to fetch translation history");
             }
-            setHistoryImages(data.images ?? []);
+            setHistoryImages(data.images);
         } catch (error) {
             setHistoryError(error instanceof Error ? error.message : "Unknown error");
         } finally {
@@ -254,24 +224,25 @@ export default function TranslateWorkbench() {
 
             try {
                 const response = await fetch(`/api/translate/task/${taskId}`);
-                const data = await response.json();
+                const data: ApiGetTranslationTaskResponse & { error?: string; } =
+                    await response.json();
                 if (!response.ok) {
                     throw new Error(data.error || "Failed to poll task status");
                 }
                 setTaskStatus(data);
+                setResultImages(data.images);
+                setLoadingResult(true);
 
-                if (data.status === "completed") {
+                if (isTaskEnded(data)) {
                     setPolling(false);
                     clearInterval(interval);
-                    await fetchResultImages(taskId);
+                    setLoadingResult(false);
                     await fetchHistoryImages();
-                } else if (data.status === "failed") {
-                    clearInterval(interval);
-                    setPolling(false);
                 }
             } catch (error) {
                 setPolling(false);
                 clearInterval(interval);
+                setLoadingResult(false);
                 setResultError(error instanceof Error ? error.message : "Unknown error");
             }
         }, POLL_INTERVAL_MS);
@@ -289,13 +260,11 @@ export default function TranslateWorkbench() {
             const isProcessing = polling || submitLoading;
             return {
                 id: page.id,
-                label: page.label,
                 status: hasResult
                     ? ("completed" as const)
                     : isProcessing
                         ? ("processing" as const)
                         : ("active" as const),
-                progress: taskStatus?.progress,
                 image: page.previewUrl,
             };
         });
@@ -595,7 +564,7 @@ export default function TranslateWorkbench() {
                     </div>
 
                     {/* 任务栏 */}
-                    <div className="flex gap-4">
+                    <div className="flex h-40 gap-4">
                         <div className="flex w-48 flex-col gap-2">
                             <Button
                                 className="flex-1 justify-start gap-3 rounded-xl bg-[#0053dd] text-xs font-bold text-white hover:bg-[#0053dd]/90"
@@ -669,7 +638,7 @@ export default function TranslateWorkbench() {
                                             </div>
                                         )}
                                         <Image
-                                            alt={thumb.label}
+                                            alt=""
                                             className="h-full w-full object-cover"
                                             fetchPriority="low"
                                             height={96}
@@ -679,29 +648,7 @@ export default function TranslateWorkbench() {
                                             width={96}
                                         />
                                     </div>
-                                    <div className="flex items-center justify-between px-0.5">
-                                        <span
-                                            className={cn(
-                                                "font-headline text-[9px] font-bold uppercase",
-                                                isThumbSelected(index)
-                                                    ? "text-[#0053dd]"
-                                                    : "text-[#5a6064]",
-                                            )}
-                                        >
-                                            {thumb.label}
-                                        </span>
-                                        {thumb.status === "active" && isThumbSelected(index) && (
-                                            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#0053dd]" />
-                                        )}
-                                        {thumb.status === "completed" && (
-                                            <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                        )}
-                                        {thumb.status === "processing" && (
-                                            <span className="font-headline text-[8px] font-bold italic text-[#5a6064]">
-                                                {thumb.progress}%
-                                            </span>
-                                        )}
-                                    </div>
+                                    {/** 淡蓝色高亮蒙层 */}
                                     {thumb.status !== "active" && (
                                         <div className="pointer-events-none absolute inset-0 rounded-xl bg-[#0053dd]/5 opacity-0 transition-opacity group-hover:opacity-100" />
                                     )}
@@ -789,7 +736,7 @@ export default function TranslateWorkbench() {
                                                 fill
                                                 loading="eager"
                                                 sizes="(max-width: 1024px) 33vw, 180px"
-                                                src={item.url}
+                                                src={item.resultImageUrl}
                                                 unoptimized
                                             />
                                         </div>

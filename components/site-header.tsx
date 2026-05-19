@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/utils";
-import { createClient } from "@/lib/supabase/client";
+import { createBrowserClient } from "@/lib/utils/supabase/client";
 
 /** 与 translate 页一致的导航项，便于首页锚点与路由复用 */
 export const SITE_NAV_ITEMS = [
@@ -28,7 +28,7 @@ export function SiteHeader() {
 
         async function checkAuth() {
             try {
-                const supabase = createClient();
+                const supabase = createBrowserClient();
                 const { data } = await supabase.auth.getClaims();
                 const user = data?.claims;
 
@@ -61,12 +61,12 @@ export function SiteHeader() {
                             <BookOpen className="h-5 w-5" />
                         </div>
                         <span className="font-headline text-xl font-bold tracking-tighter text-[#2d3337]">
-              ComicCurator
+                            ComicCurator
                         </span>
                     </Link>
                     <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
                         {SITE_NAV_ITEMS.map((item) => {
-           
+
                             return (
                                 <Link
                                     key={item.key}
@@ -88,7 +88,7 @@ export function SiteHeader() {
                         className="scale-95 rounded-full bg-[#0053dd] px-5 py-2 text-sm font-bold text-white hover:bg-[#0053dd]/90"
                     >
                         <a href="#" rel="noopener noreferrer">
-              Join Discord
+                            Join Discord
                         </a>
                     </Button>
                     {authState === "authed" ? (
@@ -110,7 +110,7 @@ export function SiteHeader() {
                             variant="secondary"
                             aria-label="登录"
                         >
-              Login
+                            Login
                         </Button>
                     )}
                 </div>
