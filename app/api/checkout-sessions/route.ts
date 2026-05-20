@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!), new UserRepository(supabase));
     const result = await paymentService.createCheckoutSession(tier, billing,
         `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`, // 成功回调 URL
-        `${origin}/payment/cancel` // 取消回调 URL
+        `${origin}/` // 取消后回到主页
     );
     if (result.error) {
         return NextResponse.json({ error: result.error.message }, { status: 500 });

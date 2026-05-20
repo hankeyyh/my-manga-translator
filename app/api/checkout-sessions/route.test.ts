@@ -99,7 +99,7 @@ describe("POST /api/checkout-sessions", () => {
                 },
                 success_url:
                     "http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url: "http://localhost:3000/payment/cancel",
+                cancel_url: "http://localhost:3000/",
             })
         );
     });
