@@ -37,6 +37,7 @@ export class PaymentService {
             },
             success_url: successUrl,
             cancel_url: cancelUrl,
+            automatic_tax: { enabled: true },
         });
         if (!session.url) {
             console.error("createCheckoutSession, stripe failed to create checkout session");
