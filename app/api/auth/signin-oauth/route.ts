@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authService } from "@/lib/services/auth/auth-service";
-import { SUCCESS_CODE } from "@/types/api";
+import { SUCCESS_CODE } from "@/types/api/common";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();

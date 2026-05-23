@@ -8,8 +8,8 @@
 
 import { NextResponse } from "next/server";
 import { authService } from "@/lib/services/auth/auth-service";
-import { SignOutResponse } from '@/types/api';
-import { SUCCESS_CODE } from "@/types/api";
+import { SignOutResponse } from "@/types/api/auth";
+import { SUCCESS_CODE } from "@/types/api/common";
 
 export async function POST() {
     const authResponse = await authService.signOut();

@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Form from "next/form";
-import { SUCCESS_CODE } from "@/types/api";
+import { SUCCESS_CODE } from "@/types/api/common";
 
 const linkClass =
     "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";

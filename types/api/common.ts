@@ -1,0 +1,13 @@
+
+/** 业务成功码（与 HTTP 状态码独立，供客户端判断） */
+
+export const SUCCESS_CODE = '0';
+/**
+ * 统一 API 响应结构（全站接口约定）
+ */
+
+export interface ApiResponse<T = unknown> {
+    code: string;
+    message: string;
+    data: T | null;
+}

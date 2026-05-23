@@ -35,10 +35,8 @@ import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site-header";
 import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
 import { TranslationConfig } from "@/types/do/translation-config";
-import {
-    ApiGetTranslationTaskResponse,
-    ApiTranslationTaskImage,
-} from "@/types/api";
+import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
+import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
 
 const manrope = Manrope({

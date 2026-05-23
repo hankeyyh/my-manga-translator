@@ -4,7 +4,8 @@ import { TranslationTaskRepository } from "@/lib/repositories/translate/translat
 import { UserRepository } from "@/lib/repositories/auth/user-repository";
 import { TranslationService } from "@/lib/services/translate/translation-service";
 import { createServerClient } from "@/lib/utils/supabase/server";
-import { ApiGetTranslationTaskResponse, ApiTranslationTaskImage } from "@/types/api";
+import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
+import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";

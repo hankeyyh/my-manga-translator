@@ -1,12 +1,18 @@
 import Stripe from "stripe";
-import { SubscriptionTier, BillingCycle, resolveSubscriptionPriceId } from "./subscription-prices";
-import { Result } from "@/types/do/common";
+import { SubscriptionTier, BillingCycle, resolveSubscriptionPriceId } from "./topup-prices";
+import { BizResult, DB_ERROR_CODE, Result } from "@/types/do/common";
 import { UserRepository } from "@/lib/repositories/auth/user-repository";
+import { TopUpConfig } from "@/types/do/topup-config";
+import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
+import { SUCCESS_CODE } from "@/types/do/common";
 
 
 interface RetriveCheckoutSessionData {
-    status: string | null | undefined;
-    email: string | null | undefined;
+    status: string | null;
+    paymentStatus: string;
+    email?: string | null;
+    // 表 user_transaction 主键id
+    transactionId?: string;
 }
 
 
@@ -16,7 +22,7 @@ interface RetriveCheckoutSessionData {
 export class PaymentService {
     constructor(private stripe: Stripe, private userRepo: UserRepository) { }
 
-    async createCheckoutSession(tier: SubscriptionTier, billing: BillingCycle, successUrl: string, cancelUrl: string): Promise<Result<string>> {
+    async createCheckoutSession(transactionId: string, priceId: string, transactionType: string, successUrl: string, cancelUrl: string): Promise<Result<string>> {
         const userResult = await this.userRepo.getCurrentUser();
         if (userResult.error || !userResult.data) {
             return {
@@ -24,15 +30,14 @@ export class PaymentService {
                 error: new Error("User not found"),
             };
         }
+        const mode = transactionType === 'pay-to-use' ? 'payment' : 'subscription';
         const user = userResult.data;
-        const priceId = resolveSubscriptionPriceId(tier, billing);
         const session = await this.stripe.checkout.sessions.create({
             line_items: [{ price: priceId, quantity: 1 }],
-            mode: 'subscription',
+            mode: mode,
             client_reference_id: user.id,
             metadata: {
-                tier,
-                billing,
+                transactionId: transactionId,
                 userId: user.id,
             },
             success_url: successUrl,
@@ -57,7 +62,9 @@ export class PaymentService {
         return {
             data: {
                 status: session.status,
+                paymentStatus: session.payment_status,
                 email: session.customer_details?.email,
+                transactionId: session.metadata?.transactionId,
             },
             error: null,
         };

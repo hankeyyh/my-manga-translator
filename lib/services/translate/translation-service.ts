@@ -1,7 +1,7 @@
 import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
-import { getBaseUrl } from "@/lib/utils/url";
+import { getAlgoBaseUrl } from "@/lib/utils/url";
 import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
 import { CreateImageParams, TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
 import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
@@ -358,7 +358,7 @@ export class TranslationService {
         const formData = new FormData();
         formData.append('image', imageBlob);
         formData.append('config', JSON.stringify(config));
-        const baseUrl = getBaseUrl();
+        const baseUrl = getAlgoBaseUrl();
 
         const response = await fetch(
             `${baseUrl}/translate/with-form/image/stream/web`,
@@ -497,7 +497,7 @@ export class TranslationService {
 
     // 获取翻译结果图片 URL
     getResultUrl(folderName: string): string {
-        const baseUrl = getBaseUrl();
+        const baseUrl = getAlgoBaseUrl();
         return `${baseUrl}/result/${folderName}/final.png`;
     }
 

@@ -4,7 +4,7 @@ import { TranslationTaskRepository } from "@/lib/repositories/translate/translat
 import { UserRepository } from "@/lib/repositories/auth/user-repository";
 import { TranslationService } from "@/lib/services/translate/translation-service";
 import { createServerClient } from "@/lib/utils/supabase/server";
-import { ApiTranslationTaskImage } from "@/types/api";
+import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TranslationImageView } from "@/types/dto/translation-image";
 import { NextResponse } from "next/server";
