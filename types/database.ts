@@ -34,6 +34,96 @@ export type Database = {
   }
   public: {
     Tables: {
+      credit_logs: {
+        Row: {
+          amount: number
+          balance_type: string
+          created_at: string
+          id: string
+          task_id: string | null
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_type: string
+          created_at?: string
+          id?: string
+          task_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_type?: string
+          created_at?: string
+          id?: string
+          task_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_logs_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "translation_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_logs_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "user_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      topup_config: {
+        Row: {
+          billing_cycle: string | null
+          created_at: string
+          credits_included: number
+          id: string
+          is_active: boolean
+          pack_tier: string | null
+          plan_tier: string | null
+          price: number
+          stripe_price_id: string
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          billing_cycle?: string | null
+          created_at?: string
+          credits_included: number
+          id?: string
+          is_active?: boolean
+          pack_tier?: string | null
+          plan_tier?: string | null
+          price: number
+          stripe_price_id: string
+          transaction_type: string
+          updated_at?: string
+        }
+        Update: {
+          billing_cycle?: string | null
+          created_at?: string
+          credits_included?: number
+          id?: string
+          is_active?: boolean
+          pack_tier?: string | null
+          plan_tier?: string | null
+          price?: number
+          stripe_price_id?: string
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       translation_images: {
         Row: {
           completed_at: string | null
@@ -156,12 +246,138 @@ export type Database = {
         }
         Relationships: []
       }
+      user_credits: {
+        Row: {
+          created_at: string
+          id: string
+          pay_to_use_balance: number
+          subscription_balance: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pay_to_use_balance?: number
+          subscription_balance?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pay_to_use_balance?: number
+          subscription_balance?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          billing_cycle: string
+          created_at: string
+          current_period_ended_at: string
+          current_period_started_at: string
+          id: string
+          plan_tier: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          billing_cycle: string
+          created_at?: string
+          current_period_ended_at: string
+          current_period_started_at: string
+          id?: string
+          plan_tier: string
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          billing_cycle?: string
+          created_at?: string
+          current_period_ended_at?: string
+          current_period_started_at?: string
+          id?: string
+          plan_tier?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_transactions: {
+        Row: {
+          billing_cycle: string | null
+          canceled_at: string | null
+          created_at: string
+          credits: number | null
+          failed_at: string | null
+          id: string
+          pack_tier: string | null
+          plan_tier: string | null
+          recharge_amount: number
+          stripe_session_id: string | null
+          subscription_ended_at: string | null
+          subscription_started_at: string | null
+          succeeded_at: string | null
+          transaction_status: string
+          transaction_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          billing_cycle?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          credits?: number | null
+          failed_at?: string | null
+          id?: string
+          pack_tier?: string | null
+          plan_tier?: string | null
+          recharge_amount: number
+          stripe_session_id?: string | null
+          subscription_ended_at?: string | null
+          subscription_started_at?: string | null
+          succeeded_at?: string | null
+          transaction_status: string
+          transaction_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          billing_cycle?: string | null
+          canceled_at?: string | null
+          created_at?: string
+          credits?: number | null
+          failed_at?: string | null
+          id?: string
+          pack_tier?: string | null
+          plan_tier?: string | null
+          recharge_amount?: number
+          stripe_session_id?: string | null
+          subscription_ended_at?: string | null
+          subscription_started_at?: string | null
+          succeeded_at?: string | null
+          transaction_status?: string
+          transaction_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      succeed_transaction: {
+        Args: { p_transaction_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

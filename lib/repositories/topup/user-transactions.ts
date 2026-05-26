@@ -33,6 +33,7 @@ export interface UpdateTransactionParam {
     planTier?: string,
     billingCycle?: string,
     packTier?: string,
+    stripeSessionId?: string,
     succeededAt?: string,
     failedAt?: string,
     canceledAt?: string,
@@ -134,6 +135,9 @@ export class UserTransactionsRepository {
         }
         if (param.packTier !== undefined) {
             updateData.pack_tier = param.packTier;
+        }
+        if (param.stripeSessionId !== undefined) {
+            updateData.stripe_session_id = param.stripeSessionId;
         }
         if (param.succeededAt !== undefined) {
             updateData.succeeded_at = param.succeededAt;

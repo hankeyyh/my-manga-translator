@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { authService } from '@/lib/services/auth/auth-service';
-import { BillingCycle, isBillingCycle, isSubscriptionTier, SubscriptionTier } from '@/lib/services/payment/topup-prices';
 import { PaymentService } from '@/lib/services/payment/payment-service';
 import { UserRepository } from '@/lib/repositories/auth/user-repository';
 import { createServerClient } from "@/lib/utils/supabase/server";
@@ -68,6 +67,13 @@ export async function POST(request: NextRequest) {
     if (result.error) {
         return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
+    const session = result.data!;
 
-    return NextResponse.json({ url: result.data });
+    // 6. stripe session.id 写回user_transaction
+    const updateTransResult = await creditService.updateStripeSessionId(userTransaction.id, session.sessionId);
+    if (!updateTransResult.error) {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
+    return NextResponse.json({ url: session.url });
 }

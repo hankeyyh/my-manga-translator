@@ -124,7 +124,7 @@ export class CreditService {
             failedAt: new Date().toISOString(),
         });
         if (error) {
-            console.error(`succeedUserTransaction, updateUserTransaction fail, error: ${error.message}`);
+            console.error(`failUserTransaction, updateUserTransaction fail, error: ${error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: error };
         }
         return { code: SUCCESS_CODE, data: null, error: null };
@@ -137,7 +137,19 @@ export class CreditService {
             canceledAt: new Date().toISOString(),
         });
         if (error) {
-            console.error(`succeedUserTransaction, updateUserTransaction fail, error: ${error.message}`);
+            console.error(`cancelUserTransaction, updateUserTransaction fail, error: ${error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
+    // 更新stripe session id
+    async updateStripeSessionId(transactionId: string, stripeSessionId: string): Promise<BizResult<void>> {
+        const { error } = await this.userTransRepo.updateUserTransaction(transactionId, {
+            stripeSessionId: stripeSessionId,
+        });
+        if (error) {
+            console.error(`updateStripeSessionId, updateUserTransaction fail, error: ${error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: error };
         }
         return { code: SUCCESS_CODE, data: null, error: null };

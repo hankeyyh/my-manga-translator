@@ -4,11 +4,9 @@ import Stripe from "stripe";
 import { createServerClient } from "@/lib/utils/supabase/server";
 import { UserRepository } from "@/lib/repositories/auth/user-repository";
 import { PaymentService } from "@/lib/services/payment/payment-service";
+import PaymentIncompleteDisplay from "@/components/payment/payment-incomplete";
+import PendingPaymentDisplay from "@/components/payment/payment-pending";
 import SuccessDisplay from "@/components/payment/payment-success";
-import { CreditService } from "@/lib/services/credit/credit-service";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
-import { UserTransactionsRepository } from "@/lib/repositories/topup/user-transactions";
-import { createServiceRoleClient } from "@/lib/utils/supabase/admin";
 
 export default function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
     return (
@@ -31,28 +29,26 @@ async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ 
         return <div>Error: {result.error.message}</div>;
     }
     // 2. 状态检查
-    const { status, paymentStatus, email, transactionId } = result.data!;
+    const { status, paymentStatus, email } = result.data!;
+    // 2.1 不应该出现
     if (status === "open") {
         return redirect("/");
     }
+    // 2.2 款已到账
     if (status === "complete" && paymentStatus == "paid") {
-        if (!transactionId) {
-            // 不应该走到这里，transactionId 必须拿到
-            return <div>Meet Error: Transaction ID Not Found</div>;
-        }
-        // 3. 增加credits
-        const adminSupabase = createServiceRoleClient();
-        const credService = new CreditService(new TopUpConfigRepository(supabase),
-            new UserTransactionsRepository(adminSupabase), // 管理员才有权限增加credits
-        );
-        // TODO 如果失败怎么办，重试？
-        const succeedTransactionResult = await credService.succeedUserTransaction(transactionId);
-        if (succeedTransactionResult.error) {
-            credService.failUserTransaction(transactionId);
-            return <div>Meet Error: Internal Server Error</div>
-        }
         return (
             <SuccessDisplay email={email ?? ""} />
         );
     }
+    // 2.3 异步支付，款还未到账
+    if (status === "complete" && paymentStatus === "unpaid") {
+        return <PendingPaymentDisplay email={email ?? undefined} />;
+    }
+    // 2.4 不应该出现
+    return (
+        <PaymentIncompleteDisplay
+            status={status}
+            paymentStatus={paymentStatus}
+        />
+    );
 }
