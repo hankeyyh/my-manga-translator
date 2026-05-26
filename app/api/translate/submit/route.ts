@@ -1,12 +1,11 @@
-import { TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
-import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
-import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { authService } from "@/lib/services/auth/auth-service";
-import { TranslationService } from "@/lib/services/translate/translation-service";
+import { TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
+import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
+import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { TranslationService } from "@/biz/services/translate/translation-service";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { CHECK_PARAM_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
-import { createServerClient } from "@/lib/utils/supabase/server";
+import { createServerClient } from "@/biz/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { BizResult, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result } from "@/types/do/common";
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { SUCCESS_CODE } from "@/types/do/common";
 
 interface CreateCheckoutSessionData {

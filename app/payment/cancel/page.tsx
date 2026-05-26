@@ -1,10 +1,10 @@
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
-import { UserTransactionsRepository } from "@/lib/repositories/topup/user-transactions";
-import { CreditService } from "@/lib/services/credit/credit-service";
-import { PaymentService } from "@/lib/services/payment/payment-service";
-import { createServerClient } from "@/lib/utils/supabase/server";
-import { redirect } from "next/navigation"
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
+import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
+import { CreditService } from "@/biz/services/credit/credit-service";
+import { PaymentService } from "@/biz/services/payment/payment-service";
+import { createServerClient } from "@/biz/utils/supabase/server";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import Stripe from "stripe";
 
@@ -39,5 +39,5 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
         return <div>Error: {transResult.error.message}</div>;
     }
 
-    return redirect("/")
+    return redirect("/");
 }

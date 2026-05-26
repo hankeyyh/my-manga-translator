@@ -7,10 +7,11 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { authService } from "@/lib/services/auth/auth-service";
+import { AuthService } from "@/biz/services/auth/auth-service";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { createServerClient } from "@/biz/utils/supabase/server";
 import { SignInResponse } from "@/types/api/auth";
 import { SUCCESS_CODE } from "@/types/api/common";
-import { UserMapper } from "@/lib/mappers/user-mapper";
 
 
 export async function POST(request: NextRequest) {
@@ -20,11 +21,20 @@ export async function POST(request: NextRequest) {
         const response: SignInResponse = { code: 'VALIDATION_ERROR', message: 'Email and password are required', data: null };
         return NextResponse.json(response, { status: 400 });
     }
+    const supabase = await createServerClient();
+    const authService = new AuthService(new UserRepository(supabase));
     const authResponse = await authService.signIn(email, password);
     if (authResponse.error) {
         const response: SignInResponse = { code: 'SIGNIN_FAILED', message: authResponse.error.message, data: null };
         return NextResponse.json(response, { status: 400 });
     }
-    const response: SignInResponse = { code: SUCCESS_CODE, message: 'OK', data: { user: authResponse.data ? UserMapper.toDTO(authResponse.data) : null } };
+    const userEntity = authResponse.data!;
+    const response: SignInResponse = {
+        code: SUCCESS_CODE,
+        message: 'OK',
+        data: {
+            user: { id: userEntity.id, email: userEntity.email }
+        }
+    };
     return NextResponse.json(response, { status: 200 });
 }

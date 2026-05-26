@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
-import type { CreateImageParams } from "@/lib/repositories/translate/translation-image";
+import type { CreateImageParams } from "@/biz/repositories/translate/translation-image";
 import { loadRouteMethod } from "../../helper.test";
 
 type CurrentUserResult = {
@@ -11,7 +11,6 @@ type TaskResult = { data: { id: string; } | null; error: Error | null; };
 type UploadResult = { data: string | null; error: Error | null; };
 type CreateImagesResult = { data: { id: string; }[] | null; error: Error | null; };
 
-const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
 const getCurrentUserFromRepoMock = jest.fn<() => Promise<CurrentUserResult>>();
 const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();
 const createTaskMock = jest.fn<
@@ -39,21 +38,13 @@ async function loadPost() {
         "POST",
         [
             {
-                moduleName: "@/lib/services/auth/auth-service",
-                factory: () => ({
-                    authService: {
-                        getCurrentUser: getCurrentUserMock,
-                    },
-                }),
-            },
-            {
                 moduleName: "@/lib/utils/supabase/server",
                 factory: () => ({
                     createServerClient: createClientMock,
                 }),
             },
             {
-                moduleName: "@/lib/repositories/user-repository",
+                moduleName: "@/lib/repositories/auth/user-repository",
                 factory: () => ({
                     UserRepository: jest.fn().mockImplementation(() => ({
                         getCurrentUser: getCurrentUserFromRepoMock,
@@ -109,10 +100,6 @@ function buildRequest({
 describe("translate submit route", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        getCurrentUserMock.mockResolvedValue({
-            data: { id: "user-1", email: "user-1@example.com" },
-            error: null,
-        });
         getCurrentUserFromRepoMock.mockResolvedValue({
             data: { id: "user-1", email: "user-1@example.com" },
             error: null,
@@ -134,7 +121,7 @@ describe("translate submit route", () => {
 
     test("should return 401 when auth service returns error", async () => {
         const POST = await loadPost();
-        getCurrentUserMock.mockResolvedValue({
+        getCurrentUserFromRepoMock.mockResolvedValue({
             data: null,
             error: new Error("auth failed"),
         });
@@ -148,7 +135,7 @@ describe("translate submit route", () => {
 
     test("should return 401 when user is null", async () => {
         const POST = await loadPost();
-        getCurrentUserMock.mockResolvedValue({
+        getCurrentUserFromRepoMock.mockResolvedValue({
             data: null,
             error: null,
         });

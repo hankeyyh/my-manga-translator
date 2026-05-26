@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/utils";
-import { createBrowserClient } from "@/lib/utils/supabase/client";
+import { createBrowserClient } from "@/biz/utils/supabase/client";
 
 /** 与 translate 页一致的导航项，便于首页锚点与路由复用 */
 export const SITE_NAV_ITEMS = [

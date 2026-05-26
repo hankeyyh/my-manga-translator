@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
-import { createServerClient } from "@/lib/utils/supabase/server";
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { PaymentService } from "@/lib/services/payment/payment-service";
+import { createServerClient } from "@/biz/utils/supabase/server";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { PaymentService } from "@/biz/services/payment/payment-service";
 import PaymentIncompleteDisplay from "@/components/payment/payment-incomplete";
 import PendingPaymentDisplay from "@/components/payment/payment-pending";
 import SuccessDisplay from "@/components/payment/payment-success";

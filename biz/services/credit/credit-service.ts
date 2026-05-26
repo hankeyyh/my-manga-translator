@@ -1,7 +1,7 @@
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
-import { UserTransactionsRepository } from "@/lib/repositories/topup/user-transactions";
-import { sleep } from "@/lib/utils/sleep";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
+import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
+import { sleep } from "@/biz/utils/sleep";
 import { BizResult, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TopUpConfig } from "@/types/do/topup-config";
 import { UserTransaction } from "@/types/do/user-transaction";

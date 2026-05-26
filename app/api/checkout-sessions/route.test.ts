@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
-import { UserEntity } from "@/lib/entities/user-entity";
+import { UserEntity } from "@/types/entity/user";
 import { loadRouteMethod } from "../helper.test";
 
 type CurrentUserResult = {
@@ -13,6 +13,8 @@ const checkoutSessionsCreate = jest.fn<
 >();
 
 const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
+
+const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();
 
 function buildCheckoutRequest(body: Record<string, unknown>) {
     return new NextRequest("http://localhost/api/checkout-sessions", {
@@ -28,11 +30,17 @@ async function loadPost() {
         "POST",
         [
             {
-                moduleName: "@/lib/services/auth/auth-service",
+                moduleName: "@/lib/utils/supabase/server",
                 factory: () => ({
-                    authService: {
+                    createServerClient: createClientMock,
+                }),
+            },
+            {
+                moduleName: "@/lib/repositories/auth/user-repository",
+                factory: () => ({
+                    UserRepository: jest.fn().mockImplementation(() => ({
                         getCurrentUser: getCurrentUserMock,
-                    },
+                    })),
                 }),
             },
             {
@@ -75,6 +83,7 @@ describe("POST /api/checkout-sessions", () => {
             data: new UserEntity("uid", "u@test.com"),
             error: null,
         });
+        createClientMock.mockResolvedValue({});
     });
 
     test("在存在 Origin 时按档位返回 Stripe Checkout URL", async () => {

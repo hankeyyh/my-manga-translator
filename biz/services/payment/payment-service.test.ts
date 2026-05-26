@@ -1,9 +1,9 @@
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { createServiceRoleClient } from "@/lib/utils/supabase/admin";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { beforeAll, describe, expect, test } from "@jest/globals";
 import Stripe from "stripe";
 import { PaymentService } from "./payment-service";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 
 describe("PaymentService", () => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);

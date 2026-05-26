@@ -1,6 +1,12 @@
-import { SignUpSuccessData, SignInSuccessData } from "@/lib/services/auth/auth-types";
 import { ApiResponse } from "./common";
+import { UserDTO } from "../dto/user";
 
+export interface SignUpSuccessData {
+    user: UserDTO | null;
+}
+export interface SignInSuccessData {
+    user: UserDTO | null;
+}
 
 export type SignUpResponse = ApiResponse<SignUpSuccessData>;
 

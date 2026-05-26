@@ -7,11 +7,15 @@
  */
 
 import { NextResponse } from "next/server";
-import { authService } from "@/lib/services/auth/auth-service";
+import { AuthService } from "@/biz/services/auth/auth-service";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { createServerClient } from "@/biz/utils/supabase/server";
 import { SignOutResponse } from "@/types/api/auth";
 import { SUCCESS_CODE } from "@/types/api/common";
 
 export async function POST() {
+    const supabase = await createServerClient();
+    const authService = new AuthService(new UserRepository(supabase));
     const authResponse = await authService.signOut();
     if (authResponse.error) {
         const response: SignOutResponse = { code: 'SIGNOUT_FAILED', message: authResponse.error.message, data: null };

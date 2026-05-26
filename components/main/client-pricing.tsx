@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { cn } from "../utils";
 import { Badge } from "../ui/badge";
-import { SubscriptionTier } from "@/lib/services/payment/topup-prices";
+import { SubscriptionTier } from "@/biz/services/payment/topup-prices";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

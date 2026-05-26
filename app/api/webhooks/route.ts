@@ -1,14 +1,13 @@
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
-import { UserTransactionsRepository } from "@/lib/repositories/topup/user-transactions";
-import { CreditService } from "@/lib/services/credit/credit-service";
-import { PaymentService } from "@/lib/services/payment/payment-service";
-import { createServiceRoleClient } from "@/lib/utils/supabase/admin";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
+import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
+import { CreditService } from "@/biz/services/credit/credit-service";
+import { PaymentService } from "@/biz/services/payment/payment-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
-    console.debug("stripe webhooks called");
     const sig = request.headers.get('stripe-signature');
     if (!sig) {
         console.error(`stripe webhooks, stripe-signature header not found, header: ${request.headers}`);

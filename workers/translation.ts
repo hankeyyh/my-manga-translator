@@ -1,11 +1,11 @@
 import "@/setup-env";
-import { TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
-import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
-import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
-import { TranslationService } from "@/lib/services/translate/translation-service";
-import { createServiceRoleClient } from "@/lib/utils/supabase/admin";
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
-import { sleep } from "@/lib/utils/sleep";
+import { TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
+import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
+import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
+import { TranslationService } from "@/biz/services/translate/translation-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { sleep } from "@/biz/utils/sleep";
 
 const POLL_INTERVAL = 5000; // 5 秒
 const MAX_CONCURRENT = 3; // 同时处理 3 张图片

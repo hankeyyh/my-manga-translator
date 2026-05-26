@@ -1,15 +1,16 @@
+
 /**
  * 用户实体
  * 核心业务对象，不依赖任何数据库实现
  */
 export class UserEntity {
     constructor(
-    public readonly id: string,
-    public readonly email: string,
-    ) {}
+        public readonly id: string,
+        public readonly email: string
+    ) { }
 
     // 验证邮箱格式
-    static validateEmail(email: string): { valid: boolean; error?: string } {
+    static validateEmail(email: string): { valid: boolean; error?: string; } {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email) {

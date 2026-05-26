@@ -9,10 +9,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { authService } from '@/lib/services/auth/auth-service';
+import { AuthService } from '@/biz/services/auth/auth-service';
+import { UserRepository } from '@/biz/repositories/auth/user-repository';
+import { createServerClient } from '@/biz/utils/supabase/server';
 import type { SignUpResponse } from "@/types/api/auth";
 import { SUCCESS_CODE } from "@/types/api/common";
-import { UserMapper } from '@/lib/mappers/user-mapper';
 
 // 参数校验
 const signUpSchema = z.object({
@@ -49,6 +50,8 @@ export async function POST(request: NextRequest) {
 
     // 3. 调用注册服务
     const { email, password, metadata } = validationResult.data;
+    const supabase = await createServerClient();
+    const authService = new AuthService(new UserRepository(supabase));
     const authResponse = await authService.signUp(email, password, metadata);
 
     // 4. 处理注册错误
@@ -56,13 +59,17 @@ export async function POST(request: NextRequest) {
         const response: SignUpResponse = { code: 'SIGNUP_FAILED', message: authResponse.error.message, data: null };
         return NextResponse.json(response, { status: 400 });
     }
+    const userEntity = authResponse.data!;
 
     // 5. 返回成功响应（将 Entity 转换为 JSON 可序列化格式）
     const response: SignUpResponse = {
         code: SUCCESS_CODE,
         message: 'OK',
         data: {
-            user: authResponse.data ? UserMapper.toDTO(authResponse.data) : null,
+            user: {
+                id: userEntity.id,
+                email: userEntity.email,
+            },
         },
     };
 

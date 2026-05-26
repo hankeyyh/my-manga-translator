@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authService } from "@/lib/services/auth/auth-service";
+import { AuthService } from "@/biz/services/auth/auth-service";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { createServerClient } from "@/biz/utils/supabase/server";
 import { SUCCESS_CODE } from "@/types/api/common";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
     const { provider } = body;
     if (provider === "google") {
+        const supabase = await createServerClient();
+        const authService = new AuthService(new UserRepository(supabase));
         const result = await authService.signInWithGoogle();
         if (result.error) {
             return NextResponse.json({ code: 'SIGNIN_WITH_OAUTH_FAILED', message: result.error.message, data: null }, { status: 400 });

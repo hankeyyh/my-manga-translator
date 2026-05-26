@@ -1,14 +1,14 @@
 import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
-import { getAlgoBaseUrl } from "@/lib/utils/url";
-import { TranslationTaskRepository } from "@/lib/repositories/translate/translation-task";
-import { CreateImageParams, TranslationImageRepository } from "@/lib/repositories/translate/translation-image";
-import { TranslationStorageRepository } from "@/lib/repositories/translate/translation-storage";
-import { UserRepository } from "@/lib/repositories/auth/user-repository";
+import { getAlgoBaseUrl } from "@/biz/utils/url";
+import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
+import { CreateImageParams, TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
+import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
+import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
-import { sleep } from "@/lib/utils/sleep";
+import { sleep } from "@/biz/utils/sleep";
 
 const MAX_TRANSLATION_RETRIES = 3;
 const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果

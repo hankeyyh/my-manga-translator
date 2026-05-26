@@ -1,9 +1,9 @@
-import { createServerClient } from "@/lib/utils/supabase/server";
+import { createServerClient } from "@/biz/utils/supabase/server";
 import { ClientPricing } from "./client-pricing";
-import { CreditService } from "@/lib/services/credit/credit-service";
-import { TopUpConfigRepository } from "@/lib/repositories/topup/topup-config";
+import { CreditService } from "@/biz/services/credit/credit-service";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { Suspense } from "react";
-import { UserTransactionsRepository } from "@/lib/repositories/topup/user-transactions";
+import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 
 export function Pricing() {
     return (

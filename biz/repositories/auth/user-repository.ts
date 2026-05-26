@@ -3,9 +3,8 @@
  * 封装 auth.users 的所有认证操作
  */
 
-import type { EmailOtpType, Provider, SupabaseClient } from '@supabase/supabase-js';
-import { UserEntity } from '@/lib/entities/user-entity';
-import { UserMapper } from '@/lib/mappers/user-mapper';
+import type { User as SupabaseUser, EmailOtpType, JwtPayload, Provider, SupabaseClient } from '@supabase/supabase-js';
+import { UserEntity } from "@/types/entity/user";
 import { Result } from "@/types/do/common";
 
 // OAuth 登录选项
@@ -19,6 +18,20 @@ export type SignInWithOAuthOptions = {
     /** If set to true does not immediately redirect the current browser context to visit the OAuth authorization page for the provider. */
     skipBrowserRedirect?: boolean;
 };
+
+function mapRawUserToUserEntity(user: SupabaseUser): UserEntity {
+    return new UserEntity(
+        user.id,
+        user.email!,
+    );
+}
+
+function mapRawClaimToUserEntity(claims: JwtPayload): UserEntity {
+    return new UserEntity(
+        claims.sub,
+        claims.email!,
+    );
+}
 
 /**
  * User 仓储类
@@ -59,7 +72,7 @@ export class UserRepository {
         }
 
         return {
-            data: UserMapper.fromUserToEntity(data.user),
+            data: mapRawUserToUserEntity(data.user),
             error: null,
         };
     }
@@ -87,7 +100,7 @@ export class UserRepository {
         }
 
         return {
-            data: UserMapper.fromUserToEntity(data.user),
+            data: mapRawUserToUserEntity(data.user),
             error: null,
         };
     }
@@ -121,7 +134,7 @@ export class UserRepository {
             };
         }
 
-        return { data: UserMapper.fromUserToEntity(data.user), error: null };
+        return { data: mapRawUserToUserEntity(data.user), error: null };
     }
 
     async signOut(): Promise<Result<void>> {
@@ -158,7 +171,7 @@ export class UserRepository {
         }
 
         return {
-            data: UserMapper.fromClaimsToEntity(data.claims),
+            data: mapRawClaimToUserEntity(data.claims),
             error: null,
         };
     }
@@ -187,7 +200,7 @@ export class UserRepository {
         }
 
         return {
-            data: UserMapper.fromUserToEntity(data.user),
+            data: mapRawUserToUserEntity(data.user),
             error: null,
         };
     }
