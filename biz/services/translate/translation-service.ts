@@ -1,4 +1,4 @@
-import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, NETWORK_ERROR_CODE, REMOTE_LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { getAlgoBaseUrl } from "@/biz/utils/url";
@@ -8,7 +8,6 @@ import { TranslationStorageRepository } from "@/biz/repositories/translate/trans
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
-import { sleep } from "@/biz/utils/sleep";
 
 const MAX_TRANSLATION_RETRIES = 3;
 const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果
@@ -238,46 +237,26 @@ export class TranslationService {
             await this.handleTranslateImageFailed(imageId, `Failed to submit translation: ${submitResult.error.message}`);
             return;
         }
-        const folderName = submitResult.data?.folderName!;
-        console.debug("algo server folderName:", folderName);
+        const reader = submitResult.data!;
 
-        // 6. 更新 folderName
-        const updateFolderNameResult = await this.imageRepo.updateImage(imageId, {
-            folderName: folderName,
-        });
-        if (updateFolderNameResult.error) {
-            console.error('❌ Failed to update folder name:', updateFolderNameResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to update folder name: ${updateFolderNameResult.error.message}`);
+        // 6. 等待翻译完成
+        const waitResult = await this.waitTranslationComplete(reader);
+        if (waitResult.error) {
+            console.error('❌ algo svr return error:', waitResult.error);
+            await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
             return;
         }
 
-        // 7. 等待翻译完成
-        const isReady = await this.waitForResult(folderName);
-        if (!isReady) {
-            console.error('❌ Translation timeout:', this.getResultUrl(folderName));
-            await this.handleTranslateImageFailed(imageId, `Translation timeout: ${this.getResultUrl(folderName)}`);
-            return;
-        }
-
-        // 8.下载翻译图片
-        const translatedImageResult = await this.downloadResult(folderName);
-        if (translatedImageResult.error) {
-            console.error('❌ Failed to download translated image:', this.getResultUrl(folderName), ", error:", translatedImageResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to download translated image: ${this.getResultUrl(folderName)}`);
-            return;
-        }
-        const translatedImage = translatedImageResult.data!;
-
-        // 9. 上传到 Supabase Storage
-        const uploadResultImageResult = await this.imageStorage.uploadResultImage(task.userId, task.id, image.imageIndex, translatedImage);
+        // 7. 上传到 Supabase Storage
+        const uploadResultImageResult = await this.imageStorage.uploadResultImage(task.userId, task.id, image.imageIndex, waitResult.data!);
         if (uploadResultImageResult.error) {
-            console.error('❌ Failed to upload translated image:', this.getResultUrl(folderName), ", error:", uploadResultImageResult.error);
+            console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
             return;
         }
         const resultImagePath = uploadResultImageResult.data!;
 
-        // 10. 更新图片状态为 completed (触发器会自动更新任务进度)
+        // 8. 更新图片状态为 completed (触发器会自动更新任务进度)
         const updateResultImageResult = await this.imageRepo.updateImage(imageId, {
             status: 'completed',
             resultImagePath: resultImagePath,
@@ -293,19 +272,6 @@ export class TranslationService {
         return;
     }
 
-    // 等待翻译结果就绪
-    private async waitForResult(folderName: string): Promise<boolean> {
-        let startTime = Date.now();
-        while (Date.now() - startTime < RESULT_CHECK_TIMEOUT) {
-            const isReady = await this.checkResultReady(folderName);
-            if (isReady) {
-                return true;
-            }
-            await sleep(RESULT_CHECK_INTERVAL);
-        }
-        return false;
-    }
-
     // 处理翻译失败的图片
     private async handleTranslateImageFailed(imageId: string, errMessage: string) {
         const imageResult = await this.imageRepo.getImage(imageId);
@@ -315,7 +281,7 @@ export class TranslationService {
         }
         const image = imageResult.data!;
 
-        const retryCount = this.getImageRetryCount(image);
+        const retryCount = this.computeImageRetryCount(image);
         const shouldRetry = retryCount < MAX_TRANSLATION_RETRIES;
         const status = shouldRetry ? 'pending' : 'failed';
         const updateImageResult = await this.imageRepo.updateImage(imageId, {
@@ -353,173 +319,98 @@ export class TranslationService {
         }
     }
 
-    // 调用模型翻译服务
-    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<Result<{ folderName: string; }>> {
-        const formData = new FormData();
-        formData.append('image', imageBlob);
-        formData.append('config', JSON.stringify(config));
-        const baseUrl = getAlgoBaseUrl();
-
-        const response = await fetch(
-            `${baseUrl}/translate/with-form/image/stream/web`,
-            {
-                method: 'POST',
-                body: formData,
+    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<BizResult<ReadableStreamDefaultReader>> {
+        const algoBaseUrl = getAlgoBaseUrl();
+        try {
+            const bodyData = new FormData();
+            bodyData.append("image", imageBlob);
+            bodyData.append("config", JSON.stringify(config));
+            const response = await fetch(`${algoBaseUrl}/translate/with-form/image/stream`, {
+                method: "POST",
+                body: bodyData,
+            });
+            if (!response.ok) {
+                console.error(`submitTranslation, fetch algo svr fail, error: ${response.statusText}`);
+                return { code: NETWORK_ERROR_CODE, data: null, error: new Error("fetch algo svr fail") };
             }
-        );
-
-        if (!response.ok) {
-            console.error('❌ submitTranslation error:', response.statusText);
+            const reader = response.body?.getReader();
+            if (!reader) {
+                console.error("submitTranslation, no response body");
+                return { code: NETWORK_ERROR_CODE, data: null, error: new Error("no response body") };
+            }
+            return { code: SUCCESS_CODE, data: reader, error: null };
+        } catch (err) {
+            console.error(`submitTranslation, fetch algo svr fail, error: ${err}`);
             return {
+                code: NETWORK_ERROR_CODE,
                 data: null,
-                error: new Error(`Translation API error: ${response.statusText}`),
+                error: err instanceof Error ? err : new Error(String(err)),
             };
         }
-
-        // 解析流式响应获取 folderName
-        const folderName = await this.parseFolderNameFromStream(response);
-        if (!folderName) {
-            console.error("submitTranslation, parseFolderNameFromStream failed, folderName not found");
-            return {
-                data: null,
-                error: new Error('Folder name not found'),
-            };
-        }
-
-        return {
-            data: { folderName },
-            error: null,
-        };
     }
 
-    /**
-   * 从流式响应中解析 folderName
-   * 注意: 这个实现需要根据实际的响应格式调整
-   */
-    private extractFolderNameFromProgressText(text: string): string {
-        // 后端会发送类似:
-        // - rendering_folder:<folderName>
-        // - final_ready:<folderName>
-        // 兼容历史可能的 folder_name/folder-name 形式。
-        const patterns = [
-            /(?:rendering_folder|final_ready)\s*:\s*([a-zA-Z0-9_-]+)/i,
-            /folder[_-]?name["\s:]+([a-zA-Z0-9_-]+)/i,
-        ];
-        for (const pattern of patterns) {
-            const match = text.match(pattern);
-            if (match?.[1]) return match[1];
-        }
-        return "";
-    }
-
-    private async parseFolderNameFromStream(response: Response): Promise<string> {
-        const reader = response.body?.getReader();
-        if (!reader) throw new Error('No response body');
-
-        let folderName = '';
-        let buffer: Uint8Array<ArrayBufferLike> = new Uint8Array(0);
-        const decoder = new TextDecoder();
-
-        const concatUint8Array = (
-            a: Uint8Array<ArrayBufferLike>,
-            b: Uint8Array<ArrayBufferLike>
-        ): Uint8Array<ArrayBufferLike> => {
-            const merged = new Uint8Array(a.length + b.length);
-            merged.set(a, 0);
-            merged.set(b, a.length);
-            return merged;
-        };
-
+    async waitTranslationComplete(reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>): Promise<BizResult<Blob>> {
+        let buffer: Uint8Array<ArrayBuffer> = new Uint8Array();
+        const textDecoder = new TextDecoder("utf-8");
         try {
             while (true) {
                 const { done, value } = await reader.read();
-                if (done) break;
-                if (!value || value.length === 0) continue;
+                if (done) {
+                    // 不应该走到这里，通过协议status判断结束
+                    return { code: LOGIC_ERROR_CODE, data: null, error: new Error("data not completed") };
+                }
+                if (!value || value.length === 0) {
+                    continue;
+                }
+                // merge value
+                buffer = this.mergeUint8Array(buffer, value);
 
                 // 解析流式数据: [1 byte status][4 bytes size][n bytes data]
-                // 注意：一个 chunk 可能包含多个包，也可能是半包，需要缓存并拼包。
-                buffer = concatUint8Array(buffer, value);
-
-                while (buffer.length >= 5) {
+                while (buffer.byteLength >= 5) {
                     const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-                    const status = buffer[0];
-                    const size = view.getUint32(1, false); // big-endian
-                    const frameSize = 5 + size;
-
-                    if (buffer.length < frameSize) break;
-
+                    const status = view.getUint8(0);
+                    const dataSize = view.getUint32(1, false);
+                    const frameSize = 5 + dataSize;
+                    if (view.byteLength < frameSize) {
+                        break;
+                    }
+                    // 当前完整数据
                     const data = buffer.slice(5, frameSize);
+                    // buffer 剩下的数据属于下一轮
                     buffer = buffer.slice(frameSize);
 
-                    if (status === 1) {
-                        // 进度消息里可能包含 folder 名称。
-                        const text = decoder.decode(data);
-                        const extracted = this.extractFolderNameFromProgressText(text);
-                        if (extracted) {
-                            folderName = extracted;
-                            // 已拿到 folderName，无需继续解析后续流
-                            return folderName;
-                        }
+                    // 处理数据包, status=0 正常返回; status=1 过程数据; status=2 异常报错; status=3 排队中; status=4 即将开始
+                    if (status === 0) {
+                        const blob = new Blob([data], { type: "image/png" });
+                        return { code: SUCCESS_CODE, data: blob, error: null };
+                    } else if (status === 1) {
+                        const stateText = textDecoder.decode(data);
+                        console.debug(`waitTranslationComplete, stateText: ${stateText}`);
                     } else if (status === 2) {
-                        const errorMsg = decoder.decode(data);
-                        console.error("error:", errorMsg);
-                        throw new Error(errorMsg);
+                        const errText = textDecoder.decode(data);
+                        console.error(`waitTranslationComplete, algo svr return error: ${errText}`);
+                        return { code: REMOTE_LOGIC_ERROR_CODE, data: null, error: new Error(errText) };
+                    } else if (status === 3) {
+                        const queuePos = textDecoder.decode(data);
+                        console.debug(`waitTranslationComplete, waiting, queue pos: ${queuePos}`);
+                    } else if (status === 4) {
+                        console.debug("waitTranslationComplete, ready to start!");
                     }
                 }
             }
         } finally {
-            reader.releaseLock();
-        }
-
-        // 如果无法从流中解析,尝试从响应头获取
-        if (!folderName) {
-            console.debug("response.headers:", response.headers);
-            folderName = response.headers.get('X-Result-Folder') ||
-                response.headers.get('X-Folder-Name') || '';
-        }
-
-        return folderName;
-    }
-
-    // 检查翻译结果是否就绪
-    async checkResultReady(folderName: string): Promise<boolean> {
-        try {
-            const response = await fetch(
-                this.getResultUrl(folderName),
-                { method: 'HEAD' }
-            );
-            return response.ok;
-        } catch (error) {
-            console.error('❌ checkResultReady error:', error);
-            return false;
+            reader.cancel();
         }
     }
 
-    // 获取翻译结果图片 URL
-    getResultUrl(folderName: string): string {
-        const baseUrl = getAlgoBaseUrl();
-        return `${baseUrl}/result/${folderName}/final.png`;
+    mergeUint8Array(a: Uint8Array<ArrayBuffer>, b: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer> {
+        const merged = new Uint8Array(a.length + b.length);
+        merged.set(a, 0);
+        merged.set(b, a.length);
+        return merged;
     }
 
-    // 下载翻译结果
-    async downloadResult(folderName: string): Promise<Result<Blob>> {
-        const response = await fetch(this.getResultUrl(folderName));
-
-        if (!response.ok) {
-            console.error("downloadResult, fetch result image failed, statusText: ", response.statusText);
-            return {
-                data: null,
-                error: new Error(`Failed to download result: ${response.statusText}`),
-            };
-        }
-
-        return {
-            data: await response.blob(),
-            error: null,
-        };
-    }
-
-    getImageRetryCount(image: TranslationImage): number {
+    computeImageRetryCount(image: TranslationImage): number {
         return Math.min((image.retryCount || 0) + 1, MAX_TRANSLATION_RETRIES);
     }
 }

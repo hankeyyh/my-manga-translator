@@ -87,7 +87,7 @@ class TranslationWorker {
             this.translationService.translateImage(image.id)
                 .catch((err) => {
                     // translateImage 内部已 handle 失败，catch 防未捕获异常
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     this.activeImages.delete(image.id);
