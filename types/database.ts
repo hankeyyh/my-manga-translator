@@ -36,31 +36,37 @@ export type Database = {
     Tables: {
       credit_logs: {
         Row: {
-          amount: number
-          balance_type: string
+          biz_type: string | null
           created_at: string
           id: string
+          paytouse_credit_change: number | null
+          subscription_credit_change: number | null
           task_id: string | null
+          total_credit_change: number | null
           transaction_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
-          amount: number
-          balance_type: string
+          biz_type?: string | null
           created_at?: string
           id?: string
+          paytouse_credit_change?: number | null
+          subscription_credit_change?: number | null
           task_id?: string | null
+          total_credit_change?: number | null
           transaction_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
-          amount?: number
-          balance_type?: string
+          biz_type?: string | null
           created_at?: string
           id?: string
+          paytouse_credit_change?: number | null
+          subscription_credit_change?: number | null
           task_id?: string | null
+          total_credit_change?: number | null
           transaction_id?: string | null
           updated_at?: string
           user_id?: string

@@ -6,6 +6,7 @@
     "start": "next start",
     "lint": "eslint .",
     "worker": "tsx workers/translation.ts",
+    "stripe": "stripe listen --forward-to http://localhost:3000/api/webhooks",
     "test": "jest"
   },
   "dependencies": {

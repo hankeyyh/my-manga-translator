@@ -64,12 +64,6 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: data, error: null };
     }
 
-    // 预估消费
-    async estimateCreditCost() { }
-
-    // 计算实际消费
-    async calculateActualCredits() { }
-
     // 创建交易记录
     async startUserTransaction(userId: string, topupConfig: TopUpConfig): Promise<BizResult<UserTransaction>> {
         let transactionResult: Result<UserTransaction>;
@@ -154,6 +148,12 @@ export class CreditService {
         }
         return { code: SUCCESS_CODE, data: null, error: null };
     }
+
+    // 预估消费
+    async estimateCreditCost() { }
+
+    // 计算实际消费
+    async calculateActualCredits() { }
 
     // 扣除积分
     async deductCredits() { }

@@ -190,13 +190,13 @@ export class TranslationService {
     }
 
     // 实际翻译图片
-    async translateImage(imageId: string) {
+    async translateImage(imageId: string): Promise<BizResult<string>> {
         console.log(`📝 Processing image: ${imageId}`);
         // 1. 获取图片详情
         const imageResult = await this.imageRepo.getImage(imageId);
         if (imageResult.error) {
             console.error('❌ Failed to get image:', imageResult.error);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
         }
         const image = imageResult.data!;
 
@@ -207,7 +207,7 @@ export class TranslationService {
         });
         if (updateImageStatusResult.error) {
             console.error('❌ Failed to update image status:', updateImageStatusResult.error);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: updateImageStatusResult.error };
         }
 
         // 3. 获取任务配置 (从图片关联的任务获取)
@@ -215,7 +215,7 @@ export class TranslationService {
         if (taskResult.error) {
             console.error('❌ Failed to get task:', taskResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to get task: ${taskResult.error.message}`);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: taskResult.error };
         }
         const task = taskResult.data!;
         const config = task.config;
@@ -225,7 +225,7 @@ export class TranslationService {
         if (downloadOriginalImageResult.error) {
             console.error('❌ Failed to download original image:', downloadOriginalImageResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to download original image: ${downloadOriginalImageResult.error.message}`);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: downloadOriginalImageResult.error };
         }
         const originalImage = downloadOriginalImageResult.data!;
         console.debug("originalImage:", originalImage);
@@ -235,7 +235,7 @@ export class TranslationService {
         if (submitResult.error) {
             console.error('❌ Failed to submit translation:', submitResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to submit translation: ${submitResult.error.message}`);
-            return;
+            return { code: submitResult.code, data: null, error: submitResult.error };
         }
         const reader = submitResult.data!;
 
@@ -244,7 +244,7 @@ export class TranslationService {
         if (waitResult.error) {
             console.error('❌ algo svr return error:', waitResult.error);
             await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
-            return;
+            return { code: waitResult.code, data: null, error: waitResult.error };
         }
 
         // 7. 上传到 Supabase Storage
@@ -252,7 +252,7 @@ export class TranslationService {
         if (uploadResultImageResult.error) {
             console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: uploadResultImageResult.error };
         }
         const resultImagePath = uploadResultImageResult.data!;
 
@@ -265,11 +265,11 @@ export class TranslationService {
         if (updateResultImageResult.error) {
             console.error('❌ Failed to update image status:', updateResultImageResult.error);
             await this.handleTranslateImageFailed(imageId, `Failed to update image result: ${updateResultImageResult.error.message}`);
-            return;
+            return { code: DB_ERROR_CODE, data: null, error: updateResultImageResult.error };
         }
         console.log(`✅ Image ${imageId} processed successfully`);
 
-        return;
+        return { code: SUCCESS_CODE, data: imageId, error: null };
     }
 
     // 处理翻译失败的图片
