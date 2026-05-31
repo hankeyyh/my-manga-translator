@@ -15,6 +15,7 @@ export class TranslationTaskRepository {
    */
     async createTask(params: CreateTaskParams): Promise<Result<TranslationTask>> {
         const insertData: TablesInsert<'translation_tasks'> = {
+            ...(params.id && { id: params.id }), // 如果传入id，则显示设置
             user_id: params.userId,
             status: 'pending',
             total_images: params.totalImages,
@@ -228,6 +229,7 @@ export class TranslationTaskRepository {
 // 创建任务参数
 
 export interface CreateTaskParams {
+    id?: string;
     userId: string;
     totalImages: number;
     config: TranslationConfig;

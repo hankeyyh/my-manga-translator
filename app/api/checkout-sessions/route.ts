@@ -9,6 +9,8 @@ import z from 'zod';
 import { TopUpConfigRepository } from '@/biz/repositories/topup/topup-config';
 import { CreditService } from '@/biz/services/credit/credit-service';
 import { UserTransactionsRepository } from '@/biz/repositories/topup/user-transactions';
+import { PricingConfigRepository } from '@/biz/repositories/pricing/pricing-config';
+import { UserCreditsRepository } from '@/biz/repositories/credit/user-credits';
 
 const checkoutSessionSchema = z.object({
     id: z.uuid()
@@ -38,6 +40,8 @@ export async function POST(request: NextRequest) {
     const { id } = parseResult.data;
     const creditService = new CreditService(new TopUpConfigRepository(supabase),
         new UserTransactionsRepository(supabase),
+        new PricingConfigRepository(supabase),
+        new UserCreditsRepository(supabase),
     );
     const topupConfigResult = await creditService.getTopUpConfig(id);
     if (topupConfigResult.error) {
@@ -79,4 +83,9 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ url: session.url });
+}
+
+// 查询支付状态
+export async function GET(request: NextRequest) {
+    const sessionId = request.nextUrl.searchParams.get("session_id");
 }

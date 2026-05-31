@@ -6,6 +6,18 @@ import { TranslationService } from "@/biz/services/translate/translation-service
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { sleep } from "@/biz/utils/sleep";
+import { BizResult } from "@/types/do/common";
+import { CreditService } from "@/biz/services/credit/credit-service";
+import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
+import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
+import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import {
+    isTranslateImageFailedResult,
+    isTranslateImageSuccessResult,
+    TranslateImageFailedResult,
+    TranslateImageSuccessResult,
+} from "@/types/dto/translation-image";
 
 const POLL_INTERVAL = 5000; // 5 秒
 const MAX_CONCURRENT = 3; // 同时处理 3 张图片
@@ -16,6 +28,7 @@ class TranslationWorker {
     private isRunning = false;
     private activeImages = new Set<string>();
     private translationService: TranslationService;
+    private creditService: CreditService;
 
     constructor() {
         const supabase = createServiceRoleClient();
@@ -24,6 +37,12 @@ class TranslationWorker {
             new TranslationTaskRepository(supabase),
             new TranslationImageRepository(supabase),
             new TranslationStorageRepository(supabase)
+        );
+        this.creditService = new CreditService(
+            new TopUpConfigRepository(supabase),
+            new UserTransactionsRepository(supabase),
+            new PricingConfigRepository(supabase),
+            new UserCreditsRepository(supabase),
         );
     }
 
@@ -85,6 +104,7 @@ class TranslationWorker {
 
             this.activeImages.add(image.id);
             this.translationService.translateImage(image.id)
+                .then((result) => this.handleTranslateImageComplete(result))
                 .catch((err) => {
                     // translateImage 内部已 handle 失败，catch 防未捕获异常
                     console.error(err);
@@ -92,6 +112,26 @@ class TranslationWorker {
                 .finally(() => {
                     this.activeImages.delete(image.id);
                 });
+        }
+    }
+
+    // 每张图片处理结束的回调
+    async handleTranslateImageComplete(input: BizResult<TranslateImageSuccessResult | TranslateImageFailedResult>) {
+        console.debug(`handleTranslateImageComplete, input: ${JSON.stringify(input)}`)
+        if (!input.data) {
+            return;
+        }
+        const data = input.data;
+        if (isTranslateImageFailedResult(data)) {
+            if (data.needRefund && data.userId) {
+                await this.creditService.refundImageCredits(data.userId, data.taskId, data.imageId, data.refundCredits);
+            } else {
+                console.warn(`translateImage fail, but no need refund or userId not found, input: ${JSON.stringify(input)}`);
+            }
+            return;
+        }
+        if (isTranslateImageSuccessResult(data)) {
+            await this.creditService.captureImageCredits(data.userId, data.taskId, data.imageId, data.consumeCredits);
         }
     }
 }

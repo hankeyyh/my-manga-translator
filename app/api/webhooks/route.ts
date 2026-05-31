@@ -1,4 +1,6 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { CreditService } from "@/biz/services/credit/credit-service";
@@ -36,7 +38,12 @@ export async function POST(request: NextRequest) {
             console.error(`transactionId not found in metadata, StripeSessionId: ${session.id}`);
             return NextResponse.json({}, { status: 200 }); // 重试无意义，返回200，需要人工介入
         }
-        const credService = new CreditService(new TopUpConfigRepository(supabase), new UserTransactionsRepository(supabase));
+        const credService = new CreditService(
+            new TopUpConfigRepository(supabase), 
+            new UserTransactionsRepository(supabase),
+            new PricingConfigRepository(supabase),
+            new UserCreditsRepository(supabase),
+        );
         const transResult = await credService.succeedUserTransaction(transactionId);
         if (transResult.error) {
             // stripe 会重试

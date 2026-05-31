@@ -1,5 +1,5 @@
 import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, NETWORK_ERROR_CODE, REMOTE_LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
-import { TranslationImage } from "@/types/do/translation-image";
+import { ImageStatus, TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { getAlgoBaseUrl } from "@/biz/utils/url";
 import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
@@ -7,7 +7,7 @@ import { CreateImageParams, TranslationImageRepository } from "@/biz/repositorie
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
-import { TranslationImageView } from "@/types/dto/translation-image";
+import { TranslateImageFailedResult, TranslateImageSuccessResult, TranslationImageView } from "@/types/dto/translation-image";
 
 const MAX_TRANSLATION_RETRIES = 3;
 const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果
@@ -21,7 +21,7 @@ export class TranslationService {
         private imageStorage: TranslationStorageRepository) { }
 
     // 提交任务
-    async submitTranslationTask(images: File[], config: TranslationConfig): Promise<BizResult<string>> {
+    async submitTranslationTask(taskId: string, images: File[], config: TranslationConfig): Promise<BizResult<string>> {
         // 参数检查
         if (!images || images.length === 0) {
             return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error('No images provided') };
@@ -40,6 +40,7 @@ export class TranslationService {
 
         // 2. 创建任务
         const taskResult = await this.taskRepo.createTask({
+            id: taskId,
             userId: user.id,
             totalImages: images.length,
             config,
@@ -190,13 +191,23 @@ export class TranslationService {
     }
 
     // 实际翻译图片
-    async translateImage(imageId: string): Promise<BizResult<string>> {
+    async translateImage(imageId: string): Promise<BizResult<TranslateImageSuccessResult | TranslateImageFailedResult>> {
         console.log(`📝 Processing image: ${imageId}`);
         // 1. 获取图片详情
         const imageResult = await this.imageRepo.getImage(imageId);
         if (imageResult.error) {
             console.error('❌ Failed to get image:', imageResult.error);
-            return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
+            return {
+                code: DB_ERROR_CODE,
+                data: {
+                    userId: "",
+                    taskId: "",
+                    imageId: imageId,
+                    needRefund: false, // image状态仍为pending，下一轮重试 
+                    refundCredits: 0,
+                },
+                error: imageResult.error
+            };
         }
         const image = imageResult.data!;
 
@@ -207,15 +218,36 @@ export class TranslationService {
         });
         if (updateImageStatusResult.error) {
             console.error('❌ Failed to update image status:', updateImageStatusResult.error);
-            return { code: DB_ERROR_CODE, data: null, error: updateImageStatusResult.error };
+            return {
+                code: DB_ERROR_CODE,
+                data: {
+                    userId: "",
+                    taskId: "",
+                    imageId: imageId,
+                    needRefund: false, // image状态仍为pending，下一轮重试 
+                    refundCredits: 0,
+                },
+                error: updateImageStatusResult.error
+            };
         }
 
         // 3. 获取任务配置 (从图片关联的任务获取)
         const taskResult = await this.taskRepo.getTask(image.taskId);
         if (taskResult.error) {
             console.error('❌ Failed to get task:', taskResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to get task: ${taskResult.error.message}`);
-            return { code: DB_ERROR_CODE, data: null, error: taskResult.error };
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to get task: ${taskResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: DB_ERROR_CODE, 
+                data: {
+                    userId: "", // TODO 没有task就不知道userId，怎么做？
+                    taskId: image.taskId,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: taskResult.error 
+            };
         }
         const task = taskResult.data!;
         const config = task.config;
@@ -224,8 +256,19 @@ export class TranslationService {
         const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
         if (downloadOriginalImageResult.error) {
             console.error('❌ Failed to download original image:', downloadOriginalImageResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to download original image: ${downloadOriginalImageResult.error.message}`);
-            return { code: DB_ERROR_CODE, data: null, error: downloadOriginalImageResult.error };
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to download original image: ${downloadOriginalImageResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: DB_ERROR_CODE, 
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: downloadOriginalImageResult.error 
+            };
         }
         const originalImage = downloadOriginalImageResult.data!;
         console.debug("originalImage:", originalImage);
@@ -234,8 +277,19 @@ export class TranslationService {
         const submitResult = await this.submitTranslation(originalImage, config);
         if (submitResult.error) {
             console.error('❌ Failed to submit translation:', submitResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to submit translation: ${submitResult.error.message}`);
-            return { code: submitResult.code, data: null, error: submitResult.error };
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to submit translation: ${submitResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: submitResult.code, 
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: submitResult.error 
+            };
         }
         const reader = submitResult.data!;
 
@@ -243,16 +297,38 @@ export class TranslationService {
         const waitResult = await this.waitTranslationComplete(reader);
         if (waitResult.error) {
             console.error('❌ algo svr return error:', waitResult.error);
-            await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
-            return { code: waitResult.code, data: null, error: waitResult.error };
+            const handleResult =  await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: waitResult.code, 
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: waitResult.error 
+            };
         }
 
         // 7. 上传到 Supabase Storage
         const uploadResultImageResult = await this.imageStorage.uploadResultImage(task.userId, task.id, image.imageIndex, waitResult.data!);
         if (uploadResultImageResult.error) {
             console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
-            return { code: DB_ERROR_CODE, data: null, error: uploadResultImageResult.error };
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: DB_ERROR_CODE, 
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: uploadResultImageResult.error 
+            };
         }
         const resultImagePath = uploadResultImageResult.data!;
 
@@ -264,20 +340,42 @@ export class TranslationService {
         });
         if (updateResultImageResult.error) {
             console.error('❌ Failed to update image status:', updateResultImageResult.error);
-            await this.handleTranslateImageFailed(imageId, `Failed to update image result: ${updateResultImageResult.error.message}`);
-            return { code: DB_ERROR_CODE, data: null, error: updateResultImageResult.error };
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to update image result: ${updateResultImageResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return { 
+                code: DB_ERROR_CODE, 
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 1,
+                }, 
+                error: updateResultImageResult.error 
+            };
         }
         console.log(`✅ Image ${imageId} processed successfully`);
 
-        return { code: SUCCESS_CODE, data: imageId, error: null };
+        return {
+            code: SUCCESS_CODE,
+            data: {
+                userId: task.userId,
+                taskId: task.id,
+                imageId: imageId,
+                consumeCredits: 1, // TODO 根据使用的模型计算价格
+            },
+            error: null
+        };
     }
 
-    // 处理翻译失败的图片
-    private async handleTranslateImageFailed(imageId: string, errMessage: string) {
+    // 处理翻译失败的图片，
+    // return: boolean 是否需要重试
+    private async handleTranslateImageFailed(imageId: string, errMessage: string): Promise<BizResult<boolean>> {
         const imageResult = await this.imageRepo.getImage(imageId);
         if (imageResult.error) {
             console.error("handleTranslateImageFailed, Failed to get image, error: ", imageResult.error);
-            return;
+            // 此时image状态为processing，下一轮也无法取到重试，只能人工介入
+            return { code: DB_ERROR_CODE, data: false, error: imageResult.error };
         }
         const image = imageResult.data!;
 
@@ -291,8 +389,9 @@ export class TranslationService {
         });
         if (updateImageResult.error) {
             console.error('handleTranslateImageFailed, Failed to update image:', updateImageResult.error);
-            return;
+            return { code: DB_ERROR_CODE, data: false, error: updateImageResult.error };
         }
+        return { code: SUCCESS_CODE, data: shouldRetry, error: null };
     }
 
     // 获取pending图片

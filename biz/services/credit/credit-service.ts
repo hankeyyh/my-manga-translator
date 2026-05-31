@@ -1,9 +1,12 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME, UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { sleep } from "@/biz/utils/sleep";
-import { BizResult, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { BizResult, CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
 import { TopUpConfig } from "@/types/do/topup-config";
+import { TranslationConfig } from "@/types/do/translation-config";
 import { UserTransaction } from "@/types/do/user-transaction";
 
 // 充值失败，重试次数
@@ -36,6 +39,8 @@ function getSubscriptionEndDate(billingCycle: string, from: Date = new Date()): 
 export class CreditService {
     constructor(private topupConfigRepo: TopUpConfigRepository,
         private userTransRepo: UserTransactionsRepository,
+        private pricingConfigRepo: PricingConfigRepository,
+        private userCreditRepo: UserCreditsRepository,
     ) {
 
     }
@@ -149,15 +154,70 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: null, error: null };
     }
 
-    // 预估消费
-    async estimateCreditCost() { }
+    // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=2credits
+    async estimateCreditCost(images: File[], config: TranslationConfig): Promise<BizResult<number>> {
+        const translator = config.translator?.translator;
+        if (!translator) {
+            return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("translator not set") };
+        }
+        // TODO 模型名称algo svr目前在env配置，无法通过接口指定
+        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(translator);
+        if (pricingResult.error) {
+            console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error}`);
+            return { code: DB_ERROR_CODE, data: null, error: pricingResult.error };
+        }
+        if (!pricingResult.data) {
+            console.error(`estimateCreditCost, model pricing config not found, translator: ${translator}`);
+            return { code: LOGIC_ERROR_CODE, data: null, error: new Error("pricing config not found") };
+        }
+        const totalCost = pricingResult.data.creditPerImage * images.length;
+        return { code: SUCCESS_CODE, data: totalCost, error: null };
+    }
 
     // 计算实际消费
-    async calculateActualCredits() { }
+    async calculateActualCredits() {
 
-    // 扣除积分
-    async deductCredits() { }
+    }
+
+    // 冻结积分
+    async freezeTaskCredits(userId: string, taskId: string, frozenCredits: number): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.freezeTaskCredits(userId, taskId, frozenCredits);
+        if (result.error) {
+            console.error(`freezeTaskCredits, repo.freezeTaskCredits fail, error: ${result.error}, 
+                taskId: ${taskId}, frozenCredits: ${frozenCredits}`);
+            if (result.error.name === CREDIT_BALANCE_NOT_ENOUGH_NAME) {
+                return { code: CREDIT_BALANCE_NOT_ENOUGH, data: null, error: result.error };
+            }
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
+    // 核销积分
+    async captureImageCredits(userId: string, taskId: string, imageId: string, consumeCredits: number): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.captureImageCredits(userId, taskId, imageId, consumeCredits);
+        if (result.error) {
+            console.error(`captureImageCredits, repo.captureImageCredits fail, error: ${result.error}, 
+                imageId: ${imageId}, consumeCredits: ${consumeCredits}`);
+            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME) {
+                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, data: null, error: result.error };
+            }
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
 
     // 退还积分
-    async refundCredits() { }
+    async refundImageCredits(userId: string, taskId: string, imageId: string, refundCredits: number): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.refundImageCredits(userId, taskId, imageId, refundCredits);
+        if (result.error) {
+            console.error(`refundImageCredits, repo.refundImageCredits fail, error: ${result.error}, 
+                imageId: ${imageId}, refundCredits: ${refundCredits}`);
+            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME) {
+                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, data: null, error: result.error };
+            }
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
 }

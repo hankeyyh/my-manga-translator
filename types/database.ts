@@ -39,10 +39,13 @@ export type Database = {
           biz_type: string | null
           created_at: string
           id: string
-          paytouse_credit_change: number | null
-          subscription_credit_change: number | null
+          image_id: string | null
+          paytouse_credit_change: number
+          paytouse_frozen_change: number
+          subscription_credit_change: number
+          subscription_frozen_change: number
           task_id: string | null
-          total_credit_change: number | null
+          total_credit_change: number
           transaction_id: string | null
           updated_at: string
           user_id: string
@@ -51,10 +54,13 @@ export type Database = {
           biz_type?: string | null
           created_at?: string
           id?: string
-          paytouse_credit_change?: number | null
-          subscription_credit_change?: number | null
+          image_id?: string | null
+          paytouse_credit_change?: number
+          paytouse_frozen_change?: number
+          subscription_credit_change?: number
+          subscription_frozen_change?: number
           task_id?: string | null
-          total_credit_change?: number | null
+          total_credit_change?: number
           transaction_id?: string | null
           updated_at?: string
           user_id: string
@@ -63,22 +69,18 @@ export type Database = {
           biz_type?: string | null
           created_at?: string
           id?: string
-          paytouse_credit_change?: number | null
-          subscription_credit_change?: number | null
+          image_id?: string | null
+          paytouse_credit_change?: number
+          paytouse_frozen_change?: number
+          subscription_credit_change?: number
+          subscription_frozen_change?: number
           task_id?: string | null
-          total_credit_change?: number | null
+          total_credit_change?: number
           transaction_id?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "credit_logs_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "translation_tasks"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "credit_logs_transaction_id_fkey"
             columns: ["transaction_id"]
@@ -87,6 +89,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pricing_config: {
+        Row: {
+          created_at: string
+          credit_per_image: number
+          id: string
+          model_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          credit_per_image: number
+          id?: string
+          model_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          credit_per_image?: number
+          id?: string
+          model_name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       topup_config: {
         Row: {
@@ -257,7 +283,9 @@ export type Database = {
           created_at: string
           id: string
           pay_to_use_balance: number
+          pay_to_use_frozen: number
           subscription_balance: number
+          subscription_frozen: number
           updated_at: string
           user_id: string
         }
@@ -265,7 +293,9 @@ export type Database = {
           created_at?: string
           id?: string
           pay_to_use_balance?: number
+          pay_to_use_frozen?: number
           subscription_balance?: number
+          subscription_frozen?: number
           updated_at?: string
           user_id: string
         }
@@ -273,7 +303,9 @@ export type Database = {
           created_at?: string
           id?: string
           pay_to_use_balance?: number
+          pay_to_use_frozen?: number
           subscription_balance?: number
+          subscription_frozen?: number
           updated_at?: string
           user_id?: string
         }
@@ -380,6 +412,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      capture_image_credits: {
+        Args: {
+          p_consume_credits: number
+          p_image_id: string
+          p_task_id: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
+      freeze_task_credits: {
+        Args: { p_credits: number; p_task_id: string; p_user_id: string }
+        Returns: undefined
+      }
+      refund_image_credits: {
+        Args: {
+          p_image_id: string
+          p_refund_credits: number
+          p_task_id: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       succeed_transaction: {
         Args: { p_transaction_id: string }
         Returns: boolean

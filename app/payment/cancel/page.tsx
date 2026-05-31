@@ -1,4 +1,6 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { CreditService } from "@/biz/services/credit/credit-service";
@@ -31,8 +33,11 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
 
     const { status, paymentStatus, email, transactionId } = stripeSessionResult.data!;
     // 2. 取消交易
-    const creditService = new CreditService(new TopUpConfigRepository(supabase),
+    const creditService = new CreditService(
+        new TopUpConfigRepository(supabase),
         new UserTransactionsRepository(supabase),
+        new PricingConfigRepository(supabase),
+        new UserCreditsRepository(supabase),
     );
     const transResult = await creditService.cancelUserTransaction(transactionId!);
     if (transResult.error) {
