@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 
-import { TRANSLATION_STYLES } from "./constants";
+import { FONT_NAME_OPTIONS, type FontName } from "@/types/do/translation-config";
 import { SUPPORTED_LANGS } from "@/types/common";
 import { PricingConfig } from "@/types/do/pricing-config";
 
@@ -26,24 +26,24 @@ export type TranslationSettingsPanelProps = {
     translateModel: string;
     sourceLang: string;
     targetLang: string;
-    style: string;
+    fontName: FontName;
     translateConfigs: PricingConfig[],
     onTranslateModelChange: (value: string) => void;
     onSourceLangChange: (value: string) => void;
     onTargetLangChange: (value: string) => void;
-    onStyleChange: (value: string) => void;
+    onFontNameChange: (value: FontName) => void;
 };
 
 export function TranslationSettingsPanel({
     translateModel,
     sourceLang,
     targetLang,
-    style,
+    fontName,
     translateConfigs,
     onTranslateModelChange,
     onSourceLangChange,
     onTargetLangChange,
-    onStyleChange,
+    onFontNameChange,
 }: TranslationSettingsPanelProps) {
     return (
         <Card className="rounded-2xl border border-white bg-[#f8f9fb]/80 shadow-xl backdrop-blur-md">
@@ -141,18 +141,18 @@ export function TranslationSettingsPanel({
                                     className="h-8 justify-between border border-[#dee3e7] bg-[#f8f9fb] px-2 font-headline text-sm font-bold text-[#2d3337] hover:bg-[#f8f9fb]"
                                     variant="outline"
                                 >
-                                    {style}
+                                    {fontName}
                                     <ChevronDown className="h-3 w-3 opacity-60" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
-                                {TRANSLATION_STYLES.map((s) => (
+                                {FONT_NAME_OPTIONS.map((name) => (
                                     <DropdownMenuItem
-                                        key={s}
+                                        key={name}
                                         className="font-headline font-bold"
-                                        onClick={() => onStyleChange(s)}
+                                        onClick={() => onFontNameChange(name)}
                                     >
-                                        {s}
+                                        {name}
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>

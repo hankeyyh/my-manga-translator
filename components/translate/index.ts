@@ -22,5 +22,3 @@ export { CompareImageViewer } from "./compare-image-viewer";
 export type { CompareImageViewerProps } from "./compare-image-viewer";
 export { CompareImagePanel } from "./compare-image-panel";
 export type { CompareImagePanelProps } from "./compare-image-panel";
-export { TRANSLATION_STYLES } from "./constants";
-export type { TranslationStyle } from "./constants";

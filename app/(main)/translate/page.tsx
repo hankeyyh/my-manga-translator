@@ -4,13 +4,12 @@ import { Manrope, Inter } from "next/font/google";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import {
-    TRANSLATION_STYLES,
     TranslationHistorySection,
     TranslateTaskBar,
     TranslateWorkbench,
 } from "@/components/translate";
 import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
-import { TranslationConfig } from "@/types/do/translation-config";
+import { FONT_NAME_OPTIONS, TranslationConfig, type FontName } from "@/types/do/translation-config";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
@@ -45,7 +44,7 @@ export default function TranslatePage() {
     const [translateModel, setTranslateModel] = useState<string>("");
     const [sourceLang, setSourceLang] = useState("JPN");
     const [targetLang, setTargetLang] = useState("ENG");
-    const [style, setStyle] = useState<string>(TRANSLATION_STYLES[0]);
+    const [fontName, setFontName] = useState<FontName>(FONT_NAME_OPTIONS[0]);
     const [activeTab, setActiveTab] = useState(0);
 
     const pagesRef = useRef<LocalPage[]>([]);
@@ -152,6 +151,9 @@ export default function TranslatePage() {
                 translator: {
                     translator: "youdao",
                     target_lang: targetLang,
+                },
+                render: {
+                    font_name: fontName,
                 },
             };
             formData.append("config", JSON.stringify(config));
@@ -277,11 +279,11 @@ export default function TranslatePage() {
                         translateModel={translateModel}
                         sourceLang={sourceLang}
                         targetLang={targetLang}
-                        style={style}
+                        fontName={fontName}
                         translateConfigs={translateConfigs}
                         onTranslateModelChange={setTranslateModel}
                         onSourceLangChange={setSourceLang}
-                        onStyleChange={setStyle}
+                        onFontNameChange={setFontName}
                         onTargetLangChange={setTargetLang}
                     />
 

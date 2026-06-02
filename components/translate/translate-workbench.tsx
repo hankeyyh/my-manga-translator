@@ -6,6 +6,7 @@ import { CompareImageViewer } from "./compare-image-viewer";
 import { WorkbenchToolRail } from "./workbench-tool-rail";
 import { WorkbenchZoomControls } from "./workbench-zoom-controls";
 import { ApiPricingConfig } from "@/types/api/pricing-config";
+import type { FontName } from "@/types/do/translation-config";
 
 export type TranslateWorkbenchProps = {
     originalImageUrl: string | null;
@@ -13,12 +14,12 @@ export type TranslateWorkbenchProps = {
     sourceLang: string;
     targetLang: string;
     translateModel: string;
-    style: string;
+    fontName: FontName;
     translateConfigs: ApiPricingConfig[];
     onSourceLangChange: (value: string) => void;
     onTargetLangChange: (value: string) => void;
     onTranslateModelChange: (value: string) => void;
-    onStyleChange: (value: string) => void;
+    onFontNameChange: (value: FontName) => void;
 };
 
 export function TranslateWorkbench({
@@ -27,12 +28,12 @@ export function TranslateWorkbench({
     sourceLang,
     targetLang,
     translateModel,
-    style,
+    fontName,
     translateConfigs,
     onSourceLangChange,
     onTargetLangChange,
     onTranslateModelChange,
-    onStyleChange,
+    onFontNameChange,
 }: TranslateWorkbenchProps) {
     const [zoom, setZoom] = useState(100);
     const zoomIn = () => setZoom((z) => Math.min(z + 25, 200));
@@ -43,12 +44,12 @@ export function TranslateWorkbench({
             <WorkbenchToolRail
                 translateModel={translateModel}
                 sourceLang={sourceLang}
-                style={style}
+                fontName={fontName}
                 targetLang={targetLang}
                 translateConfigs={translateConfigs}
                 onTranslateModelChange={onTranslateModelChange}
                 onSourceLangChange={onSourceLangChange}
-                onStyleChange={onStyleChange}
+                onFontNameChange={onFontNameChange}
                 onTargetLangChange={onTargetLangChange}
             />
             <WorkbenchZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} zoom={zoom} />

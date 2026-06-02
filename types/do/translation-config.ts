@@ -9,6 +9,21 @@ type Colorizer = 'none' | 'mc2';
 type Renderer = 'default' | 'manga2eng' | 'manga2eng_pillow' | 'none';
 type Alignment = 'auto' | 'left' | 'center' | 'right';
 type Direction = 'auto' | 'horizontal' | 'vertical';
+
+/**
+ * 与 manga-image-translator `FONT_NAME_PATH_MAP` / `RenderConfig.font_name` 对齐的预设字体名。
+ * JSON 中 `render.font_name` 须使用下列字符串之一。
+ */
+export const FONT_NAME_OPTIONS = [
+    'Auto',
+    'Anime Ace',
+    'Anime Ace 3.0',
+    'Arial Unicode Regular',
+    'Comic Shanns 2',
+] as const;
+
+export type FontName = (typeof FONT_NAME_OPTIONS)[number];
+
 /** 与 manga-image-translator `UpscaleConfig` 对齐的放大选项 */
 
 export interface UpscaleConfig {
@@ -28,6 +43,8 @@ export interface RenderConfig {
     alignment?: Alignment;
     /** 关闭描边 */
     disable_font_border?: boolean;
+    /** 预设字体名；未设置时使用服务端 font_path 或渲染器默认字体 */
+    font_name?: FontName;
     /** 字号偏移，正数增大 */
     font_size_offset?: number;
     /** 最小输出字号；默认约为 image_sides_sum/200，-1 表示使用默认 */
