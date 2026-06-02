@@ -1,7 +1,9 @@
 import Stripe from "stripe";
-import { BizResult, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result } from "@/types/do/common";
+import { DB_ERROR_CODE, LOGIC_ERROR_CODE } from "@/types/dto/response";
+import { Result } from "@/types/do/response";
+import { BizResult } from "@/types/dto/response";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { SUCCESS_CODE } from "@/types/do/common";
+import { SUCCESS_CODE } from "@/types/dto/response";
 
 interface CreateCheckoutSessionData {
     sessionId: string;

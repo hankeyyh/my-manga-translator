@@ -4,7 +4,7 @@ import { TranslationTaskRepository } from "@/biz/repositories/translate/translat
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationService } from "@/biz/services/translate/translation-service";
 import { TranslationConfig } from "@/types/do/translation-config";
-import { CHECK_PARAM_ERROR_CODE, CREDIT_BALANCE_NOT_ENOUGH, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { CHECK_PARAM_ERROR_CODE, CREDIT_BALANCE_NOT_ENOUGH, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { CreditService } from "@/biz/services/credit/credit-service";

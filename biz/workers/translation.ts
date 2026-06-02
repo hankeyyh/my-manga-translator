@@ -6,7 +6,7 @@ import { TranslationService } from "@/biz/services/translate/translation-service
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { sleep } from "@/biz/utils/sleep";
-import { BizResult } from "@/types/do/common";
+import { BizResult } from "@/types/dto/response";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
@@ -117,7 +117,7 @@ class TranslationWorker {
 
     // 每张图片处理结束的回调
     async handleTranslateImageComplete(input: BizResult<TranslateImageSuccessResult | TranslateImageFailedResult>) {
-        console.debug(`handleTranslateImageComplete, input: ${JSON.stringify(input)}`)
+        console.debug(`handleTranslateImageComplete, input: ${JSON.stringify(input)}`);
         if (!input.data) {
             return;
         }

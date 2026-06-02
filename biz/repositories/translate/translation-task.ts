@@ -3,7 +3,7 @@ import type { TranslationTaskDetail } from "@/types/do/translation-task";
 import type { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import type { TranslationImage } from "@/types/do/translation-image";
 import type { Json, TablesInsert, TablesUpdate } from '@/types/database';
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { mapTranslationImageRowToTranslationImage, mapTranslationTaskRowToTranslationTask } from '../common';
 import { TranslationConfig } from '@/types/do/translation-config';
 

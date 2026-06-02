@@ -1,4 +1,4 @@
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 // 积分余额不足

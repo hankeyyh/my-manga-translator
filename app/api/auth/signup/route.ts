@@ -13,7 +13,7 @@ import { AuthService } from '@/biz/services/auth/auth-service';
 import { UserRepository } from '@/biz/repositories/auth/user-repository';
 import { createServerClient } from '@/biz/utils/supabase/server';
 import type { SignUpResponse } from "@/types/api/auth";
-import { SUCCESS_CODE } from "@/types/api/common";
+import { API_SUCCESS_CODE } from "@/types/api/response";
 
 // 参数校验
 const signUpSchema = z.object({
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     // 5. 返回成功响应（将 Entity 转换为 JSON 可序列化格式）
     const response: SignUpResponse = {
-        code: SUCCESS_CODE,
+        code: API_SUCCESS_CODE,
         message: 'OK',
         data: {
             user: {

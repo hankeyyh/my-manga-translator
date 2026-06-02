@@ -1,4 +1,4 @@
-import { ApiResponse } from "./common";
+import { ApiResponse } from "./response";
 import { UserDTO } from "../dto/user";
 
 export interface SignUpSuccessData {

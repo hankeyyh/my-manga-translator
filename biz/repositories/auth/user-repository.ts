@@ -5,7 +5,7 @@
 
 import type { User as SupabaseUser, EmailOtpType, JwtPayload, Provider, SupabaseClient } from '@supabase/supabase-js';
 import { UserEntity } from "@/types/entity/user";
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 
 // OAuth 登录选项
 export type SignInWithOAuthOptions = {

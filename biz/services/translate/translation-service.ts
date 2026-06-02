@@ -1,4 +1,6 @@
-import { BizResult, CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, NETWORK_ERROR_CODE, REMOTE_LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, NETWORK_ERROR_CODE, REMOTE_LOGIC_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
+import { Result } from "@/types/do/response";
+import { BizResult } from "@/types/dto/response";
 import { ImageStatus, TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { getAlgoBaseUrl } from "@/biz/utils/url";
@@ -237,16 +239,16 @@ export class TranslationService {
             console.error('❌ Failed to get task:', taskResult.error);
             const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to get task: ${taskResult.error.message}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: DB_ERROR_CODE, 
+            return {
+                code: DB_ERROR_CODE,
                 data: {
                     userId: "", // TODO 没有task就不知道userId，怎么做？
                     taskId: image.taskId,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: taskResult.error 
+                },
+                error: taskResult.error
             };
         }
         const task = taskResult.data!;
@@ -258,16 +260,16 @@ export class TranslationService {
             console.error('❌ Failed to download original image:', downloadOriginalImageResult.error);
             const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to download original image: ${downloadOriginalImageResult.error.message}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: DB_ERROR_CODE, 
+            return {
+                code: DB_ERROR_CODE,
                 data: {
                     userId: task.userId,
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: downloadOriginalImageResult.error 
+                },
+                error: downloadOriginalImageResult.error
             };
         }
         const originalImage = downloadOriginalImageResult.data!;
@@ -279,16 +281,16 @@ export class TranslationService {
             console.error('❌ Failed to submit translation:', submitResult.error);
             const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to submit translation: ${submitResult.error.message}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: submitResult.code, 
+            return {
+                code: submitResult.code,
                 data: {
                     userId: task.userId,
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: submitResult.error 
+                },
+                error: submitResult.error
             };
         }
         const reader = submitResult.data!;
@@ -297,18 +299,18 @@ export class TranslationService {
         const waitResult = await this.waitTranslationComplete(reader);
         if (waitResult.error) {
             console.error('❌ algo svr return error:', waitResult.error);
-            const handleResult =  await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Talgo svr return error:: ${waitResult.error}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: waitResult.code, 
+            return {
+                code: waitResult.code,
                 data: {
                     userId: task.userId,
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: waitResult.error 
+                },
+                error: waitResult.error
             };
         }
 
@@ -318,16 +320,16 @@ export class TranslationService {
             console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
             const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: DB_ERROR_CODE, 
+            return {
+                code: DB_ERROR_CODE,
                 data: {
                     userId: task.userId,
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: uploadResultImageResult.error 
+                },
+                error: uploadResultImageResult.error
             };
         }
         const resultImagePath = uploadResultImageResult.data!;
@@ -342,16 +344,16 @@ export class TranslationService {
             console.error('❌ Failed to update image status:', updateResultImageResult.error);
             const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to update image result: ${updateResultImageResult.error.message}`);
             const shouldRetry = handleResult.data!;
-            return { 
-                code: DB_ERROR_CODE, 
+            return {
+                code: DB_ERROR_CODE,
                 data: {
                     userId: task.userId,
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
                     refundCredits: 1,
-                }, 
-                error: updateResultImageResult.error 
+                },
+                error: updateResultImageResult.error
             };
         }
         console.log(`✅ Image ${imageId} processed successfully`);

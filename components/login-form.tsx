@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Form from "next/form";
-import { SUCCESS_CODE } from "@/types/api/common";
+import { API_SUCCESS_CODE } from "@/types/api/response";
 
 const linkClass =
     "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
@@ -46,7 +46,7 @@ export function LoginForm({
             });
 
             const data = await response.json();
-            if (data.code !== SUCCESS_CODE) {
+            if (data.code !== API_SUCCESS_CODE) {
                 throw new Error(data.message || "登录失败");
             }
             router.push("/");
@@ -69,7 +69,7 @@ export function LoginForm({
                 body: JSON.stringify({ provider: "google" }),
             });
             const data = await response.json();
-            if (data.code !== SUCCESS_CODE) {
+            if (data.code !== API_SUCCESS_CODE) {
                 throw new Error(data.message || "登录失败");
             }
             window.location.href = data.data.url;

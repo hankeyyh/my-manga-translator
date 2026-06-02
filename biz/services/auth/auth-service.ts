@@ -6,7 +6,7 @@
 
 import { UserRepository } from '@/biz/repositories/auth/user-repository';
 import { UserEntity } from "@/types/entity/user";
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { EmailOtpType } from '@supabase/supabase-js';
 
 // 设置confirm邮件中的next重定向链接

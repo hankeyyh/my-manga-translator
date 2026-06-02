@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { ImageStatus, TranslationImage } from "@/types/do/translation-image";
 import type { Json, Tables, TablesInsert, TablesUpdate } from '../../../types/database';
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { mapTranslationImageRowToTranslationImage } from '../common';
 
 // 创建图片参数

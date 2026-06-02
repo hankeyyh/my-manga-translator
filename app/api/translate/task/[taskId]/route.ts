@@ -6,7 +6,7 @@ import { TranslationService } from "@/biz/services/translate/translation-service
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskImage } from "@/types/api/translation-image";
-import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
 import { NextRequest, NextResponse } from "next/server";

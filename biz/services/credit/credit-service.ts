@@ -4,7 +4,10 @@ import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-conf
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { sleep } from "@/biz/utils/sleep";
-import { BizResult, CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, LOGIC_ERROR_CODE, Result, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, LOGIC_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
+import { Result } from "@/types/do/response";
+import { BizResult } from "@/types/dto/response";
+import { PricingConfig } from "@/types/do/pricing-config";
 import { TopUpConfig } from "@/types/do/topup-config";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { UserTransaction } from "@/types/do/user-transaction";
@@ -152,6 +155,16 @@ export class CreditService {
             return { code: DB_ERROR_CODE, data: null, error: error };
         }
         return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
+    // 获取翻译价格配置
+    async getAllPricingConfig(): Promise<BizResult<PricingConfig[]>> {
+        const result = await this.pricingConfigRepo.getAllPricingConfig();
+        if (result.error) {
+            console.error(`getAllPricingConfig, repo.getAllPricingConfig fail, error: ${result.error}`);
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 
     // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=2credits

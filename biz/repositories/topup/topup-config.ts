@@ -1,5 +1,5 @@
 import { Tables } from "@/types/database";
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { TopUpConfig } from "@/types/do/topup-config";
 import { SupabaseClient } from "@supabase/supabase-js";
 

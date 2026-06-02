@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
 import { buildTaskRouteContext, loadRouteMethod } from "@/app/api/helper.test";
-import { DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/do/common";
+import { DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import type { TranslationTaskDetailView } from "@/types/dto/translation-task";
 
 const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();

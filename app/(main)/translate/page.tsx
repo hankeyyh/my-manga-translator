@@ -1,43 +1,20 @@
 "use client";
 
 import { Manrope, Inter } from "next/font/google";
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-    CheckCircle2,
-    ChevronDown,
-    Download,
-    HelpCircle,
-    History,
-    Layers,
-    Loader2,
-    Minus,
-    Phone,
-    Plus,
-    Settings,
-    Wand2,
-} from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site-header";
+import {
+    TRANSLATION_STYLES,
+    TranslationHistorySection,
+    TranslateTaskBar,
+    TranslateWorkbench,
+} from "@/components/translate";
 import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
+import { ApiPricingConfig } from "@/types/api/pricing-config";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -51,8 +28,6 @@ const inter = Inter({
     variable: "--font-inter",
 });
 
-const ENGINES = ["GPT-4o Vision", "GPT-4o mini", "Claude 3.5 Sonnet"] as const;
-const STYLES = ["WildWords BB", "Standard", "Artistic"] as const;
 const POLL_INTERVAL_MS = 5000;
 const POLL_MAX_WAIT_MS = 5 * 60 * 1000;
 
@@ -67,17 +42,12 @@ function isTaskEnded(task: Pick<ApiGetTranslationTaskResponse, "status">) {
 }
 
 export default function TranslatePage() {
-    const [zoom, setZoom] = useState(100);
-    const [showSettings, setShowSettings] = useState(false);
-    const [engine, setEngine] = useState<string>(ENGINES[0]);
+    const [translateModel, setTranslateModel] = useState<string>("");
     const [sourceLang, setSourceLang] = useState("JPN");
     const [targetLang, setTargetLang] = useState("ENG");
-    const [style, setStyle] = useState<string>(STYLES[0]);
+    const [style, setStyle] = useState<string>(TRANSLATION_STYLES[0]);
     const [activeTab, setActiveTab] = useState(0);
-    /** 左侧竖条：0 设置 1 历史 2 图层 3 魔法棒 4 帮助 */
-    const [leftTool, setLeftTool] = useState(0);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const pagesRef = useRef<LocalPage[]>([]);
     const [pages, setPages] = useState<LocalPage[]>([]);
     const [taskId, setTaskId] = useState<string | null>(null);
@@ -92,10 +62,8 @@ export default function TranslatePage() {
     const [submitLoading, setSubmitLoading] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
-    const zoomIn = () => setZoom((z) => Math.min(z + 25, 200));
-    const zoomOut = () => setZoom((z) => Math.max(z - 25, 50));
+    const [translateConfigs, setTranslateConfigs] = useState<ApiPricingConfig[]>([]);
 
-    const openFilePicker = () => fileInputRef.current?.click();
     // 选择待翻译图片
     const onPickFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
         const picked = Array.from(event.target.files ?? []);
@@ -179,6 +147,7 @@ export default function TranslatePage() {
             for (const page of pages) {
                 formData.append("images", page.file);
             }
+            // TODO 可配置
             const config: TranslationConfig = {
                 translator: {
                     translator: "youdao",
@@ -206,6 +175,7 @@ export default function TranslatePage() {
         }
     };
 
+    // 轮询拉取任务结果
     useEffect(() => {
         if (!polling || !taskId) {
             return;
@@ -252,6 +222,27 @@ export default function TranslatePage() {
         void fetchHistoryImages();
     }, []);
 
+    const fetchTranslationConfig = async () => {
+        try {
+            const response = await fetch("/api/translate/config");
+            const json: { data?: ApiPricingConfig[]; error?: string; } = await response.json();
+            if (!response.ok) {
+                throw new Error(json.error || "Failed to fetch translation config");
+            }
+            const configs = json.data ?? [];
+            setTranslateConfigs(configs);
+            if (configs[0]?.modelName) {
+                setTranslateModel(configs[0].modelName);
+            }
+        } catch (err) {
+            console.error("fetchTranslationConfig failed:", err);
+        }
+    };
+
+    useEffect(() => {
+        void fetchTranslationConfig();
+    }, []);
+
     const thumbnails = useMemo(() => {
         return pages.map((page, index) => {
             const hasResult = Boolean(resultImages[index]);
@@ -268,8 +259,6 @@ export default function TranslatePage() {
         });
     }, [pages, resultImages, polling, submitLoading, taskStatus?.progress]);
 
-    const isThumbSelected = (index: number) => activeTab === index;
-
     return (
         <div
             className={cn(
@@ -282,467 +271,40 @@ export default function TranslatePage() {
                 <SiteHeader />
 
                 <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-6">
-                    {/* 结果展示区 */}
-                    <div className="relative flex h-[75vh] min-h-[420px] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
-                        <div
-                            className={cn(
-                                "absolute left-5 top-1/2 z-20 flex -translate-y-1/2 items-start gap-0",
-                            )}
-                        >
-                            <nav
-                                aria-label="Workbench tools"
-                                className="flex flex-col gap-1 rounded-[28px] border border-[#eef0f3] bg-white p-2 shadow-[0_4px_20px_rgba(15,23,42,0.08)]"
-                            >
-                                <Button
-                                    className={cn(
-                                        "h-11 w-11 shrink-0 rounded-xl",
-                                        leftTool === 0
-                                            ? "bg-[#0053dd] text-white shadow-sm hover:bg-[#0053dd]/90"
-                                            : "text-[#5F6368] hover:bg-[#f1f3f5]",
-                                    )}
-                                    onClick={() => {
-                                        setLeftTool(0);
-                                        setShowSettings((s) => !s);
-                                    }}
-                                    size="icon"
-                                    title="设置"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <Settings className="h-[22px] w-[22px]" />
-                                </Button>
-                                <Button
-                                    className={cn(
-                                        "h-11 w-11 shrink-0 rounded-xl",
-                                        leftTool === 1
-                                            ? "bg-[#0053dd] text-white shadow-sm hover:bg-[#0053dd]/90"
-                                            : "text-[#5F6368] hover:bg-[#f1f3f5]",
-                                    )}
-                                    onClick={() => {
-                                        setLeftTool(1);
-                                        setShowSettings(false);
-                                    }}
-                                    size="icon"
-                                    title="历史"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <History className="h-[22px] w-[22px]" strokeWidth={1.75} />
-                                </Button>
-                                <Button
-                                    className={cn(
-                                        "h-11 w-11 shrink-0 rounded-xl",
-                                        leftTool === 2
-                                            ? "bg-[#0053dd] text-white shadow-sm hover:bg-[#0053dd]/90"
-                                            : "text-[#5F6368] hover:bg-[#f1f3f5]",
-                                    )}
-                                    onClick={() => {
-                                        setLeftTool(2);
-                                        setShowSettings(false);
-                                    }}
-                                    size="icon"
-                                    title="图层"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <Layers className="h-[22px] w-[22px]" strokeWidth={1.75} />
-                                </Button>
-                                <Button
-                                    className={cn(
-                                        "h-11 w-11 shrink-0 rounded-xl",
-                                        leftTool === 3
-                                            ? "bg-[#0053dd] text-white shadow-sm hover:bg-[#0053dd]/90"
-                                            : "text-[#5F6368] hover:bg-[#f1f3f5]",
-                                    )}
-                                    onClick={() => {
-                                        setLeftTool(3);
-                                        setShowSettings(false);
-                                    }}
-                                    size="icon"
-                                    title="魔法 / 自动"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <Wand2 className="h-[22px] w-[22px]" strokeWidth={1.75} />
-                                </Button>
-                                <Button
-                                    className={cn(
-                                        "h-11 w-11 shrink-0 rounded-xl",
-                                        leftTool === 4
-                                            ? "bg-[#0053dd] text-white shadow-sm hover:bg-[#0053dd]/90"
-                                            : "text-[#5F6368] hover:bg-[#f1f3f5]",
-                                    )}
-                                    onClick={() => {
-                                        setLeftTool(4);
-                                        setShowSettings(false);
-                                    }}
-                                    size="icon"
-                                    title="帮助"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <HelpCircle className="h-[22px] w-[22px]" strokeWidth={1.75} />
-                                </Button>
-                            </nav>
+                    <TranslateWorkbench
+                        originalImageUrl={selectedPage?.previewUrl ?? null}
+                        translatedImageUrl={translatedSrc}
+                        translateModel={translateModel}
+                        sourceLang={sourceLang}
+                        targetLang={targetLang}
+                        style={style}
+                        translateConfigs={translateConfigs}
+                        onTranslateModelChange={setTranslateModel}
+                        onSourceLangChange={setSourceLang}
+                        onStyleChange={setStyle}
+                        onTargetLangChange={setTargetLang}
+                    />
 
-                            <div
-                                className={cn(
-                                    "absolute left-full top-0 ml-3 min-w-[280px] transition-all duration-200 ease-out",
-                                    showSettings && leftTool === 0
-                                        ? "pointer-events-auto visible translate-y-0 opacity-100"
-                                        : "pointer-events-none invisible -translate-y-2 opacity-0",
-                                )}
-                            >
-                                <Card className="rounded-2xl border border-white bg-[#f8f9fb]/80 shadow-xl backdrop-blur-md">
-                                    <CardContent className="flex flex-col gap-3 p-4">
-                                        <div className="flex flex-col gap-0.5">
-                                            <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                                                Translation Engine
-                                            </Label>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        className="h-auto justify-between px-0 py-0 font-headline text-sm font-bold text-[#0053dd] hover:bg-transparent hover:text-[#0053dd]"
-                                                        variant="ghost"
-                                                    >
-                                                        {engine}
-                                                        <ChevronDown className="h-4 w-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="start" className="w-56">
-                                                    <DropdownMenuLabel>Engine</DropdownMenuLabel>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuRadioGroup
-                                                        onValueChange={setEngine}
-                                                        value={engine}
-                                                    >
-                                                        {ENGINES.map((e) => (
-                                                            <DropdownMenuRadioItem key={e} value={e}>
-                                                                {e}
-                                                            </DropdownMenuRadioItem>
-                                                        ))}
-                                                    </DropdownMenuRadioGroup>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
+                    <TranslateTaskBar
+                        onNewTask={() => setPages([])}
+                        onPickFiles={onPickFiles}
+                        onSelectThumbnail={setActiveTab}
+                        onSubmit={submitTask}
+                        pageCount={pages.length}
+                        polling={polling}
+                        resultError={resultError}
+                        selectedIndex={activeTab}
+                        submitError={submitError}
+                        submitLoading={submitLoading}
+                        taskStatus={taskStatus}
+                        thumbnails={thumbnails}
+                    />
 
-                                        <div className="flex gap-8 border-t border-[#dee3e7] pt-3">
-                                            <div className="flex flex-col gap-0.5">
-                                                <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                                                    Languages
-                                                </Label>
-                                                <div className="flex items-center gap-2 text-sm font-bold">
-                                                    <Input
-                                                        className="h-8 w-12 border-[#dee3e7] bg-[#f8f9fb] px-1 text-center font-headline font-bold text-[#0053dd]"
-                                                        onChange={(e) => setSourceLang(e.target.value)}
-                                                        value={sourceLang}
-                                                    />
-                                                    <ChevronDown className="h-4 w-4 text-[#767b7f]" />
-                                                    <Input
-                                                        className="h-8 w-12 border-[#dee3e7] bg-[#f8f9fb] px-1 text-center font-headline font-bold text-[#0053dd]"
-                                                        onChange={(e) => setTargetLang(e.target.value)}
-                                                        value={targetLang}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col gap-0.5">
-                                                <Label className="text-[10px] font-bold uppercase tracking-wider text-[#5a6064] opacity-60">
-                                                    Style
-                                                </Label>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button
-                                                            className="h-8 justify-between border border-[#dee3e7] bg-[#f8f9fb] px-2 font-headline text-sm font-bold text-[#2d3337] hover:bg-[#f8f9fb]"
-                                                            variant="outline"
-                                                        >
-                                                            {style}
-                                                            <ChevronDown className="h-3 w-3 opacity-60" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="start">
-                                                        {STYLES.map((s) => (
-                                                            <DropdownMenuItem
-                                                                key={s}
-                                                                className="font-headline font-bold"
-                                                                onClick={() => setStyle(s)}
-                                                            >
-                                                                {s}
-                                                            </DropdownMenuItem>
-                                                        ))}
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </div>
-
-                        <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-lg border border-[#dee3e7] bg-white/90 px-1 py-0.5 shadow-sm backdrop-blur-sm">
-                            <Button
-                                className="h-8 w-8"
-                                onClick={zoomOut}
-                                size="icon"
-                                type="button"
-                                variant="ghost"
-                            >
-                                <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="min-w-[2.75rem] text-center font-headline text-xs font-bold text-[#5a6064]">
-                                {zoom}%
-                            </span>
-                            <Button
-                                className="h-8 w-8"
-                                onClick={zoomIn}
-                                size="icon"
-                                type="button"
-                                variant="ghost"
-                            >
-                                <Plus className="h-4 w-4" />
-                            </Button>
-                        </div>
-
-                        <div className="flex min-h-0 flex-1 gap-2 overflow-hidden bg-[#ebeef1] px-4 py-8">
-                            <div className="flex min-h-0 min-w-0 flex-1 justify-end">
-                                <div className="flex h-full min-h-0 w-full max-w-full flex-col items-center justify-end gap-2">
-                                    <span className="shrink-0 font-headline text-[10px] font-bold uppercase tracking-widest text-[#5a6064]">
-                                        Original ({sourceLang})
-                                    </span>
-                                    <div
-                                        className="relative flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
-                                        style={{
-                                            transform: `scale(${zoom / 100})`,
-                                            transformOrigin: "right center",
-                                        }}
-                                    >
-                                        {selectedPage?.previewUrl ? (
-                                            <Image
-                                                alt="Original Comic Panel"
-                                                className="object-contain"
-                                                fetchPriority="high"
-                                                fill
-                                                priority
-                                                sizes="50vw"
-                                                src={selectedPage.previewUrl}
-                                                unoptimized
-                                            />
-                                        ) : null}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex min-h-0 min-w-0 flex-1 justify-start">
-                                <div className="flex h-full min-h-0 w-full max-w-full flex-col items-center justify-start gap-2">
-                                    <span className="shrink-0 font-headline text-[10px] font-bold uppercase tracking-widest text-[#0053dd]">
-                                        Translated ({targetLang})
-                                    </span>
-                                    <div
-                                        className="relative flex min-h-0 w-full min-w-0 flex-1 items-center justify-center overflow-hidden rounded-lg bg-[#ebeef1]"
-                                        style={{
-                                            transform: `scale(${zoom / 100})`,
-                                            transformOrigin: "left center",
-                                        }}
-                                    >
-                                        {translatedSrc ? (
-                                            <Image
-                                                alt="Translated Comic Panel"
-                                                className="object-contain"
-                                                fetchPriority="high"
-                                                fill
-                                                priority
-                                                sizes="50vw"
-                                                src={translatedSrc}
-                                                unoptimized
-                                            />
-                                        ) : null}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 任务栏 */}
-                    <div className="flex h-40 gap-4">
-                        <div className="flex w-48 flex-col gap-2">
-                            <Button
-                                className="flex-1 justify-start gap-3 rounded-xl bg-[#0053dd] text-xs font-bold text-white hover:bg-[#0053dd]/90"
-                                disabled={pages.length === 0 || submitLoading || polling}
-                                onClick={submitTask}
-                            >
-                                {submitLoading || polling ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                    <Phone className="h-4 w-4" />
-                                )}
-                                Start All
-                            </Button>
-                            <Button
-                                className="flex-1 justify-start gap-3 rounded-xl border-[#dee3e7] text-xs font-bold text-[#5a6064] hover:border-[#0053dd] hover:text-[#0053dd]"
-                                variant="outline"
-                            >
-                                <Download className="h-4 w-4" />
-                                Download All
-                            </Button>
-                            <Button
-                                className="flex-1 justify-start gap-3 rounded-xl border-[#dee3e7] text-xs font-bold text-[#5a6064] hover:border-[#0053dd] hover:text-[#0053dd]"
-                                variant="outline"
-                                onClick={() => { setPages([]); }}
-                            >
-                                New Task
-                            </Button>
-                            {(submitError || resultError) && (
-                                <p className="line-clamp-2 text-[10px] text-red-500">
-                                    {submitError ?? resultError}
-                                </p>
-                            )}
-                            {taskStatus && (
-                                <p className="line-clamp-2 text-[10px] text-[#5a6064]">
-                                    {taskStatus.completed_images}/{taskStatus.total_images} •{" "}
-                                    {taskStatus.progress}%
-                                </p>
-                            )}
-                        </div>
-
-                        <div
-                            className={cn(
-                                "flex flex-1 gap-3 overflow-x-auto rounded-2xl bg-[#f1f4f7] p-2",
-                                "[scrollbar-width:thin]",
-                                "[&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#dee3e7]",
-                            )}
-                        >
-                            {thumbnails.map((thumb, index) => (
-                                <Button
-                                    key={thumb.id}
-                                    className={cn(
-                                        "group relative flex h-full w-24 shrink-0 flex-col items-stretch justify-start gap-0 rounded-xl p-1.5 font-normal text-left shadow-none transition-all hover:bg-white hover:text-inherit focus-visible:ring-offset-0",
-                                        isThumbSelected(index)
-                                            ? "border-2 border-[#0053dd] bg-white"
-                                            : "border border-transparent bg-white hover:border-[#dee3e7]",
-                                    )}
-                                    onClick={() => setActiveTab(index)}
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <div
-                                        className={cn(
-                                            "relative mb-1 flex-1 overflow-hidden rounded-lg",
-                                            thumb.status === "completed" &&
-                                            "grayscale group-hover:grayscale-0",
-                                        )}
-                                    >
-                                        {thumb.status === "processing" && (
-                                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
-                                                <Loader2 className="h-4 w-4 animate-spin text-white" />
-                                            </div>
-                                        )}
-                                        <Image
-                                            alt=""
-                                            className="h-full w-full object-cover"
-                                            fetchPriority="low"
-                                            height={96}
-                                            sizes="96px"
-                                            src={thumb.image}
-                                            unoptimized
-                                            width={96}
-                                        />
-                                    </div>
-                                    {/** 淡蓝色高亮蒙层 */}
-                                    {thumb.status !== "active" && (
-                                        <div className="pointer-events-none absolute inset-0 rounded-xl bg-[#0053dd]/5 opacity-0 transition-opacity group-hover:opacity-100" />
-                                    )}
-                                </Button>
-                            ))}
-
-                            <Button
-                                className="group flex h-full w-24 shrink-0 flex-col gap-1 rounded-xl border-dashed border-[#dee3e7] bg-white shadow-none hover:border-[#0053dd] hover:bg-white"
-                                onClick={openFilePicker}
-                                type="button"
-                                variant="outline"
-                            >
-                                <Plus className="h-5 w-5 text-[#dee3e7] transition-colors group-hover:text-[#0053dd]" />
-                                <span className="font-headline text-[9px] font-bold text-[#5a6064]">
-                                    Add Page
-                                </span>
-                            </Button>
-                        </div>
-                        <input
-                            ref={fileInputRef}
-                            accept="image/*"
-                            className="hidden"
-                            multiple
-                            onChange={onPickFiles}
-                            type="file"
-                        />
-                    </div>
-
-                    {/* 翻译历史 */}
-                    <div className="shrink-0 rounded-2xl bg-[#e8edf0] p-5">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <h2 className="font-headline text-2xl font-bold text-[#2d3337]">
-                                    Translation History
-                                </h2>
-                                <Button
-                                    className="h-8 rounded-full border-[#d6dce1] bg-white px-4 text-xs font-semibold text-[#5a6064] hover:bg-white"
-                                    variant="outline"
-                                >
-                                    Auto-delete after: 1 week
-                                </Button>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    className="h-8 rounded-md border-[#d6dce1] bg-white px-4 text-xs font-semibold text-[#5a6064] hover:bg-white"
-                                    variant="outline"
-                                >
-                                    Amount
-                                </Button>
-                                <Button className="h-8 rounded-md bg-[#0053dd] px-4 text-xs font-semibold text-white hover:bg-[#0053dd]/90">
-                                    Bulk Download
-                                </Button>
-                            </div>
-                        </div>
-
-                        {historyLoading ? (
-                            <div className="flex h-40 items-center justify-center rounded-xl bg-[#dfe5ea]">
-                                <Loader2 className="h-5 w-5 animate-spin text-[#5a6064]" />
-                            </div>
-                        ) : historyError ? (
-                            <p className="rounded-xl bg-[#dfe5ea] p-4 text-sm text-red-500">
-                                {historyError}
-                            </p>
-                        ) : historyImages.length === 0 ? (
-                            <p className="rounded-xl bg-[#dfe5ea] p-4 text-sm text-[#5a6064]">
-                                暂无翻译历史
-                            </p>
-                        ) : (
-                            <div
-                                className={cn(
-                                    "max-h-[720px] overflow-y-auto pr-1",
-                                    "[scrollbar-width:thin]",
-                                    "[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#c9d1d8]",
-                                )}
-                            >
-                                <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-                                    {historyImages.map((item, index) => (
-                                        <div
-                                            key={item.id}
-                                            className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-[#d6dce1] bg-white"
-                                        >
-                                            <Image
-                                                alt={`History Image ${item.imageIndex + 1}`}
-                                                className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                                                fill
-                                                loading="eager"
-                                                sizes="(max-width: 1024px) 33vw, 180px"
-                                                src={item.resultImageUrl}
-                                                unoptimized
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <TranslationHistorySection
+                        error={historyError}
+                        images={historyImages}
+                        loading={historyLoading}
+                    />
                 </div>
             </main>
         </div>

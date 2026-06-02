@@ -11,7 +11,7 @@ import { AuthService } from "@/biz/services/auth/auth-service";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { SignInResponse } from "@/types/api/auth";
-import { SUCCESS_CODE } from "@/types/api/common";
+import { API_SUCCESS_CODE } from "@/types/api/response";
 
 
 export async function POST(request: NextRequest) {
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
     const userEntity = authResponse.data!;
     const response: SignInResponse = {
-        code: SUCCESS_CODE,
+        code: API_SUCCESS_CODE,
         message: 'OK',
         data: {
             user: { id: userEntity.id, email: userEntity.email }

@@ -1,5 +1,5 @@
 import { Tables, TablesInsert, TablesUpdate } from "@/types/database";
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 import { UserTransaction } from "@/types/do/user-transaction";
 import { SupabaseClient } from "@supabase/supabase-js";
 

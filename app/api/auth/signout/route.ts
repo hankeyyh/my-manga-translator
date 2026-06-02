@@ -11,7 +11,7 @@ import { AuthService } from "@/biz/services/auth/auth-service";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { SignOutResponse } from "@/types/api/auth";
-import { SUCCESS_CODE } from "@/types/api/common";
+import { API_SUCCESS_CODE } from "@/types/api/response";
 
 export async function POST() {
     const supabase = await createServerClient();
@@ -21,6 +21,6 @@ export async function POST() {
         const response: SignOutResponse = { code: 'SIGNOUT_FAILED', message: authResponse.error.message, data: null };
         return NextResponse.json(response, { status: 400 });
     }
-    const response: SignOutResponse = { code: SUCCESS_CODE, message: 'OK', data: null };
+    const response: SignOutResponse = { code: API_SUCCESS_CODE, message: 'OK', data: null };
     return NextResponse.json(response, { status: 200 });
 }

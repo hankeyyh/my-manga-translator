@@ -1,10 +1,3 @@
-
-// repo 通用返回类型
-export type Result<TData, TError = Error> = {
-    data: TData | null;
-    error: TError | null;
-};
-
 // biz 通用返回类型
 export type BizResult<TData, TError = Error> = {
     data: TData | null;
@@ -23,3 +16,4 @@ export const LOGIC_ERROR_CODE = 6; // 业务逻辑错误
 export const CREDIT_BALANCE_NOT_ENOUGH = 7; // 用户积分不足
 export const CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE = 8; // 冻结积分不足以核销
 export const CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND = 9; // 冻结积分不足以退还
+

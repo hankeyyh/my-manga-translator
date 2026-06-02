@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getFileExtension } from "../../utils/file";
-import { Result } from "@/types/do/common";
+import { Result } from "@/types/do/response";
 
 export class TranslationStorageRepository {
     private bucketName = 'translation_storage';
