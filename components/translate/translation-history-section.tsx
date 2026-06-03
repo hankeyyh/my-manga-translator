@@ -7,9 +7,17 @@ export type TranslationHistorySectionProps = {
     images: ApiTranslationTaskImage[];
     loading: boolean;
     error: string | null;
+    selectedImageId: string | null;
+    onSelectImage: (image: ApiTranslationTaskImage) => void;
 };
 
-export function TranslationHistorySection({images, loading, error }: TranslationHistorySectionProps) {
+export function TranslationHistorySection({
+    images,
+    loading,
+    error,
+    selectedImageId,
+    onSelectImage,
+}: TranslationHistorySectionProps) {
     return (
         <div className="shrink-0 rounded-2xl bg-[#e8edf0] p-5">
             <TranslationHistoryHeader />
@@ -25,7 +33,11 @@ export function TranslationHistorySection({images, loading, error }: Translation
                     暂无翻译历史
                 </p>
             ) : (
-                <TranslationHistoryGrid images={images} />
+                <TranslationHistoryGrid
+                    images={images}
+                    onSelectImage={onSelectImage}
+                    selectedImageId={selectedImageId}
+                />
             )}
         </div>
     );

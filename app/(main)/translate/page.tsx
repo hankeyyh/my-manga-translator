@@ -46,6 +46,8 @@ export default function TranslatePage() {
     const [targetLang, setTargetLang] = useState("ENG");
     const [fontName, setFontName] = useState<FontName>(FONT_NAME_OPTIONS[0]);
     const [activeTab, setActiveTab] = useState(0);
+    const [selectionSource, setSelectionSource] = useState<"taskbar" | "history">("taskbar");
+    const [selectImage, setSelectImage] = useState<ApiTranslationTaskImage | null>(null);
 
     const pagesRef = useRef<LocalPage[]>([]);
     const [pages, setPages] = useState<LocalPage[]>([]);
@@ -100,15 +102,30 @@ export default function TranslatePage() {
         };
     }, []);
 
-    const selectedPage = pages[activeTab] ?? null;
-
-    // 点选任务栏图片，展示翻译后结果
-    const translatedSrc = useMemo(() => {
-        if (selectedPage && resultImages[activeTab]) {
-            return resultImages[activeTab].resultImageUrl;
+    const workbenchImages = useMemo(() => {
+        if (selectionSource === "history" && selectImage) {
+            return {
+                originalImageUrl: selectImage.originalImageUrl,
+                translatedImageUrl: selectImage.resultImageUrl,
+            };
         }
-        return null;
-    }, [activeTab, resultImages, selectedPage]);
+
+        const page = pages[activeTab] ?? null;
+        return {
+            originalImageUrl: page?.previewUrl ?? null,
+            translatedImageUrl: resultImages[activeTab]?.resultImageUrl ?? null,
+        };
+    }, [selectionSource, selectImage, activeTab, pages, resultImages]);
+
+    const handleSelectTaskbarThumbnail = (index: number) => {
+        setSelectionSource("taskbar");
+        setActiveTab(index);
+    };
+
+    const handleSelectHistoryImage = (image: ApiTranslationTaskImage) => {
+        setSelectionSource("history");
+        setSelectImage(image);
+    };
 
     const fetchHistoryImages = async () => {
         setHistoryLoading(true);
@@ -274,8 +291,8 @@ export default function TranslatePage() {
 
                 <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-6">
                     <TranslateWorkbench
-                        originalImageUrl={selectedPage?.previewUrl ?? null}
-                        translatedImageUrl={translatedSrc}
+                        originalImageUrl={workbenchImages.originalImageUrl}
+                        translatedImageUrl={workbenchImages.translatedImageUrl}
                         translateModel={translateModel}
                         sourceLang={sourceLang}
                         targetLang={targetLang}
@@ -290,12 +307,12 @@ export default function TranslatePage() {
                     <TranslateTaskBar
                         onNewTask={() => setPages([])}
                         onPickFiles={onPickFiles}
-                        onSelectThumbnail={setActiveTab}
+                        onSelectThumbnail={handleSelectTaskbarThumbnail}
                         onSubmit={submitTask}
                         pageCount={pages.length}
                         polling={polling}
                         resultError={resultError}
-                        selectedIndex={activeTab}
+                        selectedIndex={selectionSource === "taskbar" ? activeTab : -1}
                         submitError={submitError}
                         submitLoading={submitLoading}
                         taskStatus={taskStatus}
@@ -306,6 +323,10 @@ export default function TranslatePage() {
                         error={historyError}
                         images={historyImages}
                         loading={historyLoading}
+                        onSelectImage={handleSelectHistoryImage}
+                        selectedImageId={
+                            selectionSource === "history" ? selectImage?.id ?? null : null
+                        }
                     />
                 </div>
             </main>

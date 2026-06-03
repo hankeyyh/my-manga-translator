@@ -5,9 +5,15 @@ import { cn } from "@/components/utils";
 
 export type TranslationHistoryGridProps = {
     images: ApiTranslationTaskImage[];
+    selectedImageId: string | null;
+    onSelectImage: (image: ApiTranslationTaskImage) => void;
 };
 
-export function TranslationHistoryGrid({ images }: TranslationHistoryGridProps) {
+export function TranslationHistoryGrid({
+    images,
+    selectedImageId,
+    onSelectImage,
+}: TranslationHistoryGridProps) {
     return (
         <div
             className={cn(
@@ -20,7 +26,13 @@ export function TranslationHistoryGrid({ images }: TranslationHistoryGridProps) 
                 {images.map((item) => (
                     <div
                         key={item.id}
-                        className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-[#d6dce1] bg-white"
+                        className={cn(
+                            "group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-lg border bg-white",
+                            selectedImageId === item.id
+                                ? "border-2 border-[#0053dd]"
+                                : "border-[#d6dce1]",
+                        )}
+                        onClick={() => { onSelectImage(item); }}
                     >
                         <Image
                             alt={`History Image ${item.imageIndex + 1}`}
