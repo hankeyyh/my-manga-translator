@@ -10,6 +10,7 @@ import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
 import { NextRequest, NextResponse } from "next/server";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 
 function toApiTranslationTaskImage(img: TranslationImageView): ApiTranslationTaskImage {
     return {
@@ -46,6 +47,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
         new TranslationTaskRepository(supabase),
         new TranslationImageRepository(supabase),
         new TranslationStorageRepository(supabase),
+        new PricingConfigRepository(supabase),
     );
 
     const result = await translationService.getTranslationTaskDetail(taskId);

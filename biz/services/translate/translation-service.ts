@@ -10,6 +10,7 @@ import { TranslationStorageRepository } from "@/biz/repositories/translate/trans
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslateImageFailedResult, TranslateImageSuccessResult, TranslationImageView } from "@/types/dto/translation-image";
+import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 
 const MAX_TRANSLATION_RETRIES = 3;
 const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果
@@ -20,7 +21,8 @@ export class TranslationService {
     constructor(private userRepo: UserRepository,
         private taskRepo: TranslationTaskRepository,
         private imageRepo: TranslationImageRepository,
-        private imageStorage: TranslationStorageRepository) { }
+        private imageStorage: TranslationStorageRepository,
+        private pricingConfigRepo: PricingConfigRepository) { }
 
     // 提交任务
     async submitTranslationTask(taskId: string, images: File[], config: TranslationConfig): Promise<BizResult<string>> {
@@ -246,13 +248,36 @@ export class TranslationService {
                     taskId: image.taskId,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: 0,
                 },
                 error: taskResult.error
             };
         }
         const task = taskResult.data!;
         const config = task.config;
+
+        // TODO 把模型单价写在task、image里，防止pricing价格修改导致扣费异常
+
+        // 获取模型价格
+        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(config.translator?.model_name ?? "");
+        if (pricingResult.error) {
+            console.error('❌ Failed to get pricing config: ', pricingResult.error.message);
+            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to get pricing config: ${pricingResult.error.message}`);
+            const shouldRetry = handleResult.data!;
+            return {
+                code: DB_ERROR_CODE,
+                data: {
+                    userId: task.userId,
+                    taskId: task.id,
+                    imageId: imageId,
+                    needRefund: !shouldRetry,
+                    refundCredits: 0,
+                },
+                error: pricingResult.error,
+            };
+        }
+        const consumeCredits = pricingResult.data?.creditPerImage!;
+        console.debug("consumeCredits: ", consumeCredits);
 
         // 4. 下载原始图片
         const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
@@ -267,7 +292,7 @@ export class TranslationService {
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: consumeCredits,
                 },
                 error: downloadOriginalImageResult.error
             };
@@ -288,7 +313,7 @@ export class TranslationService {
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: consumeCredits,
                 },
                 error: submitResult.error
             };
@@ -308,7 +333,7 @@ export class TranslationService {
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: consumeCredits,
                 },
                 error: waitResult.error
             };
@@ -327,7 +352,7 @@ export class TranslationService {
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: consumeCredits,
                 },
                 error: uploadResultImageResult.error
             };
@@ -351,7 +376,7 @@ export class TranslationService {
                     taskId: task.id,
                     imageId: imageId,
                     needRefund: !shouldRetry,
-                    refundCredits: 1,
+                    refundCredits: consumeCredits,
                 },
                 error: updateResultImageResult.error
             };
@@ -364,7 +389,7 @@ export class TranslationService {
                 userId: task.userId,
                 taskId: task.id,
                 imageId: imageId,
-                consumeCredits: 1, // TODO 根据使用的模型计算价格
+                consumeCredits: consumeCredits,
             },
             error: null
         };

@@ -26,6 +26,9 @@ export class PricingConfigRepository {
     }
 
     async getPricingConfigByModel(modelName: string): Promise<Result<PricingConfig>> {
+        if (!modelName) {
+            return { data: null, error: new Error("modelName not set") };
+        }
         const { data, error } = await this.supabase.from("pricing_config")
             .select("*").eq("model_name", modelName).single();
         if (error) {

@@ -166,7 +166,8 @@ export default function TranslatePage() {
             // TODO 可配置
             const config: TranslationConfig = {
                 translator: {
-                    translator: "youdao",
+                    translator: "gemini",
+                    model_name: "gemini-3.5-flash",
                     target_lang: targetLang,
                 },
                 render: {

@@ -169,18 +169,18 @@ export class CreditService {
 
     // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=2credits
     async estimateCreditCost(images: File[], config: TranslationConfig): Promise<BizResult<number>> {
-        const translator = config.translator?.translator;
-        if (!translator) {
+        const modelName = config.translator?.model_name;
+        if (!modelName) {
             return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("translator not set") };
         }
         // TODO 模型名称algo svr目前在env配置，无法通过接口指定
-        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(translator);
+        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(modelName);
         if (pricingResult.error) {
-            console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error}`);
+            console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: pricingResult.error };
         }
         if (!pricingResult.data) {
-            console.error(`estimateCreditCost, model pricing config not found, translator: ${translator}`);
+            console.error(`estimateCreditCost, model pricing config not found, modelName: ${modelName}`);
             return { code: LOGIC_ERROR_CODE, data: null, error: new Error("pricing config not found") };
         }
         const totalCost = pricingResult.data.creditPerImage * images.length;

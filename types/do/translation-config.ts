@@ -74,6 +74,8 @@ export interface RenderConfig {
 export interface TranslatorConfig {
     /** 使用的语言翻译服务 */
     translator?: Translator;
+    /** 模型名称 */
+    model_name?: string;
     /** 目标语言代码 */
     target_lang?: string;
     /** 不跳过看似已在目标语言中的文本 */

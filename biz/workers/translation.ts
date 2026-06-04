@@ -36,7 +36,8 @@ class TranslationWorker {
             new UserRepository(supabase),
             new TranslationTaskRepository(supabase),
             new TranslationImageRepository(supabase),
-            new TranslationStorageRepository(supabase)
+            new TranslationStorageRepository(supabase),
+            new PricingConfigRepository(supabase),
         );
         this.creditService = new CreditService(
             new TopUpConfigRepository(supabase),

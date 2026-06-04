@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
         new TranslationTaskRepository(supabase),
         new TranslationImageRepository(supabase),
         new TranslationStorageRepository(supabase),
+        new PricingConfigRepository(supabase),
     );
     const submitResult = await translationService.submitTranslationTask(taskId, images, config);
     if (submitResult.code === UNAUTHORIZED_ERROR_CODE) {
