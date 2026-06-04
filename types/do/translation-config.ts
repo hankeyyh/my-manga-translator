@@ -2,7 +2,7 @@
 type Upscaler = 'waifu2x' | 'esrgan' | '4xultrasharp';
 type Detector = 'default' | 'dbconvnext' | 'ctd' | 'craft' | 'paddle' | 'none';
 type Ocr = '32px' | '48px' | '48px_ctc' | 'mocr';
-type Translator = 'youdao' | 'baidu' | 'deepl' | 'papago' | 'caiyun' | 'chatgpt' | 'chatgpt_2stage' | 'none' | 'original' | 'sakura' | 'deepseek' | 'groq' | 'gemini' | 'gemini_2stage' | 'custom_openai' | 'offline' | 'nllb' | 'nllb_big' | 'sugoi' | 'jparacrawl' | 'jparacrawl_big' | 'm2m100' | 'm2m100_big' | 'mbart50' | 'qwen2' | 'qwen2_big';
+export type Translator = 'youdao' | 'baidu' | 'deepl' | 'papago' | 'caiyun' | 'chatgpt' | 'chatgpt_2stage' | 'none' | 'original' | 'sakura' | 'deepseek' | 'groq' | 'gemini' | 'gemini_2stage' | 'custom_openai' | 'offline' | 'nllb' | 'nllb_big' | 'sugoi' | 'jparacrawl' | 'jparacrawl_big' | 'm2m100' | 'm2m100_big' | 'mbart50' | 'qwen2' | 'qwen2_big';
 type Inpainter = 'default' | 'lama_large' | 'lama_mpe' | 'sd' | 'none' | 'original';
 type InpaintPrecision = 'fp32' | 'fp16' | 'bf16';
 type Colorizer = 'none' | 'mc2';

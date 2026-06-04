@@ -96,6 +96,7 @@ export type Database = {
           credit_per_image: number
           id: string
           model_name: string
+          translator: string
           updated_at: string
         }
         Insert: {
@@ -103,6 +104,7 @@ export type Database = {
           credit_per_image: number
           id?: string
           model_name: string
+          translator: string
           updated_at?: string
         }
         Update: {
@@ -110,6 +112,7 @@ export type Database = {
           credit_per_image?: number
           id?: string
           model_name?: string
+          translator?: string
           updated_at?: string
         }
         Relationships: []
@@ -160,6 +163,7 @@ export type Database = {
         Row: {
           completed_at: string | null
           created_at: string | null
+          credits: number
           error_message: string | null
           filename: string
           folder_name: string | null
@@ -181,6 +185,7 @@ export type Database = {
         Insert: {
           completed_at?: string | null
           created_at?: string | null
+          credits?: number
           error_message?: string | null
           filename?: string
           folder_name?: string | null
@@ -202,6 +207,7 @@ export type Database = {
         Update: {
           completed_at?: string | null
           created_at?: string | null
+          credits?: number
           error_message?: string | null
           filename?: string
           folder_name?: string | null
@@ -236,12 +242,14 @@ export type Database = {
           completed_images: number
           config: Json
           created_at: string | null
+          credit_per_image: number
           failed_images: number
           id: string
           metadata: Json | null
           progress: number | null
           started_at: string | null
           status: string
+          total_credits: number
           total_images: number
           updated_at: string | null
           user_id: string | null
@@ -251,12 +259,14 @@ export type Database = {
           completed_images?: number
           config?: Json
           created_at?: string | null
+          credit_per_image?: number
           failed_images?: number
           id?: string
           metadata?: Json | null
           progress?: number | null
           started_at?: string | null
           status: string
+          total_credits?: number
           total_images?: number
           updated_at?: string | null
           user_id?: string | null
@@ -266,12 +276,14 @@ export type Database = {
           completed_images?: number
           config?: Json
           created_at?: string | null
+          credit_per_image?: number
           failed_images?: number
           id?: string
           metadata?: Json | null
           progress?: number | null
           started_at?: string | null
           status?: string
+          total_credits?: number
           total_images?: number
           updated_at?: string | null
           user_id?: string | null

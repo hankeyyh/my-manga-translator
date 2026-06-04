@@ -1,11 +1,13 @@
 import { Tables } from "@/types/database";
 import { Result } from "@/types/do/response";
 import { PricingConfig } from "@/types/do/pricing-config";
+import type { Translator } from "@/types/do/translation-config";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 function mapPricingConfigRowToPricingConfig(row: Tables<"pricing_config">): PricingConfig {
     return {
         id: row.id,
+        translator: row.translator as Translator,
         modelName: row.model_name,
         creditPerImage: row.credit_per_image,
     };

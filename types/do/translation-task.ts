@@ -27,6 +27,9 @@ export interface TranslationTask {
     completedAt?: string;
     updatedAt: string;
     metadata?: Record<string, any>;
+
+    creditPerImage: number;
+    totalCredits: number;
 }
 
 // 任务详情 (含图片列表)

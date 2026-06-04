@@ -38,28 +38,37 @@ export class TranslationService {
         // 1. 获取当前用户
         const userResult = await this.userRepo.getCurrentUser();
         if (userResult.error) {
+            console.error(`submitTranslationTask, repo.getCurrentUser fail, error: ${userResult.error.message}`);
             return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
         }
         const user = userResult.data!;
 
-        // 2. 创建任务
+        // 2. 获取价格配置
+        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(config.translator?.model_name ?? "");
+        if (pricingResult.error) {
+            console.error(`submitTranslationTask, repo.getPricingConfigByModel fail, error: ${pricingResult.error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: pricingResult.error };
+        }
+        // 3. 创建任务
         const taskResult = await this.taskRepo.createTask({
             id: taskId,
             userId: user.id,
             totalImages: images.length,
+            creditPerImage: pricingResult.data?.creditPerImage!,
             config,
         });
         if (taskResult.error) {
+            console.error(`submitTranslationTask, repo.createTask fail, error: ${taskResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: taskResult.error };
         }
         const task = taskResult.data!;
 
-        // 3. 上传图片
+        // 4. 上传图片
         const createImageParams: CreateImageParams[] = [];
         for (let i = 0; i < images.length; i++) {
             const uploadResult = await this.imageStorage.uploadOriginalImage(user.id, task.id, i, images[i]);
             if (uploadResult.error) {
-                console.error("submitTranslationTask, uploadOriginalImage failed, error: ", uploadResult.error);
+                console.error("submitTranslationTask, uploadOriginalImage failed, error: ", uploadResult.error.message);
                 return { code: DB_ERROR_CODE, data: null, error: uploadResult.error };
             }
             const originalPath = uploadResult.data!;
@@ -71,12 +80,14 @@ export class TranslationService {
                 originalImageSize: images[i].size,
                 originalImageWidth: 0,
                 originalImageHeight: 0,
+                credits: pricingResult.data?.creditPerImage!,
             });
         }
 
         // 4. 保存图片
         const imageResult = await this.imageRepo.createImages(createImageParams);
         if (imageResult.error) {
+            console.error(`submitTranslationTask, repo.createImages failed, error: ${imageResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
         }
 
@@ -256,27 +267,7 @@ export class TranslationService {
         const task = taskResult.data!;
         const config = task.config;
 
-        // TODO 把模型单价写在task、image里，防止pricing价格修改导致扣费异常
-
-        // 获取模型价格
-        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(config.translator?.model_name ?? "");
-        if (pricingResult.error) {
-            console.error('❌ Failed to get pricing config: ', pricingResult.error.message);
-            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to get pricing config: ${pricingResult.error.message}`);
-            const shouldRetry = handleResult.data!;
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    needRefund: !shouldRetry,
-                    refundCredits: 0,
-                },
-                error: pricingResult.error,
-            };
-        }
-        const consumeCredits = pricingResult.data?.creditPerImage!;
+        const consumeCredits = image.credits;
         console.debug("consumeCredits: ", consumeCredits);
 
         // 4. 下载原始图片

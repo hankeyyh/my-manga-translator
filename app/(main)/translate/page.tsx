@@ -163,11 +163,11 @@ export default function TranslatePage() {
             for (const page of pages) {
                 formData.append("images", page.file);
             }
-            // TODO 可配置
+            const selected = translateConfigs.find((c) => c.modelName === translateModel);
             const config: TranslationConfig = {
                 translator: {
-                    translator: "gemini",
-                    model_name: "gemini-3.5-flash",
+                    translator: selected?.translator,
+                    model_name: translateModel,
                     target_lang: targetLang,
                 },
                 render: {

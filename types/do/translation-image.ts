@@ -28,6 +28,8 @@ export interface TranslationImage {
     completedAt?: string;
     updatedAt: string;
     metadata?: Record<string, any>;
+
+    credits: number;
 }
 
 export function isValidImage(image: TranslationImage): boolean {

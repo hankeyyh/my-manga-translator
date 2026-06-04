@@ -1,11 +1,56 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TranslationTaskDetail } from "@/types/do/translation-task";
 import type { TaskStatus, TranslationTask } from "@/types/do/translation-task";
-import type { TranslationImage } from "@/types/do/translation-image";
-import type { Json, TablesInsert, TablesUpdate } from '@/types/database';
+import type { Json, Tables, TablesInsert, TablesUpdate } from '@/types/database';
 import { Result } from "@/types/do/response";
-import { mapTranslationImageRowToTranslationImage, mapTranslationTaskRowToTranslationTask } from '../common';
+import { mapTranslationImageRowToTranslationImage } from "./translation-image";
 import { TranslationConfig } from '@/types/do/translation-config';
+
+export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation_tasks'>): TranslationTask {
+    return {
+        id: data.id,
+        userId: data.user_id ?? '',
+        status: data.status as TranslationTask['status'],
+        // 统计信息
+        totalImages: data.total_images,
+        completedImages: data.completed_images,
+        failedImages: data.failed_images,
+        progress: data.progress ?? 0,
+
+        config: data.config as TranslationTask['config'],
+
+        createdAt: data.created_at ?? new Date().toISOString(),
+        startedAt: data.started_at ?? undefined,
+        completedAt: data.completed_at ?? undefined,
+        updatedAt: data.updated_at ?? new Date().toISOString(),
+        metadata: (data.metadata as TranslationTask['metadata']) ?? undefined,
+
+        creditPerImage: data.credit_per_image,
+        totalCredits: data.total_credits,
+
+    };
+}
+
+// 创建任务参数
+export interface CreateTaskParams {
+    id?: string;
+    userId: string;
+    totalImages: number;
+    creditPerImage: number;
+    config: TranslationConfig;
+}
+
+// 更新任务参数 (很少使用,因为有触发器自动更新)
+export interface UpdateTaskParams {
+    status?: TaskStatus;
+    progress?: number;
+    totalImages?: number;
+    completedImages?: number;
+    failedImages?: number;
+    startedAt?: string;
+    completedAt?: string;
+    metadata?: Record<string, any>;
+}
 
 export class TranslationTaskRepository {
     constructor(private supabase: SupabaseClient) { }
@@ -23,6 +68,8 @@ export class TranslationTaskRepository {
             failed_images: 0,
             progress: 0,
             config: params.config as Json,
+            credit_per_image: params.creditPerImage,
+            total_credits: params.creditPerImage * params.totalImages,
         };
 
         const { data, error } = await this.supabase
@@ -226,24 +273,4 @@ export class TranslationTaskRepository {
     }
 }
 
-// 创建任务参数
-
-export interface CreateTaskParams {
-    id?: string;
-    userId: string;
-    totalImages: number;
-    config: TranslationConfig;
-}
-
-// 更新任务参数 (很少使用,因为有触发器自动更新)
-export interface UpdateTaskParams {
-    status?: TaskStatus;
-    progress?: number;
-    totalImages?: number;
-    completedImages?: number;
-    failedImages?: number;
-    startedAt?: string;
-    completedAt?: string;
-    metadata?: Record<string, any>;
-}
 

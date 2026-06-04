@@ -173,7 +173,6 @@ export class CreditService {
         if (!modelName) {
             return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("translator not set") };
         }
-        // TODO 模型名称algo svr目前在env配置，无法通过接口指定
         const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(modelName);
         if (pricingResult.error) {
             console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error.message}`);
