@@ -68,6 +68,8 @@ export interface RenderConfig {
     font_size?: number | null;
     /** 分镜与 text_region 的从右到左阅读顺序 */
     rtl?: boolean;
+    /** 调整font-size适配ocr box */
+    fit_to_box?: boolean;
 }
 /** 与 manga-image-translator `TranslatorConfig` 对齐的翻译器与译后检查选项 */
 

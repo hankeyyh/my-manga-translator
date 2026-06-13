@@ -172,7 +172,23 @@ export default function TranslatePage() {
                 },
                 render: {
                     font_name: fontName,
+                    fit_to_box: true,
                 },
+                detector: {
+                    detector: "ctd",
+                },
+                inpainter: {
+                    inpainter: "lama_large",
+                },
+                ocr: {
+                    ocr: "mocr",
+                    use_mocr_merge: true,
+                },
+                upscale: {
+                    upscaler: "waifu2x",
+                    upscale_ratio: 2,
+                    revert_upscaling: true,
+                }
             };
             formData.append("config", JSON.stringify(config));
 
