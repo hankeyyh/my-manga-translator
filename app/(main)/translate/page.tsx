@@ -185,7 +185,7 @@ export default function TranslatePage() {
                     use_mocr_merge: true,
                 },
                 upscale: {
-                    upscaler: "waifu2x",
+                    upscaler: "esrgan",
                     upscale_ratio: 2,
                     revert_upscaling: true,
                 }
