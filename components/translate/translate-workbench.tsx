@@ -1,0 +1,65 @@
+"use client";
+
+import { useState } from "react";
+
+import { CompareImageViewer } from "./compare-image-viewer";
+import { WorkbenchToolRail } from "./workbench-tool-rail";
+import { WorkbenchZoomControls } from "./workbench-zoom-controls";
+import { ApiPricingConfig } from "@/types/api/pricing-config";
+import type { FontName } from "@/types/do/translation-config";
+
+export type TranslateWorkbenchProps = {
+    originalImageUrl: string | null;
+    translatedImageUrl: string | null;
+    sourceLang: string;
+    targetLang: string;
+    translateModel: string;
+    fontName: FontName;
+    translateConfigs: ApiPricingConfig[];
+    onSourceLangChange: (value: string) => void;
+    onTargetLangChange: (value: string) => void;
+    onTranslateModelChange: (value: string) => void;
+    onFontNameChange: (value: FontName) => void;
+};
+
+export function TranslateWorkbench({
+    originalImageUrl,
+    translatedImageUrl,
+    sourceLang,
+    targetLang,
+    translateModel,
+    fontName,
+    translateConfigs,
+    onSourceLangChange,
+    onTargetLangChange,
+    onTranslateModelChange,
+    onFontNameChange,
+}: TranslateWorkbenchProps) {
+    const [zoom, setZoom] = useState(100);
+    const zoomIn = () => setZoom((z) => Math.min(z + 25, 200));
+    const zoomOut = () => setZoom((z) => Math.max(z - 25, 50));
+
+    return (
+        <div className="relative flex h-[75vh] min-h-[420px] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/40 bg-[#f1f4f7] shadow-sm">
+            <WorkbenchToolRail
+                translateModel={translateModel}
+                sourceLang={sourceLang}
+                fontName={fontName}
+                targetLang={targetLang}
+                translateConfigs={translateConfigs}
+                onTranslateModelChange={onTranslateModelChange}
+                onSourceLangChange={onSourceLangChange}
+                onFontNameChange={onFontNameChange}
+                onTargetLangChange={onTargetLangChange}
+            />
+            <WorkbenchZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} zoom={zoom} />
+            <CompareImageViewer
+                originalImageUrl={originalImageUrl}
+                sourceLang={sourceLang}
+                targetLang={targetLang}
+                translatedImageUrl={translatedImageUrl}
+                zoom={zoom}
+            />
+        </div>
+    );
+}
