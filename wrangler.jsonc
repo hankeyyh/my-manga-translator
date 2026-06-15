@@ -21,5 +21,10 @@
   },
   "observability": {
     "enabled": true
+  },
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://my-manga-translator.hankeyyh.workers.dev",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
+    "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
   }
 }
