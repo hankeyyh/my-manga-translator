@@ -516,7 +516,7 @@ export class TranslationService {
                 }
             }
         } finally {
-            reader.cancel();
+            await reader.cancel();
         }
     }
 

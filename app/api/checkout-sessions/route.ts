@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         `${origin}/payment/cancel?session_id={CHECKOUT_SESSION_ID}` // 取消页
     );
     if (result.error) {
-        creditService.failUserTransaction(userTransaction.id);
+        await creditService.failUserTransaction(userTransaction.id);
         return NextResponse.json({ error: result.error.message }, { status: 500 });
     }
     const session = result.data!;
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     // 6. stripe session.id 写回user_transaction
     const updateTransResult = await creditService.updateStripeSessionId(userTransaction.id, session.sessionId);
     if (updateTransResult.error) {
-        creditService.failUserTransaction(userTransaction.id);
+        await creditService.failUserTransaction(userTransaction.id);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 
