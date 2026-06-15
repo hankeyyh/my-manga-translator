@@ -11,13 +11,13 @@ import { EmailOtpType } from '@supabase/supabase-js';
 
 // 设置confirm邮件中的next重定向链接
 function emailConfirmRedirectUrl(): string | undefined {
-    const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+    const base = process.env.SITE_URL?.replace(/\/$/, '');
     return base;
 }
 
 // oauth登录后，重定向到confirm url
 function getConfirmUrl(next: string): string {
-    const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '');
+    const base = process.env.SITE_URL?.replace(/\/$/, '');
     return `${base}/api/auth/confirm?next=${encodeURIComponent(next)}`;
 }
 

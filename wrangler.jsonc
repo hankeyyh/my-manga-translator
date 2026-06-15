@@ -1,30 +1,31 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
-  "name": "my-manga-translator",
-  "compatibility_date": "2026-06-14",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "my-manga-translator"
-    }
-  ],
-  "images": {
-    "binding": "IMAGES"
-  },
-  "observability": {
-    "enabled": true
-  },
-  "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://my-manga-translator.hankeyyh.workers.dev",
-    "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
-    "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
-  }
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "main": ".open-next/worker.js",
+    "name": "my-manga-translator",
+    "compatibility_date": "2026-06-14",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
+    "assets": {
+        "directory": ".open-next/assets",
+        "binding": "ASSETS"
+    },
+    "services": [
+        {
+            "binding": "WORKER_SELF_REFERENCE",
+            "service": "my-manga-translator"
+        }
+    ],
+    "images": {
+        "binding": "IMAGES"
+    },
+    "observability": {
+        "enabled": true
+    },
+    "vars": {
+        "SITE_URL": "https://my-manga-translator.hankeyyh.workers.dev",
+        "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_IxU_ISlH0UxwGIqP0HNFoA_siUuX0a5",
+        "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
+    },
 }
