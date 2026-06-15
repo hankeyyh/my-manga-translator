@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.status !== "complete" || session.payment_status !== "paid") {
-            return null;
+            return;
         }
         // 交易完成，增加积分
         const transactionId = session.metadata?.transactionId;
