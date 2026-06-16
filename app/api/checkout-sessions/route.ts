@@ -86,6 +86,6 @@ export async function POST(request: NextRequest) {
 }
 
 // 查询支付状态
-export async function GET(request: NextRequest) {
-    const sessionId = request.nextUrl.searchParams.get("session_id");
-}
+// export async function GET(request: NextRequest) {
+//     const sessionId = request.nextUrl.searchParams.get("session_id");
+// }
