@@ -21,7 +21,9 @@ async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ 
 
     // 1. 获取stripe session
     const supabase = await createServerClient();
-    const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!),
+    const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        httpClient: Stripe.createFetchHttpClient(),
+    }),
         new UserRepository(supabase)
     );
     const result = await paymentService.retriveCheckoutSession(sessionId);

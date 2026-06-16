@@ -18,7 +18,9 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
     const supabase = createServiceRoleClient();
     const paymentService = new PaymentService(
-        new Stripe(process.env.STRIPE_SECRET_KEY!),
+        new Stripe(process.env.STRIPE_SECRET_KEY!, {
+            httpClient: Stripe.createFetchHttpClient(),
+        }),
         new UserRepository(supabase),
     );
     const eventResult = paymentService.constructWebhookEvent(body, sig);
