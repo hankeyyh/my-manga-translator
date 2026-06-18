@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: eventResult.error }, { status: 400 });
     }
     const event = eventResult.data!;
-
+    // TODO 要监听订阅续费事件
     if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.status !== "complete" || session.payment_status !== "paid") {

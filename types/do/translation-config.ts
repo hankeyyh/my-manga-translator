@@ -168,8 +168,21 @@ export interface OcrConfig {
     /** 文本区域最低置信度；为 null 时使用模型默认 */
     prob?: number | null;
 }
-/** 与 manga-image-translator `Config` 对齐的管线配置（嵌套子配置） */
+/** 与 manga-image-translator `SavePlace` 对齐的保存目标 */
 
+type SavePlace = 'local' | 'supabase_storage';
+/** 与 manga-image-translator `SaveConfig` 对齐的保存选项 */
+
+export interface SaveConfig {
+    /** 保存到本地或其它存储；默认 local */
+    save_to?: SavePlace;
+    /** save_to 为 supabase_storage 时指定 bucket */
+    supabase_storage_bucket?: string | null;
+    /** save_to 为 supabase_storage 时指定路径: folder/subfolder/filename.png */
+    supabase_storage_path?: string | null;
+}
+
+/** 与 manga-image-translator `Config` 对齐的管线配置（嵌套子配置） */
 export interface TranslationConfig {
     /** 按正则按文字内容过滤区域，例 `'.*badtext.*'` */
     filter_text?: string | null;
@@ -180,6 +193,7 @@ export interface TranslationConfig {
     colorizer?: ColorizerConfig;
     inpainter?: InpainterConfig;
     ocr?: OcrConfig;
+    save?: SaveConfig;
     /** 不用分镜检测排序，而使用更简单的回退逻辑 */
     force_simple_sort?: boolean;
     /** 抹字区域卷积核大小，用于彻底清除文字残留 */

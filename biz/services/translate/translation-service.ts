@@ -208,45 +208,29 @@ export class TranslationService {
     // 实际翻译图片
     async translateImage(imageId: string): Promise<BizResult<TranslateImageSuccessResult | TranslateImageFailedResult>> {
         console.log(`📝 Processing image: ${imageId}`);
-        // 1. 获取图片详情
-        const imageResult = await this.imageRepo.getImage(imageId);
-        if (imageResult.error) {
-            console.error('❌ Failed to get image:', imageResult.error);
+        // 1. 乐观锁抢占：仅 status=pending 时可更新为 processing
+        const claimResult = await this.imageRepo.getPendingImageForProcessing(imageId);
+        if (claimResult.error) {
+            console.error('❌ Failed to claim image:', claimResult.error);
             return {
                 code: DB_ERROR_CODE,
                 data: {
                     userId: "",
                     taskId: "",
                     imageId: imageId,
-                    needRefund: false, // image状态仍为pending，下一轮重试 
+                    needRefund: false,
                     refundCredits: 0,
                 },
-                error: imageResult.error
+                error: claimResult.error
             };
         }
-        const image = imageResult.data!;
-
-        // 2. 更新图片状态为 processing (触发器会自动更新任务状态)
-        const updateImageStatusResult = await this.imageRepo.updateImage(imageId, {
-            status: 'processing',
-            startedAt: new Date().toISOString(),
-        });
-        if (updateImageStatusResult.error) {
-            console.error('❌ Failed to update image status:', updateImageStatusResult.error);
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: "",
-                    taskId: "",
-                    imageId: imageId,
-                    needRefund: false, // image状态仍为pending，下一轮重试 
-                    refundCredits: 0,
-                },
-                error: updateImageStatusResult.error
-            };
+        if (!claimResult.data) {
+            console.debug(`Image ${imageId} already claimed by another worker, skipping`);
+            return { code: SUCCESS_CODE, data: null, error: null };
         }
+        const image = claimResult.data;
 
-        // 3. 获取任务配置 (从图片关联的任务获取)
+        // 2. 获取任务配置 (从图片关联的任务获取)
         const taskResult = await this.taskRepo.getTask(image.taskId);
         if (taskResult.error) {
             console.error('❌ Failed to get task:', taskResult.error);
@@ -270,7 +254,7 @@ export class TranslationService {
         const consumeCredits = image.credits;
         console.debug("consumeCredits: ", consumeCredits);
 
-        // 4. 下载原始图片
+        // 3. 下载原始图片
         const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
         if (downloadOriginalImageResult.error) {
             console.error('❌ Failed to download original image:', downloadOriginalImageResult.error);
@@ -291,7 +275,14 @@ export class TranslationService {
         const originalImage = downloadOriginalImageResult.data!;
         console.debug("originalImage:", originalImage);
 
-        // 5. 提交到 Modal 服务
+        // 4. 提交到 Modal 服务
+        const today = new Date().toISOString().slice(0, 10);
+        const finalFilePath = `${task.userId}/${today}/output/${task.id}_${image.imageIndex}.png`;
+        config.save = {
+            save_to: "supabase_storage",
+            supabase_storage_bucket: "translation_storage",
+            supabase_storage_path: finalFilePath,
+        };
         const submitResult = await this.submitTranslation(originalImage, config);
         if (submitResult.error) {
             console.error('❌ Failed to submit translation:', submitResult.error);
@@ -311,7 +302,7 @@ export class TranslationService {
         }
         const reader = submitResult.data!;
 
-        // 6. 等待翻译完成
+        // 5. 等待翻译完成
         const waitResult = await this.waitTranslationComplete(reader);
         if (waitResult.error) {
             console.error('❌ algo svr return error:', waitResult.error);
@@ -330,30 +321,30 @@ export class TranslationService {
             };
         }
 
-        // 7. 上传到 Supabase Storage
-        const uploadResultImageResult = await this.imageStorage.uploadResultImage(task.userId, task.id, image.imageIndex, waitResult.data!);
-        if (uploadResultImageResult.error) {
-            console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
-            const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
-            const shouldRetry = handleResult.data!;
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    needRefund: !shouldRetry,
-                    refundCredits: consumeCredits,
-                },
-                error: uploadResultImageResult.error
-            };
-        }
-        const resultImagePath = uploadResultImageResult.data!;
+        // 6. 上传到 Supabase Storage
+        // const uploadResultImageResult = await this.imageStorage.uploadResultImage(task.userId, task.id, image.imageIndex, waitResult.data!);
+        // if (uploadResultImageResult.error) {
+        //     console.error("❌ Failed to upload translated image, error:", uploadResultImageResult.error);
+        //     const handleResult = await this.handleTranslateImageFailed(imageId, `Failed to upload translated image: ${uploadResultImageResult.error.message}`);
+        //     const shouldRetry = handleResult.data!;
+        //     return {
+        //         code: DB_ERROR_CODE,
+        //         data: {
+        //             userId: task.userId,
+        //             taskId: task.id,
+        //             imageId: imageId,
+        //             needRefund: !shouldRetry,
+        //             refundCredits: consumeCredits,
+        //         },
+        //         error: uploadResultImageResult.error
+        //     };
+        // }
+        // const resultImagePath = uploadResultImageResult.data!;
 
-        // 8. 更新图片状态为 completed (触发器会自动更新任务进度)
+        // 7. 更新图片状态为 completed (触发器会自动更新任务进度)
         const updateResultImageResult = await this.imageRepo.updateImage(imageId, {
             status: 'completed',
-            resultImagePath: resultImagePath,
+            resultImagePath: finalFilePath,
             completedAt: new Date().toISOString(),
         });
         if (updateResultImageResult.error) {
@@ -442,7 +433,7 @@ export class TranslationService {
             const bodyData = new FormData();
             bodyData.append("image", imageBlob);
             bodyData.append("config", JSON.stringify(config));
-            const response = await fetch(`${algoBaseUrl}/translate/with-form/image/stream`, {
+            const response = await fetch(`${algoBaseUrl}/translate/with-form/image/stream/web`, {
                 method: "POST",
                 body: bodyData,
             });

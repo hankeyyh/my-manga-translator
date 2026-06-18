@@ -262,6 +262,42 @@ export class TranslationImageRepository {
     }
 
     /**
+   * 乐观锁抢占待处理图片：仅当 status=pending 时更新为 processing 并返回行数据。
+   * 返回 data=null 表示已被其他 worker 抢占，非错误。
+   */
+    async getPendingImageForProcessing(imageId: string): Promise<Result<TranslationImage | null>> {
+        const { data, error } = await this.supabase
+            .from('translation_images')
+            .update({
+                status: 'processing',
+                started_at: new Date().toISOString(),
+            })
+            .eq('id', imageId)
+            .eq('status', 'pending')
+            .select()
+            .maybeSingle();
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`抢占图片失败: ${error.message}`),
+            };
+        }
+
+        if (!data) {
+            return {
+                data: null,
+                error: null,
+            };
+        }
+
+        return {
+            data: mapTranslationImageRowToTranslationImage(data),
+            error: null,
+        };
+    }
+
+    /**
    * 获取待处理的图片 (Worker 专用)
    */
     async getPendingImages(limit: number = 10): Promise<Result<TranslationImage[]>> {

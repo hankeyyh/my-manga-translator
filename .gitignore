@@ -54,3 +54,5 @@ prds/
 !.dev.vars.example
 
 !.env.example
+
+sslkeys.log
