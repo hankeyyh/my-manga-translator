@@ -33,7 +33,7 @@
             "workflows": [
                 {
                     "binding": "MY_WORKFLOW",
-                    "name": "my-manga-translator-workflow",
+                    "name": "my-manga-translator-workflow-prod",
                     "class_name": "MyWorkFlow"
                 }
             ],

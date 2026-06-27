@@ -34,11 +34,11 @@
         },
         "prod": {
             "vars": {
-                "SITE_URL": "https://my-manga-translator.hankeyyh.workers.dev",
+                "SITE_URL": "https://my-manga-translator-prod.hankeyyh.workers.dev",
                 "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
                 "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_IxU_ISlH0UxwGIqP0HNFoA_siUuX0a5",
                 "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
-                "TRANSLATION_WORKFLOW_BASE_URL": "https://my-manga-translator-workflow.hankeyyh.workers.dev"
+                "TRANSLATION_WORKFLOW_BASE_URL": "https://my-manga-translator-workflow-prod.hankeyyh.workers.dev"
             },
             "services": [
                 {
