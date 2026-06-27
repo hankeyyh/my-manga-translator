@@ -48,7 +48,7 @@
             ],
             "images": {
                 "binding": "IMAGES"
-            },
+            },"name": "my-manga-translator-workflow",
         }
     }
 }
