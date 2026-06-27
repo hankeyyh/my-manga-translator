@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const HERO_IMAGE = "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2940&auto=format&fit=crop";
+const HERO_IMAGE = "/hero.avif";
 
 export function HeroImage() {
     return (
@@ -12,6 +12,7 @@ export function HeroImage() {
                 priority
                 sizes="100vw"
                 src={HERO_IMAGE}
+                unoptimized
             />
             <div
                 aria-hidden
