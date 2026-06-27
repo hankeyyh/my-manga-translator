@@ -1,0 +1,42 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "my-manga-translator-workflow",
+    "main": "biz/workers/workflow.ts",
+    "compatibility_date": "2026-06-14",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
+    "observability": {
+        "enabled": true
+    },
+    "env": {
+        "dev": {
+            "vars": {
+                "NEXT_PUBLIC_SUPABASE_URL": "http://127.0.0.1:64321",
+                "MANGA_IMAGE_TRANSLATOR_BASE_URL": "http://127.0.0.1:8000",
+                "CONCURRENT_IMAGES": 2
+            },
+            "workflows": [
+                {
+                    "binding": "MY_WORKFLOW",
+                    "name": "my-manga-translator-workflow",
+                    "class_name": "MyWorkFlow"
+                }
+            ],
+        },
+        "prod": {
+            "vars": {
+                "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
+                "MANGA_IMAGE_TRANSLATOR_BASE_URL": "https://hankeyyh--manga-translator-web.modal.run",
+                "CONCURRENT_IMAGES": 2
+            },
+            "workflows": [
+                {
+                    "binding": "MY_WORKFLOW",
+                    "name": "my-manga-translator-workflow",
+                    "class_name": "MyWorkFlow"
+                }
+            ],
+        }
+    }
+}

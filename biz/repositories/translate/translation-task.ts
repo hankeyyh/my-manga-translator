@@ -128,6 +128,35 @@ export class TranslationTaskRepository {
     }
 
     /**
+     * 批量获取任务详情 (不含图片列表)
+     */
+    async batchGetTask(taskIds: string[]): Promise<Result<TranslationTask[]>> {
+        if (taskIds.length === 0) {
+            return { data: null, error: null };
+        }
+        const { data, error } = await this.supabase
+            .from('translation_tasks')
+            .select()
+            .in('id', taskIds);
+        if (error) {
+            return {
+                data: null, 
+                error: new Error(`批量获取任务详情失败：${error.message}`),
+            };
+        }
+        if (!data || data.length === 0) {
+            return {
+                data: null, 
+                error: null,
+            }
+        }
+        return {
+            data: data.map(mapTranslationTaskRowToTranslationTask),
+            error: null,
+        }
+    }
+
+    /**
    * 获取任务详情 (含图片列表)
    */
     async getTaskWithImages(taskId: string): Promise<Result<TranslationTaskDetail>> {

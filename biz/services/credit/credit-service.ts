@@ -1,5 +1,5 @@
-import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME, UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
+import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME } from "@/types/do/response";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
@@ -167,7 +167,7 @@ export class CreditService {
     }
 
     // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=2credits
-    async estimateCreditCost(images: File[], config: TranslationConfig): Promise<BizResult<number>> {
+    async estimateCreditCost(imageLength: number, config: TranslationConfig): Promise<BizResult<number>> {
         const modelName = config.translator?.model_name;
         if (!modelName) {
             return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("translator not set") };
@@ -181,7 +181,7 @@ export class CreditService {
             console.error(`estimateCreditCost, model pricing config not found, modelName: ${modelName}`);
             return { code: LOGIC_ERROR_CODE, data: null, error: new Error("pricing config not found") };
         }
-        const totalCost = pricingResult.data.creditPerImage * images.length;
+        const totalCost = pricingResult.data.creditPerImage * imageLength;
         return { code: SUCCESS_CODE, data: totalCost, error: null };
     }
 
@@ -204,6 +204,17 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: null, error: null };
     }
 
+    // 翻译重试，冻结积分
+    async freezeImageCreditsForRetry(userId: string, taskId: string, imageIds: string[], retryCnt: number): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.freezeImageCreditsForRetry(userId, taskId, imageIds, retryCnt);
+        if (result.error) {
+            console.error(`freezeImageCreditsForRetry, repo.freezeImageCreditsForRetry fail, userId: ${userId}, taskId: ${taskId}, 
+                imageIds: ${imageIds}, retryCnt: ${retryCnt}, error: ${result.error}`);
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
     // 核销积分
     async captureImageCredits(userId: string, taskId: string, imageId: string, consumeCredits: number): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.captureImageCredits(userId, taskId, imageId, consumeCredits);
@@ -218,12 +229,40 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: null, error: null };
     }
 
+    // 批量核销积分
+    async batchCaptureImageCredits(userId: string, imageIds: string[]): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.batchCaptureImageCredits(userId, imageIds);
+        if (result.error) {
+            console.error(`batchCaptureImageCredits, repo.batchCaptureImageCredits fail, error: ${result.error}, 
+                imageIds: ${imageIds}`);
+            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME) {
+                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, data: null, error: result.error };
+            }
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
     // 退还积分
     async refundImageCredits(userId: string, taskId: string, imageId: string, refundCredits: number): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.refundImageCredits(userId, taskId, imageId, refundCredits);
         if (result.error) {
             console.error(`refundImageCredits, repo.refundImageCredits fail, error: ${result.error}, 
                 imageId: ${imageId}, refundCredits: ${refundCredits}`);
+            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME) {
+                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, data: null, error: result.error };
+            }
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
+
+    // 批量退回积分
+    async batchRefundImageCredits(userId: string, imageIds: string[]): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.batchRefundImageCredits(userId, imageIds);
+        if (result.error) {
+            console.error(`batchRefundImageCredits, repo.batchRefundImageCredits fail, error: ${result.error}, 
+                imageIds: ${imageIds}`);
             if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME) {
                 return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, data: null, error: result.error };
             }

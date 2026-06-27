@@ -1,16 +1,6 @@
+import { handleRpcResult } from "@/biz/utils/db";
 import { Result } from "@/types/do/response";
 import { SupabaseClient } from "@supabase/supabase-js";
-
-// 积分余额不足
-const CREDIT_BALANCE_NOT_ENOUGH = "U0001";
-// 已冻结积分不足，无法核销
-const CREDIT_FROZEN_NOT_ENOUGH = "U0002";
-// 已冻结积分不足，无法退回
-const CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND = "U0003";
-
-export const CREDIT_BALANCE_NOT_ENOUGH_NAME = "CreditBalanceNotEnoughError";
-export const CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME = "CreditFrozenNotEnoughToCaptureError";
-export const CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME = "CreditFrozenNotEnoughToRefundError";
 
 export class UserCreditsRepository {
     constructor(private supabase: SupabaseClient) {
@@ -24,15 +14,18 @@ export class UserCreditsRepository {
             p_task_id: taskId,
             p_credits: credits,
         });
-        if (result.error) {
-            if (result.error.code === CREDIT_BALANCE_NOT_ENOUGH) {
-                const err = new Error("not enough credit");
-                err.name = CREDIT_BALANCE_NOT_ENOUGH_NAME;
-                return { data: null, error: err };
-            }
-            return { data: null, error: result.error };
-        }
-        return { data: null, error: null };
+        return handleRpcResult(result);
+    }
+
+    // 翻译重试，冻结用户积分
+    async freezeImageCreditsForRetry(userId: string, taskId: string, imageIds: string[], retryCnt: number): Promise<Result<void>> {
+        const result = await this.supabase.rpc("freeze_image_credits_for_retry", {
+            p_user_id: userId,
+            p_task_id: taskId,
+            p_image_ids: imageIds,
+            p_retry_cnt: retryCnt,
+        });
+        return handleRpcResult(result);
     }
 
     // 核销积分
@@ -43,15 +36,16 @@ export class UserCreditsRepository {
             p_image_id: imageId,
             p_consume_credits: consumeCredits,
         });
-        if (result.error) {
-            if (result.error.code === CREDIT_FROZEN_NOT_ENOUGH) {
-                const err = new Error("not enough frozen credit");
-                err.name = CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME;
-                return { data: null, error: err };
-            }
-            return { data: null, error: result.error };
-        }
-        return { data: null, error: null };
+        return handleRpcResult(result);
+    }
+
+    // 批量核销积分
+    async batchCaptureImageCredits(userId: string, imageIds: string[]): Promise<Result<void>> {
+        const result = await this.supabase.rpc("batch_capture_image_credits", {
+            p_user_id: userId,
+            p_image_ids: imageIds,
+        });
+        return handleRpcResult(result);
     }
 
     // 退回积分
@@ -62,14 +56,15 @@ export class UserCreditsRepository {
             p_image_id: imageId,
             p_refund_credits: refundCredits,
         });
-        if (result.error) {
-            if (result.error.code === CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND) {
-                const err = new Error("not enough frozen credit to refund");
-                err.name = CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME;
-                return { data: null, error: err };
-            }
-            return { data: null, error: result.error };
-        }
-        return { data: null, error: null };
+        return handleRpcResult(result);
+    }
+
+    // 批量退回积分
+    async batchRefundImageCredits(userId: string, imageIds: string[]): Promise<Result<void>> {
+        const result = await this.supabase.rpc("batch_refund_image_credits", {
+            p_user_id: userId,
+            p_image_ids: imageIds,
+        });
+        return handleRpcResult(result);
     }
 }

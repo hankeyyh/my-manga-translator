@@ -133,11 +133,11 @@ export default function TranslatePage() {
 
         try {
             const response = await fetch("/api/translate/history");
-            const data = await response.json();
+            const data = (await response.json()) as { error?: string, images?: ApiTranslationTaskImage[] };
             if (!response.ok) {
                 throw new Error(data.error || "Failed to fetch translation history");
             }
-            setHistoryImages(data.images);
+            setHistoryImages(data.images!);
         } catch (error) {
             setHistoryError(error instanceof Error ? error.message : "Unknown error");
         } finally {
@@ -196,7 +196,7 @@ export default function TranslatePage() {
                 method: "POST",
                 body: formData,
             });
-            const data = await response.json();
+            const data = (await response.json()) as { error?: string, taskId?: string };
             if (!response.ok || !data.taskId) {
                 throw new Error(data.error || "Failed to submit translation");
             }

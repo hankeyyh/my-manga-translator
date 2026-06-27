@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Form from "next/form";
 import { API_SUCCESS_CODE } from "@/types/api/response";
+import { SignUpResponse } from "@/types/api/auth";
 
 const linkClass =
     "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
@@ -58,7 +59,7 @@ export function SignUpForm({
                 }),
             });
 
-            const data = await response.json();
+            const data = (await response.json()) as SignUpResponse;
 
             if (data.code !== API_SUCCESS_CODE) {
                 throw new Error(data.message || "注册失败");

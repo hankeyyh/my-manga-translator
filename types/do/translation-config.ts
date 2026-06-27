@@ -180,6 +180,8 @@ export interface SaveConfig {
     supabase_storage_bucket?: string | null;
     /** save_to 为 supabase_storage 时指定路径: folder/subfolder/filename.png */
     supabase_storage_path?: string | null;
+    /** save_to 为 supabase_storage 时, 批量翻译指定路径 */
+    supabase_storage_paths?: string[] | null;
 }
 
 /** 与 manga-image-translator `Config` 对齐的管线配置（嵌套子配置） */
@@ -200,4 +202,8 @@ export interface TranslationConfig {
     kernel_size?: number;
     /** 扩展文字 mask 以消除原图遗留文字像素 */
     mask_dilation_offset?: number;
+    /** 单张图片标识，用于流式 image_failed 通知 */
+    image_identifier?: string | null;
+    /** 批量翻译时每张图片的标识，与 images 顺序一致 */
+    image_identifiers?: string[] | null;
 }

@@ -18,6 +18,7 @@ export interface TranslateImageFailedResult {
     userId: string;
     taskId: string;
     imageId: string;
+    shoudRetry: boolean;
     needRefund: boolean;
     refundCredits: number;
 }

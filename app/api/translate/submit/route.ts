@@ -15,6 +15,7 @@ import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
 import { AuthService } from "@/biz/services/auth/auth-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { randomUUID } from "crypto";
+import { getWorkflowBaseUrl } from "@/biz/utils/url";
 
 export async function POST(request: NextRequest) {
     // 1. 验证用户登录
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
         new UserCreditsRepository(serviceRoleClient),
     );
     // 计算积分
-    const creditResult = await creditService.estimateCreditCost(images, config);
+    const creditResult = await creditService.estimateCreditCost(images.length, config);
     if (creditResult.error) {
         return NextResponse.json({ error: "Failed to Calculate Credits" }, { status: 500 });
     }
@@ -81,6 +82,30 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: submitResult.error?.message ?? 'Internal Server Error' }, { status: 500 });
     }
 
-    // 3. 返回任务 ID
+    // 4. 调用workflow，发起翻译流程
+    const workflowResponse = await fetch(`${getWorkflowBaseUrl()}/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            userId: userResult.data.id,
+            taskId: submitResult.data,
+        }),
+    });
+    let workflowResult: { success?: boolean; message?: string };
+    try {
+        workflowResult = await workflowResponse.json();
+    } catch {
+        console.error("Failed to parse workflow response");
+        return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
+    }
+    if (!workflowResponse.ok || !workflowResult.success) {
+        console.error("Failed to start workflow:", workflowResult.message ?? workflowResponse.statusText);
+        return NextResponse.json(
+            { error: workflowResult.message ?? "Failed to start translation workflow" },
+            { status: 500 },
+        );
+    }
+
+    // 5. 返回任务 ID
     return NextResponse.json({ taskId: submitResult.data }, { status: 200 });
 }

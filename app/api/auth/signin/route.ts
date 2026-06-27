@@ -16,7 +16,7 @@ import { API_SUCCESS_CODE } from "@/types/api/response";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
-    const { email, password } = body;
+    const { email, password } = body as { email: string, password: string };
     if (!email || !password) {
         const response: SignInResponse = { code: 'VALIDATION_ERROR', message: 'Email and password are required', data: null };
         return NextResponse.json(response, { status: 400 });
