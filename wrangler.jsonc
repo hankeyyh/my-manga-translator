@@ -35,6 +35,7 @@
         "prod": {
             "vars": {
                 "SITE_URL": "https://my-manga-translator-prod.hankeyyh.workers.dev",
+                // 注意：NEXT_PUBLIC_* build阶段会inline进代码，如果本地执行npm run deploy，会使用.env的本地值导致错误
                 "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
                 "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_IxU_ISlH0UxwGIqP0HNFoA_siUuX0a5",
                 "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
