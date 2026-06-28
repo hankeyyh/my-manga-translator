@@ -91,6 +91,10 @@ export async function POST(request: NextRequest) {
             taskId: submitResult.data,
         }),
     });
+    if (!workflowResponse.ok) {
+        console.error("Failed to start workflow:", workflowResponse.statusText);
+        return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
+    }
     let workflowResult: { success?: boolean; message?: string };
     try {
         workflowResult = await workflowResponse.json();
@@ -98,12 +102,9 @@ export async function POST(request: NextRequest) {
         console.error("Failed to parse workflow response");
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
-    if (!workflowResponse.ok || !workflowResult.success) {
-        console.error("Failed to start workflow:", workflowResult.message ?? workflowResponse.statusText);
-        return NextResponse.json(
-            { error: workflowResult.message ?? "Failed to start translation workflow" },
-            { status: 500 },
-        );
+    if (!workflowResult.success) {
+        console.error("Failed to start workflow:", workflowResult.message);
+        return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
 
     // 5. 返回任务 ID
