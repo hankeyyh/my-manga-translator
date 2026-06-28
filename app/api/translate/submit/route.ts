@@ -92,7 +92,8 @@ export async function POST(request: NextRequest) {
         }),
     });
     if (!workflowResponse.ok) {
-        console.error(`Failed to start workflow, status: ${workflowResponse.status}, error: ${workflowResponse.statusText}`);
+        console.error(`Failed to start workflow, url: ${getWorkflowBaseUrl()}, 
+            status: ${workflowResponse.status}, error: ${workflowResponse.statusText}`);
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
     let workflowResult: { success?: boolean; message?: string; };
