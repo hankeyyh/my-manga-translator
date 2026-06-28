@@ -19,7 +19,7 @@
             "workflows": [
                 {
                     "binding": "MY_WORKFLOW",
-                    "name": "my-manga-translator-workflow",
+                    "name": "my-manga-translator-workflow-dev",
                     "class_name": "MyWorkFlow"
                 }
             ],

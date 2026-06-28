@@ -15,7 +15,7 @@ import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
 import { AuthService } from "@/biz/services/auth/auth-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { randomUUID } from "crypto";
-import { getWorkflowBaseUrl } from "@/biz/utils/url";
+import { startTranslationWorkflow } from "@/biz/utils/cloudflare";
 
 export async function POST(request: NextRequest) {
     // 1. 验证用户登录
@@ -82,18 +82,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: submitResult.error?.message ?? 'Internal Server Error' }, { status: 500 });
     }
 
-    // 4. 调用workflow，发起翻译流程
-    const workflowResponse = await fetch(`${getWorkflowBaseUrl()}/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            userId: userResult.data.id,
-            taskId: submitResult.data,
-        }),
-    });
+    // 4. 调用 workflow（生产必须用 Service Binding 否则404，本地 next dev 走 HTTP）
+    const workflowResponse = await startTranslationWorkflow({ userId: userResult.data.id, taskId: submitResult.data });
     if (!workflowResponse.ok) {
-        console.error(`Failed to start workflow, url: ${getWorkflowBaseUrl()}, 
-            status: ${workflowResponse.status}, error: ${workflowResponse.statusText}`);
+        console.error(`Failed to start workflow, status: ${workflowResponse.status}, error: ${workflowResponse.statusText}`);
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
     let workflowResult: { success?: boolean; message?: string; };

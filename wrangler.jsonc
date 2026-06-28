@@ -26,6 +26,10 @@
                 {
                     "binding": "WORKER_SELF_REFERENCE",
                     "service": "my-manga-translator-dev"
+                },
+                {
+                    "binding": "TRANSLATION_WORKFLOW",
+                    "service": "my-manga-translator-workflow-dev"
                 }
             ],
             "images": {
@@ -45,6 +49,10 @@
                 {
                     "binding": "WORKER_SELF_REFERENCE",
                     "service": "my-manga-translator-prod"
+                },
+                {
+                    "binding": "TRANSLATION_WORKFLOW",
+                    "service": "my-manga-translator-workflow-prod"
                 }
             ],
             "images": {
