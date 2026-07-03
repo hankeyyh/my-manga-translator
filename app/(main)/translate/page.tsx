@@ -27,7 +27,7 @@ const inter = Inter({
     variable: "--font-inter",
 });
 
-const POLL_INTERVAL_MS = 5000;
+const POLL_INTERVAL_MS = 1000;
 const POLL_MAX_WAIT_MS = 5 * 60 * 1000;
 
 interface LocalPage {
@@ -111,9 +111,10 @@ export default function TranslatePage() {
         }
 
         const page = pages[activeTab] ?? null;
+        const activeResult = resultImages[activeTab];
         return {
             originalImageUrl: page?.previewUrl ?? null,
-            translatedImageUrl: resultImages[activeTab]?.resultImageUrl ?? null,
+            translatedImageUrl: activeResult?.status === "completed" ? activeResult.resultImageUrl : null,
         };
     }, [selectionSource, selectImage, activeTab, pages, resultImages]);
 
@@ -281,8 +282,12 @@ export default function TranslatePage() {
 
     const thumbnails = useMemo(() => {
         return pages.map((page, index) => {
-            const hasResult = Boolean(resultImages[index]);
-            const isProcessing = polling || submitLoading;
+            const image = resultImages.find((img) => img.imageIndex === index);;
+            const hasResult = image?.status === "completed";
+            const isProcessing = submitLoading ||
+                image?.status === "pending" ||
+                image?.status === "processing" ||
+                (polling && !image);
             return {
                 id: page.id,
                 status: hasResult
@@ -293,7 +298,7 @@ export default function TranslatePage() {
                 image: page.previewUrl,
             };
         });
-    }, [pages, resultImages, polling, submitLoading, taskStatus?.progress]);
+    }, [pages, resultImages, polling, submitLoading]);
 
     return (
         <div
