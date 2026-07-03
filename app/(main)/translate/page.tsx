@@ -111,7 +111,7 @@ export default function TranslatePage() {
         }
 
         const page = pages[activeTab] ?? null;
-        const activeResult = resultImages[activeTab];
+        const activeResult = resultImages.find((img) => img.imageIndex === activeTab);
         return {
             originalImageUrl: page?.previewUrl ?? null,
             translatedImageUrl: activeResult?.status === "completed" ? activeResult.resultImageUrl : null,
@@ -126,6 +126,22 @@ export default function TranslatePage() {
     const handleSelectHistoryImage = (image: ApiTranslationTaskImage) => {
         setSelectionSource("history");
         setSelectImage(image);
+    };
+
+    const handleNewTask = () => {
+        for (const page of pages) {
+            URL.revokeObjectURL(page.previewUrl);
+        }
+        setPages([]);
+        setResultImages([]);
+        setTaskId(null);
+        setTaskStatus(null);
+        setPolling(false);
+        setSubmitError(null);
+        setResultError(null);
+        setActiveTab(0);
+        setSelectionSource("taskbar");
+        setSelectImage(null);
     };
 
     const fetchHistoryImages = async () => {
@@ -327,7 +343,7 @@ export default function TranslatePage() {
                     />
 
                     <TranslateTaskBar
-                        onNewTask={() => setPages([])}
+                        onNewTask={handleNewTask}
                         onPickFiles={onPickFiles}
                         onSelectThumbnail={handleSelectTaskbarThumbnail}
                         onSubmit={submitTask}
