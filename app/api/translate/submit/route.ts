@@ -18,7 +18,7 @@ import { randomUUID } from "crypto";
 import { startTranslationWorkflow } from "@/biz/utils/cloudflare";
 
 export async function POST(request: NextRequest) {
-    // 1. 验证用户登录
+    // 0. 验证用户登录
     const supabase = await createServerClient();
     const authService = new AuthService(new UserRepository(supabase));
     const userResult = await authService.getCurrentUser();
