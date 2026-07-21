@@ -164,6 +164,7 @@ export class TranslationTaskRepository {
             .from('translation_tasks')
             .select('*, translation_images(*)')
             .eq('id', taskId)
+            .order('image_index', { ascending: true, referencedTable: 'translation_images' })
             .single();
 
         if (error) {
@@ -179,10 +180,14 @@ export class TranslationTaskRepository {
             };
         }
 
+        const images = (data.translation_images as Tables<'translation_images'>[])
+            .map(mapTranslationImageRowToTranslationImage)
+            .sort((a, b) => a.imageIndex - b.imageIndex);
+
         return {
             data: {
                 ...mapTranslationTaskRowToTranslationTask(data),
-                images: data.translation_images.map(mapTranslationImageRowToTranslationImage),
+                images,
             },
             error: null,
         };

@@ -14,6 +14,8 @@ import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
 import { ApiPricingConfig } from "@/types/api/pricing-config";
+import { translationCacheService } from "@/biz/services/translation-cache/translation-cache-service";
+import { LocalPage } from "@/types/dto/local-page";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -30,14 +32,61 @@ const inter = Inter({
 const POLL_INTERVAL_MS = 1000;
 const POLL_MAX_WAIT_MS = 5 * 60 * 1000;
 
-interface LocalPage {
-    id: string;
-    file: File;
-    previewUrl: string;
-}
-
 function isTaskEnded(task: Pick<ApiGetTranslationTaskResponse, "status">) {
     return TASK_ENDED_STATUSES.includes(task.status);
+}
+
+function buildTranslationConfig(
+    translateModel: string,
+    targetLang: string,
+    fontName: FontName,
+    translateConfigs: ApiPricingConfig[],
+): TranslationConfig {
+    const selected = translateConfigs.find((c) => c.modelName === translateModel);
+    return {
+        translator: {
+            translator: selected?.translator,
+            model_name: translateModel,
+            target_lang: targetLang,
+        },
+        render: {
+            font_name: fontName,
+            fit_to_box: true,
+        },
+        detector: {
+            detector: "ctd",
+        },
+        inpainter: {
+            inpainter: "lama_large",
+        },
+        ocr: {
+            ocr: "mocr",
+            use_mocr_merge: true,
+        },
+        upscale: {
+            upscaler: "esrgan",
+            upscale_ratio: 2,
+            revert_upscaling: true,
+        },
+    };
+}
+
+function buildCachedResultImages(
+    cached: Awaited<ReturnType<typeof translationCacheService.partitionPagesByCache>>["cached"],
+    trackCachedResultUrl: (url: string) => void,
+): ApiTranslationTaskImage[] {
+    return cached.map(({ originalIndex, page, hit }) => {
+        const resultImageUrl = translationCacheService.createResultObjectUrl(hit);
+        trackCachedResultUrl(resultImageUrl);
+        return {
+            id: `local-cache-${page.id}`,
+            status: "completed",
+            imageIndex: originalIndex,
+            taskId: "local-cache",
+            originalImageUrl: page.previewUrl,
+            resultImageUrl,
+        };
+    });
 }
 
 export default function TranslatePage() {
@@ -50,6 +99,11 @@ export default function TranslatePage() {
     const [selectImage, setSelectImage] = useState<ApiTranslationTaskImage | null>(null);
 
     const pagesRef = useRef<LocalPage[]>([]);
+    // 跟踪本地缓存命中后创建的 Blob URL，方便之后统一回收
+    const cachedResultUrlsRef = useRef<string[]>([]);
+    const submitIndexMapRef = useRef<number[]>([]);
+    const submitConfigRef = useRef<TranslationConfig | null>(null);
+    const uncachedPagesRef = useRef<LocalPage[]>([]);
     const [pages, setPages] = useState<LocalPage[]>([]);
     const [taskId, setTaskId] = useState<string | null>(null);
     const [taskStatus, setTaskStatus] = useState<ApiGetTranslationTaskResponse | null>(null);
@@ -89,6 +143,17 @@ export default function TranslatePage() {
         event.target.value = "";
     };
 
+    const trackCachedResultUrl = (url: string) => {
+        cachedResultUrlsRef.current.push(url);
+    };
+
+    const revokeCachedResultUrls = () => {
+        for (const url of cachedResultUrlsRef.current) {
+            URL.revokeObjectURL(url);
+        }
+        cachedResultUrlsRef.current = [];
+    };
+
     // 回收blob url
     useEffect(() => {
         pagesRef.current = pages;
@@ -99,9 +164,11 @@ export default function TranslatePage() {
             for (const page of pagesRef.current) {
                 URL.revokeObjectURL(page.previewUrl);
             }
+            revokeCachedResultUrls();
         };
     }, []);
 
+    // 用户选择历史&任务栏图片，展示翻译前后图片
     const workbenchImages = useMemo(() => {
         if (selectionSource === "history" && selectImage) {
             return {
@@ -132,6 +199,7 @@ export default function TranslatePage() {
         for (const page of pages) {
             URL.revokeObjectURL(page.previewUrl);
         }
+        revokeCachedResultUrls();
         setPages([]);
         setResultImages([]);
         setTaskId(null);
@@ -142,6 +210,9 @@ export default function TranslatePage() {
         setActiveTab(0);
         setSelectionSource("taskbar");
         setSelectImage(null);
+        submitIndexMapRef.current = [];
+        submitConfigRef.current = null;
+        uncachedPagesRef.current = [];
     };
 
     const fetchHistoryImages = async () => {
@@ -150,7 +221,7 @@ export default function TranslatePage() {
 
         try {
             const response = await fetch("/api/translate/history");
-            const data = (await response.json()) as { error?: string, images?: ApiTranslationTaskImage[] };
+            const data = (await response.json()) as { error?: string, images?: ApiTranslationTaskImage[]; };
             if (!response.ok) {
                 throw new Error(data.error || "Failed to fetch translation history");
             }
@@ -174,50 +245,51 @@ export default function TranslatePage() {
         setTaskStatus(null);
         setTaskId(null);
         setPolling(false);
+        revokeCachedResultUrls();
+        submitIndexMapRef.current = [];
+        submitConfigRef.current = null;
+        uncachedPagesRef.current = [];
 
         try {
+            const config = buildTranslationConfig(
+                translateModel,
+                targetLang,
+                fontName,
+                translateConfigs,
+            );
+            const { cached, uncached } = await translationCacheService.partitionPagesByCache(
+                pages,
+                config,
+            );
+            const cachedResults = buildCachedResultImages(cached, trackCachedResultUrl);
+
+            if (uncached.length === 0) {
+                setResultImages(cachedResults);
+                setActiveTab(0);
+                return;
+            }
+
+            const indexMap = uncached.map((item) => item.originalIndex);
+            submitIndexMapRef.current = indexMap;
+            submitConfigRef.current = config;
+            uncachedPagesRef.current = uncached.map((item) => item.page);
+
             const formData = new FormData();
-            for (const page of pages) {
+            for (const { page } of uncached) {
                 formData.append("images", page.file);
             }
-            const selected = translateConfigs.find((c) => c.modelName === translateModel);
-            const config: TranslationConfig = {
-                translator: {
-                    translator: selected?.translator,
-                    model_name: translateModel,
-                    target_lang: targetLang,
-                },
-                render: {
-                    font_name: fontName,
-                    fit_to_box: true,
-                },
-                detector: {
-                    detector: "ctd",
-                },
-                inpainter: {
-                    inpainter: "lama_large",
-                },
-                ocr: {
-                    ocr: "mocr",
-                    use_mocr_merge: true,
-                },
-                upscale: {
-                    upscaler: "esrgan",
-                    upscale_ratio: 2,
-                    revert_upscaling: true,
-                }
-            };
             formData.append("config", JSON.stringify(config));
 
             const response = await fetch("/api/translate/submit", {
                 method: "POST",
                 body: formData,
             });
-            const data = (await response.json()) as { error?: string, taskId?: string };
+            const data = (await response.json()) as { error?: string, taskId?: string; };
             if (!response.ok || !data.taskId) {
                 throw new Error(data.error || "Failed to submit translation");
             }
 
+            setResultImages(cachedResults);
             setTaskId(data.taskId);
             setPolling(true);
             setActiveTab(0);
@@ -251,13 +323,53 @@ export default function TranslatePage() {
                     throw new Error(data.error || "Failed to poll task status");
                 }
                 setTaskStatus(data);
-                setResultImages(data.images);
                 setLoadingResult(true);
+
+                const indexMap = submitIndexMapRef.current;
+                const config = submitConfigRef.current;
+                const uncachedPages = uncachedPagesRef.current;
+                // 用服务端 imageIndex（提交批次内下标）对齐，禁止依赖数组顺序
+                const serverResults: ApiTranslationTaskImage[] = data.images.map((img) => ({
+                    ...img,
+                    imageIndex: indexMap[img.imageIndex] ?? img.imageIndex,
+                }));
+
+                setResultImages((prevCached) => {
+                    const merged = [...prevCached];
+                    for (const serverResult of serverResults) {
+                        const existingIndex = merged.findIndex(
+                            (item) => item.imageIndex === serverResult.imageIndex,
+                        );
+                        if (existingIndex >= 0) {
+                            merged[existingIndex] = serverResult;
+                        } else {
+                            merged.push(serverResult);
+                        }
+                    }
+                    merged.sort((a, b) => a.imageIndex - b.imageIndex);
+                    return merged;
+                });
 
                 if (isTaskEnded(data)) {
                     setPolling(false);
                     clearInterval(interval);
                     setLoadingResult(false);
+
+                    // 翻译结果写入缓存
+                    if (config) {
+                        for (const img of data.images) {
+                            const page = uncachedPages[img.imageIndex];
+                            if (img.status !== "completed" || !img.resultImageUrl || !page) {
+                                continue;
+                            }
+                            void translationCacheService.saveFromResultUrl(
+                                page.file,
+                                config,
+                                img.resultImageUrl,
+                            );
+                        }
+                    }
+
                     await fetchHistoryImages();
                 }
             } catch (error) {
@@ -271,6 +383,7 @@ export default function TranslatePage() {
         return () => clearInterval(interval);
     }, [polling, taskId]);
 
+    // 进入页面时，加载历史图片
     useEffect(() => {
         void fetchHistoryImages();
     }, []);
@@ -292,6 +405,7 @@ export default function TranslatePage() {
         }
     };
 
+    // 进入页面时，加载模型配置
     useEffect(() => {
         void fetchTranslationConfig();
     }, []);
