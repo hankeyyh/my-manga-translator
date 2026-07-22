@@ -700,9 +700,9 @@ export class TranslationService {
                     // buffer 剩下的数据属于下一轮
                     buffer = buffer.slice(frameSize);
                     const message = textDecoder.decode(data);
-                    console.debug("status: ", status, " message: ", message);
 
-                    // 处理数据包, status=0 接口执行成功后，每张图片发一次; 
+                    // 处理数据包, 
+                    // status=0 接口执行成功后，每张图片发一次; 
                     // status=1 过程数据;
                     // - image_completed:{image_identifier}:{output_path} 保存成功
                     // - image_failed:{image_identifier}:{errMsg} 翻译过程遇到失败
@@ -712,6 +712,7 @@ export class TranslationService {
                     // status=5 整体翻译完成
                     switch (status) {
                         case 1: {
+                            console.debug("status: 1 ", " message: ", message);
                             const event = this.parseProgressEvent(message);
                             if (event) {
                                 yield event;
@@ -719,18 +720,22 @@ export class TranslationService {
                             break;
                         }
                         case 2: {
+                            console.debug("status: 2 ", " message: ", message);
                             yield { type: "batch_error", error: message };
                             return;
                         }
                         case 3: {
+                            console.debug("status: 3 ", " message: ", message);
                             yield { type: "queue", position: Number(message) };
                             break;
                         }
                         case 4: {
+                            console.debug("status: 4 ", " message: ", message);
                             yield { type: "ready" };
                             break;
                         }
                         case 5: {
+                            console.debug("status: 5 ", " message: ", message);
                             yield { type: "batch_completed" };
                             return;
                         }
