@@ -152,6 +152,26 @@ export class TranslationImageRepository {
         };
     }
 
+    async batchGetImages(imageIds: string[]): Promise<Result<TranslationImage[]>> {
+        const { data, error } = await this.supabase
+            .from('translation_images')
+            .select('*')
+            .in('id', imageIds);
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`获取图片详情失败: ${error.message}`),
+            };
+        }
+        if (!data || data.length === 0) {
+            return { data: [], error: null };
+        }
+        return {
+            data: data.map((value) => mapTranslationImageRowToTranslationImage(value)),
+            error: null,
+        };
+    }
+
     /**
    * 获取任务的pending图片
    */

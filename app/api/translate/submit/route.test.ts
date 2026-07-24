@@ -260,12 +260,16 @@ describe("translate submit route", () => {
                 imageIndex: 0,
                 originalImagePath: "user-1/task-1/0-original.jpg",
                 originalImageSize: image1.size,
+                filename: "",
+                credits: 0,
             },
             {
                 taskId: "task-1",
                 imageIndex: 1,
                 originalImagePath: "user-1/task-1/1-original.jpg",
                 originalImageSize: image2.size,
+                filename: "",
+                credits: 0,
             },
         ]);
     });

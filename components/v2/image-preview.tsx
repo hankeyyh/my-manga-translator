@@ -8,12 +8,20 @@ import { MangaPage } from "./thumbnail";
 export type ImagePreviewProps = {
     pages: MangaPage[];
     index: number;
+    showTranslated?: boolean;
     onClose: () => void;
     onIndexChange: (index: number) => void;
 };
 
-export function ImagePreview({ pages, index, onClose, onIndexChange }: ImagePreviewProps) {
+export function ImagePreview({
+    pages,
+    index,
+    showTranslated = true,
+    onClose,
+    onIndexChange,
+}: ImagePreviewProps) {
     const page = pages[index];
+    const imageUrl = showTranslated && page?.status === "completed" && page.resultUrl ? page.resultUrl : page?.originalUrl;
 
     useEffect(() => {
         if (!page || pages.length === 0) return;
@@ -59,7 +67,7 @@ export function ImagePreview({ pages, index, onClose, onIndexChange }: ImagePrev
                 <X className="size-5" />
             </Button>
             <img
-                src={page.status === "completed" ? page.resultUrl : page.originalUrl}
+                src={imageUrl}
                 alt={page.name}
                 className="max-h-full max-w-full object-contain"
                 onClick={(e) => e.stopPropagation()} />

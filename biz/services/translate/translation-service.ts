@@ -13,6 +13,7 @@ import { TranslateImageFailedResult, TranslateImageSuccessResult, TranslationIma
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
+import { packZip } from "@/biz/utils/pack";
 
 const MAX_TRANSLATION_RETRIES = 0; // 目前不允许重试
 const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果
@@ -400,13 +401,39 @@ export class TranslationService {
         for (const image of images) {
             const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
             if (downloadOriginalImageResult.error) {
-                console.error(`Failed to download original image, imageId: ${image.id}, err: ${downloadOriginalImageResult.error}`);
+                console.error(`Failed to download original image, imageId: ${image.id}, err: ${downloadOriginalImageResult.error.message}`);
                 continue;
             }
             validImages.push(image);
             originalImages.push(downloadOriginalImageResult.data!);
         }
         return { validImages, blobs: originalImages };
+    }
+
+    async downloadResultZip(imageIds: string[]): Promise<BizResult<Uint8Array<ArrayBuffer>>> {
+        // 获取images
+        const imageResult = await this.imageRepo.batchGetImages(imageIds);
+        if (imageResult.error) {
+            console.error(`downloadResultZip, repo.batchGetImages fail, error: ${imageResult.error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
+        }
+        const images = imageResult.data!;
+        // 下载翻译后的图
+        const zippable: { fileName: string, blob: Blob; }[] = [];
+        for (const image of images) {
+            if (!image.resultImagePath) {
+                continue;
+            }
+            const downloadResult = await this.imageStorage.downloadFile(image.resultImagePath);
+            if (downloadResult.error) {
+                console.error(`downloadResultZip, storage.downloadFile fail, error: ${downloadResult.error.message}`);
+                continue;
+            }
+            zippable.push({ fileName: image.filename, blob: downloadResult.data! });
+        }
+        // 打包zip
+        const result = await packZip(zippable);
+        return { code: SUCCESS_CODE, data: result, error: null };
     }
 
     /**

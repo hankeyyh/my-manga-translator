@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
     ChevronDown,
     Download,
+    Languages,
     Moon,
     Plus,
     Upload,
@@ -25,14 +26,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { MangaPage, ThumbNail } from "@/components/v2/thumbnail";
 import { ImagePreview } from "@/components/v2/image-preview";
 import { UploadZone } from "@/components/v2/upload-zone";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
-import { CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH } from "next/dist/shared/lib/constants";
-import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
+import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
 
 const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
 const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
@@ -51,6 +52,13 @@ function formatFileSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function isTaskEnded(taskStatus: TaskStatus | null) {
+    if (taskStatus === null) {
+        return false;
+    }
+    return TASK_ENDED_STATUSES.includes(taskStatus);
 }
 
 const FAQ_ITEMS = [
@@ -188,6 +196,17 @@ function buildTranslationConfig(selLang: { code: string, label: string; }, selMo
     };
 }
 
+function onDownload(pages: MangaPage[]) {
+    const imageIds = pages.map((value) => {
+        if (!value.imageId || value.status !== "completed") {
+            return;
+        }
+        return value.imageId;
+    });
+    const imageIdsStr = imageIds.join(",");
+    window.location.href = `${window.origin}/api/download?imageIds=${imageIdsStr}`;
+}
+
 export default function V2HomePage() {
     const [pricingTab, setPricingTab] = useState<"pay" | "sub">("sub");
     const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
@@ -203,6 +222,8 @@ export default function V2HomePage() {
     const [polling, setPolling] = useState<boolean>(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const [taskId, setTaskId] = useState<string | null>(null);
+    const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
+    const [showTranslated, setShowTranslated] = useState(true);
 
     // 选择图片
     const onFilesSelected = (files: File[]): void => {
@@ -261,8 +282,10 @@ export default function V2HomePage() {
         setPages([]);
         setPreviewIndex(null);
         setTaskId(null);
+        setTaskStatus(null);
         setSubmitLoading(false);
         setPolling(false);
+        setShowTranslated(true);
         clearIntervalRef();
     };
 
@@ -285,6 +308,7 @@ export default function V2HomePage() {
 
             if (next.length === 0) {
                 setTaskId(null);
+                setTaskStatus(null);
                 setPolling(false);
                 setSubmitLoading(false);
                 clearIntervalRef();
@@ -327,6 +351,8 @@ export default function V2HomePage() {
 
     // 轮询任务 
     // TODO 缓存
+    // TODO 重试
+    // TODO 历史页
     useEffect(() => {
         if (!taskId || polling) {
             return;
@@ -352,7 +378,9 @@ export default function V2HomePage() {
                 for (let i = 0; i < data.images.length; i++) {
                     newPages[i].status = data.images[i].status;
                     newPages[i].resultUrl = data.images[i].resultImageUrl;
+                    newPages[i].imageId = data.images[i].id;
                 }
+                setTaskStatus(data.status);
                 setPages((prev) =>
                     prev.map((page, i) => {
                         const img = data.images[i];
@@ -366,7 +394,7 @@ export default function V2HomePage() {
                     })
                 );
                 // 任务结束
-                if (TASK_ENDED_STATUSES.includes(data.status)) {
+                if (isTaskEnded(data.status)) {
                     clearIntervalRef();
                     setPolling(false);
                 }
@@ -475,9 +503,22 @@ export default function V2HomePage() {
                 <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
                     <div className="mx-auto max-w-5xl space-y-4 px-4">
                         <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
-
+                       
                         <div className="space-y-2">
-                            <div className="flex justify-end">
+                            <div className="flex items-center justify-end gap-3">
+                                {isTaskEnded(taskStatus) && (
+                                    <div className="flex items-center gap-1.5">
+                                        <Languages
+                                            className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
+                                            aria-hidden
+                                        />
+                                        <Switch
+                                            checked={showTranslated}
+                                            onCheckedChange={setShowTranslated}
+                                            aria-label={showTranslated ? "查看翻译图" : "查看原图"}
+                                        />
+                                    </div>
+                                )}
                                 <Button
                                     variant="ghost"
                                     size="sm"
@@ -493,6 +534,7 @@ export default function V2HomePage() {
                                     <ThumbNail
                                         key={page.name}
                                         {...page}
+                                        showTranslated={showTranslated}
                                         onRemove={() => removePage(page.name)}
                                         onPreview={() => setPreviewIndex(index)}
                                     />
@@ -504,6 +546,7 @@ export default function V2HomePage() {
                             <ImagePreview
                                 pages={pages}
                                 index={previewIndex}
+                                showTranslated={showTranslated}
                                 onClose={() => setPreviewIndex(null)}
                                 onIndexChange={setPreviewIndex}
                             />
@@ -563,13 +606,13 @@ export default function V2HomePage() {
                                     <Upload className="size-4" />
                                     开始翻译
                                 </Button>
-                                <Button variant="outline" className="w-full">
+                                <Button variant="outline" className="w-full" onClick={() => onDownload(pages)}>
                                     <Download className="size-4" />
                                     下载全部
                                 </Button>
                             </div>
                         </div>
-
+            
                         <p className="text-center text-xs text-muted-foreground">
                             ✦ AI 自动识别日语、中文、英语、韩语等多种语言
                         </p>
