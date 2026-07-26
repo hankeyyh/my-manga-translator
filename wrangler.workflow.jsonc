@@ -14,7 +14,8 @@
             "vars": {
                 "NEXT_PUBLIC_SUPABASE_URL": "http://127.0.0.1:64321",
                 "MANGA_IMAGE_TRANSLATOR_BASE_URL": "http://127.0.0.1:8000",
-                "CONCURRENT_IMAGES": 2
+                "CONCURRENT_IMAGES": 2,
+                "FORCE_TRANSLATE_FAIL": 0
             },
             "workflows": [
                 {

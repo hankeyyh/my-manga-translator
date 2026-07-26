@@ -32,6 +32,7 @@ interface StartWorkflowBody {
 interface RetryWorkflowBody {
     userId: string;
     taskId: string;
+    imageIds: string[];
 }
 
 export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
@@ -193,15 +194,11 @@ export default {
         }
         // 翻译重试
         if (req.method === "POST" && url.pathname === "/retry") {
-            const { userId, taskId } = await req.json() as RetryWorkflowBody;
+            const { userId, taskId, imageIds } = await req.json() as RetryWorkflowBody;
+            if (imageIds.length === 0) {
+                return Response.json({ success: false, message: "No failed images found" }, { status: 400 });
+            }
             const supabase = createServiceRoleClient();
-            const translationService = new TranslationService(
-                new UserRepository(supabase),
-                new TranslationTaskRepository(supabase),
-                new TranslationImageRepository(supabase),
-                new TranslationStorageRepository(supabase),
-                new PricingConfigRepository(supabase),
-            );
             const creditService = new CreditService(
                 new TopUpConfigRepository(supabase),
                 new UserTransactionsRepository(supabase),
@@ -209,40 +206,27 @@ export default {
                 new UserCreditsRepository(supabase),
             );
 
-            // 获取任务失败图片
-            const failedImagesResult = await translationService.getFailedImages(taskId);
-            if (failedImagesResult.error) {
-                return Response.json({ success: false, message: failedImagesResult.error.message }, { status: 500 });
+            // 重试
+            const prepareResult = await creditService.prepareImagesForRetry(userId, taskId, imageIds);
+            if (prepareResult.error) {
+                return Response.json({ success: false, message: prepareResult.error.message }, { status: 500 });
             }
-            const images = failedImagesResult.data!;
-            if (images.length === 0) {
-                return Response.json({ success: false, message: "No failed images found" }, { status: 400 });
-            }
-            const imageIds = images.map((value) => value.id);
-            // 批量重试：要求本批图处于同一 retry_count 轮次
-            const currentAttempts = images.map((img) => img.retryCount ?? 0);
-            if (new Set(currentAttempts).size > 1) {
-                // 部分图已重试过、部分没有 → 应拒绝或拆开两批 workflow
-                return Response.json({ success: false, message: "images retry_count not same" }, { status: 500 });
-            }
-            const retryCnt = currentAttempts[0] + 1;
-            // 重新冻结积分
-            const freezeResult = await creditService.freezeImageCreditsForRetry(userId, taskId, imageIds, retryCnt);
-            if (freezeResult.error) {
-                return Response.json({ success: false, message: freezeResult.error.message }, { status: 500 });
-            }
-            // failed -> pending
-            const resetResult = await translationService.markImagesFromFailedToPending(imageIds, retryCnt);
-            if (resetResult.error) {
-                // IF 失败，无法batch_refund回退积分，因为image.retry_count仍为旧值，和credit_logs.retry_count对不上
-                return Response.json({ success: false, message: resetResult.error.message }, { status: 500 });
+            const prepareData = prepareResult.data!;
+            // 失败图片已经重试，提前返回
+            if (prepareData.newly_prepared.length === 0) {
+                return Response.json({
+                    success: true,
+                    taskId,
+                    workflowInstanceIds: [],
+                    alreadyPrepared: prepareData.already_prepared,
+                }, { status: 200 });
             }
             // 发起workflow
             const batchSize = Math.max(1, parseInt(env.CONCURRENT_IMAGES, 10) || 1);
-            const imageIdBatches = chunkImageIds(imageIds, batchSize);
+            const imageIdBatches = chunkImageIds(prepareData.newly_prepared, batchSize);
             const instances = await env.MY_WORKFLOW.createBatch(
                 imageIdBatches.map((imageIds, index) => ({
-                    id: `retry-${retryCnt}-${taskId}-${index}`,
+                    id: `retry-${taskId}-${index}-${Date.now()}`,
                     params: { userId, taskId, imageIds },
                 })),
             );

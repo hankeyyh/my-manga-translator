@@ -30,6 +30,11 @@ const CREDIT_RPC_ERRORS = {
         name: "ImageNotFoundError",
         message: "image not found",
     },
+    CONCURRENT_MODIFICATION_IMAGE_ERROR: {
+        code: "P0003",
+        name: "ConcurrentModificationImageError",
+        message: "concurrent modification on image"
+    }
 } as const;
 
 export const CREDIT_BALANCE_NOT_ENOUGH_NAME = CREDIT_RPC_ERRORS.CREDIT_BALANCE_NOT_ENOUGH.name;

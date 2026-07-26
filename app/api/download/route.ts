@@ -50,6 +50,6 @@ export async function GET(request: NextRequest) {
 }
 
 /**
+ * LEARN
  * http header multipart
- * Date 如何格式化输出
  */

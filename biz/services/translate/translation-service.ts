@@ -448,6 +448,12 @@ export class TranslationService {
         const successImageIds: string[] = [];
         const failedImageIds: string[] = [];
 
+        // DEBUG
+        if (process.env.FORCE_TRANSLATE_FAIL === "1") {
+            await this.markImagesFailed(imageIds, "dev forced fail");
+            return { successImageIds: [], failedImageIds: imageIds };
+        }
+
         // 1. 下载原始图片
         const { validImages, blobs: originalImages } = await this.downloadOriginalImages(images);
         const validImageIds = validImages.map((value) => value.id);

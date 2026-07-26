@@ -67,4 +67,14 @@ export class UserCreditsRepository {
         });
         return handleRpcResult(result);
     }
+
+    // 重试翻译
+    async prepareImagesForRetry(userId: string, taskId: string, imageIds: string[]): Promise<Result<{ newly_prepared: string[], already_prepared: string[] }>> {
+        const result = await this.supabase.rpc("prepare_images_for_retry", {
+            p_user_id: userId,
+            p_task_id: taskId,
+            p_image_ids: imageIds,
+        });
+        return handleRpcResult(result);
+    }
 }

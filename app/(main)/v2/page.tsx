@@ -219,6 +219,7 @@ export default function V2HomePage() {
     const [translateMode, setTranslateMode] = useState<string>(SUPPORTED_MODE[0]);
     const [fontStyle, setFontStyle] = useState<string>(SUPPORTED_FONT_STYLE[0]);
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+    const [retryLoading, setRetryLoading] = useState<boolean>(false);
     const [polling, setPolling] = useState<boolean>(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const [taskId, setTaskId] = useState<string | null>(null);
@@ -261,7 +262,7 @@ export default function V2HomePage() {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
-    }
+    };
 
     // 为了释放object url，需要保存pages引用
     useEffect(() => {
@@ -284,6 +285,7 @@ export default function V2HomePage() {
         setTaskId(null);
         setTaskStatus(null);
         setSubmitLoading(false);
+        setRetryLoading(false);
         setPolling(false);
         setShowTranslated(true);
         clearIntervalRef();
@@ -311,6 +313,7 @@ export default function V2HomePage() {
                 setTaskStatus(null);
                 setPolling(false);
                 setSubmitLoading(false);
+                setRetryLoading(false);
                 clearIntervalRef();
             }
 
@@ -324,6 +327,12 @@ export default function V2HomePage() {
             return;
         }
         setSubmitLoading(true);
+        setPages((prev) => prev.map((value) => {
+            return {
+                ...value,
+                status: "pending",
+            };
+        }));
         try {
             const formData = new FormData();
             const conf = buildTranslationConfig(targetLang, translateMode, fontStyle);
@@ -340,32 +349,83 @@ export default function V2HomePage() {
                 throw new Error(data.error);
             }
             setTaskId(data.taskId!);
+            setPolling(true);
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
             toast.error(errMsg);
             console.error(errMsg);
+            setPages((prev) => prev.map((value) => {
+                return {
+                    ...value,
+                    status: "failed",
+                };
+            }));
         } finally {
             setSubmitLoading(false);
         }
     };
 
-    // 轮询任务 
-    // TODO 缓存
-    // TODO 重试
-    // TODO 历史页
-    useEffect(() => {
-        if (!taskId || polling) {
+    // 重试翻译
+    const retryTaskImages = async (taskId: string | null, imageIds: string[]) => {
+        if (!taskId || imageIds.length === 0 || retryLoading) {
             return;
         }
-        setPolling(true);
+        setRetryLoading(true);
+        const retryIdSet = new Set(imageIds);
+        setPages((prev) => prev.map((value) => {
+            return value.imageId && retryIdSet.has(value.imageId) ? {
+                ...value,
+                status: "pending",
+            } : value;
+        }));
+        try {
+            const response = await fetch("/api/translate/retry", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ taskId, imageIds })
+            });
+            if (!response.ok) {
+                const { error } = await response.json() as { error: string; };
+                throw new Error(error);
+            }
+            setPolling(true);
+        } catch (err) {
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            toast.error(errMsg);
+            console.error(errMsg);
+            setPages((prev) => prev.map((value) => {
+                return value.imageId && retryIdSet.has(value.imageId) ? {
+                    ...value,
+                    status: "failed",
+                } : value;
+            }));
+        } finally {
+            setRetryLoading(false);
+        }
+    };
+
+    // 轮询任务 
+    // TODO 缓存
+    // TODO 历史页
+    useEffect(() => {
+        if (!taskId || !polling) {
+            return;
+        }
+
         const startedAt = Date.now();
-        intervalRef.current = setInterval(async () => {
+        const poll = async () => {
             // 轮询 limit 5min
             if (Date.now() - startedAt > 5 * 60 * 1000) {
                 clearIntervalRef();
                 setPolling(false);
                 toast.error("翻译超时，请重试");
                 console.error("Translation timeout");
+                // 标记剩余图片失败
+                setPages((prev) => prev.map((page) => {
+                    return page.status !== "completed" ? { ...page, status: "failed" } : page;
+                }));
                 return;
             }
             try {
@@ -374,15 +434,10 @@ export default function V2HomePage() {
                 if (!response.ok) {
                     throw new Error(data.error);
                 }
-                const newPages = [...pages];
-                for (let i = 0; i < data.images.length; i++) {
-                    newPages[i].status = data.images[i].status;
-                    newPages[i].resultUrl = data.images[i].resultImageUrl;
-                    newPages[i].imageId = data.images[i].id;
-                }
                 setTaskStatus(data.status);
                 setPages((prev) =>
                     prev.map((page, i) => {
+                        // 需要保证前后端图片顺序一致
                         const img = data.images[i];
                         // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
                         if (!img || page.status === "completed") return page;
@@ -390,6 +445,7 @@ export default function V2HomePage() {
                             ...page,
                             status: img.status,
                             resultUrl: img.resultImageUrl,
+                            imageId: img.id,
                         };
                     })
                 );
@@ -405,12 +461,17 @@ export default function V2HomePage() {
                 clearIntervalRef();
                 setPolling(false);
             }
+        };
+
+        void poll();
+        intervalRef.current = setInterval(() => {
+            void poll();
         }, 1000);
 
         return () => {
             clearIntervalRef();
         };
-    }, [taskId]);
+    }, [taskId, polling]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -503,7 +564,7 @@ export default function V2HomePage() {
                 <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
                     <div className="mx-auto max-w-5xl space-y-4 px-4">
                         <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
-                       
+
                         <div className="space-y-2">
                             <div className="flex items-center justify-end gap-3">
                                 {isTaskEnded(taskStatus) && (
@@ -537,6 +598,7 @@ export default function V2HomePage() {
                                         showTranslated={showTranslated}
                                         onRemove={() => removePage(page.name)}
                                         onPreview={() => setPreviewIndex(index)}
+                                        onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
                                     />
                                 ))}
                             </div>
@@ -612,7 +674,7 @@ export default function V2HomePage() {
                                 </Button>
                             </div>
                         </div>
-            
+
                         <p className="text-center text-xs text-muted-foreground">
                             ✦ AI 自动识别日语、中文、英语、韩语等多种语言
                         </p>

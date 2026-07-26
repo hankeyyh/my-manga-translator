@@ -19,6 +19,7 @@ export type ThumbNailProps = MangaPage & {
     showTranslated?: boolean;
     onRemove?: () => void;
     onPreview?: () => void;
+    onRetry?: () => void;
 };
 
 function onDownload(page: MangaPage) {
@@ -28,7 +29,7 @@ function onDownload(page: MangaPage) {
     window.location.href = `${window.origin}/api/download?imageIds=${page.imageId}`;
 }
 
-export function ThumbNail({ showTranslated = true, onRemove, onPreview, ...props }: ThumbNailProps) {
+export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, ...props }: ThumbNailProps) {
     const isPending = props.status === "pending";
     const isProcessing = props.status === "processing";
     const showStatusOverlay = isPending || isProcessing;
@@ -103,7 +104,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, ...props
                         </span>
                     )}
                     {props.status === "failed" && (
-                        <Button size="sm" variant="outline" className="h-7 px-2 text-xs">
+                        <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onRetry}>
                             重试
                         </Button>
                     )}
