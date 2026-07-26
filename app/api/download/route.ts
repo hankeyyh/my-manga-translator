@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         new PricingConfigRepository(supabase),
     );
     const result = await translationService.downloadResultZip(imageIds);
-    if (result.error) {
+    if (result.error || !result.data) {
         return NextResponse.json({ error: "Internal Server Error"}, { status: 500 });
     }
     const zipped = result.data;
