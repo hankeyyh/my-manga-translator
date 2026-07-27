@@ -145,6 +145,11 @@ function chunkImageIds(imageIds: string[], size: number): string[][] {
     return chunks;
 }
 
+/**
+ * TODO
+ * chatgpt ratelimit 无法中止重试
+ */
+
 export default {
     async fetch(req: Request, env: Env): Promise<Response> {
         const url = new URL(req.url);

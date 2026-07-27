@@ -185,11 +185,6 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: totalCost, error: null };
     }
 
-    // 计算实际消费
-    async calculateActualCredits() {
-
-    }
-
     // 冻结积分
     async freezeTaskCredits(userId: string, taskId: string, frozenCredits: number): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.freezeTaskCredits(userId, taskId, frozenCredits);
@@ -204,31 +199,6 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: null, error: null };
     }
 
-    // 翻译重试，冻结积分
-    async freezeImageCreditsForRetry(userId: string, taskId: string, imageIds: string[], retryCnt: number): Promise<BizResult<void>> {
-        const result = await this.userCreditRepo.freezeImageCreditsForRetry(userId, taskId, imageIds, retryCnt);
-        if (result.error) {
-            console.error(`freezeImageCreditsForRetry, repo.freezeImageCreditsForRetry fail, userId: ${userId}, taskId: ${taskId}, 
-                imageIds: ${imageIds}, retryCnt: ${retryCnt}, error: ${result.error}`);
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: null, error: null };
-    }
-
-    // 核销积分
-    async captureImageCredits(userId: string, taskId: string, imageId: string, consumeCredits: number): Promise<BizResult<void>> {
-        const result = await this.userCreditRepo.captureImageCredits(userId, taskId, imageId, consumeCredits);
-        if (result.error) {
-            console.error(`captureImageCredits, repo.captureImageCredits fail, error: ${result.error}, 
-                imageId: ${imageId}, consumeCredits: ${consumeCredits}`);
-            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME) {
-                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, data: null, error: result.error };
-            }
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: null, error: null };
-    }
-
     // 批量核销积分
     async batchCaptureImageCredits(userId: string, imageIds: string[]): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.batchCaptureImageCredits(userId, imageIds);
@@ -237,20 +207,6 @@ export class CreditService {
                 imageIds: ${imageIds}`);
             if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME) {
                 return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, data: null, error: result.error };
-            }
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: null, error: null };
-    }
-
-    // 退还积分
-    async refundImageCredits(userId: string, taskId: string, imageId: string, refundCredits: number): Promise<BizResult<void>> {
-        const result = await this.userCreditRepo.refundImageCredits(userId, taskId, imageId, refundCredits);
-        if (result.error) {
-            console.error(`refundImageCredits, repo.refundImageCredits fail, error: ${result.error}, 
-                imageId: ${imageId}, refundCredits: ${refundCredits}`);
-            if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME) {
-                return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, data: null, error: result.error };
             }
             return { code: DB_ERROR_CODE, data: null, error: result.error };
         }

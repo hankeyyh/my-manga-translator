@@ -1,7 +1,6 @@
-import { CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, LOGIC_ERROR_CODE, NETWORK_ERROR_CODE, REMOTE_LOGIC_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
-import { Result } from "@/types/do/response";
+import { CHECK_PARAM_ERROR_CODE, DB_ERROR_CODE, NETWORK_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import { BizResult } from "@/types/dto/response";
-import { ImageStatus, TranslationImage } from "@/types/do/translation-image";
+import { TranslationImage } from "@/types/do/translation-image";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { getAlgoBaseUrl } from "@/biz/utils/url";
 import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
@@ -9,15 +8,11 @@ import { CreateImageParams, TranslationImageRepository } from "@/biz/repositorie
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
-import { TranslateImageFailedResult, TranslateImageSuccessResult, TranslationImageView } from "@/types/dto/translation-image";
+import { TranslationImageView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
 import { packZip } from "@/biz/utils/pack";
-
-const MAX_TRANSLATION_RETRIES = 0; // 目前不允许重试
-const RESULT_CHECK_INTERVAL = 10000; // 10 秒检查一次结果
-const RESULT_CHECK_TIMEOUT = 300000; // 5 分钟超时
 
 export class TranslationService {
 
@@ -208,161 +203,6 @@ export class TranslationService {
         return { code: SUCCESS_CODE, data: images, error: null };
     }
 
-    // 实际翻译图片
-    async translateImage(imageId: string): Promise<BizResult<TranslateImageSuccessResult | TranslateImageFailedResult>> {
-        console.log(`📝 Processing image: ${imageId}`);
-        // 1. 乐观锁抢占：仅 status=pending 时可更新为 processing
-        const claimResult = await this.imageRepo.batchGetPendingImageForProcessing([imageId]);
-        if (claimResult.error) {
-            console.error('Failed to claim image:', claimResult.error.message);
-            await this.markImagesFailed([imageId], `Failed to claim image: ${claimResult.error.message}`);
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: "",
-                    taskId: "",
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: 0,
-                },
-                error: claimResult.error
-            };
-        }
-        if (!claimResult.data || claimResult.data.length === 0) {
-            console.debug(`Image ${imageId} already claimed by another worker, skipping`);
-            return { code: SUCCESS_CODE, data: null, error: null };
-        }
-        const image = claimResult.data[0];
-
-        // 2. 获取任务配置 (从图片关联的任务获取)
-        const taskResult = await this.taskRepo.getTask(image.taskId);
-        if (taskResult.error) {
-            console.error('Failed to get task:', taskResult.error.message);
-            await this.markImagesFailed([imageId], `Failed to get task: ${taskResult.error.message}`);
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: "", // TODO 没有task就不知道userId，怎么做？
-                    taskId: image.taskId,
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: 0,
-                },
-                error: taskResult.error
-            };
-        }
-        const task = taskResult.data!;
-        const config = task.config;
-
-        const consumeCredits = image.credits;
-        console.debug("consumeCredits: ", consumeCredits);
-
-        // 3. 下载原始图片
-        const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
-        if (downloadOriginalImageResult.error) {
-            console.error('Failed to download original image:', downloadOriginalImageResult.error.message);
-            await this.markImagesFailed([imageId], `Failed to download original image: ${downloadOriginalImageResult.error.message}`);
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: consumeCredits,
-                },
-                error: downloadOriginalImageResult.error
-            };
-        }
-        const originalImage = downloadOriginalImageResult.data!;
-        console.debug("originalImage:", originalImage);
-
-        // 4. 提交到 Modal 服务
-        const today = new Date().toISOString().slice(0, 10);
-        const finalFilePath = `${task.userId}/${today}/output/${task.id}_${image.imageIndex}.png`;
-        config.save = {
-            save_to: "supabase_storage",
-            supabase_storage_bucket: "translation_storage",
-            supabase_storage_path: finalFilePath,
-        };
-        const submitResult = await this.submitTranslation(originalImage, config);
-        if (submitResult.error) {
-            console.error('Failed to submit translation:', submitResult.error.message);
-            await this.markImagesFailed([imageId], `Failed to submit translation: ${submitResult.error.message}`);
-            return {
-                code: submitResult.code,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: consumeCredits,
-                },
-                error: submitResult.error
-            };
-        }
-        const reader = submitResult.data!;
-
-        // 5. 等待翻译完成
-        const waitResult = await this.waitTranslationComplete(reader);
-        if (waitResult.error) {
-            console.error('algo svr return error:', waitResult.error.message);
-            await this.markImagesFailed([imageId], `Talgo svr return error:: ${waitResult.error}`);
-            return {
-                code: waitResult.code,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: consumeCredits,
-                },
-                error: waitResult.error
-            };
-        }
-
-        // TODO 需要查storage，确认图片已上传
-        // 6. 更新图片状态为 completed (触发器会自动更新任务进度)
-        const updateResultImageResult = await this.imageRepo.updateImage(imageId, {
-            status: 'completed',
-            resultImagePath: finalFilePath,
-            completedAt: new Date().toISOString(),
-        });
-        if (updateResultImageResult.error) {
-            console.error('Failed to update image status:', updateResultImageResult.error.message);
-            await this.markImagesFailed([imageId], `Failed to update image result: ${updateResultImageResult.error.message}`);
-            return {
-                code: DB_ERROR_CODE,
-                data: {
-                    userId: task.userId,
-                    taskId: task.id,
-                    imageId: imageId,
-                    shoudRetry: false,
-                    needRefund: true,
-                    refundCredits: consumeCredits,
-                },
-                error: updateResultImageResult.error
-            };
-        }
-        console.log(`✅ Image ${imageId} processed successfully`);
-
-        return {
-            code: SUCCESS_CODE,
-            data: {
-                userId: task.userId,
-                taskId: task.id,
-                imageId: imageId,
-                consumeCredits: consumeCredits,
-            },
-            error: null
-        };
-    }
-
     async batchGetPendingImageForProcessing(imageIds: string[]): Promise<BizResult<TranslationImage[]>> {
         const claimResult = await this.imageRepo.batchGetPendingImageForProcessing(imageIds);
         if (claimResult.error) {
@@ -377,22 +217,6 @@ export class TranslationService {
             return { code: DB_ERROR_CODE, data: null, error: taskResult.error };
         }
         return { code: SUCCESS_CODE, data: taskResult.data, error: null };
-    }
-
-    async getFailedImages(taskId: string): Promise<BizResult<TranslationImage[]>> {
-        const result = await this.imageRepo.getFailedImages(taskId);
-        if (result.error) {
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: result.data, error: null };
-    }
-
-    async getSuccessImages(taskId: string): Promise<BizResult<TranslationImage[]>> {
-        const result = await this.imageRepo.getSuccessImages(taskId);
-        if (result.error) {
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 
     async downloadOriginalImages(images: TranslationImage[]): Promise<{ validImages: TranslationImage[], blobs: Blob[]; }> {
@@ -544,25 +368,6 @@ export class TranslationService {
         return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 
-    // 翻译重试，将failed图片重新标记为pending
-    async markImagesFromFailedToPending(imageIds: string[], retryCount: number): Promise<BizResult<string[]>> {
-        const result = await this.imageRepo.markImagesFromFailedToPending(imageIds, retryCount);
-        if (result.error) {
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: result.data, error: null };
-    }
-
-    // 获取pending图片
-    async getPendingImages(limit: number): Promise<BizResult<TranslationImage[]>> {
-        const result = await this.imageRepo.getPendingImages(limit);
-        if (result.error) {
-            console.error("getPendingImages failed, error: ", result.error.message);
-            return { code: DB_ERROR_CODE, data: null, error: result.error };
-        }
-        return { code: SUCCESS_CODE, data: result.data!, error: null };
-    }
-
     // 获取任务图片
     async getTaskPendingImages(taskId: string): Promise<BizResult<TranslationImage[]>> {
         const result = await this.imageRepo.getPendingImagesByTask(taskId);
@@ -573,51 +378,7 @@ export class TranslationService {
         return { code: SUCCESS_CODE, data: result.data!, error: null };
     }
 
-    // 重置超时的图片
-    async resetStuckImages() {
-        // 处理超过10m的图片
-        const stuckImagesResult = await this.imageRepo.getStuckImages(10);
-        if (stuckImagesResult.error) {
-            console.error('❌ Failed to get stuck images:', stuckImagesResult.error.message);
-            return;
-        }
-        const stuckImages = stuckImagesResult.data!;
-        for (const image of stuckImages) {
-            await this.markImagesFailed([image.id], `Image stuck for too long`);
-        }
-    }
-
-    async submitTranslation(imageBlob: Blob, config: TranslationConfig): Promise<BizResult<ReadableStreamDefaultReader>> {
-        const algoBaseUrl = getAlgoBaseUrl();
-        try {
-            const bodyData = new FormData();
-            bodyData.append("image", imageBlob);
-            bodyData.append("config", JSON.stringify(config));
-            const response = await fetch(`${algoBaseUrl}/translate/with-form/image/stream/web`, {
-                method: "POST",
-                body: bodyData,
-            });
-            if (!response.ok) {
-                console.error(`submitTranslation, fetch algo svr fail, error: ${response.statusText}`);
-                return { code: NETWORK_ERROR_CODE, data: null, error: new Error("fetch algo svr fail") };
-            }
-            const reader = response.body?.getReader();
-            if (!reader) {
-                console.error("submitTranslation, no response body");
-                return { code: NETWORK_ERROR_CODE, data: null, error: new Error("no response body") };
-            }
-            return { code: SUCCESS_CODE, data: reader, error: null };
-        } catch (err) {
-            console.error(`submitTranslation, fetch algo svr fail, error: ${err}`);
-            return {
-                code: NETWORK_ERROR_CODE,
-                data: null,
-                error: err instanceof Error ? err : new Error(String(err)),
-            };
-        }
-    }
-
-    async submitBatchTranslation(imageBlobs: Blob[], config: TranslationConfig): Promise<BizResult<ReadableStreamDefaultReader>> {
+    private async submitBatchTranslation(imageBlobs: Blob[], config: TranslationConfig): Promise<BizResult<ReadableStreamDefaultReader>> {
         const algoBaseUrl = getAlgoBaseUrl();
         try {
             const bodyData = new FormData();
@@ -649,61 +410,7 @@ export class TranslationService {
         }
     }
 
-    async waitTranslationComplete(reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>): Promise<BizResult<Blob>> {
-        let buffer: Uint8Array<ArrayBuffer> = new Uint8Array();
-        const textDecoder = new TextDecoder("utf-8");
-        try {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) {
-                    // 不应该走到这里，通过协议status判断结束
-                    return { code: LOGIC_ERROR_CODE, data: null, error: new Error("data not completed") };
-                }
-                if (!value || value.length === 0) {
-                    continue;
-                }
-                // merge value
-                buffer = this.mergeUint8Array(buffer, value);
-
-                // 解析流式数据: [1 byte status][4 bytes size][n bytes data]
-                while (buffer.byteLength >= 5) {
-                    const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-                    const status = view.getUint8(0);
-                    const dataSize = view.getUint32(1, false);
-                    const frameSize = 5 + dataSize;
-                    if (view.byteLength < frameSize) {
-                        break;
-                    }
-                    // 当前完整数据
-                    const data = buffer.slice(5, frameSize);
-                    // buffer 剩下的数据属于下一轮
-                    buffer = buffer.slice(frameSize);
-
-                    // 处理数据包, status=0 正常返回; status=1 过程数据; status=2 异常报错; status=3 排队中; status=4 即将开始
-                    if (status === 0) {
-                        const blob = new Blob([data], { type: "image/png" });
-                        return { code: SUCCESS_CODE, data: blob, error: null };
-                    } else if (status === 1) {
-                        const stateText = textDecoder.decode(data);
-                        console.debug(`waitTranslationComplete, stateText: ${stateText}`);
-                    } else if (status === 2) {
-                        const errText = textDecoder.decode(data);
-                        console.error(`waitTranslationComplete, algo svr return error: ${errText}`);
-                        return { code: REMOTE_LOGIC_ERROR_CODE, data: null, error: new Error(errText) };
-                    } else if (status === 3) {
-                        const queuePos = textDecoder.decode(data);
-                        console.debug(`waitTranslationComplete, waiting, queue pos: ${queuePos}`);
-                    } else if (status === 4) {
-                        console.debug("waitTranslationComplete, ready to start!");
-                    }
-                }
-            }
-        } finally {
-            await reader.cancel();
-        }
-    }
-
-    async* parseTranslationStream(reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>): AsyncGenerator<TranslationStreamEvent, void, void> {
+    private async* parseTranslationStream(reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>): AsyncGenerator<TranslationStreamEvent, void, void> {
         let buffer: Uint8Array<ArrayBuffer> = new Uint8Array();
         const textDecoder = new TextDecoder("utf-8");
         try {
@@ -780,7 +487,7 @@ export class TranslationService {
         }
     }
 
-    parseProgressEvent(message: string): TranslationStreamEvent | null {
+    private parseProgressEvent(message: string): TranslationStreamEvent | null {
         if (message.startsWith("image_completed:")) {
             const parsed = this.parseImageProgressMessage(message, "image_completed:");
             if (!parsed) {
@@ -795,27 +502,6 @@ export class TranslationService {
             return { type: "image_failed", imageId: parsed.imageId, error: parsed.payload };
         }
         return { type: "progress", message: message };
-    }
-
-    async onProgressUpdated(data: Uint8Array<ArrayBuffer>) {
-        const textDecoder = new TextDecoder("utf-8");
-        const message = textDecoder.decode(data);
-        console.debug(`onProgressUpdated, state: ${message}`);
-        if (message.startsWith("image_completed:")) {
-            const parsed = this.parseImageProgressMessage(message, "image_completed:");
-            if (!parsed) {
-                console.error(`onProgressUpdated, invalid image_completed message: ${message}`);
-                return;
-            }
-            await this.markImageSuccess(parsed.imageId, parsed.payload);
-        } else if (message.startsWith("image_failed:")) {
-            const parsed = this.parseImageProgressMessage(message, "image_failed:");
-            if (!parsed) {
-                console.error(`onProgressUpdated, invalid image_failed message: ${message}`);
-                return;
-            }
-            await this.markImagesFailed([parsed.imageId], parsed.payload);
-        }
     }
 
     private parseImageProgressMessage(message: string, prefix: string): { imageId: string; payload: string; } | null {
@@ -835,24 +521,10 @@ export class TranslationService {
         return { imageId, payload };
     }
 
-    async onImageTranslateError(data: Uint8Array<ArrayBuffer>) {
-        const textDecoder = new TextDecoder("utf-8");
-        const message = textDecoder.decode(data);
-        console.error(`onImageTranslateError, err: ${message}`);
-    }
-
-    async onBatchTranslateCompleted(data: Uint8Array<ArrayBuffer>) {
-        console.debug(`onBatchTranslateCompleted, all images completed!`);
-    }
-
-    mergeUint8Array(a: Uint8Array<ArrayBuffer>, b: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer> {
+    private mergeUint8Array(a: Uint8Array<ArrayBuffer>, b: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer> {
         const merged = new Uint8Array(a.length + b.length);
         merged.set(a, 0);
         merged.set(b, a.length);
         return merged;
-    }
-
-    computeImageRetryCount(image: TranslationImage): number {
-        return Math.min((image.retryCount || 0) + 1, MAX_TRANSLATION_RETRIES);
     }
 }
