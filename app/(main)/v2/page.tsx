@@ -452,7 +452,6 @@ export default function V2HomePage() {
 
     /**
      * TODO 如果重试的时候变换了config无法生效，retry默认使用提交时的task配置
-     * 因为超时重试，db图片可能已经completed,processing无法作为重试对象
      */
     // 重试翻译
     const retryTaskImages = async (taskId: string | null, imageIds: string[]) => {
@@ -525,15 +524,13 @@ export default function V2HomePage() {
                 }
                 setTaskStatus(data.status);
                 setPages((prev) => {
-                    // 计数器必须在 updater 内部，避免 Strict Mode 双调用时 i 被累加导致映射错位
-                    let i = 0;
                     return prev.map((page) => {
                         // 缓存图片数据已完整，跳过
                         if (page.cached === true) {
                             return page;
                         }
                         // 需要保证前后端图片顺序一致
-                        const img = data.images[i++];
+                        const img = data.images.find((value) => value.filename === page.name);
                         // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
                         if (!img || page.status === "completed") return page;
                         return {
