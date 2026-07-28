@@ -76,11 +76,12 @@ function buildCachedResultImages(
     trackCachedResultUrl: (url: string) => void,
 ): ApiTranslationTaskImage[] {
     return cached.map(({ originalIndex, page, hit }) => {
-        const resultImageUrl = translationCacheService.createResultObjectUrl(hit);
+        const resultImageUrl = URL.createObjectURL(hit.resultBlob);
         trackCachedResultUrl(resultImageUrl);
         return {
             id: `local-cache-${page.id}`,
             status: "completed",
+            filename: "",
             imageIndex: originalIndex,
             taskId: "local-cache",
             originalImageUrl: page.previewUrl,

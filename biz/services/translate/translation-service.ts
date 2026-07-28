@@ -410,6 +410,9 @@ export class TranslationService {
         }
     }
 
+    /**
+     * TODO 没有超时控制
+     */
     private async* parseTranslationStream(reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>): AsyncGenerator<TranslationStreamEvent, void, void> {
         let buffer: Uint8Array<ArrayBuffer> = new Uint8Array();
         const textDecoder = new TextDecoder("utf-8");

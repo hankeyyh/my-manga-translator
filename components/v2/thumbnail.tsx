@@ -1,35 +1,20 @@
 "use client";
 
-import { Clock, Download, Eye, Loader2, X } from "lucide-react";
+import { Clock, Eye, Loader2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { ImageStatus } from "@/types/do/translation-image";
-
-export interface MangaPage {
-    name: string,
-    originalFile: File,
-    originalUrl: string,
-    originalSize: string,
-    status?: ImageStatus,
-    resultUrl?: string,
-    imageId?: string,
-}
+import { MangaPage } from "@/types/dto/manga-page";
 
 export type ThumbNailProps = MangaPage & {
     showTranslated?: boolean;
     onRemove?: () => void;
     onPreview?: () => void;
     onRetry?: () => void;
+    onContinueWait?: () => void;
+    onDownload?: () => void;
 };
 
-function onDownload(page: MangaPage) {
-    if (!page.imageId || page.status !== "completed") {
-        return;
-    }
-    window.location.href = `${window.origin}/api/download?imageIds=${page.imageId}`;
-}
-
-export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, ...props }: ThumbNailProps) {
+export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, onContinueWait, onDownload, ...props }: ThumbNailProps) {
     const isPending = props.status === "pending";
     const isProcessing = props.status === "processing";
     const showStatusOverlay = isPending || isProcessing;
@@ -103,13 +88,18 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                             processing
                         </span>
                     )}
+                    {props.status === "stalled" && (
+                        <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onContinueWait}>
+                            继续等待
+                        </Button>
+                    )}
                     {props.status === "failed" && (
                         <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onRetry}>
                             重试
                         </Button>
                     )}
-                    {props.status === "completed" && (
-                        <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => onDownload(props)}>
+                    {props.status === "completed" && onDownload && (
+                        <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onDownload}>
                             下载
                         </Button>
                     )}

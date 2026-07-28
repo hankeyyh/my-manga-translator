@@ -4,7 +4,7 @@ import {
     idbGetAll,
     idbPut,
     openIndexedDB,
-} from "@/biz/repositories/translation-cache/indexdb";
+} from "@/biz/repositories/translation-cache/indexeddb";
 import {
     CachedTranslationEntry,
 } from "@/types/dto/cache";

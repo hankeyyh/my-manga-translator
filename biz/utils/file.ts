@@ -10,6 +10,7 @@ export function getFileExtension(file: File) {
         : undefined;
     return extFromName || extFromType;
 }
+
 /** 对 File 原始字节计算 SHA-256 hex 字符串 */
 export async function computeFileHash(file: File): Promise<string> {
     const buffer = await file.arrayBuffer();

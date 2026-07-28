@@ -1,7 +1,8 @@
 import { TranslationCacheStore } from "@/biz/repositories/translation-cache/translation-cache-store";
 import { bytesToHex, computeFileHash } from "@/biz/utils/file";
+import { MangaPage } from "@/types/dto/manga-page";
 import { TranslationConfig } from "@/types/do/translation-config";
-import { CacheLookupHit, PartitionResult } from "@/types/dto/cache";
+import { PartitionResult } from "@/types/dto/cache";
 import { LocalPage } from "@/types/dto/local-page";
 
 /**
@@ -44,6 +45,16 @@ async function computeConfigHash(config: TranslationConfig): Promise<string> {
 
 function buildCacheKey(imageHash: string, configHash: string): string {
     return `${imageHash}:${configHash}`;
+}
+
+export interface PartitionResultV2 {
+    cached: Array<{
+        mangaPage: MangaPage,
+        cacheResultBlob: Blob;
+    }>,
+    uncached: Array<{
+        mangaPage: MangaPage,
+    }>;
 }
 
 /** 对外业务 API，page.tsx 只依赖这一层 */
@@ -102,6 +113,32 @@ export class TranslationCacheService {
         return { cached, uncached };
     }
 
+    async partitionPagesByCacheV2(pages: MangaPage[], config: TranslationConfig): Promise<PartitionResultV2> {
+        let configHash: string;
+        try {
+            configHash = await computeConfigHash(config);
+        } catch {
+            return { cached: [], uncached: pages.map((value) => { return { mangaPage: value }; }) };
+        }
+        const cached: PartitionResultV2["cached"] = [];
+        const uncached: PartitionResultV2["uncached"] = [];
+        for (const page of pages) {
+            try {
+                const fileHash = await computeFileHash(page.originalFile);
+                const key = buildCacheKey(fileHash, configHash);
+                const entry = await this.cacheStore.get(key);
+                if (entry) {
+                    cached.push({ mangaPage: page, cacheResultBlob: entry.resultBlob });
+                } else {
+                    uncached.push({ mangaPage: page });
+                }
+            } catch (err) {
+                uncached.push({ mangaPage: page });
+            }
+        }
+        return { cached, uncached };
+    }
+
     /**
      * 翻译成功后：下载远程结果并写入缓存
      */
@@ -133,11 +170,6 @@ export class TranslationCacheService {
         } catch {
             // IndexedDB / fetch 失败时静默降级，不影响主流程
         }
-    }
-
-    /** 命中缓存时，生成可展示的 blob URL */
-    createResultObjectUrl(hit: CacheLookupHit): string {
-        return URL.createObjectURL(hit.resultBlob);
     }
 }
 

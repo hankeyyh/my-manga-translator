@@ -27,13 +27,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
-import { MangaPage, ThumbNail } from "@/components/v2/thumbnail";
+import { ThumbNail } from "@/components/v2/thumbnail";
+import { MangaPage } from "@/types/dto/manga-page";
 import { ImagePreview } from "@/components/v2/image-preview";
 import { UploadZone } from "@/components/v2/upload-zone";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
+import { translationCacheService } from "@/biz/services/translation-cache/translation-cache-service";
+import { packZip } from "@/biz/utils/pack";
 
 const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
 const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
@@ -156,6 +159,9 @@ const BLOG_POSTS = [
     { title: "多语言漫画本地化的常见坑", date: "2026-05-10" },
 ];
 
+/**
+ * TODO fontstyle 没有使用
+ */
 function buildTranslationConfig(selLang: { code: string, label: string; }, selMode: string, selFontStyle: string): TranslationConfig {
     let company: Translator;
     let modelName: string;
@@ -196,15 +202,71 @@ function buildTranslationConfig(selLang: { code: string, label: string; }, selMo
     };
 }
 
-function onDownload(pages: MangaPage[]) {
-    const imageIds = pages.map((value) => {
-        if (!value.imageId || value.status !== "completed") {
-            return;
+async function onDownload(pages: MangaPage[]) {
+    // 缓存图在本地（blob URL），远端图是签名 URL；统一在浏览器 fetch，服务端拿不到本地缓存
+    const completed = pages.filter(
+        (page) => page.status === "completed" && page.resultUrl,
+    );
+    if (completed.length === 0) {
+        return;
+    }
+    try {
+        const items = await Promise.all(
+            completed.map(async (page) => {
+                const response = await fetch(page.resultUrl!);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${page.name}`);
+                }
+                return { fileName: page.name, blob: await response.blob() };
+            }),
+        );
+
+        let fileName: string;
+        let blob: Blob;
+        if (items.length === 1) {
+            fileName = items[0].fileName;
+            blob = items[0].blob;
+        } else {
+            const zipped = await packZip(items);
+            const d = new Date();
+            const pad = (n: number) => String(n).padStart(2, "0");
+            fileName = `task-${[
+                d.getFullYear(),
+                pad(d.getMonth() + 1),
+                pad(d.getDate()),
+                pad(d.getHours()),
+                pad(d.getMinutes()),
+                pad(d.getSeconds()),
+            ].join("-")}.zip`;
+            blob = new Blob([zipped], { type: "application/zip" });
         }
-        return value.imageId;
-    });
-    const imageIdsStr = imageIds.join(",");
-    window.location.href = `${window.origin}/api/download?imageIds=${imageIdsStr}`;
+
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = fileName;
+        anchor.click();
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        const errMsg = err instanceof Error ? err.message : "Download failed";
+        toast.error(errMsg);
+        console.error(errMsg);
+    }
+}
+
+function isAllPageEnded(pages: MangaPage[]) {
+    if (pages.length === 0) {
+        return false;
+    }
+    return pages.every(
+        (page) => page.status === "completed" || page.status === "failed",
+    );
+}
+
+function hasCompletedResults(pages: MangaPage[]) {
+    const allEnded = isAllPageEnded(pages);
+    const hasCompleted = pages.some((page) => page.status === "completed");
+    return allEnded && hasCompleted;
 }
 
 export default function V2HomePage() {
@@ -225,6 +287,7 @@ export default function V2HomePage() {
     const [taskId, setTaskId] = useState<string | null>(null);
     const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
     const [showTranslated, setShowTranslated] = useState(true);
+    const submitConfigRef = useRef<TranslationConfig | null>(null);
 
     // 选择图片
     const onFilesSelected = (files: File[]): void => {
@@ -245,6 +308,7 @@ export default function V2HomePage() {
                     originalFile: file,
                     originalUrl: URL.createObjectURL(file),
                     originalSize: formatFileSize(file.size),
+                    cached: false,
                 });
             }
             return next;
@@ -254,6 +318,9 @@ export default function V2HomePage() {
     const revokeAllObjectUrls = () => {
         for (const page of pagesRef.current) {
             URL.revokeObjectURL(page.originalUrl);
+            if (page.cached && page.resultUrl) {
+                URL.revokeObjectURL(page.resultUrl);
+            }
         }
     };
 
@@ -298,6 +365,9 @@ export default function V2HomePage() {
             if (targetIndex < 0) return prev;
 
             URL.revokeObjectURL(prev[targetIndex].originalUrl);
+            if (prev[targetIndex].cached && prev[targetIndex].resultUrl) {
+                URL.revokeObjectURL(prev[targetIndex].resultUrl);
+            }
             const next = prev.filter((p) => p.name !== name);
 
             setPreviewIndex((current) => {
@@ -327,17 +397,28 @@ export default function V2HomePage() {
             return;
         }
         setSubmitLoading(true);
-        setPages((prev) => prev.map((value) => {
-            return {
-                ...value,
-                status: "pending",
-            };
-        }));
         try {
-            const formData = new FormData();
             const conf = buildTranslationConfig(targetLang, translateMode, fontStyle);
-            for (const page of pages) {
-                formData.append("images", page.originalFile);
+            submitConfigRef.current = conf;
+            // 检查缓存
+            const { cached, uncached } = await translationCacheService.partitionPagesByCacheV2(pages, conf);
+            // 已缓存的图片补充翻译结果，其他待翻译图片pending
+            setPages((prev) => prev.map((value) => {
+                const target = cached.find((cachePage) => cachePage.mangaPage.name === value.name);
+                if (target) {
+                    return { ...value, status: "completed", resultUrl: URL.createObjectURL(target.cacheResultBlob), cached: true };
+                } else {
+                    return { ...value, status: "pending" };
+                }
+            }));
+            if (uncached.length === 0) {
+                return;
+            }
+
+            // 无缓存图片提交翻译
+            const formData = new FormData();
+            for (const page of uncached) {
+                formData.append("images", page.mangaPage.originalFile);
             }
             formData.set("config", JSON.stringify(conf));
             const response = await fetch("/api/translate/submit", {
@@ -355,16 +436,24 @@ export default function V2HomePage() {
             toast.error(errMsg);
             console.error(errMsg);
             setPages((prev) => prev.map((value) => {
-                return {
-                    ...value,
-                    status: "failed",
-                };
+                if (value.status === "completed") {
+                    return value;
+                } else {
+                    return {
+                        ...value,
+                        status: "failed",
+                    };
+                }
             }));
         } finally {
             setSubmitLoading(false);
         }
     };
 
+    /**
+     * TODO 如果重试的时候变换了config无法生效，retry默认使用提交时的task配置
+     * 因为超时重试，db图片可能已经completed,processing无法作为重试对象
+     */
     // 重试翻译
     const retryTaskImages = async (taskId: string | null, imageIds: string[]) => {
         if (!taskId || imageIds.length === 0 || retryLoading) {
@@ -376,6 +465,7 @@ export default function V2HomePage() {
             return value.imageId && retryIdSet.has(value.imageId) ? {
                 ...value,
                 status: "pending",
+                cached: false,
             } : value;
         }));
         try {
@@ -407,7 +497,6 @@ export default function V2HomePage() {
     };
 
     // 轮询任务 
-    // TODO 缓存
     // TODO 历史页
     useEffect(() => {
         if (!taskId || !polling) {
@@ -424,7 +513,7 @@ export default function V2HomePage() {
                 console.error("Translation timeout");
                 // 标记剩余图片失败
                 setPages((prev) => prev.map((page) => {
-                    return page.status !== "completed" ? { ...page, status: "failed" } : page;
+                    return page.status !== "completed" ? { ...page, status: "stalled" } : page;
                 }));
                 return;
             }
@@ -435,10 +524,16 @@ export default function V2HomePage() {
                     throw new Error(data.error);
                 }
                 setTaskStatus(data.status);
-                setPages((prev) =>
-                    prev.map((page, i) => {
+                setPages((prev) => {
+                    // 计数器必须在 updater 内部，避免 Strict Mode 双调用时 i 被累加导致映射错位
+                    let i = 0;
+                    return prev.map((page) => {
+                        // 缓存图片数据已完整，跳过
+                        if (page.cached === true) {
+                            return page;
+                        }
                         // 需要保证前后端图片顺序一致
-                        const img = data.images[i];
+                        const img = data.images[i++];
                         // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
                         if (!img || page.status === "completed") return page;
                         return {
@@ -447,12 +542,23 @@ export default function V2HomePage() {
                             resultUrl: img.resultImageUrl,
                             imageId: img.id,
                         };
-                    })
-                );
+                    });
+                });
                 // 任务结束
                 if (isTaskEnded(data.status)) {
                     clearIntervalRef();
                     setPolling(false);
+                    // 写入缓存
+                    const conf = submitConfigRef.current;
+                    if (conf) {
+                        for (const img of data.images) {
+                            const targetPage = pagesRef.current.find((value) => value.name === img.filename);
+                            if (img.status !== "completed" || !img.resultImageUrl || !targetPage) {
+                                continue;
+                            }
+                            translationCacheService.saveFromResultUrl(targetPage.originalFile, conf, img.resultImageUrl);
+                        }
+                    }
                 }
             } catch (err) {
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
@@ -464,9 +570,7 @@ export default function V2HomePage() {
         };
 
         void poll();
-        intervalRef.current = setInterval(() => {
-            void poll();
-        }, 1000);
+        intervalRef.current = setInterval(() => void poll(), 1000);
 
         return () => {
             clearIntervalRef();
@@ -567,7 +671,7 @@ export default function V2HomePage() {
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-end gap-3">
-                                {isTaskEnded(taskStatus) && (
+                                {hasCompletedResults(pages) && (
                                     <div className="flex items-center gap-1.5">
                                         <Languages
                                             className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
@@ -599,6 +703,8 @@ export default function V2HomePage() {
                                         onRemove={() => removePage(page.name)}
                                         onPreview={() => setPreviewIndex(index)}
                                         onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
+                                        onContinueWait={() => void setPolling(true)}
+                                        onDownload={() => void onDownload([page])}
                                     />
                                 ))}
                             </div>
@@ -668,7 +774,7 @@ export default function V2HomePage() {
                                     <Upload className="size-4" />
                                     开始翻译
                                 </Button>
-                                <Button variant="outline" className="w-full" onClick={() => onDownload(pages)}>
+                                <Button variant="outline" className="w-full" disabled={!hasCompletedResults(pages)} onClick={() => void onDownload(pages)}>
                                     <Download className="size-4" />
                                     下载全部
                                 </Button>

@@ -5,6 +5,7 @@ export interface ApiTranslationTaskImage {
     id: string;
     status: ImageStatus;
     imageIndex: number;
+    filename: string;
     taskId: string;
     originalImageUrl: string;
     resultImageUrl: string;

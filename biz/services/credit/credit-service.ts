@@ -231,7 +231,7 @@ export class CreditService {
     async prepareImagesForRetry(userId: string, taskId: string, imageIds: string[]): Promise<BizResult<{ newly_prepared: string[], already_prepared: string[]; }>> {
         const result = await this.userCreditRepo.prepareImagesForRetry(userId, taskId, imageIds);
         if (result.error) {
-            console.error(`prepareImagesForRetry, repo.prepareImagesForRetry fail, error: ${result.error.message}`);
+            console.error(`prepareImagesForRetry, repo.prepareImagesForRetry fail, imageIds: ${imageIds}, error: ${result.error.message}`);
             if (result.error.name === CREDIT_BALANCE_NOT_ENOUGH_NAME) {
                 return { code: CREDIT_BALANCE_NOT_ENOUGH, data: null, error: result.error };
             }
