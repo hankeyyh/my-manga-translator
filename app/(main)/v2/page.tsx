@@ -694,137 +694,141 @@ export default function V2HomePage() {
                     <div className="mx-auto max-w-5xl space-y-4 px-4">
                         <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
 
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-end gap-3">
-                                {hasCompletedResults(pages) && (
-                                    <div className="flex items-center gap-1.5">
-                                        <Languages
-                                            className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
-                                            aria-hidden
-                                        />
-                                        <Switch
-                                            checked={showTranslated}
-                                            onCheckedChange={setShowTranslated}
-                                            aria-label={showTranslated ? "查看翻译图" : "查看原图"}
-                                        />
+                        {pages.length > 0 && (
+                            <>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-end gap-3">
+                                        {hasCompletedResults(pages) && (
+                                            <div className="flex items-center gap-1.5">
+                                                <Languages
+                                                    className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
+                                                    aria-hidden
+                                                />
+                                                <Switch
+                                                    checked={showTranslated}
+                                                    onCheckedChange={setShowTranslated}
+                                                    aria-label={showTranslated ? "查看翻译图" : "查看原图"}
+                                                />
+                                            </div>
+                                        )}
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-muted-foreground"
+                                            onClick={onClearAll}
+                                        >
+                                            <X className="size-3" />
+                                            全部清除
+                                        </Button>
                                     </div>
-                                )}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-muted-foreground"
-                                    onClick={onClearAll}
-                                >
-                                    <X className="size-3" />
-                                    全部清除
-                                </Button>
-                            </div>
-                            <div className="grid grid-cols-5 items-start gap-3">
-                                {pages.map((page, index) => (
-                                    <ThumbNail
-                                        key={page.name}
-                                        {...page}
+                                    <div className="grid grid-cols-5 items-start gap-3">
+                                        {pages.map((page, index) => (
+                                            <ThumbNail
+                                                key={page.name}
+                                                {...page}
+                                                showTranslated={showTranslated}
+                                                onRemove={() => removePage(page.name)}
+                                                onPreview={() => setPreviewIndex(index)}
+                                                onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
+                                                onContinueWait={() => void setPolling(true)}
+                                                onDownload={() => void onDownload([page])}
+                                            />
+                                        ))}
+                                    </div>
+                                    <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>确认清除全部内容？</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    翻译任务仍在进行中。清除后仅会清空当前工作区，后台翻译不会中止，已消耗的额度也不会退回。
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>取消</AlertDialogCancel>
+                                                <AlertDialogAction onClick={resetWorkspace}>
+                                                    确认清除
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </div>
+
+                                {previewIndex !== null && (
+                                    <ImagePreview
+                                        pages={pages}
+                                        index={previewIndex}
                                         showTranslated={showTranslated}
-                                        onRemove={() => removePage(page.name)}
-                                        onPreview={() => setPreviewIndex(index)}
-                                        onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
-                                        onContinueWait={() => void setPolling(true)}
-                                        onDownload={() => void onDownload([page])}
+                                        onClose={() => setPreviewIndex(null)}
+                                        onIndexChange={setPreviewIndex}
                                     />
-                                ))}
-                            </div>
-                            <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>确认清除全部内容？</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            翻译任务仍在进行中。清除后仅会清空当前工作区，后台翻译不会中止，已消耗的额度也不会退回。
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>取消</AlertDialogCancel>
-                                        <AlertDialogAction onClick={resetWorkspace}>
-                                            确认清除
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </div>
+                                )}
 
-                        {previewIndex !== null && (
-                            <ImagePreview
-                                pages={pages}
-                                index={previewIndex}
-                                showTranslated={showTranslated}
-                                onClose={() => setPreviewIndex(null)}
-                                onIndexChange={setPreviewIndex}
-                            />
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-sm font-medium">翻译为</p>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="outline" className="w-full justify-between">
+                                                    {targetLang.label}
+                                                    <ChevronDown className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-56">
+                                                {SUPPORTED_LANGS.map((lang) => (
+                                                    <DropdownMenuItem key={lang.code} onSelect={() => setTargetLang(lang)}>{lang.label}</DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-sm font-medium">翻译模式</p>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="outline" className="w-full justify-between">
+                                                    {translateMode}
+                                                    <ChevronDown className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-56">
+                                                {SUPPORTED_MODE.map((mode) => (
+                                                    <DropdownMenuItem key={mode} onSelect={() => setTranslateMode(mode)}>{mode}</DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-sm font-medium">字体风格</p>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="outline" className="w-full justify-between">
+                                                    {fontStyle}
+                                                    <ChevronDown className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-56">
+                                                {SUPPORTED_FONT_STYLE.map((style) => (
+                                                    <DropdownMenuItem key={style} onSelect={() => setFontStyle(style)}>{style}</DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    <div className="flex w-full flex-col gap-2 sm:w-40">
+                                        <Button className="w-full" onClick={submitTask}>
+                                            <Upload className="size-4" />
+                                            开始翻译
+                                        </Button>
+                                        <Button variant="outline" className="w-full" disabled={!hasCompletedResults(pages)} onClick={() => void onDownload(pages)}>
+                                            <Download className="size-4" />
+                                            下载全部
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <p className="text-center text-xs text-muted-foreground">
+                                    ✦ AI 自动识别日语、中文、英语、韩语等多种语言
+                                </p>
+                            </>
                         )}
-
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium">翻译为</p>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
-                                            {targetLang.label}
-                                            <ChevronDown className="size-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-56">
-                                        {SUPPORTED_LANGS.map((lang) => (
-                                            <DropdownMenuItem key={lang.code} onSelect={() => setTargetLang(lang)}>{lang.label}</DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium">翻译模式</p>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
-                                            {translateMode}
-                                            <ChevronDown className="size-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-56">
-                                        {SUPPORTED_MODE.map((mode) => (
-                                            <DropdownMenuItem key={mode} onSelect={() => setTranslateMode(mode)}>{mode}</DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium">字体风格</p>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
-                                            {fontStyle}
-                                            <ChevronDown className="size-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-56">
-                                        {SUPPORTED_FONT_STYLE.map((style) => (
-                                            <DropdownMenuItem key={style} onSelect={() => setFontStyle(style)}>{style}</DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="flex w-full flex-col gap-2 sm:w-40">
-                                <Button className="w-full" onClick={submitTask}>
-                                    <Upload className="size-4" />
-                                    开始翻译
-                                </Button>
-                                <Button variant="outline" className="w-full" disabled={!hasCompletedResults(pages)} onClick={() => void onDownload(pages)}>
-                                    <Download className="size-4" />
-                                    下载全部
-                                </Button>
-                            </div>
-                        </div>
-
-                        <p className="text-center text-xs text-muted-foreground">
-                            ✦ AI 自动识别日语、中文、英语、韩语等多种语言
-                        </p>
                     </div>
                 </section>
 
