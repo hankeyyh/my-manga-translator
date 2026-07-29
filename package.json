@@ -8,6 +8,7 @@
     "worker": "tsx biz/workers/translation.ts",
     "stripe": "stripe listen --forward-to http://localhost:3000/api/webhooks",
     "test": "jest",
+    "cf-build": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview -e dev",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy -e prod",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload -e prod",

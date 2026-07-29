@@ -10,6 +10,16 @@ import {
     Upload,
     X,
 } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -287,6 +297,7 @@ export default function V2HomePage() {
     const [taskId, setTaskId] = useState<string | null>(null);
     const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
     const [showTranslated, setShowTranslated] = useState(true);
+    const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
     const submitConfigRef = useRef<TranslationConfig | null>(null);
 
     // 选择图片
@@ -356,6 +367,14 @@ export default function V2HomePage() {
         setPolling(false);
         setShowTranslated(true);
         clearIntervalRef();
+    };
+
+    const onClearAll = (): void => {
+        if (taskId && !isTaskEnded(taskStatus)) {
+            setClearConfirmOpen(true);
+        } else {
+            resetWorkspace();
+        }
     };
 
     // 删除单张图片
@@ -430,6 +449,7 @@ export default function V2HomePage() {
                 throw new Error(data.error);
             }
             setTaskId(data.taskId!);
+            setTaskStatus("pending");
             setPolling(true);
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
@@ -480,6 +500,7 @@ export default function V2HomePage() {
                 throw new Error(error);
             }
             setPolling(true);
+            setTaskStatus("pending");
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
             toast.error(errMsg);
@@ -502,6 +523,9 @@ export default function V2HomePage() {
             return;
         }
 
+        // 当开启新任务，查之前任务的fetch需要中止，防止造成写竞态
+        const abortController = new AbortController();
+
         const startedAt = Date.now();
         const poll = async () => {
             // 轮询 limit 5min
@@ -517,7 +541,7 @@ export default function V2HomePage() {
                 return;
             }
             try {
-                const response = await fetch(`/api/translate/task/${taskId}`);
+                const response = await fetch(`/api/translate/task/${taskId}`, { signal: abortController.signal });
                 const data = await response.json() as { error?: string; } & ApiGetTranslationTaskResponse;
                 if (!response.ok) {
                     throw new Error(data.error);
@@ -558,6 +582,9 @@ export default function V2HomePage() {
                     }
                 }
             } catch (err) {
+                if (err instanceof Error && err.name === "AbortError") {
+                    return;
+                }
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
                 toast.error(errMsg);
                 console.error(errMsg);
@@ -571,6 +598,7 @@ export default function V2HomePage() {
 
         return () => {
             clearIntervalRef();
+            abortController.abort();
         };
     }, [taskId, polling]);
 
@@ -685,7 +713,7 @@ export default function V2HomePage() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-muted-foreground"
-                                    onClick={resetWorkspace}
+                                    onClick={onClearAll}
                                 >
                                     <X className="size-3" />
                                     全部清除
@@ -705,6 +733,22 @@ export default function V2HomePage() {
                                     />
                                 ))}
                             </div>
+                            <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>确认清除全部内容？</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            翻译任务仍在进行中。清除后仅会清空当前工作区，后台翻译不会中止，已消耗的额度也不会退回。
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>取消</AlertDialogCancel>
+                                        <AlertDialogAction onClick={resetWorkspace}>
+                                            确认清除
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </div>
 
                         {previewIndex !== null && (

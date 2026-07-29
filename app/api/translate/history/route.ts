@@ -15,6 +15,7 @@ function toApiTranslationTaskImage(img: TranslationImageView): ApiTranslationTas
         id: img.id,
         status: img.status,
         taskId: img.taskId,
+        filename: img.filename,
         imageIndex: img.imageIndex,
         originalImageUrl: img.originalImageUrl,
         resultImageUrl: img.resultImageUrl,
