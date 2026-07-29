@@ -39,6 +39,10 @@ export class TranslationService {
             console.error(`submitTranslationTask, repo.getCurrentUser fail, error: ${userResult.error.message}`);
             return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
         }
+        if (!userResult.data) {
+            console.error(`submitTranslationTask, user claims not found, need login`);
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: new Error("User Not Login") };
+        }
         const user = userResult.data!;
 
         // 2. 获取价格配置
@@ -96,7 +100,7 @@ export class TranslationService {
     async getTranslationTaskDetail(taskId: string): Promise<BizResult<TranslationTaskDetailView>> {
         // 获取当前用户
         const userResult = await this.userRepo.getCurrentUser();
-        if (userResult.error) {
+        if (userResult.error || !userResult.data) {
             return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
         }
         const user = userResult.data!;
@@ -160,7 +164,7 @@ export class TranslationService {
     async getUserTranslationHistory(): Promise<BizResult<TranslationImageView[]>> {
         // 1. 获取当前用户
         const userResult = await this.userRepo.getCurrentUser();
-        if (userResult.error) {
+        if (userResult.error || !userResult.data) {
             return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
         }
         const user = userResult.data!;

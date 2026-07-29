@@ -10,6 +10,7 @@ import { PricingConfig } from "@/types/do/pricing-config";
 import { TopUpConfig } from "@/types/do/topup-config";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { UserTransaction } from "@/types/do/user-transaction";
+import { UserCredit } from "@/types/do/user-credit";
 
 // 充值失败，重试次数
 const TOPUP_MAX_RETRIES = 3;
@@ -48,8 +49,13 @@ export class CreditService {
     }
 
     // 查询积分余额
-    async getCreditBalance(userId: string): Promise<number> {
-        return 0;
+    async getCreditBalance(userId: string): Promise<BizResult<UserCredit>> {
+        const { data, error } = await this.userCreditRepo.getCredits(userId);
+        if (error) {
+            console.error(`getCreditBalance, repo.getCredits fail, userId: ${userId}, error: ${error}`);
+            return { code: DB_ERROR_CODE, data: null, error: error };
+        }
+        return { code: SUCCESS_CODE, data: data, error: null };
     }
 
     // 获取积分充值配置

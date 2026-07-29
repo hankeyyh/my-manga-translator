@@ -166,7 +166,7 @@ export class UserRepository {
         if (!data?.claims) {
             return {
                 data: null,
-                error: new Error('获取当前用户失败: 未返回用户数据'),
+                error: null,
             };
         }
 

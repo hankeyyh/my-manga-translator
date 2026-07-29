@@ -67,7 +67,11 @@ export class AuthService {
     }
 
     async getCurrentUser(): Promise<Result<UserEntity>> {
-        return await this.userRepo.getCurrentUser();
+        const result =  await this.userRepo.getCurrentUser();
+        if (result.error) {
+            console.error(`getCurrentUser, repo.getCurrentUser fail, error: ${result.error}`);
+        }
+        return result;
     }
 
     async verifyOtp(tokenHash: string, type: EmailOtpType): Promise<Result<UserEntity>> {
