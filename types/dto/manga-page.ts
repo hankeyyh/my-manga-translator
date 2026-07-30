@@ -10,5 +10,4 @@ export interface MangaPage {
     status?: WebImageStatus;
     resultUrl?: string;
     imageId?: string;
-    cached: boolean;
 }

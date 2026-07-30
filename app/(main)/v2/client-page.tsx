@@ -45,8 +45,7 @@ import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
-import { translationCacheService } from "@/biz/services/translation-cache/translation-cache-service";
-import { packZip } from "@/biz/utils/pack";
+
 const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
 const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
 const PLACEHOLDER_BLOG = "https://placehold.co/400x240/e5e5e5/a3a3a3?text=Blog";
@@ -211,56 +210,15 @@ function buildTranslationConfig(selLang: { code: string, label: string; }, selMo
     };
 }
 
-async function onDownload(pages: MangaPage[]) {
-    // 缓存图在本地（blob URL），远端图是签名 URL；统一在浏览器 fetch，服务端拿不到本地缓存
-    const completed = pages.filter(
-        (page) => page.status === "completed" && page.resultUrl,
-    );
-    if (completed.length === 0) {
-        return;
-    }
-    try {
-        const items = await Promise.all(
-            completed.map(async (page) => {
-                const response = await fetch(page.resultUrl!);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${page.name}`);
-                }
-                return { fileName: page.name, blob: await response.blob() };
-            }),
-        );
-
-        let fileName: string;
-        let blob: Blob;
-        if (items.length === 1) {
-            fileName = items[0].fileName;
-            blob = items[0].blob;
-        } else {
-            const zipped = await packZip(items);
-            const d = new Date();
-            const pad = (n: number) => String(n).padStart(2, "0");
-            fileName = `task-${[
-                d.getFullYear(),
-                pad(d.getMonth() + 1),
-                pad(d.getDate()),
-                pad(d.getHours()),
-                pad(d.getMinutes()),
-                pad(d.getSeconds()),
-            ].join("-")}.zip`;
-            blob = new Blob([zipped], { type: "application/zip" });
+function onDownload(pages: MangaPage[]) {
+    const imageIds = pages.map((value) => {
+        if (!value.imageId || value.status !== "completed") {
+            return;
         }
-
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = url;
-        anchor.download = fileName;
-        anchor.click();
-        URL.revokeObjectURL(url);
-    } catch (err) {
-        const errMsg = err instanceof Error ? err.message : "Download failed";
-        toast.error(errMsg);
-        console.error(errMsg);
-    }
+        return value.imageId;
+    });
+    const imageIdsStr = imageIds.join(",");
+    window.location.href = `${window.origin}/api/download?imageIds=${imageIdsStr}`;
 }
 
 function isAllPageEnded(pages: MangaPage[]) {
@@ -297,7 +255,6 @@ export function ClientPage() {
     const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
     const [showTranslated, setShowTranslated] = useState(true);
     const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
-    const submitConfigRef = useRef<TranslationConfig | null>(null);
 
     // 选择图片
     const onFilesSelected = (files: File[]): void => {
@@ -318,7 +275,6 @@ export function ClientPage() {
                     originalFile: file,
                     originalUrl: URL.createObjectURL(file),
                     originalSize: formatFileSize(file.size),
-                    cached: false,
                 });
             }
             return next;
@@ -328,9 +284,6 @@ export function ClientPage() {
     const revokeAllObjectUrls = () => {
         for (const page of pagesRef.current) {
             URL.revokeObjectURL(page.originalUrl);
-            if (page.cached && page.resultUrl) {
-                URL.revokeObjectURL(page.resultUrl);
-            }
         }
     };
 
@@ -383,9 +336,6 @@ export function ClientPage() {
             if (targetIndex < 0) return prev;
 
             URL.revokeObjectURL(prev[targetIndex].originalUrl);
-            if (prev[targetIndex].cached && prev[targetIndex].resultUrl) {
-                URL.revokeObjectURL(prev[targetIndex].resultUrl);
-            }
             const next = prev.filter((p) => p.name !== name);
 
             setPreviewIndex((current) => {
@@ -417,26 +367,16 @@ export function ClientPage() {
         setSubmitLoading(true);
         try {
             const conf = buildTranslationConfig(targetLang, translateMode, fontStyle);
-            submitConfigRef.current = conf;
-            // 检查缓存
-            const { cached, uncached } = await translationCacheService.partitionPagesByCacheV2(pages, conf);
-            // 已缓存的图片补充翻译结果，其他待翻译图片pending
             setPages((prev) => prev.map((value) => {
-                const target = cached.find((cachePage) => cachePage.mangaPage.name === value.name);
-                if (target) {
-                    return { ...value, status: "completed", resultUrl: URL.createObjectURL(target.cacheResultBlob), cached: true };
-                } else {
-                    return { ...value, status: "pending" };
-                }
+                return {
+                    ...value,
+                    status: "pending",
+                };
             }));
-            if (uncached.length === 0) {
-                return;
-            }
 
-            // 无缓存图片提交翻译
             const formData = new FormData();
-            for (const page of uncached) {
-                formData.append("images", page.mangaPage.originalFile);
+            for (const page of pages) {
+                formData.append("images", page.originalFile);
             }
             formData.set("config", JSON.stringify(conf));
             const response = await fetch("/api/translate/submit", {
@@ -483,7 +423,6 @@ export function ClientPage() {
             return value.imageId && retryIdSet.has(value.imageId) ? {
                 ...value,
                 status: "pending",
-                cached: false,
             } : value;
         }));
         try {
@@ -548,10 +487,6 @@ export function ClientPage() {
                 setTaskStatus(data.status);
                 setPages((prev) => {
                     return prev.map((page) => {
-                        // 缓存图片数据已完整，跳过
-                        if (page.cached === true) {
-                            return page;
-                        }
                         // 需要保证前后端图片顺序一致
                         const img = data.images.find((value) => value.filename === page.name);
                         // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
@@ -568,17 +503,6 @@ export function ClientPage() {
                 if (isTaskEnded(data.status)) {
                     clearIntervalRef();
                     setPolling(false);
-                    // 写入缓存
-                    const conf = submitConfigRef.current;
-                    if (conf) {
-                        for (const img of data.images) {
-                            const targetPage = pagesRef.current.find((value) => value.name === img.filename);
-                            if (img.status !== "completed" || !img.resultImageUrl || !targetPage) {
-                                continue;
-                            }
-                            translationCacheService.saveFromResultUrl(targetPage.originalFile, conf, img.resultImageUrl);
-                        }
-                    }
                 }
             } catch (err) {
                 if (err instanceof Error && err.name === "AbortError") {
