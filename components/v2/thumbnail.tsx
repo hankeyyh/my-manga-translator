@@ -4,7 +4,7 @@ import { Clock, Eye, Loader2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { cn } from "../utils";
-import { MangaPage } from "@/types/dto/manga-page";
+import { MangaPage } from "@/types/web/manga-page";
 
 export type ThumbNailProps = MangaPage & {
     showTranslated?: boolean;

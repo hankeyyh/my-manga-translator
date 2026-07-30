@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
-import { MangaPage } from "@/types/dto/manga-page";
+import { MangaPage } from "@/types/web/manga-page";
 
 export type ImagePreviewProps = {
     pages: MangaPage[];

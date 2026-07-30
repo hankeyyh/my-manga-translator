@@ -1,6 +1,6 @@
 import { TranslationCacheStore } from "@/biz/repositories/translation-cache/translation-cache-store";
 import { bytesToHex, computeFileHash } from "@/biz/utils/file";
-import { MangaPage } from "@/types/dto/manga-page";
+import { MangaPage } from "@/types/web/manga-page";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { PartitionResult } from "@/types/dto/cache";
 import { LocalPage } from "@/types/dto/local-page";

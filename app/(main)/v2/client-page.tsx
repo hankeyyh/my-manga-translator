@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { ThumbNail } from "@/components/v2/thumbnail";
-import { MangaPage } from "@/types/dto/manga-page";
+import { MangaPage } from "@/types/web/manga-page";
 import { ImagePreview } from "@/components/v2/image-preview";
 import { UploadZone } from "@/components/v2/upload-zone";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";

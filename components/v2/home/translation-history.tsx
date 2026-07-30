@@ -48,6 +48,60 @@ export type HistoryTask = {
     status: TaskStatus;
 };
 
+// Relative to ~2026-07-30 so 1d / 7d / 1m filters each return a different subset
+const MOCK_TASKS: HistoryTask[] = [
+    {
+        id: "1",
+        sourceLang: "日语",
+        sourceCode: "JP",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 24,
+        startedAt: "2026-07-30", // today → 1d / 7d / 1m
+        status: "completed",
+    },
+    {
+        id: "2",
+        sourceLang: "韩语",
+        sourceCode: "KR",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 12,
+        startedAt: "2026-07-28", // 2 days ago → 7d / 1m
+        status: "processing",
+    },
+    {
+        id: "3",
+        sourceLang: "中文",
+        sourceCode: "CN",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 8,
+        startedAt: "2026-07-24", // 6 days ago → 7d / 1m
+        status: "pending",
+    },
+    {
+        id: "4",
+        sourceLang: "日语",
+        sourceCode: "JP",
+        targetLang: "中文",
+        targetCode: "ZH",
+        totalImages: 16,
+        startedAt: "2026-07-10", // 20 days ago → 1m only
+        status: "failed",
+    },
+    {
+        id: "5",
+        sourceLang: "英语",
+        sourceCode: "EN",
+        targetLang: "日语",
+        targetCode: "JP",
+        totalImages: 32,
+        startedAt: "2026-05-01", // older → all only
+        status: "partial",
+    },
+];
+
 function canDownload(status: TaskStatus) {
     return status === "completed" || status === "partial";
 }
@@ -80,11 +134,11 @@ function isWithinDateRange(startedAt: string, range: DateRangeValue) {
     return taskDate >= cutoff;
 }
 
-export function TranslationHistory({ tasks }: { tasks: HistoryTask[] }) {
+export function TranslationHistory() {
     const [statusFilter, setStatusFilter] = useState<"全部" | TaskStatus>("全部");
     const [dateRange, setDateRange] = useState<DateRangeValue>("all");
 
-    const filteredTasks = tasks.filter((task) => {
+    const filteredTasks = MOCK_TASKS.filter((task) => {
         const matchStatus = statusFilter === "全部" || task.status === statusFilter;
         const matchDate = isWithinDateRange(task.startedAt, dateRange);
         return matchStatus && matchDate;
