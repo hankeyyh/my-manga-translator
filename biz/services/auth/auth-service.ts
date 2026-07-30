@@ -57,7 +57,7 @@ export class AuthService {
 
     async signInWithGoogle(): Promise<Result<string | null>> {
         return await this.userRepo.signInWithOAuth("google", {
-            redirectTo: getConfirmUrl('/'),
+            redirectTo: getConfirmUrl('/v2'),
             queryParams: getGoogleOAuthQueryParams(),
         });
     }

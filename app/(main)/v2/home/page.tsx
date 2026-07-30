@@ -1,9 +1,7 @@
-import { CreditCard, History, LogOut } from "lucide-react";
-
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Footer } from "@/components/v2/footer";
+import { AccountNav } from "@/components/v2/home/account-nav";
+import { ProfileCard } from "@/components/v2/home/profile-card";
 import {
     TranslationHistory,
     type HistoryTask,
@@ -79,49 +77,8 @@ export default async function HomePage() {
                     <div className="grid gap-8 md:grid-cols-[220px_1fr]">
                         {/* Sidebar: user + nav */}
                         <aside className="space-y-4">
-                            <Card className="gap-0 py-4 shadow-none">
-                                <CardContent className="space-y-4 px-4">
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">邮箱</p>
-                                        <p className="mt-1 break-all text-sm">{email}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">积分余额</p>
-                                        <p className="mt-1 text-xl font-semibold">
-                                            {totalCredits.toLocaleString()}
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            <nav aria-label="Account" className="space-y-1">
-                                <Button
-                                    variant="secondary"
-                                    className="h-auto w-full justify-start gap-2 px-3 py-2.5"
-                                    type="button"
-                                >
-                                    <History className="size-4" />
-                                    翻译历史
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-muted-foreground"
-                                    type="button"
-                                >
-                                    <CreditCard className="size-4" />
-                                    账单与订阅
-                                </Button>
-                                <div className="border-t pt-2">
-                                    <Button
-                                        variant="ghost"
-                                        className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-destructive"
-                                        type="button"
-                                    >
-                                        <LogOut className="size-4" />
-                                        退出登录
-                                    </Button>
-                                </div>
-                            </nav>
+                            <ProfileCard email={email} totalCredits={totalCredits} />
+                            <AccountNav />
                         </aside>
 
                         {/* Main: translation history */}
