@@ -2,7 +2,6 @@ import { Manrope, Inter } from "next/font/google";
 
 import {
     HomeAccountNav,
-    HomeFooter,
     HomeHistorySection,
     type HomeHistoryRecord,
     HomeProfileCard,
@@ -10,6 +9,7 @@ import {
 } from "@/components/home";
 import { SiteHeader } from "@/components/v2/site-header";
 import { cn } from "@/components/utils";
+import { Footer } from "@/components/v2/footer";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -95,7 +95,7 @@ export default function HomePage() {
                 </div>
             </main>
 
-            <HomeFooter />
+            <Footer />
         </div>
     );
 }
