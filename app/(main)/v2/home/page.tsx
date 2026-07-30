@@ -1,101 +1,141 @@
-import { Manrope, Inter } from "next/font/google";
+import { CreditCard, History, LogOut } from "lucide-react";
 
-import {
-    HomeAccountNav,
-    HomeHistorySection,
-    type HomeHistoryRecord,
-    HomeProfileCard,
-    HomeProUpsellCard,
-} from "@/components/home";
-import { SiteHeader } from "@/components/v2/site-header";
-import { cn } from "@/components/utils";
+import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Footer } from "@/components/v2/footer";
+import {
+    TranslationHistory,
+    type HistoryTask,
+} from "@/components/v2/home/translation-history";
+import { SiteHeader } from "@/components/v2/site-header";
 
-const manrope = Manrope({
-    subsets: ["latin"],
-    weight: ["400", "700", "800"],
-    variable: "--font-manrope",
-});
-
-const inter = Inter({
-    subsets: ["latin"],
-    weight: ["400", "500", "600"],
-    variable: "--font-inter",
-});
-
-const PROFILE_IMAGE =
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAcDREvFTqL-a6KKMlfk1MYH8SBNlWiH_D0vtDtEopJPHkwSd_XTPjMiRwaAFHGkzQInGNUF0VxV6kY09_z6SdvvFeSL0uh5nmjMI2nWRtsVztuO6OagUAQ-JbKGEi14oxD8_YksRWjV4gHzJUFC4zAkwi3D6RoU6GH_BuPkEHhUMrOI_DJxw3JN2RwYzSyWkla28vOJPNFAmUDM-1KVzYjPwR-26OQWGy8fce3VNrM1JGrAGevBPNlMu2cBxq4wSX5uFUyWKw";
-
-const historyRecords: HomeHistoryRecord[] = [
+// Relative to ~2026-07-30 so 1d / 7d / 1m filters each return a different subset
+const MOCK_TASKS: HistoryTask[] = [
     {
-        id: 1,
-        filename: "Neon_Ghost_Vol1_Ch1.zip",
-        size: "24.5 MB",
-        language: "JP → EN",
-        date: "2024-05-12",
+        id: "1",
+        sourceLang: "日语",
+        sourceCode: "JP",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 24,
+        startedAt: "2026-07-30", // today → 1d / 7d / 1m
         status: "completed",
-        image:
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuC9ATpDHXc2Dc4fGjTJ_9pielutss3f1UGjzRwj2TkBlhCCiyecX6DoVU4k4J5emNklNo2zQm3D7K0D4G4gecdF-EKAMtEp9ygaCLhsBc1fJy_9AjLCk1DZp1ElweqYuZAOQeIMbbEEZrSoKZAH_ulQrE6P-V1Bw99_Xbta5fghiaTH3_J_2bXPLpBQJIQCsaLkKRDnTh8gL7y1xdSJKf5yg_s6riBW4MVaYiTe3C3JV29dqHtGS8_T4-HldozRI-JqQv2sz2k",
     },
     {
-        id: 2,
-        filename: "Blade_of_Fate_04.pdf",
-        size: "12.1 MB",
-        language: "KR → EN",
-        date: "2024-05-10",
-        status: "queued",
-        image:
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuDSkq32BqXMVS0OPEoP-6n4DsIWJSeTJqL2M6JjsL0WRGojSIt53k1I_ZKdShrhAr2KUfJO38Kj2nzB4vyGxxd2moazeOrC45TFn1Pt8tGfBjIk6MZyI8TbEmxWVeRVOF4P5Pnlz0bFWuJyJXrRfL9mv4dIkBFzIKddTlx3MiPHuumgsV-88OTWVWbyrvgbR59vExR72wDJGlY6ETuxp7hsuvFR9mUjs7yhxJ-1p9xyYXr3EhZFmwn0fpRyOXEWjiK4I6bkW6E",
+        id: "2",
+        sourceLang: "韩语",
+        sourceCode: "KR",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 12,
+        startedAt: "2026-07-28", // 2 days ago → 7d / 1m
+        status: "processing",
     },
     {
-        id: 3,
-        filename: "Summer_Sketch_S1.zip",
-        size: "8.9 MB",
-        language: "CN → EN",
-        date: "2024-05-08",
-        status: "completed",
-        image: null,
+        id: "3",
+        sourceLang: "中文",
+        sourceCode: "CN",
+        targetLang: "英语",
+        targetCode: "EN",
+        totalImages: 8,
+        startedAt: "2026-07-24", // 6 days ago → 7d / 1m
+        status: "pending",
+    },
+    {
+        id: "4",
+        sourceLang: "日语",
+        sourceCode: "JP",
+        targetLang: "中文",
+        targetCode: "ZH",
+        totalImages: 16,
+        startedAt: "2026-07-10", // 20 days ago → 1m only
+        status: "failed",
+    },
+    {
+        id: "5",
+        sourceLang: "英语",
+        sourceCode: "EN",
+        targetLang: "日语",
+        targetCode: "JP",
+        totalImages: 32,
+        startedAt: "2026-05-01", // older → all only
+        status: "partial",
     },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+    const userInfoResult = await getCurrentUserInfo();
+    const userInfo = userInfoResult.data;
+    const email = userInfo?.user?.email ?? "";
+    const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
+    const tasks = MOCK_TASKS;
+
     return (
-        <div
-            className={cn(
-                manrope.variable,
-                inter.variable,
-                "flex min-h-screen flex-col bg-[#f8f9fb] font-body text-[#2d3337]",
-            )}
-        >
+        <>
             <SiteHeader />
-            {/* fixed 顶栏不占文档流，占位保证 flex 布局下页脚能贴齐视口底 */}
-            <div aria-hidden className="h-16 shrink-0" />
+            <div className="min-h-screen bg-background">
+                <main className="mx-auto max-w-5xl px-4 py-10">
+                    <div className="grid gap-8 md:grid-cols-[220px_1fr]">
+                        {/* Sidebar: user + nav */}
+                        <aside className="space-y-4">
+                            <Card className="gap-0 py-4 shadow-none">
+                                <CardContent className="space-y-4 px-4">
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">邮箱</p>
+                                        <p className="mt-1 break-all text-sm">{email}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">积分余额</p>
+                                        <p className="mt-1 text-xl font-semibold">
+                                            {totalCredits.toLocaleString()}
+                                        </p>
+                                    </div>
+                                </CardContent>
+                            </Card>
 
-            <main
-                className={cn(
-                    "mx-auto w-full max-w-7xl flex-1 px-8 py-12",
-                )}
-            >
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
-                    <div className="space-y-8 md:col-span-4 lg:col-span-3">
-                        <HomeProfileCard
-                            creditsBalance={2450}
-                            email="alex.chen@design.com"
-                            name="Alex Chen"
-                            profileImage={PROFILE_IMAGE}
-                            translatedCount={128}
-                        />
-                        <HomeAccountNav />
+                            <nav aria-label="Account" className="space-y-1">
+                                <Button
+                                    variant="secondary"
+                                    className="h-auto w-full justify-start gap-2 px-3 py-2.5"
+                                    type="button"
+                                >
+                                    <History className="size-4" />
+                                    翻译历史
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-muted-foreground"
+                                    type="button"
+                                >
+                                    <CreditCard className="size-4" />
+                                    账单与订阅
+                                </Button>
+                                <div className="border-t pt-2">
+                                    <Button
+                                        variant="ghost"
+                                        className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-destructive"
+                                        type="button"
+                                    >
+                                        <LogOut className="size-4" />
+                                        退出登录
+                                    </Button>
+                                </div>
+                            </nav>
+                        </aside>
+
+                        {/* Main: translation history */}
+                        <section className="min-w-0 space-y-4">
+                            <div>
+                                <h1 className="text-xl font-semibold">翻译历史</h1>
+                            </div>
+
+                            <TranslationHistory tasks={tasks} />
+                        </section>
                     </div>
-
-                    <div className="space-y-8 md:col-span-8 lg:col-span-9">
-                        <HomeProUpsellCard />
-                        <HomeHistorySection records={historyRecords} />
-                    </div>
-                </div>
-            </main>
-
+                </main>
+            </div>
             <Footer />
-        </div>
+        </>
     );
 }
