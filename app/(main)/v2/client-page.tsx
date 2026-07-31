@@ -376,7 +376,9 @@ export function ClientPage() {
 
             const formData = new FormData();
             for (const page of pages) {
-                formData.append("images", page.originalFile);
+                if (page.originalFile) {
+                    formData.append("images", page.originalFile);
+                }
             }
             formData.set("config", JSON.stringify(conf));
             const response = await fetch("/api/translate/submit", {

@@ -1,15 +1,22 @@
-import { ChevronDown, Clock, Download } from "lucide-react";
+"use client";
 
+import { ChevronDown, ChevronUp, Clock, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
     Card,
+    CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { ImagePreview } from "@/components/v2/image-preview";
+import { ThumbNail } from "@/components/v2/thumbnail";
 import type { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
+import type { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import type { TaskStatus } from "@/types/do/translation-task";
+import type { MangaPage } from "@/types/web/manga-page";
+import { useState } from "react";
 
 const SOURCE_LANG = "Auto";
 
@@ -17,8 +24,12 @@ function canDownload(status: TaskStatus) {
     return status === "completed" || status === "partial";
 }
 
-function onDownload(taskId: string) {
+function onDownloadTask(taskId: string) {
     window.location.href = `${window.origin}/api/download?taskId=${taskId}`;
+}
+
+function onDownloadImage(imageId: string) {
+    window.location.href = `${window.origin}/api/download?imageIds=${imageId}`;
 }
 
 function statusBadgeClassName(status: TaskStatus) {
@@ -40,6 +51,17 @@ function formatDate(iso: string) {
     return iso.slice(0, 10);
 }
 
+function toMangaPage(img: ApiTranslationTaskImage): MangaPage {
+    return {
+        name: img.filename,
+        originalUrl: img.originalImageUrl,
+        originalSize: "",
+        status: img.status,
+        resultUrl: img.resultImageUrl || undefined,
+        imageId: img.id,
+    };
+}
+
 type Props = {
     task: ApiGetTranslationTaskResponse;
 };
@@ -47,6 +69,12 @@ type Props = {
 export function TranslationHistoryTaskItem({ task }: Props) {
     const downloadable = canDownload(task.status);
     const targetCode = task.config.translator?.target_lang ?? "—";
+    const [isShowDetail, setIsShowDetail] = useState(false);
+    const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+
+    const pages = [...task.images]
+        .sort((a, b) => a.imageIndex - b.imageIndex)
+        .map(toMangaPage);
 
     return (
         <li>
@@ -78,16 +106,49 @@ export function TranslationHistoryTaskItem({ task }: Props) {
                             type="button"
                             variant="ghost"
                             disabled={!downloadable}
-                            onClick={() => onDownload(task.id)}
+                            onClick={() => onDownloadTask(task.id)}
                         >
                             <Download className="size-3.5" />
                         </Button>
-                        <Button size="sm" type="button" variant="ghost">
-                            <ChevronDown className="size-3.5" />
+                        <Button
+                            size="sm"
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setIsShowDetail((v) => !v)}
+                        >
+                            {isShowDetail ? (
+                                <ChevronUp className="size-3.5" />
+                            ) : (
+                                <ChevronDown className="size-3.5" />
+                            )}
                         </Button>
                     </div>
                 </CardHeader>
+
+                {isShowDetail && pages.length > 0 && (
+                    <CardContent className="px-4 pt-4 pb-0">
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                            {pages.map((page, index) => (
+                                <ThumbNail
+                                    key={page.imageId ?? page.name}
+                                    {...page}
+                                    onPreview={() => setPreviewIndex(index)}
+                                    onDownload={page.imageId ? () => onDownloadImage(page.imageId!) : undefined}
+                                />
+                            ))}
+                        </div>
+                    </CardContent>
+                )}
             </Card>
+
+            {previewIndex !== null && (
+                <ImagePreview
+                    pages={pages}
+                    index={previewIndex}
+                    onClose={() => setPreviewIndex(null)}
+                    onIndexChange={setPreviewIndex}
+                />
+            )}
         </li>
     );
 }

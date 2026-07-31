@@ -124,6 +124,10 @@ export class TranslationCacheService {
         const uncached: PartitionResultV2["uncached"] = [];
         for (const page of pages) {
             try {
+                if (!page.originalFile) {
+                    uncached.push({ mangaPage: page });
+                    continue;
+                }
                 const fileHash = await computeFileHash(page.originalFile);
                 const key = buildCacheKey(fileHash, configHash);
                 const entry = await this.cacheStore.get(key);

@@ -98,12 +98,12 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                                 processing
                             </span>
                         )}
-                        {props.status === "stalled" && (
+                        {props.status === "stalled" && onContinueWait && (
                             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onContinueWait}>
                                 继续等待
                             </Button>
                         )}
-                        {props.status === "failed" && (
+                        {props.status === "failed" && onRetry && (
                             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onRetry}>
                                 重试
                             </Button>
