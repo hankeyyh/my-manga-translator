@@ -17,6 +17,10 @@ function canDownload(status: TaskStatus) {
     return status === "completed" || status === "partial";
 }
 
+function onDownload(taskId: string) {
+    window.location.href = `${window.origin}/api/download?taskId=${taskId}`;
+}
+
 function statusBadgeClassName(status: TaskStatus) {
     switch (status) {
         case "completed":
@@ -74,6 +78,7 @@ export function TranslationHistoryTaskItem({ task }: Props) {
                             type="button"
                             variant="ghost"
                             disabled={!downloadable}
+                            onClick={() => onDownload(task.id)}
                         >
                             <Download className="size-3.5" />
                         </Button>

@@ -10,12 +10,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const imageIdsStr = url.searchParams.get("imageIds");
-    if (!imageIdsStr) {
-        return NextResponse.json({ error: "Image id required" }, { status: 400 });
-    }
-    const imageIds = imageIdsStr.split(",")
-    if (imageIds.length === 0) {
-        return NextResponse.json({ error: "Image id required" }, { status: 400 });
+    const taskId = url.searchParams.get("taskId");
+    if (!imageIdsStr && !taskId) {
+        return NextResponse.json({ error: "ImageId or taskId is required" }, { status: 400 });
     }
     const supabase = await createServerClient();
     const translationService = new TranslationService(
@@ -25,9 +22,25 @@ export async function GET(request: NextRequest) {
         new TranslationStorageRepository(supabase),
         new PricingConfigRepository(supabase),
     );
+    let imageIds: string[] = []; 
+    if (imageIdsStr) {
+        imageIds = imageIdsStr.split(",");
+        if (imageIds.length === 0) {
+            return NextResponse.json({ error: "Image id required" }, { status: 400 });
+        }
+    } else if (taskId) {
+        const result = await translationService.getTaskSuccessImages(taskId);
+        if (result.error) {
+            return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        }
+        if (result.data?.length === 0) {
+            return NextResponse.json({ error: "No Completed Images" }, { status: 400 });
+        }
+        imageIds = result.data!.map((value) => value.id);
+    }
     const result = await translationService.downloadResultZip(imageIds);
     if (result.error || !result.data) {
-        return NextResponse.json({ error: "Internal Server Error"}, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
     const zipped = result.data;
     const d = new Date();
@@ -46,7 +59,7 @@ export async function GET(request: NextRequest) {
             "Content-Type": "application/zip"
         },
         status: 200,
-    })
+    });
 }
 
 /**

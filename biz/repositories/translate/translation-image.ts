@@ -173,8 +173,8 @@ export class TranslationImageRepository {
     }
 
     /**
-   * 获取任务的pending图片
-   */
+    * 获取任务的pending图片
+    */
     async getPendingImagesByTask(taskId: string): Promise<Result<TranslationImage[]>> {
         const { data, error } = await this.supabase
             .from('translation_images')
@@ -187,6 +187,36 @@ export class TranslationImageRepository {
             return {
                 data: null,
                 error: new Error(`获取任务图片列表失败: ${error.message}`),
+            };
+        }
+        if (!data || data.length === 0) {
+            return {
+                data: [],
+                error: null,
+            };
+        }
+
+        return {
+            data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
+            error: null,
+        };
+    }
+
+    /**
+    * 获取翻译成功的图片
+    */
+    async getSuccessImagesByTask(taskId: string): Promise<Result<TranslationImage[]>> {
+        const { data, error } = await this.supabase
+            .from('translation_images')
+            .select('*')
+            .eq('task_id', taskId)
+            .eq('status', 'completed')
+            .order('image_index', { ascending: true });
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`获取翻译成功的图片失败: ${error.message}`),
             };
         }
         if (!data || data.length === 0) {
@@ -289,126 +319,6 @@ export class TranslationImageRepository {
         }
         return {
             data: data.map(mapTranslationImageRowToTranslationImage),
-            error: null,
-        };
-    }
-
-    /**
-   * 获取待处理的图片 (Worker 专用)
-   */
-    async getPendingImages(limit: number = 10): Promise<Result<TranslationImage[]>> {
-        const { data, error } = await this.supabase
-            .from('translation_images')
-            .select('*')
-            .eq('status', 'pending')
-            .order('created_at', { ascending: true })
-            .limit(limit);
-
-        if (error) {
-            return {
-                data: null,
-                error: new Error(`Failed to get pending images: ${error.message}`),
-            };
-        }
-
-        if (!data || data.length === 0) {
-            return {
-                data: [],
-                error: null,
-            };
-        }
-
-        return {
-            data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
-            error: null,
-        };
-    }
-
-    /**
-   * 获取超时的 processing 图片 (Worker 专用)
-   */
-    async getStuckImages(timeoutMinutes: number = 30): Promise<Result<TranslationImage[]>> {
-        const timeoutTime = new Date(Date.now() - timeoutMinutes * 60 * 1000).toISOString();
-        const { data, error } = await this.supabase
-            .from('translation_images')
-            .select('*')
-            .eq('status', 'processing')
-            .lt('started_at', timeoutTime)
-            .order('created_at', { ascending: true });
-
-        if (error) {
-            return {
-                data: null,
-                error: new Error(`获取超时的 processing 图片失败: ${error.message}`),
-            };
-        }
-        if (!data || data.length === 0) {
-            return {
-                data: [],
-                error: null,
-            };
-        }
-
-        return {
-            data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
-            error: null,
-        };
-    }
-
-    /**
-   * 获取失败的图片 (用于重试)
-   */
-    async getFailedImages(taskId: string): Promise<Result<TranslationImage[]>> {
-        const { data, error } = await this.supabase
-            .from('translation_images')
-            .select('*')
-            .eq('task_id', taskId)
-            .eq('status', 'failed');
-
-        if (error) {
-            return {
-                data: null,
-                error: new Error(`获取失败的图片失败: ${error.message}`),
-            };
-        }
-        if (!data || data.length === 0) {
-            return {
-                data: [],
-                error: null,
-            };
-        }
-
-        return {
-            data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
-            error: null,
-        };
-    }
-
-    /**
-     * 获取翻译成功的图片
-     */
-    async getSuccessImages(taskId: string): Promise<Result<TranslationImage[]>> {
-        const { data, error } = await this.supabase
-            .from('translation_images')
-            .select('*')
-            .eq('task_id', taskId)
-            .eq('status', 'completed');
-
-        if (error) {
-            return {
-                data: null,
-                error: new Error(`获取翻译成功的图片失败: ${error.message}`),
-            };
-        }
-        if (!data || data.length === 0) {
-            return {
-                data: [],
-                error: null,
-            };
-        }
-
-        return {
-            data: data.map((item) => mapTranslationImageRowToTranslationImage(item)),
             error: null,
         };
     }

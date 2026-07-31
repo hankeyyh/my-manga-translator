@@ -472,11 +472,21 @@ export class TranslationService {
         return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 
-    // 获取任务图片
+    // 获取任务pending图片
     async getTaskPendingImages(taskId: string): Promise<BizResult<TranslationImage[]>> {
         const result = await this.imageRepo.getPendingImagesByTask(taskId);
         if (result.error) {
             console.error("getPendingImagesByTask failed, error: ", result.error.message);
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: result.data!, error: null };
+    }
+
+    // 获取任务completed图片
+    async getTaskSuccessImages(taskId: string): Promise<BizResult<TranslationImage[]>> {
+        const result = await this.imageRepo.getSuccessImagesByTask(taskId);
+        if (result.error) {
+            console.error("getSuccessImagesByTask failed, error: ", result.error.message);
             return { code: DB_ERROR_CODE, data: null, error: result.error };
         }
         return { code: SUCCESS_CODE, data: result.data!, error: null };
