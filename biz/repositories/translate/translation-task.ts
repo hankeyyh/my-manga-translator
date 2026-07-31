@@ -286,6 +286,63 @@ export class TranslationTaskRepository {
     }
 
     /**
+     * 获取用户任务列表（含图片），支持状态与创建时间筛选
+     */
+    async getUserTasksWithImages(
+        userId: string,
+        options?: {
+            status?: TaskStatus;
+            createdAfter?: string;
+            limit?: number;
+        },
+    ): Promise<Result<TranslationTaskDetail[]>> {
+        const limit = options?.limit ?? 50;
+        let query = this.supabase
+            .from('translation_tasks')
+            .select('*, translation_images(*)')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .order('image_index', { ascending: true, referencedTable: 'translation_images' })
+            .limit(limit);
+
+        if (options?.status) {
+            query = query.eq('status', options.status);
+        }
+        if (options?.createdAfter) {
+            query = query.gte('created_at', options.createdAfter);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`获取用户任务列表失败: ${error.message}`),
+            };
+        }
+
+        if (!data || data.length === 0) {
+            return {
+                data: [],
+                error: null,
+            };
+        }
+
+        return {
+            data: data.map((row) => {
+                const images = (row.translation_images as Tables<'translation_images'>[])
+                    .map(mapTranslationImageRowToTranslationImage)
+                    .sort((a, b) => a.imageIndex - b.imageIndex);
+                return {
+                    ...mapTranslationTaskRowToTranslationTask(row),
+                    images,
+                };
+            }),
+            error: null,
+        };
+    }
+
+    /**
    * 删除任务 (级联删除图片)
    */
     async deleteTask(taskId: string): Promise<Result<void>> {

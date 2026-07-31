@@ -78,6 +78,8 @@ function buildTaskDetailView(overrides: Partial<TranslationTaskDetailView> = {})
         createdAt: "2026-01-01T00:00:00.000Z",
         completedAt: "2026-01-01T00:10:00.000Z",
         updatedAt: "2026-01-01T00:10:00.000Z",
+        creditPerImage: 1,
+        totalCredits: 1,
         images: [
             {
                 id: "img-1",
@@ -92,6 +94,8 @@ function buildTaskDetailView(overrides: Partial<TranslationTaskDetailView> = {})
                 maxRetries: 3,
                 createdAt: "2026-01-01T00:00:00.000Z",
                 updatedAt: "2026-01-01T00:10:00.000Z",
+                filename: "",
+                credits: 0,
             },
         ],
         ...overrides,
@@ -170,6 +174,7 @@ describe("translate task route", () => {
             progress: 100,
             created_at: "2026-01-01T00:00:00.000Z",
             completed_at: "2026-01-01T00:10:00.000Z",
+            config: {},
             images: [
                 {
                     id: "img-1",

@@ -10,9 +10,28 @@ import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
-import { TranslationTask } from "@/types/do/translation-task";
+import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
 import { packZip } from "@/biz/utils/pack";
+
+export type TranslationHistoryRange = "1d" | "7d" | "1m" | "all";
+
+const HISTORY_RANGE_DAYS: Record<Exclude<TranslationHistoryRange, "all">, number> = {
+    "1d": 1,
+    "7d": 7,
+    "1m": 30,
+};
+
+function resolveHistoryCreatedAfter(range: TranslationHistoryRange): string | undefined {
+    if (range === "all") {
+        return undefined;
+    }
+    const days = HISTORY_RANGE_DAYS[range];
+    const cutoff = new Date();
+    cutoff.setHours(0, 0, 0, 0);
+    cutoff.setDate(cutoff.getDate() - (days - 1));
+    return cutoff.toISOString();
+}
 
 export class TranslationService {
 
@@ -205,6 +224,87 @@ export class TranslationService {
         });
 
         return { code: SUCCESS_CODE, data: images, error: null };
+    }
+
+    // 用户翻译历史（按任务）
+    async getUserTranslationHistoryByTasks(options?: {
+        status?: TaskStatus;
+        range?: TranslationHistoryRange;
+        limit?: number;
+    }): Promise<BizResult<TranslationTaskDetailView[]>> {
+        const userResult = await this.userRepo.getCurrentUser();
+        if (userResult.error || !userResult.data) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
+        }
+        const user = userResult.data!;
+
+        const range = options?.range ?? "all";
+        const tasksResult = await this.taskRepo.getUserTasksWithImages(user.id, {
+            status: options?.status,
+            createdAfter: resolveHistoryCreatedAfter(range),
+            limit: options?.limit,
+        });
+        if (tasksResult.error) {
+            console.error(`getUserTranslationHistoryByTasks, repo.getUserTasksWithImages fail, userId: ${user.id}, 
+                status: ${options?.status}, range: ${range}, error: ${tasksResult.error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: tasksResult.error };
+        }
+        const tasks = tasksResult.data!;
+        if (tasks.length === 0) {
+            return { code: SUCCESS_CODE, data: [], error: null };
+        }
+
+        const allImages = tasks.flatMap((task) => task.images);
+        const originalUrls: string[] = allImages.map(() => "");
+        const resultSignedUrls: string[] = allImages.map(() => "");
+
+        if (allImages.length > 0) {
+            const originalImagePaths = allImages.map((img) => img.originalImagePath);
+            const originalUrlResult = await this.imageStorage.createSignedUrls(originalImagePaths, 3600);
+            if (originalUrlResult.error) {
+                console.error("getUserTranslationHistoryByTasks, createSignedUrls failed, error: ", originalUrlResult.error.message);
+                return { code: DB_ERROR_CODE, data: null, error: originalUrlResult.error };
+            }
+            originalUrlResult.data!.forEach((url, i) => {
+                originalUrls[i] = url ?? "";
+            });
+
+            const resultPathsToSign: string[] = [];
+            const resultPathIndices: number[] = [];
+            allImages.forEach((img, i) => {
+                if (img.resultImagePath) {
+                    resultPathsToSign.push(img.resultImagePath);
+                    resultPathIndices.push(i);
+                }
+            });
+            if (resultPathsToSign.length > 0) {
+                const resultUrlResult = await this.imageStorage.createSignedUrls(resultPathsToSign, 3600);
+                if (resultUrlResult.error) {
+                    console.error("getUserTranslationHistoryByTasks, createSignedUrls failed, error: ", resultUrlResult.error.message);
+                    return { code: DB_ERROR_CODE, data: null, error: resultUrlResult.error };
+                }
+                const signedResultUrls = resultUrlResult.data!;
+                resultPathIndices.forEach((imageIndex, j) => {
+                    resultSignedUrls[imageIndex] = signedResultUrls[j] ?? "";
+                });
+            }
+        }
+
+        let imageOffset = 0;
+        const taskViews: TranslationTaskDetailView[] = tasks.map((task) => {
+            const images = task.images.map((img, i): TranslationImageView => ({
+                ...img,
+                originalImageUrl: originalUrls[imageOffset + i] ?? "",
+                resultImageUrl: resultSignedUrls[imageOffset + i] ?? "",
+            }));
+            imageOffset += task.images.length;
+            return {
+                ...task,
+                images,
+            };
+        });
+
+        return { code: SUCCESS_CODE, data: taskViews, error: null };
     }
 
     async batchGetPendingImageForProcessing(imageIds: string[]): Promise<BizResult<TranslationImage[]>> {

@@ -1,3 +1,4 @@
+import { TranslationConfig } from "../do/translation-config";
 import { TaskStatus } from "../do/translation-task";
 import { ApiTranslationTaskImage } from "./translation-image";
 
@@ -11,5 +12,6 @@ export interface ApiGetTranslationTaskResponse {
     progress: number;
     created_at: string;
     completed_at?: string;
+    config: TranslationConfig;
     images: ApiTranslationTaskImage[];
 }

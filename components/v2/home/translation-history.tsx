@@ -1,22 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { ChevronDown, Download } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
 import {
     DateRangeFilter,
     type DateRangeValue,
 } from "@/components/v2/home/date-range-filter";
+import { TranslationHistoryEmpty } from "@/components/v2/home/translation-history-empty";
+import { TranslationHistoryLoading } from "@/components/v2/home/translation-history-loading";
+import { TranslationHistoryTaskItem } from "@/components/v2/home/translation-history-task-item";
+import type { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import type { TaskStatus } from "@/types/do/translation-task";
 
 const STATUS_FILTERS: Array<"全部" | TaskStatus> = [
@@ -28,125 +22,72 @@ const STATUS_FILTERS: Array<"全部" | TaskStatus> = [
     "partial",
 ];
 
-const DATE_RANGE_DAYS: Record<Exclude<DateRangeValue, "all">, number> = {
-    "1d": 1,
-    "7d": 7,
-    "1m": 30,
-};
-
-/**
- * TODO web需要自定义一套task类型，包含cache+返回的图片
- */
-export type HistoryTask = {
-    id: string;
-    sourceLang: string;
-    sourceCode: string;
-    targetLang: string;
-    targetCode: string;
-    totalImages: number;
-    startedAt: string;
-    status: TaskStatus;
-};
-
-// Relative to ~2026-07-30 so 1d / 7d / 1m filters each return a different subset
-const MOCK_TASKS: HistoryTask[] = [
-    {
-        id: "1",
-        sourceLang: "日语",
-        sourceCode: "JP",
-        targetLang: "英语",
-        targetCode: "EN",
-        totalImages: 24,
-        startedAt: "2026-07-30", // today → 1d / 7d / 1m
-        status: "completed",
-    },
-    {
-        id: "2",
-        sourceLang: "韩语",
-        sourceCode: "KR",
-        targetLang: "英语",
-        targetCode: "EN",
-        totalImages: 12,
-        startedAt: "2026-07-28", // 2 days ago → 7d / 1m
-        status: "processing",
-    },
-    {
-        id: "3",
-        sourceLang: "中文",
-        sourceCode: "CN",
-        targetLang: "英语",
-        targetCode: "EN",
-        totalImages: 8,
-        startedAt: "2026-07-24", // 6 days ago → 7d / 1m
-        status: "pending",
-    },
-    {
-        id: "4",
-        sourceLang: "日语",
-        sourceCode: "JP",
-        targetLang: "中文",
-        targetCode: "ZH",
-        totalImages: 16,
-        startedAt: "2026-07-10", // 20 days ago → 1m only
-        status: "failed",
-    },
-    {
-        id: "5",
-        sourceLang: "英语",
-        sourceCode: "EN",
-        targetLang: "日语",
-        targetCode: "JP",
-        totalImages: 32,
-        startedAt: "2026-05-01", // older → all only
-        status: "partial",
-    },
-];
-
-function canDownload(status: TaskStatus) {
-    return status === "completed" || status === "partial";
-}
-
-function statusBadgeVariant(
-    status: TaskStatus,
-): "default" | "secondary" | "destructive" | "outline" {
-    switch (status) {
-        case "completed":
-            return "default";
-        case "failed":
-            return "destructive";
-        case "processing":
-            return "secondary";
-        default:
-            return "outline";
-    }
-}
-
-function startOfDay(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
-function isWithinDateRange(startedAt: string, range: DateRangeValue) {
-    if (range === "all") return true;
-
-    const taskDate = startOfDay(new Date(`${startedAt}T00:00:00`));
-    const cutoff = startOfDay(new Date());
-    cutoff.setDate(cutoff.getDate() - (DATE_RANGE_DAYS[range] - 1));
-    return taskDate >= cutoff;
-}
-
 export function TranslationHistory() {
     const [statusFilter, setStatusFilter] = useState<"全部" | TaskStatus>("全部");
     const [dateRange, setDateRange] = useState<DateRangeValue>("all");
+    const [tasks, setTasks] = useState<ApiGetTranslationTaskResponse[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredTasks = MOCK_TASKS.filter((task) => {
-        const matchStatus = statusFilter === "全部" || task.status === statusFilter;
-        const matchDate = isWithinDateRange(task.startedAt, dateRange);
-        return matchStatus && matchDate;
-    });
+    useEffect(() => {
+        const abortController = new AbortController();
+
+        async function fetchHistory() {
+            setLoading(true);
+
+            try {
+                const params = new URLSearchParams();
+                if (statusFilter !== "全部") {
+                    params.set("status", statusFilter);
+                }
+                params.set("range", dateRange);
+
+                const response = await fetch(`/api/translate/history2?${params}`, {
+                    signal: abortController.signal,
+                });
+                const { error, data } = (await response.json()) as {
+                    error: string | null;
+                    data: ApiGetTranslationTaskResponse[] | null;
+                };
+                if (!response.ok) {
+                    throw new Error(error ?? "Unknown Error");
+                }
+                setTasks(data!);
+            } catch (err) {
+                if (err instanceof DOMException && err.name === "AbortError") {
+                    return;
+                }
+                const errMsg = err instanceof Error ? err.message : "Unknown Error";
+                setTasks([]);
+                toast(errMsg);
+            } finally {
+                if (!abortController.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        void fetchHistory();
+        return () => abortController.abort();
+    }, [statusFilter, dateRange]);
 
     function clearFilters() {
         setStatusFilter("全部");
         setDateRange("all");
+    }
+
+    let content;
+    if (loading) {
+        content = <TranslationHistoryLoading />;
+    } else if (tasks.length === 0) {
+        content = <TranslationHistoryEmpty onClearFilters={clearFilters} />;
+    } else {
+        content = (
+            <ul className="space-y-3">
+                {tasks.map((task) => (
+                    <TranslationHistoryTaskItem key={task.id} task={task} />
+                ))}
+            </ul>
+        );
     }
 
     return (
@@ -176,93 +117,7 @@ export function TranslationHistory() {
                 </div>
             </div>
 
-            {filteredTasks.length > 0 ? (
-                <ul className="space-y-3">
-                    {filteredTasks.map((task) => {
-                        const downloadable = canDownload(task.status);
-                        return (
-                            <li key={task.id}>
-                                <Card className="gap-0 py-4 shadow-none">
-                                    <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 px-4 py-0">
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex flex-wrap items-center gap-2">
-                                                <CardTitle className="text-sm">
-                                                    {task.sourceCode} → {task.targetCode}
-                                                </CardTitle>
-                                                <Badge
-                                                    variant={statusBadgeVariant(task.status)}
-                                                >
-                                                    {task.status}
-                                                </Badge>
-                                            </div>
-                                            <CardDescription className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
-                                                <span>
-                                                    <span className="text-muted-foreground">
-                                                        源语言{" "}
-                                                    </span>
-                                                    {task.sourceLang} {task.sourceCode}
-                                                </span>
-                                                <span>
-                                                    <span className="text-muted-foreground">
-                                                        目标语言{" "}
-                                                    </span>
-                                                    {task.targetLang} {task.targetCode}
-                                                </span>
-                                                <span>
-                                                    <span className="text-muted-foreground">
-                                                        翻译页数{" "}
-                                                    </span>
-                                                    {task.totalImages} 页
-                                                </span>
-                                                <span>
-                                                    <span className="text-muted-foreground">
-                                                        开始日期{" "}
-                                                    </span>
-                                                    {task.startedAt}
-                                                </span>
-                                            </CardDescription>
-                                        </div>
-                                        <div className="flex shrink-0 gap-2">
-                                            <Button
-                                                size="sm"
-                                                type="button"
-                                                variant="ghost"
-                                                disabled={!downloadable}
-                                            >
-                                                <Download className="size-3.5" />
-                                            </Button>
-                                            <Button size="sm" type="button" variant="ghost">
-                                                <ChevronDown className="size-3.5" />
-                                            </Button>
-                                        </div>
-                                    </CardHeader>
-                                </Card>
-                            </li>
-                        );
-                    })}
-                </ul>
-            ) : (
-                <Card className="gap-0 py-10 shadow-none">
-                    <CardContent className="flex flex-col items-center gap-3 px-4 text-center">
-                        <p className="text-sm text-muted-foreground">
-                            暂无翻译历史 / 无匹配结果
-                        </p>
-                        <div className="flex gap-2">
-                            <Button asChild size="sm">
-                                <Link href="/v2">去翻译</Link>
-                            </Button>
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="outline"
-                                onClick={clearFilters}
-                            >
-                                清除筛选
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
+            {content}
         </div>
     );
 }

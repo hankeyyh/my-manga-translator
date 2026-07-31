@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     const submitResult = await translationService.submitTranslationTask(taskId, images, config);
     if (submitResult.code === UNAUTHORIZED_ERROR_CODE) {
         // TODO 如果失败，需要refundcredits，但此时没有imageId
-        return NextResponse.json({ error: submitResult.error!.message }, { status: 401 });
+        return NextResponse.json({ error: "UnAuthorized" }, { status: 401 });
     }
     if (submitResult.code === CHECK_PARAM_ERROR_CODE) {
         return NextResponse.json({ error: submitResult.error!.message }, { status: 400 });

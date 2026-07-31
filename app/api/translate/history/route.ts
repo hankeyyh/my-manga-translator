@@ -35,7 +35,7 @@ export async function GET() {
 
     const result = await translationService.getUserTranslationHistory();
     if (result.code === UNAUTHORIZED_ERROR_CODE) {
-        return NextResponse.json({ error: result.error!.message }, { status: 401 });
+        return NextResponse.json({ error: "UnAuthorized" }, { status: 401 });
     }
     if (result.code !== SUCCESS_CODE || result.data === null) {
         return NextResponse.json({ error: result.error?.message ?? "Internal Server Error" }, { status: 500 });
