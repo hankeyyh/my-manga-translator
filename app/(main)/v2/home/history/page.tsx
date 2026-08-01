@@ -1,4 +1,4 @@
-import { TranslationHistory } from "@/components/v2/home/translation-history";
+import { TranslationHistory } from "@/app/(main)/v2/home/history/_components/translation-history";
 
 export default function HistoryPage() {
     return (

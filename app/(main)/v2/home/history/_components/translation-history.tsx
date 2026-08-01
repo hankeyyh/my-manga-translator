@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import {
     DateRangeFilter,
     type DateRangeValue,
-} from "@/components/v2/home/date-range-filter";
-import { TranslationHistoryEmpty } from "@/components/v2/home/translation-history-empty";
-import { TranslationHistoryLoading } from "@/components/v2/home/translation-history-loading";
-import { TranslationHistoryTaskItem } from "@/components/v2/home/translation-history-task-item";
+} from "@/app/(main)/v2/home/_components/date-range-filter";
+import { TranslationHistoryEmpty } from "@/app/(main)/v2/home/history/_components/translation-history-empty";
+import { TranslationHistoryLoading } from "@/app/(main)/v2/home/history/_components/translation-history-loading";
+import { TranslationHistoryTaskItem } from "@/app/(main)/v2/home/history/_components/translation-history-task-item";
 import type { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import type { TaskStatus } from "@/types/do/translation-task";
 
