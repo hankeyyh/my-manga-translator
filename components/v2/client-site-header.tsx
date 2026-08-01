@@ -26,7 +26,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
     };
 
     const onClickDashboard = () => {
-        router.push("/v2/home");
+        router.push("/v2/home/history");
     };
 
     const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);

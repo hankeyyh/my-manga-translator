@@ -53,7 +53,7 @@ export function TranslationHistory() {
                 }
                 setTasks(data!);
             } catch (err) {
-                if (err instanceof DOMException && err.name === "AbortError") {
+                if (err instanceof Error && err.name === "AbortError") {
                     return;
                 }
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
