@@ -1,6 +1,7 @@
 export interface UserTransaction {
     id: string;
     userId: string;
+    createdAt: string;
     billingCycle: string | null;
     planTier: string | null;
     packTier: string | null;

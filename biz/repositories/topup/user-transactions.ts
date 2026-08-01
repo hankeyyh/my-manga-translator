@@ -43,6 +43,7 @@ export function mapUserTransactionRowToUserTransaction(row: Tables<'user_transac
     return {
         id: row.id,
         userId: row.user_id,
+        createdAt: row.created_at,
         billingCycle: row.billing_cycle,
         planTier: row.plan_tier,
         packTier: row.pack_tier,
@@ -167,5 +168,39 @@ export class UserTransactionsRepository {
             return { data: null, error: result.error };
         }
         return { data: result.data, error: null };
+    }
+
+    async listByUserId(
+        userId: string,
+        options: {
+            cursor?: { createdAt: string; id: string };
+            limit: number;
+        },
+    ): Promise<Result<UserTransaction[]>> {
+        let query = this.supabase
+            .from("user_transactions")
+            .select("*")
+            .eq("user_id", userId)
+            .order("created_at", { ascending: false })
+            .order("id", { ascending: false })
+            .limit(options.limit);
+
+        if (options.cursor) {
+            const createdAt = options.cursor.createdAt;
+            const id = options.cursor.id;
+            // (created_at, id) < (cursor) under DESC order → strictly older
+            query = query.or(
+                `created_at.lt."${createdAt}",and(created_at.eq."${createdAt}",id.lt.${id})`,
+            );
+        }
+
+        const { data, error } = await query;
+        if (error) {
+            return { data: null, error };
+        }
+        return {
+            data: (data ?? []).map(mapUserTransactionRowToUserTransaction),
+            error: null,
+        };
     }
 }
