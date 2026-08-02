@@ -325,6 +325,7 @@ export class TranslationService {
         const originalUrls: string[] = allImages.map(() => "");
         const resultSignedUrls: string[] = allImages.map(() => "");
 
+        // 准备签名url
         if (allImages.length > 0) {
             const originalImagePaths = allImages.map((img) => img.originalImagePath);
             const originalUrlResult = await this.imageStorage.createSignedUrls(originalImagePaths, 3600);

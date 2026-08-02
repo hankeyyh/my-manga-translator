@@ -49,6 +49,13 @@ export async function getUserTranslationHistory(input: GetUserTranslationHistory
                 data: null,
             };
         }
+        if (result.code === CHECK_PARAM_ERROR_CODE) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                message: result.error?.message ?? "Param Error",
+                data: null,
+            }
+        }
         if (result.code !== SUCCESS_CODE || result.data === null) {
             return {
                 code: result.code,

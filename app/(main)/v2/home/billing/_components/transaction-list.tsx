@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TransactionListEmpty } from "@/app/(main)/v2/home/billing/_components/transaction-list-empty";
 import type { UserTransaction } from "@/types/do/user-transaction";
+import { SUCCESS_CODE } from "@/types/dto/response";
 
 type Props = {
     initialPage: ListUserTransactionsPage;
@@ -52,8 +53,8 @@ export function TransactionList({ initialPage }: Props) {
             const result = await listUserTransactions({
                 cursor: nextCursor,
             });
-            if (result.error || !result.data) {
-                toast(result.error?.message ?? "Unknown Error");
+            if (result.code !== SUCCESS_CODE || !result.data) {
+                toast(result.message || "Unknown Error");
                 return;
             }
             startTransition(() => {
