@@ -46,25 +46,4 @@ export class TopUpConfigRepository {
         }
         return { data: data.map((val: Tables<'topup_config'>) => mapTopUpConfigRowToTopUpConfig(val)), error: null };
     }
-
-    async getSubscriptionConfig(
-        planTier: string,
-        billingCycle: string,
-    ): Promise<Result<TopUpConfig | null>> {
-        const { data, error } = await this.supabase
-            .from("topup_config")
-            .select("*")
-            .eq("is_active", true)
-            .eq("transaction_type", "subscription")
-            .eq("plan_tier", planTier)
-            .eq("billing_cycle", billingCycle)
-            .maybeSingle();
-        if (error) {
-            return { data: null, error };
-        }
-        if (!data) {
-            return { data: null, error: null };
-        }
-        return { data: mapTopUpConfigRowToTopUpConfig(data), error: null };
-    }
 }

@@ -11,4 +11,5 @@ export interface UserTransaction {
     subscriptionStartedAt: string | null;
     transactionStatus: string;
     transactionType: string;
+    topupConfigId: string;
 }

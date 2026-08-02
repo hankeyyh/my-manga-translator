@@ -88,6 +88,7 @@ export class CreditService {
                 credits: topupConfig.creditsIncluded,
                 transactionStatus: TRANSACTION_STATUS_PENDING,
                 packTier: topupConfig.packTier!,
+                topupConfigId: topupConfig.id,
             });
         } else if (topupConfig.transactionType === TRANSACTION_TYPE_SUBSCRIPTION) {
             // 订阅
@@ -102,6 +103,7 @@ export class CreditService {
                 planTier: topupConfig.planTier!,
                 subscriptionStartedAt: startedAt.toISOString(),
                 subscriptionEndedAt: endedAt.toISOString(),
+                topupConfigId: topupConfig.id,
             });
         } else {
             console.error(`startUserTransaction, unsupported transactionType: ${topupConfig.transactionType}`);

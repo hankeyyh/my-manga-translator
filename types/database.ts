@@ -42,6 +42,7 @@ export type Database = {
           image_id: string | null
           paytouse_credit_change: number
           paytouse_frozen_change: number
+          retry_count: number | null
           subscription_credit_change: number
           subscription_frozen_change: number
           task_id: string | null
@@ -57,6 +58,7 @@ export type Database = {
           image_id?: string | null
           paytouse_credit_change?: number
           paytouse_frozen_change?: number
+          retry_count?: number | null
           subscription_credit_change?: number
           subscription_frozen_change?: number
           task_id?: string | null
@@ -72,6 +74,7 @@ export type Database = {
           image_id?: string | null
           paytouse_credit_change?: number
           paytouse_frozen_change?: number
+          retry_count?: number | null
           subscription_credit_change?: number
           subscription_frozen_change?: number
           task_id?: string | null
@@ -332,6 +335,7 @@ export type Database = {
           id: string
           plan_tier: string
           status: string
+          topup_config_id: string
           updated_at: string
           user_id: string
         }
@@ -343,6 +347,7 @@ export type Database = {
           id?: string
           plan_tier: string
           status: string
+          topup_config_id: string
           updated_at?: string
           user_id: string
         }
@@ -354,10 +359,19 @@ export type Database = {
           id?: string
           plan_tier?: string
           status?: string
+          topup_config_id?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_topup_config_id_fkey"
+            columns: ["topup_config_id"]
+            isOneToOne: false
+            referencedRelation: "topup_config"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_transactions: {
         Row: {
@@ -374,6 +388,7 @@ export type Database = {
           subscription_ended_at: string | null
           subscription_started_at: string | null
           succeeded_at: string | null
+          topup_config_id: string
           transaction_status: string
           transaction_type: string
           updated_at: string
@@ -393,6 +408,7 @@ export type Database = {
           subscription_ended_at?: string | null
           subscription_started_at?: string | null
           succeeded_at?: string | null
+          topup_config_id: string
           transaction_status: string
           transaction_type: string
           updated_at?: string
@@ -412,18 +428,35 @@ export type Database = {
           subscription_ended_at?: string | null
           subscription_started_at?: string | null
           succeeded_at?: string | null
+          topup_config_id?: string
           transaction_status?: string
           transaction_type?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_transactions_topup_config_id_fkey"
+            columns: ["topup_config_id"]
+            isOneToOne: false
+            referencedRelation: "topup_config"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      batch_capture_image_credits: {
+        Args: { p_image_ids: string[]; p_user_id: string }
+        Returns: undefined
+      }
+      batch_refund_image_credits: {
+        Args: { p_image_ids: string[]; p_user_id: string }
+        Returns: undefined
+      }
       capture_image_credits: {
         Args: {
           p_consume_credits: number
@@ -433,9 +466,29 @@ export type Database = {
         }
         Returns: undefined
       }
+      freeze_image_credits_for_retry: {
+        Args: {
+          p_image_ids: string[]
+          p_retry_cnt: number
+          p_task_id: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       freeze_task_credits: {
         Args: { p_credits: number; p_task_id: string; p_user_id: string }
         Returns: undefined
+      }
+      handle_translate_image_failed: {
+        Args: { p_err_message: string; p_image_ids: string[] }
+        Returns: {
+          image_id: string
+          should_retry: boolean
+        }[]
+      }
+      prepare_images_for_retry: {
+        Args: { p_image_ids: string[]; p_task_id: string; p_user_id: string }
+        Returns: Json
       }
       refund_image_credits: {
         Args: {

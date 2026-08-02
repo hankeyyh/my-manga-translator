@@ -17,10 +17,6 @@ function capitalize(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function isActiveSubscription(subscription: UserSubscription | null) {
-    return subscription?.status === "active";
-}
-
 function formatPriceLabel(price: number | null, billingCycle: string) {
     if (price == null) {
         return billingCycle === "yearly" ? "/yr" : "/mo";
@@ -51,9 +47,7 @@ function daysUntil(iso: string) {
 }
 
 export function SubscriptionStatus({ subscription }: Props) {
-    const active = isActiveSubscription(subscription);
-
-    if (active && subscription) {
+    if (subscription) {
         const days = daysUntil(subscription.currentPeriodEndedAt);
         const resetLabel =
             days == null

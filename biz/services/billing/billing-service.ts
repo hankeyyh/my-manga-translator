@@ -81,7 +81,7 @@ export class BillingService {
             return { data: null, error: null, code: UNAUTHORIZED_ERROR_CODE };
         }
 
-        const result = await this.userSubscriptionRepo.getByUserId(
+        const result = await this.userSubscriptionRepo.getActiveByUserId(
             userResult.data.id,
         );
         if (result.error) {
@@ -94,12 +94,9 @@ export class BillingService {
             return { data: null, error: null, code: SUCCESS_CODE };
         }
 
-        const configResult = await this.topupConfigRepo.getSubscriptionConfig(
-            subscription.planTier,
-            subscription.billingCycle,
-        );
+        const configResult = await this.topupConfigRepo.getTopUpConfig(subscription.topupConfigId);
         if (configResult.error) {
-            console.error(`getUserSubscription, repo.getSubscriptionConfig fail, error: ${configResult.error.message}`);
+            console.error(`getUserSubscription, repo.getTopUpConfig fail, error: ${configResult.error.message}`);
             return { data: null, error: configResult.error, code: DB_ERROR_CODE };
         }
 

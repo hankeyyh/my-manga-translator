@@ -15,6 +15,7 @@ function mapUserSubscriptionRow(
         status: row.status,
         currentPeriodStartedAt: row.current_period_started_at,
         currentPeriodEndedAt: row.current_period_ended_at,
+        topupConfigId: row.topup_config_id,
         price,
     };
 }
@@ -22,11 +23,12 @@ function mapUserSubscriptionRow(
 export class UserSubscriptionRepository {
     constructor(private supabase: SupabaseClient) { }
 
-    async getByUserId(userId: string): Promise<Result<UserSubscription | null>> {
+    async getActiveByUserId(userId: string): Promise<Result<UserSubscription | null>> {
         const { data, error } = await this.supabase
             .from("user_subscriptions")
             .select("*")
             .eq("user_id", userId)
+            .eq("status", "active")
             .maybeSingle();
 
         if (error) {

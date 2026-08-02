@@ -9,6 +9,7 @@ export interface CreatePayToUseTransactionParam {
     credits: number,
     transactionStatus: string,
     packTier: string,
+    topupConfigId: string,
 }
 
 export interface CreateSubscribeTransactionParam {
@@ -20,6 +21,7 @@ export interface CreateSubscribeTransactionParam {
     transactionStatus: string,
     planTier: string,
     billingCycle: string,
+    topupConfigId: string,
 }
 
 export interface UpdateTransactionParam {
@@ -37,6 +39,7 @@ export interface UpdateTransactionParam {
     succeededAt?: string,
     failedAt?: string,
     canceledAt?: string,
+    topupConfigId?: string,
 }
 
 export function mapUserTransactionRowToUserTransaction(row: Tables<'user_transactions'>): UserTransaction {
@@ -53,6 +56,7 @@ export function mapUserTransactionRowToUserTransaction(row: Tables<'user_transac
         subscriptionStartedAt: row.subscription_started_at,
         transactionStatus: row.transaction_status,
         transactionType: row.transaction_type,
+        topupConfigId: row.topup_config_id,
     };
 }
 
@@ -69,6 +73,7 @@ export class UserTransactionsRepository {
             transaction_status: param.transactionStatus,
             transaction_type: "pay-to-use",
             pack_tier: param.packTier,
+            topup_config_id: param.topupConfigId,
         };
 
         const { data, error } = await this.supabase.from("user_transactions")
@@ -92,6 +97,7 @@ export class UserTransactionsRepository {
             credits: param.credits,
             transaction_status: param.transactionStatus,
             transaction_type: "subscription",
+            topup_config_id: param.topupConfigId,
         };
 
         const { data, error } = await this.supabase.from("user_transactions")
@@ -148,6 +154,9 @@ export class UserTransactionsRepository {
         }
         if (param.canceledAt !== undefined) {
             updateData.canceled_at = param.canceledAt;
+        }
+        if (param.topupConfigId !== undefined) {
+            updateData.topup_config_id = param.topupConfigId;
         }
 
         const updateResult = await this.supabase.from("user_transactions")

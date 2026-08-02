@@ -6,6 +6,7 @@ export interface UserSubscription {
     status: string;
     currentPeriodStartedAt: string;
     currentPeriodEndedAt: string;
+    topupConfigId: string;
     // 对应 topup_config.price，未匹配到配置时为 null
     price: number | null;
 }
