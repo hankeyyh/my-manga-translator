@@ -3,7 +3,7 @@ import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAM
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
-import { CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, LOGIC_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
+import { CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE, UNSUPPORTED_TRANSACTION_TYPE } from "@/types/dto/response";
 import { Result } from "@/types/do/response";
 import { BizResult } from "@/types/dto/response";
 import { PricingConfig } from "@/types/do/pricing-config";
@@ -105,7 +105,7 @@ export class CreditService {
             });
         } else {
             console.error(`startUserTransaction, unsupported transactionType: ${topupConfig.transactionType}`);
-            return { code: LOGIC_ERROR_CODE, data: null, error: new Error("unsupported transactionType") };
+            return { code: UNSUPPORTED_TRANSACTION_TYPE, data: null, error: new Error("unsupported transactionType") };
         }
         if (transactionResult.error) {
             console.error(`startUserTransaction, createUserTransaction fail, error: ${transactionResult.error.message}`);
@@ -183,11 +183,7 @@ export class CreditService {
             console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: pricingResult.error };
         }
-        if (!pricingResult.data) {
-            console.error(`estimateCreditCost, model pricing config not found, modelName: ${modelName}`);
-            return { code: LOGIC_ERROR_CODE, data: null, error: new Error("pricing config not found") };
-        }
-        const totalCost = pricingResult.data.creditPerImage * imageLength;
+        const totalCost = pricingResult.data!.creditPerImage * imageLength;
         return { code: SUCCESS_CODE, data: totalCost, error: null };
     }
 

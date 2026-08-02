@@ -25,15 +25,7 @@ function toApiTranslationTaskImage(img: TranslationImageView): ApiTranslationTas
 
 export async function GET() {
     const supabase = await createServerClient();
-    const translationService = new TranslationService(
-        new UserRepository(supabase),
-        new TranslationTaskRepository(supabase),
-        new TranslationImageRepository(supabase),
-        new TranslationStorageRepository(supabase),
-        new PricingConfigRepository(supabase),
-    );
-
-    const result = await translationService.getUserTranslationHistory();
+    const result = await TranslationService.fromSupabase(supabase).getUserTranslationHistory();
     if (result.code === UNAUTHORIZED_ERROR_CODE) {
         return NextResponse.json({ error: "UnAuthorized" }, { status: 401 });
     }

@@ -63,15 +63,7 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = await createServerClient();
-    const translationService = new TranslationService(
-        new UserRepository(supabase),
-        new TranslationTaskRepository(supabase),
-        new TranslationImageRepository(supabase),
-        new TranslationStorageRepository(supabase),
-        new PricingConfigRepository(supabase),
-    );
-
-    const result = await translationService.getUserTranslationHistoryByTasks({
+    const result = await TranslationService.fromSupabase(supabase).getUserTranslationHistoryByTasks({
         status: statusParam as TaskStatus | undefined,
         range: rangeParam as TranslationHistoryRange,
     });

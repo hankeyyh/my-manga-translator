@@ -1,9 +1,14 @@
 import Stripe from "stripe";
-import { DB_ERROR_CODE, LOGIC_ERROR_CODE } from "@/types/dto/response";
-import { Result } from "@/types/do/response";
+import {
+    CHECK_PARAM_ERROR_CODE,
+    DB_ERROR_CODE,
+    EXCEPTION_CODE,
+    NETWORK_ERROR_CODE,
+    REMOTE_LOGIC_ERROR_CODE,
+    SUCCESS_CODE,
+} from "@/types/dto/response";
 import { BizResult } from "@/types/dto/response";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { SUCCESS_CODE } from "@/types/dto/response";
 
 interface CreateCheckoutSessionData {
     sessionId: string;
@@ -51,7 +56,7 @@ export class PaymentService {
             if (!session.url) {
                 console.error("createCheckoutSession, stripe failed to create checkout session");
                 return {
-                    code: LOGIC_ERROR_CODE,
+                    code: REMOTE_LOGIC_ERROR_CODE,
                     data: null,
                     error: new Error("Failed to create checkout session"),
                 };
@@ -67,7 +72,7 @@ export class PaymentService {
         } catch (err) {
             console.error(`createCheckoutSession fail, error: ${err}`);
             return {
-                code: LOGIC_ERROR_CODE,
+                code: NETWORK_ERROR_CODE,
                 data: null,
                 error: err instanceof Error ? err : new Error(String(err)),
             };
@@ -90,7 +95,7 @@ export class PaymentService {
         } catch (err) {
             console.error(`retriveCheckoutSession fail, error: ${err}`);
             return {
-                code: LOGIC_ERROR_CODE,
+                code: NETWORK_ERROR_CODE,
                 data: null,
                 error: err instanceof Error ? err : new Error(String(err)),
             };
@@ -101,7 +106,7 @@ export class PaymentService {
         const signingSecret = process.env.STRIPE_WEBHOOK_SIGNING_SECRET;
         if (!signingSecret) {
             return {
-                code: LOGIC_ERROR_CODE,
+                code: EXCEPTION_CODE,
                 data: null,
                 error: new Error("STRIPE_WEBHOOK_SIGNING_SECRET is not configured"),
             };
@@ -112,7 +117,7 @@ export class PaymentService {
         } catch (err) {
             console.error(`constructWebhookEvent fail, error: ${err}`);
             return {
-                code: LOGIC_ERROR_CODE,
+                code: CHECK_PARAM_ERROR_CODE,
                 data: null,
                 error: err instanceof Error ? err : new Error(String(err)),
             };

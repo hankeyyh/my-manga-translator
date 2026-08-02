@@ -6,6 +6,7 @@ import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transa
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
+import { EXCEPTION_CODE } from "@/types/dto/response";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -25,7 +26,9 @@ export async function POST(request: NextRequest) {
     );
     const eventResult = paymentService.constructWebhookEvent(body, sig);
     if (eventResult.error) {
-        return NextResponse.json({ error: eventResult.error }, { status: 400 });
+        // 配置缺失应 500；签名/body 非法为 400
+        const status = eventResult.code === EXCEPTION_CODE ? 500 : 400;
+        return NextResponse.json({ error: eventResult.error.message }, { status });
     }
     const event = eventResult.data!;
     // TODO 要监听订阅续费事件

@@ -13,6 +13,7 @@ import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-conf
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
 import { packZip } from "@/biz/utils/pack";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export type TranslationHistoryRange = "1d" | "7d" | "1m" | "all";
 
@@ -40,6 +41,16 @@ export class TranslationService {
         private imageRepo: TranslationImageRepository,
         private imageStorage: TranslationStorageRepository,
         private pricingConfigRepo: PricingConfigRepository) { }
+
+    static fromSupabase(supabase: SupabaseClient) {
+        return new TranslationService(
+            new UserRepository(supabase),
+            new TranslationTaskRepository(supabase),
+            new TranslationImageRepository(supabase),
+            new TranslationStorageRepository(supabase),
+            new PricingConfigRepository(supabase),
+        );
+    }
 
     // 提交任务
     async submitTranslationTask(taskId: string, images: File[], config: TranslationConfig): Promise<BizResult<string>> {
