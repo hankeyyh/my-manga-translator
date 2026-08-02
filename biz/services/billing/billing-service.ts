@@ -118,9 +118,7 @@ export class BillingService {
     ): Promise<BizResult<ListUserTransactionsPage>> {
         const userResult = await this.userRepo.getCurrentUser();
         if (userResult.error) {
-            console.error(
-                `listUserTransactions, repo.getCurrentUser fail, error: ${userResult.error}`,
-            );
+            console.error(`listUserTransactions, repo.getCurrentUser fail, error: ${userResult.error}`);
             return { data: null, error: userResult.error, code: DB_ERROR_CODE };
         }
         if (!userResult.data) {

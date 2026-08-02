@@ -7,7 +7,7 @@ import { TranslationTaskRepository } from "@/biz/repositories/translate/translat
 import { CreateImageParams, TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { TranslationTaskDetailView } from "@/types/dto/translation-task";
+import { TranslationHistoryPage, TranslationTaskDetailView } from "@/types/dto/translation-task";
 import { TranslationImageView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
@@ -17,11 +17,27 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 export type TranslationHistoryRange = "1d" | "7d" | "1m" | "all";
 
+type TranslationTaskCursor = {
+    createdAt: string;
+    id: string;
+};
+
+export type GetUserTranslationHistoryInput = {
+    status?: TaskStatus;
+    range?: TranslationHistoryRange;
+    cursor?: string | null;
+    limit?: number;
+};
+
+
 const HISTORY_RANGE_DAYS: Record<Exclude<TranslationHistoryRange, "all">, number> = {
     "1d": 1,
     "7d": 7,
     "1m": 30,
 };
+
+const DEFAULT_PAGE_LIMIT = 20;
+const MAX_PAGE_LIMIT = 50;
 
 function resolveHistoryCreatedAfter(range: TranslationHistoryRange): string | undefined {
     if (range === "all") {
@@ -32,6 +48,28 @@ function resolveHistoryCreatedAfter(range: TranslationHistoryRange): string | un
     cutoff.setHours(0, 0, 0, 0);
     cutoff.setDate(cutoff.getDate() - (days - 1));
     return cutoff.toISOString();
+}
+
+function encodeCursor(cursor: TranslationTaskCursor): string {
+    return Buffer.from(JSON.stringify(cursor), "utf8").toString("base64url");
+}
+
+function decodeCursor(raw: string): TranslationTaskCursor | null {
+    try {
+        const result = JSON.parse(
+            Buffer.from(raw, "base64url").toString("utf8")
+        ) as Partial<TranslationTaskCursor>;
+
+        if (typeof result.createdAt === "string" &&
+            typeof result.id === "string" &&
+            result.createdAt.length > 0 &&
+            result.id.length > 0) {
+            return { createdAt: result.createdAt, id: result.id };
+        }
+        return null;
+    } catch {
+        return null;
+    }
 }
 
 export class TranslationService {
@@ -238,32 +276,50 @@ export class TranslationService {
     }
 
     // 用户翻译历史（按任务）
-    async getUserTranslationHistoryByTasks(options?: {
-        status?: TaskStatus;
-        range?: TranslationHistoryRange;
-        limit?: number;
-    }): Promise<BizResult<TranslationTaskDetailView[]>> {
+    async getUserTranslationHistoryByTasks(input: GetUserTranslationHistoryInput = {}): Promise<BizResult<TranslationHistoryPage>> {
         const userResult = await this.userRepo.getCurrentUser();
-        if (userResult.error || !userResult.data) {
-            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
+        if (userResult.error) {
+            console.error(`getUserTranslationHistoryByTasks, repo.getCurrentUser fail, error: ${userResult.error}`);
+            return { code: DB_ERROR_CODE, data: null, error: userResult.error };
         }
-        const user = userResult.data!;
+        if (!userResult.data) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: null };
+        }
 
-        const range = options?.range ?? "all";
+        // 解析cursor，limit
+        const limit = Math.min(MAX_PAGE_LIMIT, Math.max(input.limit ?? DEFAULT_PAGE_LIMIT, 1));
+        let cursor: TranslationTaskCursor | undefined;
+        if (input.cursor) {
+            const decoded = decodeCursor(input.cursor);
+            if (!decoded) {
+                return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("Invalid Cursor") };
+            }
+            cursor = decoded;
+        }
+
+        const user = userResult.data;
+        const range = input.range ?? "all";
         const tasksResult = await this.taskRepo.getUserTasksWithImages(user.id, {
-            status: options?.status,
+            status: input.status,
             createdAfter: resolveHistoryCreatedAfter(range),
-            limit: options?.limit,
+            limit: limit + 1,
+            cursor: cursor,
         });
         if (tasksResult.error) {
             console.error(`getUserTranslationHistoryByTasks, repo.getUserTasksWithImages fail, userId: ${user.id}, 
-                status: ${options?.status}, range: ${range}, error: ${tasksResult.error.message}`);
+                status: ${input.status}, range: ${range}, error: ${tasksResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: tasksResult.error };
         }
-        const tasks = tasksResult.data!;
+        let tasks = tasksResult.data!;
         if (tasks.length === 0) {
-            return { code: SUCCESS_CODE, data: [], error: null };
+            return { code: SUCCESS_CODE, data: { tasks: [], nextCursor: null }, error: null };
         }
+        const hasMore = tasks.length > limit;
+        tasks = hasMore ? tasks.slice(0, limit) : tasks;
+        const lastTask = tasks[tasks.length - 1];
+        const nextCursor = hasMore && lastTask
+            ? encodeCursor({ createdAt: lastTask.createdAt, id: lastTask.id })
+            : null;
 
         const allImages = tasks.flatMap((task) => task.images);
         const originalUrls: string[] = allImages.map(() => "");
@@ -315,7 +371,7 @@ export class TranslationService {
             };
         });
 
-        return { code: SUCCESS_CODE, data: taskViews, error: null };
+        return { code: SUCCESS_CODE, data: { tasks: taskViews, nextCursor: nextCursor }, error: null };
     }
 
     async batchGetPendingImageForProcessing(imageIds: string[]): Promise<BizResult<TranslationImage[]>> {
@@ -656,3 +712,4 @@ export class TranslationService {
         return merged;
     }
 }
+

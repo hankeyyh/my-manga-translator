@@ -4,3 +4,8 @@ import { TranslationImageView } from "./translation-image";
 export interface TranslationTaskDetailView extends TranslationTask {
     images: TranslationImageView[];
 }
+
+export interface TranslationHistoryPage {
+    tasks: TranslationTaskDetailView[],
+    nextCursor: string | null,
+}

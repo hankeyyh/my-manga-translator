@@ -1,12 +1,16 @@
+import { getUserTranslationHistory } from "@/actions/history";
 import { TranslationHistory } from "@/app/(main)/v2/home/history/_components/translation-history";
 
-export default function HistoryPage() {
+export default async function HistoryPage() {
+    const result = await getUserTranslationHistory();
+    const page = result.data ?? { tasks: [], nextCursor: null };
+
     return (
         <>
             <div>
                 <h1 className="text-xl font-semibold">翻译历史</h1>
             </div>
-            <TranslationHistory />
+            <TranslationHistory initialPage={page} />
         </>
     );
 }

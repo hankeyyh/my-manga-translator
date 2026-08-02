@@ -290,26 +290,32 @@ export class TranslationTaskRepository {
      */
     async getUserTasksWithImages(
         userId: string,
-        options?: {
+        options: {
             status?: TaskStatus;
             createdAfter?: string;
-            limit?: number;
+            limit: number;
+            cursor?: { createdAt: string, id: string }
         },
     ): Promise<Result<TranslationTaskDetail[]>> {
-        const limit = options?.limit ?? 50;
         let query = this.supabase
             .from('translation_tasks')
             .select('*, translation_images(*)')
             .eq('user_id', userId)
             .order('created_at', { ascending: false })
+            .order('id', {ascending: false})
             .order('image_index', { ascending: true, referencedTable: 'translation_images' })
-            .limit(limit);
+            .limit(options.limit);
 
-        if (options?.status) {
+        if (options.status) {
             query = query.eq('status', options.status);
         }
-        if (options?.createdAfter) {
+        if (options.createdAfter) {
             query = query.gte('created_at', options.createdAfter);
+        }
+        if (options.cursor) {
+            const createdAt = options.cursor.createdAt;
+            const id = options.cursor.id;
+            query = query.or(`created_at.lt."${createdAt}", and(created_at.eq."${createdAt}", id.lt.${id})`);
         }
 
         const { data, error } = await query;

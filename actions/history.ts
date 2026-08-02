@@ -1,61 +1,26 @@
 "use server";
 
 import {
+    GetUserTranslationHistoryInput,
     TranslationHistoryRange,
     TranslationService,
 } from "@/biz/services/translate/translation-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
-import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
-import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import {
     CHECK_PARAM_ERROR_CODE,
     EXCEPTION_CODE,
     SUCCESS_CODE,
     UNAUTHORIZED_ERROR_CODE,
 } from "@/types/dto/response";
-import { TranslationTaskDetailView } from "@/types/dto/translation-task";
-import { TranslationImageView } from "@/types/dto/translation-image";
+import { TranslationHistoryPage } from "@/types/dto/translation-task";
 import { TaskStatus } from "@/types/do/translation-task";
 import { Response } from "@/types/action/response";
 
 const VALID_STATUSES: TaskStatus[] = ["pending", "processing", "completed", "failed", "partial"];
 const VALID_RANGES: TranslationHistoryRange[] = ["1d", "7d", "1m", "all"];
 
-export type GetUserTranslationHistoryInput = {
-    status?: TaskStatus;
-    range?: TranslationHistoryRange;
-};
-
-function toApiTranslationTaskImage(img: TranslationImageView): ApiTranslationTaskImage {
-    return {
-        id: img.id,
-        status: img.status,
-        filename: img.filename,
-        taskId: img.taskId,
-        imageIndex: img.imageIndex,
-        originalImageUrl: img.originalImageUrl,
-        resultImageUrl: img.resultImageUrl,
-        errorMessage: img.errorMessage,
-    };
-}
-
-function toApiGetTranslationTaskResponse(view: TranslationTaskDetailView): ApiGetTranslationTaskResponse {
-    return {
-        id: view.id,
-        status: view.status,
-        total_images: view.totalImages,
-        completed_images: view.completedImages,
-        failed_images: view.failedImages,
-        progress: view.progress,
-        created_at: view.createdAt,
-        completed_at: view.completedAt,
-        config: view.config,
-        images: view.images.map(toApiTranslationTaskImage),
-    };
-}
-
 export async function getUserTranslationHistory(input: GetUserTranslationHistoryInput = {}):
-    Promise<Response<ApiGetTranslationTaskResponse[]>> {
+    Promise<Response<TranslationHistoryPage>> {
     try {
         const status = input.status;
         const range = input.range ?? "all";
@@ -76,10 +41,7 @@ export async function getUserTranslationHistory(input: GetUserTranslationHistory
         }
 
         const supabase = await createServerClient();
-        const result = await TranslationService.fromSupabase(supabase).getUserTranslationHistoryByTasks({
-            status,
-            range,
-        });
+        const result = await TranslationService.fromSupabase(supabase).getUserTranslationHistoryByTasks(input);
         if (result.code === UNAUTHORIZED_ERROR_CODE) {
             return {
                 code: UNAUTHORIZED_ERROR_CODE,
@@ -98,7 +60,7 @@ export async function getUserTranslationHistory(input: GetUserTranslationHistory
         return {
             code: SUCCESS_CODE,
             message: "",
-            data: result.data.map(toApiGetTranslationTaskResponse),
+            data: result.data,
         };
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown Error";

@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { getUserTranslationHistory } from "@/actions/history";
 import { Button } from "@/components/ui/button";
 import {
     DateRangeFilter,
     type DateRangeValue,
 } from "@/app/(main)/v2/home/_components/date-range-filter";
 import { TranslationHistoryEmpty } from "@/app/(main)/v2/home/history/_components/translation-history-empty";
-import { TranslationHistoryLoading } from "@/app/(main)/v2/home/history/_components/translation-history-loading";
 import { TranslationHistoryTaskItem } from "@/app/(main)/v2/home/history/_components/translation-history-task-item";
-import type { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import type { TaskStatus } from "@/types/do/translation-task";
+import { SUCCESS_CODE } from "@/types/dto/response";
+import { TranslationHistoryPage, TranslationTaskDetailView } from "@/types/dto/translation-task";
 
 const STATUS_FILTERS: Array<"全部" | TaskStatus> = [
     "全部",
@@ -22,72 +23,64 @@ const STATUS_FILTERS: Array<"全部" | TaskStatus> = [
     "partial",
 ];
 
-export function TranslationHistory() {
+type Props = {
+    initialPage: TranslationHistoryPage;
+};
+
+export function TranslationHistory({ initialPage }: Props) {
     const [statusFilter, setStatusFilter] = useState<"全部" | TaskStatus>("全部");
     const [dateRange, setDateRange] = useState<DateRangeValue>("all");
-    const [tasks, setTasks] = useState<ApiGetTranslationTaskResponse[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [tasks, setTasks] = useState<TranslationTaskDetailView[]>(initialPage.tasks);
+    const [nextCursor, setNextCursor] = useState<string | null>(initialPage.nextCursor);
+    const [isPending, startTransition] = useTransition();
+    const isFirstRender = useRef(true);
 
     useEffect(() => {
-        const abortController = new AbortController();
-
-        async function fetchHistory() {
-            setLoading(true);
-
-            try {
-                const params = new URLSearchParams();
-                if (statusFilter !== "全部") {
-                    params.set("status", statusFilter);
-                }
-                params.set("range", dateRange);
-
-                const response = await fetch(`/api/translate/history2?${params}`, {
-                    signal: abortController.signal,
-                });
-                const { error, data } = (await response.json()) as {
-                    error: string | null;
-                    data: ApiGetTranslationTaskResponse[] | null;
-                };
-                if (!response.ok) {
-                    throw new Error(error ?? "Unknown Error");
-                }
-                setTasks(data!);
-            } catch (err) {
-                if (err instanceof Error && err.name === "AbortError") {
-                    return;
-                }
-                const errMsg = err instanceof Error ? err.message : "Unknown Error";
-                setTasks([]);
-                toast(errMsg);
-            } finally {
-                if (!abortController.signal.aborted) {
-                    setLoading(false);
-                }
-            }
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
         }
 
-        void fetchHistory();
-        return () => abortController.abort();
+        startTransition(async () => {
+            const result = await getUserTranslationHistory({
+                status: statusFilter === "全部" ? undefined : statusFilter,
+                range: dateRange,
+            });
+            if (result.code !== SUCCESS_CODE || !result.data) {
+                toast(result.message || "Unknown Error");
+                setTasks([]);
+                setNextCursor(null);
+                return;
+            }
+            startTransition(() => {
+                setTasks(result.data!.tasks);
+                setNextCursor(result.data!.nextCursor);
+            });
+        });
     }, [statusFilter, dateRange]);
+
+    function handleLoadMore() {
+        if (!nextCursor || isPending) return;
+        startTransition(async () => {
+            const result = await getUserTranslationHistory({
+                status: statusFilter === "全部" ? undefined : statusFilter,
+                range: dateRange,
+                cursor: nextCursor,
+            });
+            if (result.code !== SUCCESS_CODE || !result.data) {
+                toast(result.message || "Unknown Error");
+                return;
+            }
+            startTransition(() => {
+                setTasks((prev) => [...prev, ...result.data!.tasks]);
+                setNextCursor(result.data!.nextCursor);
+            });
+        });
+    }
 
     function clearFilters() {
         setStatusFilter("全部");
         setDateRange("all");
-    }
-
-    let content;
-    if (loading) {
-        content = <TranslationHistoryLoading />;
-    } else if (tasks.length === 0) {
-        content = <TranslationHistoryEmpty onClearFilters={clearFilters} />;
-    } else {
-        content = (
-            <ul className="space-y-3">
-                {tasks.map((task) => (
-                    <TranslationHistoryTaskItem key={task.id} task={task} />
-                ))}
-            </ul>
-        );
     }
 
     return (
@@ -117,7 +110,30 @@ export function TranslationHistory() {
                 </div>
             </div>
 
-            {content}
+            {tasks.length === 0 ? (
+                <TranslationHistoryEmpty onClearFilters={clearFilters} />
+            ) : (
+                <>
+                    <ul className="space-y-3">
+                        {tasks.map((task) => (
+                            <TranslationHistoryTaskItem key={task.id} task={task} />
+                        ))}
+                    </ul>
+                    {nextCursor && (
+                        <div className="flex justify-center">
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                                disabled={isPending}
+                                onClick={handleLoadMore}
+                            >
+                                {isPending ? "加载中…" : "加载更多"}
+                            </Button>
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 }

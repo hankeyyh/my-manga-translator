@@ -17,6 +17,7 @@ import type { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import type { TaskStatus } from "@/types/do/translation-task";
 import type { MangaPage } from "@/types/web/manga-page";
 import { useState } from "react";
+import { TranslationTaskDetailView } from "@/types/dto/translation-task";
 
 const SOURCE_LANG = "Auto";
 
@@ -63,7 +64,7 @@ function toMangaPage(img: ApiTranslationTaskImage): MangaPage {
 }
 
 type Props = {
-    task: ApiGetTranslationTaskResponse;
+    task: TranslationTaskDetailView;
 };
 
 export function TranslationHistoryTaskItem({ task }: Props) {
@@ -95,9 +96,9 @@ export function TranslationHistoryTaskItem({ task }: Props) {
                         <CardDescription className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
                             <span className="inline-flex items-center gap-1">
                                 <Clock className="size-3 text-muted-foreground" />
-                                {formatDate(task.created_at)}
+                                {formatDate(task.createdAt)}
                             </span>
-                            <span>{task.total_images} 页</span>
+                            <span>{task.totalImages} 页</span>
                         </CardDescription>
                     </div>
                     <div className="flex shrink-0 gap-2">

@@ -12,9 +12,7 @@ export default async function HomeLayout({
     const userInfoResult = await getCurrentUserInfo();
     const userInfo = userInfoResult.data;
     const email = userInfo?.user?.email ?? "";
-    const totalCredits =
-        (userInfo?.credit?.payToUseBalance ?? 0) +
-        (userInfo?.credit?.subscriptionBalance ?? 0);
+    const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
 
     return (
         <>
