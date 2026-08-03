@@ -92,14 +92,14 @@ export default function PaymentIncompleteDisplay({
                         <CardFooter className="flex flex-col justify-center gap-3 pb-4 pt-0 sm:flex-row">
                             <Button
                                 className="w-full bg-gradient-to-br from-[#3370FF] to-[#2e6dfc] font-headline text-base font-bold text-white shadow-lg shadow-[#3370FF]/20 hover:from-[#3370FF]/90 hover:to-[#2e6dfc]/90 sm:w-auto"
-                                onClick={() => router.push("/#pricing")}
+                                onClick={() => router.push("/v2#pricing")}
                                 size="lg"
                             >
                                 Try Again
                             </Button>
                             <Button
                                 className="w-full font-headline text-base font-semibold sm:w-auto"
-                                onClick={() => router.push("/")}
+                                onClick={() => router.push("/v2")}
                                 size="lg"
                                 variant="outline"
                             >

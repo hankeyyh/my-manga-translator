@@ -34,7 +34,7 @@ async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ 
     const { status, paymentStatus, email } = result.data!;
     // 2.1 不应该出现
     if (status === "open") {
-        return redirect("/");
+        return redirect("/v2");
     }
     // 2.2 款已到账
     if (status === "complete" && paymentStatus == "paid") {
