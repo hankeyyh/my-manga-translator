@@ -48,7 +48,6 @@ import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
 
 const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
 const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
-const PLACEHOLDER_BLOG = "https://placehold.co/400x240/e5e5e5/a3a3a3?text=Blog";
 const SUPPORTED_LANGS = [
     { code: "CHS", label: "简体中文" },
     { code: "CHT", label: "繁體中文" },
@@ -159,12 +158,6 @@ const SUBSCRIPTION = [
         desc: "重度订阅",
         featured: false,
     },
-];
-
-const BLOG_POSTS = [
-    { title: "如何用 AI 翻译日漫并保留原作风格", date: "2026-06-12" },
-    { title: "漫画气泡检测与重绘原理简介", date: "2026-05-28" },
-    { title: "多语言漫画本地化的常见坑", date: "2026-05-10" },
 ];
 
 /**
@@ -833,30 +826,6 @@ export function ClientPage() {
                     </div>
                 </section>
 
-                {/* 8 · Blog */}
-                <section className="py-16">
-                    <div className="mx-auto max-w-5xl px-4">
-                        <h2 className="mb-8 text-center text-2xl font-semibold">最新博客</h2>
-                        <div className="grid gap-4 md:grid-cols-3">
-                            {BLOG_POSTS.map((post) => (
-                                <Card key={post.title} className="overflow-hidden py-0">
-                                    <img
-                                        src={PLACEHOLDER_BLOG}
-                                        alt={post.title}
-                                        className="aspect-[5/3] w-full object-cover"
-                                    />
-                                    <CardHeader>
-                                        <CardTitle className="text-base">{post.title}</CardTitle>
-                                        <CardDescription>{post.date}</CardDescription>
-                                    </CardHeader>
-                                </Card>
-                            ))}
-                        </div>
-                        <p className="mt-6 text-center">
-                            <Button variant="link">查看所有文章 →</Button>
-                        </p>
-                    </div>
-                </section>
             </main>
         </div>
     );
