@@ -43,13 +43,7 @@ export async function POST(request: NextRequest) {
             console.error(`transactionId not found in metadata, StripeSessionId: ${session.id}`);
             return NextResponse.json({}, { status: 200 }); // 重试无意义，返回200，需要人工介入
         }
-        const credService = new CreditService(
-            new TopUpConfigRepository(supabase), 
-            new UserTransactionsRepository(supabase),
-            new PricingConfigRepository(supabase),
-            new UserCreditsRepository(supabase),
-        );
-        const transResult = await credService.succeedUserTransaction(transactionId);
+        const transResult = await CreditService.fromSupabase(supabase).succeedUserTransaction(transactionId);
         if (transResult.error) {
             // stripe 会重试
             return NextResponse.json({}, { status: 500 });

@@ -12,8 +12,17 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import type { TopUpConfig } from "@/types/do/topup-config";
+import type { UserSubscription } from "@/types/do/user-subscription";
 
-export function ClientPricingSection({ topUpConfigs }: { topUpConfigs: TopUpConfig[] }) {
+type Props = {
+    topUpConfigs: TopUpConfig[];
+    currentSubscription: UserSubscription | null;
+};
+
+export function ClientPricingSection({
+    topUpConfigs,
+    currentSubscription,
+}: Props) {
     const [pricingTab, setPricingTab] = useState<"pay-to-use" | "subscription">(
         "subscription",
     );
@@ -23,6 +32,7 @@ export function ClientPricingSection({ topUpConfigs }: { topUpConfigs: TopUpConf
         .filter((config) => config.transactionType === pricingTab)
         .sort((a, b) => a.price - b.price);
 
+    // TODO 如果用户已订阅其他计划，需要改为调整订阅
     async function handlePayment(id: string) {
         try {
             const res = await fetch("/api/checkout-sessions", {
@@ -69,6 +79,9 @@ export function ClientPricingSection({ topUpConfigs }: { topUpConfigs: TopUpConf
                     {plans.map((plan) => {
                         const name = getPlanName(plan);
                         const featured = isFeatured(plan);
+                        const isCurrentPlan =
+                            pricingTab === "subscription" &&
+                            currentSubscription?.topupConfigId === plan.id;
                         return (
                             <Card
                                 key={plan.id}
@@ -91,10 +104,26 @@ export function ClientPricingSection({ topUpConfigs }: { topUpConfigs: TopUpConf
                                 <CardFooter>
                                     <Button
                                         className="w-full"
-                                        variant={featured ? "default" : "outline"}
-                                        onClick={() => handlePayment(plan.id)}
+                                        variant={
+                                            isCurrentPlan
+                                                ? "secondary"
+                                                : featured
+                                                  ? "default"
+                                                  : "outline"
+                                        }
+                                        disabled={isCurrentPlan}
+                                        onClick={
+                                            isCurrentPlan
+                                                ? undefined
+                                                : () => handlePayment(plan.id)
+                                        }
                                     >
-                                        Get Started
+                                        {isCurrentPlan
+                                            ? "已订阅"
+                                            : currentSubscription &&
+                                                pricingTab === "subscription"
+                                              ? "Adjust Plan"
+                                              : "Get Started"}
                                     </Button>
                                 </CardFooter>
                             </Card>
