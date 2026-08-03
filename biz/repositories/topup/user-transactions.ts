@@ -169,9 +169,10 @@ export class UserTransactionsRepository {
         return { data: null, error: null };
     }
 
-    async succeedTransaction(transactionId: string): Promise<Result<boolean>> {
+    async succeedTransaction(transactionId: string, subscriptionId: string | null): Promise<Result<boolean>> {
         const result = await this.supabase.rpc("succeed_transaction", {
-            p_transaction_id: transactionId
+            p_transaction_id: transactionId,
+            p_stripe_subscription_id: subscriptionId
         });
         if (result.error) {
             return { data: null, error: result.error };
@@ -182,7 +183,7 @@ export class UserTransactionsRepository {
     async listByUserId(
         userId: string,
         options: {
-            cursor?: { createdAt: string; id: string };
+            cursor?: { createdAt: string; id: string; };
             limit: number;
         },
     ): Promise<Result<UserTransaction[]>> {

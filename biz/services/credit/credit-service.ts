@@ -127,8 +127,8 @@ export class CreditService {
     }
 
     // 交易记录成功
-    async succeedUserTransaction(transactionId: string): Promise<BizResult<boolean>> {
-        const result = await this.userTransRepo.succeedTransaction(transactionId);
+    async succeedUserTransaction(transactionId: string, subscriptionId: string | null): Promise<BizResult<boolean>> {
+        const result = await this.userTransRepo.succeedTransaction(transactionId, subscriptionId);
         if (result.error) {
             console.error(`succeedUserTransaction, repo.succeedTransaction fail, error: ${result.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: result.error };

@@ -1,8 +1,4 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
-import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
-import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
-import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
@@ -35,7 +31,16 @@ export async function POST(request: NextRequest) {
     if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.status !== "complete" || session.payment_status !== "paid") {
-            return;
+            return NextResponse.json({}, { status: 200 });
+        }
+        // 查看subscription id
+        let subscriptionId: string | null = null;
+        if (session.mode === "subscription" && session.subscription) {
+            if (typeof session.subscription === "string") {
+                subscriptionId = session.subscription;
+            } else {
+                subscriptionId = session.subscription.id;
+            }
         }
         // 交易完成，增加积分
         const transactionId = session.metadata?.transactionId;
@@ -43,7 +48,7 @@ export async function POST(request: NextRequest) {
             console.error(`transactionId not found in metadata, StripeSessionId: ${session.id}`);
             return NextResponse.json({}, { status: 200 }); // 重试无意义，返回200，需要人工介入
         }
-        const transResult = await CreditService.fromSupabase(supabase).succeedUserTransaction(transactionId);
+        const transResult = await CreditService.fromSupabase(supabase).succeedUserTransaction(transactionId, subscriptionId);
         if (transResult.error) {
             // stripe 会重试
             return NextResponse.json({}, { status: 500 });

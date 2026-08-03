@@ -123,4 +123,22 @@ export class PaymentService {
             };
         }
     }
+
+    async retriveSubscription(subscriptionId: string): Promise<BizResult<Stripe.Subscription>> {
+        try {
+            const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
+            return {
+                code: SUCCESS_CODE,
+                data: subscription,
+                error: null,
+            };
+        } catch (err) {
+            console.error(`retriveSubscription fail, error: ${err}`);
+            return {
+                code: NETWORK_ERROR_CODE,
+                data: null,
+                error: err instanceof Error ? err : new Error(String(err)),
+            };
+        }
+    }
 }
