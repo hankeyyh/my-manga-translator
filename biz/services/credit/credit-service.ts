@@ -11,6 +11,7 @@ import { TopUpConfig } from "@/types/do/topup-config";
 import { TranslationConfig } from "@/types/do/translation-config";
 import { UserTransaction } from "@/types/do/user-transaction";
 import { UserCredit } from "@/types/do/user-credit";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 // 充值失败，重试次数
 const TOPUP_MAX_RETRIES = 3;
@@ -46,6 +47,15 @@ export class CreditService {
         private userCreditRepo: UserCreditsRepository,
     ) {
 
+    }
+
+    static fromSupabase(supabase: SupabaseClient) {
+        return new CreditService(
+            new TopUpConfigRepository(supabase),
+            new UserTransactionsRepository(supabase),
+            new PricingConfigRepository(supabase),
+            new UserCreditsRepository(supabase),
+        );
     }
 
     // 查询积分余额

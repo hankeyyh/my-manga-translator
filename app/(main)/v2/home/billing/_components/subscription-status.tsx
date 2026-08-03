@@ -54,6 +54,7 @@ export function SubscriptionStatus({ subscription }: Props) {
                 ? `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)}`
                 : `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)} (${days} days)`;
 
+        // TODO manage 支持调整,取消订阅
         return (
             <Card className="gap-0 py-4 shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">

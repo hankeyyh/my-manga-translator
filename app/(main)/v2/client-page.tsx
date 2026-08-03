@@ -457,7 +457,6 @@ export function ClientPage() {
     };
 
     // 轮询任务 
-    // TODO 历史页
     useEffect(() => {
         if (!taskId || !polling) {
             return;
@@ -526,6 +525,8 @@ export function ClientPage() {
             abortController.abort();
         };
     }, [taskId, polling]);
+
+    // TODO 用户提交任务后，要给引导，可以继续开启新任务。如何查看任务历史。
 
     return (
         <div className="min-h-screen bg-background">

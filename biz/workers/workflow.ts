@@ -146,8 +146,7 @@ function chunkImageIds(imageIds: string[], size: number): string[][] {
 }
 
 /**
- * TODO
- * chatgpt ratelimit 无法中止重试
+ * TODO chatgpt ratelimit 无法中止重试
  */
 
 export default {
