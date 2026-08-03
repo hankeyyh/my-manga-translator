@@ -56,3 +56,5 @@ prds/
 !.env.example
 
 sslkeys.log
+
+.scratch
