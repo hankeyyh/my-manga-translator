@@ -127,7 +127,7 @@ function hasCompletedResults(pages: MangaPage[]) {
     return allEnded && hasCompleted;
 }
 
-export function ClientPage() {
+export function TranslateSection() {
     const [pages, setPages] = useState<MangaPage[]>([]);
     const pagesRef = useRef<MangaPage[]>([]);
     const [previewIndex, setPreviewIndex] = useState<number | null>(null);

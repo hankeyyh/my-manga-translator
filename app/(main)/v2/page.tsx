@@ -1,5 +1,5 @@
 import { SiteHeader } from "@/components/v2/site-header";
-import { ClientPage } from "./client-page";
+import { TranslateSection } from "./_components/translate-section";
 import { HeroSection } from "./_components/hero-section";
 import { HowSection } from "./_components/how-section";
 import { ShowcaseSection } from "./_components/showcase-section";
@@ -15,7 +15,7 @@ export default function Page() {
             <div className="min-h-screen bg-background">
                 <main>
                     <HeroSection />
-                    <ClientPage />
+                    <TranslateSection />
                     <HowSection />
                     <ShowcaseSection />
                     <PricingSection />
