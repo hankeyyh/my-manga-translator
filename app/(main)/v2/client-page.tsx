@@ -18,16 +18,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -45,7 +36,6 @@ import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
 
 const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
-const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
 const SUPPORTED_LANGS = [
     { code: "CHS", label: "简体中文" },
     { code: "CHT", label: "繁體中文" },
@@ -68,48 +58,6 @@ function isTaskEnded(taskStatus: TaskStatus | null) {
     }
     return TASK_ENDED_STATUSES.includes(taskStatus);
 }
-
-const PAY_AS_NEEDED = [
-    {
-        name: "Basic",
-        price: "$0",
-        desc: "试用 · 无需账户",
-        featured: false,
-    },
-    {
-        name: "Pro",
-        price: "$0.020/page",
-        desc: "页数包 · 永不过期",
-        featured: true,
-    },
-    {
-        name: "Ultra",
-        price: "$0.018/page",
-        desc: "大额页数包",
-        featured: false,
-    },
-];
-
-const SUBSCRIPTION = [
-    {
-        name: "Basic",
-        price: "$0.015/page",
-        desc: "入门订阅",
-        featured: false,
-    },
-    {
-        name: "Pro",
-        price: "$0.013/page",
-        desc: "高频用户",
-        featured: true,
-    },
-    {
-        name: "Ultra",
-        price: "$0.010/page",
-        desc: "重度订阅",
-        featured: false,
-    },
-];
 
 /**
  * TODO fontstyle 没有使用
@@ -181,9 +129,6 @@ function hasCompletedResults(pages: MangaPage[]) {
 }
 
 export function ClientPage() {
-    const [pricingTab, setPricingTab] = useState<"pay" | "sub">("sub");
-    const plans = pricingTab === "pay" ? PAY_AS_NEEDED : SUBSCRIPTION;
-
     const [pages, setPages] = useState<MangaPage[]>([]);
     const pagesRef = useRef<MangaPage[]>([]);
     const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -472,279 +417,190 @@ export function ClientPage() {
     // TODO 用户提交任务后，要给引导，可以继续开启新任务。如何查看任务历史。
 
     return (
-        <div className="min-h-screen bg-background">
-            <main>
-                {/* 2 · Hero */}
-                <section className="relative flex min-h-[50vh] items-center overflow-hidden">
-                    <img
-                        src={PLACEHOLDER_HERO}
-                        alt=""
-                        aria-hidden
-                        className="absolute inset-0 h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-background/60" />
-                    <div className="relative mx-auto w-full max-w-5xl px-4 py-16 text-center">
-                        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                            AI 漫画翻译，一键完成
-                        </h1>
-                        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                            自动识别气泡文字，翻译并重绘到原图。支持日漫、韩漫、中漫，保留原作版式与字体风格。
-                        </p>
-                        <div className="mt-8 grid grid-cols-3 gap-4 sm:mx-auto sm:max-w-lg">
-                            <div>
-                                <p className="text-xl font-semibold">100,000+</p>
-                                <p className="text-sm text-muted-foreground">页</p>
-                            </div>
-                            <div>
-                                <p className="text-xl font-semibold">20+</p>
-                                <p className="text-sm text-muted-foreground">语言</p>
-                            </div>
-                            <div>
-                                <p className="text-xl font-semibold">99%</p>
-                                <p className="text-sm text-muted-foreground">准确率</p>
-                            </div>
+        <>
+            {/* 2 · Hero */}
+            <section className="relative flex min-h-[50vh] items-center overflow-hidden">
+                <img
+                    src={PLACEHOLDER_HERO}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-background/60" />
+                <div className="relative mx-auto w-full max-w-5xl px-4 py-16 text-center">
+                    <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                        AI 漫画翻译，一键完成
+                    </h1>
+                    <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+                        自动识别气泡文字，翻译并重绘到原图。支持日漫、韩漫、中漫，保留原作版式与字体风格。
+                    </p>
+                    <div className="mt-8 grid grid-cols-3 gap-4 sm:mx-auto sm:max-w-lg">
+                        <div>
+                            <p className="text-xl font-semibold">100,000+</p>
+                            <p className="text-sm text-muted-foreground">页</p>
                         </div>
-                        <div className="mt-8 flex flex-wrap justify-center gap-3">
-                            <Button asChild>
-                                <a href="#tool">免费试用</a>
-                            </Button>
-                            <Button variant="outline" asChild>
-                                <a href="#how">使用流程</a>
-                            </Button>
+                        <div>
+                            <p className="text-xl font-semibold">20+</p>
+                            <p className="text-sm text-muted-foreground">语言</p>
+                        </div>
+                        <div>
+                            <p className="text-xl font-semibold">99%</p>
+                            <p className="text-sm text-muted-foreground">准确率</p>
                         </div>
                     </div>
-                </section>
+                    <div className="mt-8 flex flex-wrap justify-center gap-3">
+                        <Button asChild>
+                            <a href="#tool">免费试用</a>
+                        </Button>
+                        <Button variant="outline" asChild>
+                            <a href="#how">使用流程</a>
+                        </Button>
+                    </div>
+                </div>
+            </section>
 
-                {/* 3 · Translate Tool */}
-                <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
-                    <div className="mx-auto max-w-5xl space-y-4 px-4">
-                        <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
+            {/* 3 · Translate Tool */}
+            <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
+                <div className="mx-auto max-w-5xl space-y-4 px-4">
+                    <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
 
-                        {pages.length > 0 && (
-                            <>
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-end gap-3">
-                                        {hasCompletedResults(pages) && (
-                                            <div className="flex items-center gap-1.5">
-                                                <Languages
-                                                    className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
-                                                    aria-hidden
-                                                />
-                                                <Switch
-                                                    checked={showTranslated}
-                                                    onCheckedChange={setShowTranslated}
-                                                    aria-label={showTranslated ? "查看翻译图" : "查看原图"}
-                                                />
-                                            </div>
-                                        )}
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-muted-foreground"
-                                            onClick={onClearAll}
-                                        >
-                                            <X className="size-3" />
-                                            全部清除
-                                        </Button>
-                                    </div>
-                                    <div className="grid grid-cols-5 items-start gap-3">
-                                        {pages.map((page, index) => (
-                                            <ThumbNail
-                                                key={page.name}
-                                                {...page}
-                                                showTranslated={showTranslated}
-                                                onRemove={() => removePage(page.name)}
-                                                onPreview={() => setPreviewIndex(index)}
-                                                onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
-                                                onContinueWait={() => void setPolling(true)}
-                                                onDownload={() => void onDownload([page])}
+                    {pages.length > 0 && (
+                        <>
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-end gap-3">
+                                    {hasCompletedResults(pages) && (
+                                        <div className="flex items-center gap-1.5">
+                                            <Languages
+                                                className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
+                                                aria-hidden
                                             />
-                                        ))}
-                                    </div>
-                                    <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>确认清除全部内容？</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    翻译任务仍在进行中。清除后仅会清空当前工作区，后台翻译不会中止，已消耗的额度也不会退回。
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>取消</AlertDialogCancel>
-                                                <AlertDialogAction onClick={resetWorkspace}>
-                                                    确认清除
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
+                                            <Switch
+                                                checked={showTranslated}
+                                                onCheckedChange={setShowTranslated}
+                                                aria-label={showTranslated ? "查看翻译图" : "查看原图"}
+                                            />
+                                        </div>
+                                    )}
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-muted-foreground"
+                                        onClick={onClearAll}
+                                    >
+                                        <X className="size-3" />
+                                        全部清除
+                                    </Button>
                                 </div>
-
-                                {previewIndex !== null && (
-                                    <ImagePreview
-                                        pages={pages}
-                                        index={previewIndex}
-                                        showTranslated={showTranslated}
-                                        onClose={() => setPreviewIndex(null)}
-                                        onIndexChange={setPreviewIndex}
-                                    />
-                                )}
-
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium">翻译为</p>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="w-full justify-between">
-                                                    {targetLang.label}
-                                                    <ChevronDown className="size-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-56">
-                                                {SUPPORTED_LANGS.map((lang) => (
-                                                    <DropdownMenuItem key={lang.code} onSelect={() => setTargetLang(lang)}>{lang.label}</DropdownMenuItem>
-                                                ))}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium">翻译模式</p>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="w-full justify-between">
-                                                    {translateMode}
-                                                    <ChevronDown className="size-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-56">
-                                                {SUPPORTED_MODE.map((mode) => (
-                                                    <DropdownMenuItem key={mode} onSelect={() => setTranslateMode(mode)}>{mode}</DropdownMenuItem>
-                                                ))}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium">字体风格</p>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" className="w-full justify-between">
-                                                    {fontStyle}
-                                                    <ChevronDown className="size-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-56">
-                                                {SUPPORTED_FONT_STYLE.map((style) => (
-                                                    <DropdownMenuItem key={style} onSelect={() => setFontStyle(style)}>{style}</DropdownMenuItem>
-                                                ))}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                    <div className="flex w-full flex-col gap-2 sm:w-40">
-                                        <Button className="w-full" onClick={submitTask}>
-                                            <Upload className="size-4" />
-                                            开始翻译
-                                        </Button>
-                                        <Button variant="outline" className="w-full" disabled={!hasCompletedResults(pages)} onClick={() => void onDownload(pages)}>
-                                            <Download className="size-4" />
-                                            下载全部
-                                        </Button>
-                                    </div>
+                                <div className="grid grid-cols-5 items-start gap-3">
+                                    {pages.map((page, index) => (
+                                        <ThumbNail
+                                            key={page.name}
+                                            {...page}
+                                            showTranslated={showTranslated}
+                                            onRemove={() => removePage(page.name)}
+                                            onPreview={() => setPreviewIndex(index)}
+                                            onRetry={page.imageId ? () => void retryTaskImages(taskId, [page.imageId!]) : undefined}
+                                            onContinueWait={() => void setPolling(true)}
+                                            onDownload={() => void onDownload([page])}
+                                        />
+                                    ))}
                                 </div>
+                                <AlertDialog open={clearConfirmOpen} onOpenChange={setClearConfirmOpen}>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>确认清除全部内容？</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                翻译任务仍在进行中。清除后仅会清空当前工作区，后台翻译不会中止，已消耗的额度也不会退回。
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>取消</AlertDialogCancel>
+                                            <AlertDialogAction onClick={resetWorkspace}>
+                                                确认清除
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </div>
 
-                                <p className="text-center text-xs text-muted-foreground">
-                                    ✦ AI 自动识别日语、中文、英语、韩语等多种语言
-                                </p>
-                            </>
-                        )}
-                    </div>
-                </section>
+                            {previewIndex !== null && (
+                                <ImagePreview
+                                    pages={pages}
+                                    index={previewIndex}
+                                    showTranslated={showTranslated}
+                                    onClose={() => setPreviewIndex(null)}
+                                    onIndexChange={setPreviewIndex}
+                                />
+                            )}
 
-                {/* 4 · 使用流程 */}
-                <section id="how" className="scroll-mt-16 py-16">
-                    <div className="mx-auto max-w-5xl px-4">
-                        <h2 className="mb-8 text-center text-2xl font-semibold">使用流程</h2>
-                        <div className="grid gap-4 md:grid-cols-3">
-                            {[
-                                { step: "①", title: "上传漫画", desc: "拖放图片或文档，支持批量上传。" },
-                                { step: "②", title: "选择语言", desc: "选择目标语言与字体风格。" },
-                                { step: "③", title: "查看与下载", desc: "预览结果并下载译后漫画。" },
-                            ].map((item) => (
-                                <Card key={item.title}>
-                                    <CardHeader>
-                                        <CardDescription>{item.step}</CardDescription>
-                                        <CardTitle>{item.title}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p className="text-sm text-muted-foreground">{item.desc}</p>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                                <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium">翻译为</p>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="w-full justify-between">
+                                                {targetLang.label}
+                                                <ChevronDown className="size-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            {SUPPORTED_LANGS.map((lang) => (
+                                                <DropdownMenuItem key={lang.code} onSelect={() => setTargetLang(lang)}>{lang.label}</DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                                <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium">翻译模式</p>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="w-full justify-between">
+                                                {translateMode}
+                                                <ChevronDown className="size-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            {SUPPORTED_MODE.map((mode) => (
+                                                <DropdownMenuItem key={mode} onSelect={() => setTranslateMode(mode)}>{mode}</DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                                <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium">字体风格</p>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="w-full justify-between">
+                                                {fontStyle}
+                                                <ChevronDown className="size-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            {SUPPORTED_FONT_STYLE.map((style) => (
+                                                <DropdownMenuItem key={style} onSelect={() => setFontStyle(style)}>{style}</DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                                <div className="flex w-full flex-col gap-2 sm:w-40">
+                                    <Button className="w-full" onClick={submitTask}>
+                                        <Upload className="size-4" />
+                                        开始翻译
+                                    </Button>
+                                    <Button variant="outline" className="w-full" disabled={!hasCompletedResults(pages)} onClick={() => void onDownload(pages)}>
+                                        <Download className="size-4" />
+                                        下载全部
+                                    </Button>
+                                </div>
+                            </div>
 
-                {/* 5 · 翻译效果展示 */}
-                <section className="border-t bg-muted/40 py-16">
-                    <div className="mx-auto max-w-5xl px-4 text-center">
-                        <h2 className="mb-2 text-2xl font-semibold">翻译效果展示</h2>
-                        <p className="mb-6 text-sm text-muted-foreground">
-                            拖动滑块对比原图 / 翻译
-                        </p>
-                        <div className="overflow-hidden rounded-xl border bg-background">
-                            <img
-                                src={PLACEHOLDER_WIDE}
-                                alt="翻译前后对比"
-                                className="mx-auto h-auto w-full max-w-3xl object-cover"
-                            />
-                        </div>
-                    </div>
-                </section>
-
-                {/* 6 · 价格 */}
-                <section id="pricing" className="scroll-mt-16 py-16">
-                    <div className="mx-auto max-w-5xl px-4">
-                        <h2 className="mb-6 text-center text-2xl font-semibold">价格</h2>
-                        <div className="mb-8 flex justify-center gap-2">
-                            <Button
-                                variant={pricingTab === "pay" ? "default" : "outline"}
-                                onClick={() => setPricingTab("pay")}
-                            >
-                                Pay As Needed
-                            </Button>
-                            <Button
-                                variant={pricingTab === "sub" ? "default" : "outline"}
-                                onClick={() => setPricingTab("sub")}
-                            >
-                                Subscription
-                            </Button>
-                        </div>
-                        <div className="grid gap-4 md:grid-cols-3">
-                            {plans.map((plan) => (
-                                <Card
-                                    key={plan.name}
-                                    className={plan.featured ? "border-2 border-foreground" : undefined}
-                                >
-                                    <CardHeader className="text-center">
-                                        <CardTitle className="flex items-center justify-center gap-2">
-                                            {plan.name}
-                                            {plan.featured && <Badge>★</Badge>}
-                                        </CardTitle>
-                                        <p className="text-2xl font-bold">{plan.price}</p>
-                                        <CardDescription>{plan.desc}</CardDescription>
-                                    </CardHeader>
-                                    <CardFooter>
-                                        <Button
-                                            className="w-full"
-                                            variant={plan.featured ? "default" : "outline"}
-                                        >
-                                            Get Started
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </div>
+                            <p className="text-center text-xs text-muted-foreground">
+                                ✦ AI 自动识别日语、中文、英语、韩语等多种语言
+                            </p>
+                        </>
+                    )}
+                </div>
+            </section>
+        </>
     );
 }
