@@ -9,6 +9,7 @@ import {
 } from "@/types/dto/response";
 import { BizResult } from "@/types/dto/response";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { ChangeSubscriptionData } from "@/types/dto/user-subscription";
 
 interface CreateCheckoutSessionData {
     sessionId: string;
@@ -141,4 +142,83 @@ export class PaymentService {
             };
         }
     }
+
+    async changeSubscription(userId: string, transactionId: string, subscriptionId: string, newPriceId: string): Promise<BizResult<ChangeSubscriptionData>> {
+        if (!subscriptionId || !newPriceId) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("subscriptionId and newPriceId are required"),
+            };
+        }
+
+        try {
+            const existing = await this.stripe.subscriptions.retrieve(subscriptionId);
+            const subscriptionItemId = existing.items.data[0]?.id;
+            if (!subscriptionItemId) {
+                console.error(`changeSubscription, subscription has no items, subscriptionId: ${subscriptionId}`);
+                return {
+                    code: REMOTE_LOGIC_ERROR_CODE,
+                    data: null,
+                    error: new Error("Subscription has no items"),
+                };
+            }
+
+            const subscription = await this.stripe.subscriptions.update(subscriptionId, {
+                items: [
+                    {
+                        id: subscriptionItemId,
+                        price: newPriceId,
+                    },
+                ],
+                metadata: {
+                    transactionId: transactionId,
+                    userId: userId,
+                    // webhook 用此校验计划是否真正切到目标价（3DS 失败回滚时价格不变）
+                    stripePriceId: newPriceId,
+                },
+                proration_behavior: "none", // 完全不计算差价（升级不补差价，降级不退余款）
+                billing_cycle_anchor: 'now', // 将结算周期锚点重置为“现在”，触发立即扣费
+                payment_behavior: "pending_if_incomplete",
+                expand: ["latest_invoice"],
+            });
+
+            const clientSecret = extractInvoiceClientSecret(subscription);
+            // pending_if_incomplete：需 3DS 时会留下 pending_update，并给出 invoice confirmation_secret
+            if (subscription.pending_update && clientSecret) {
+                return {
+                    code: SUCCESS_CODE,
+                    data: {
+                        status: "requires_action",
+                        clientSecret,
+                    },
+                    error: null,
+                };
+            }
+
+            return {
+                code: SUCCESS_CODE,
+                data: {
+                    status: "success",
+                    clientSecret: null,
+                },
+                error: null,
+            };
+        } catch (err) {
+            console.error(`changeSubscription fail, error: ${err}`);
+            return {
+                code: NETWORK_ERROR_CODE,
+                data: null,
+                error: err instanceof Error ? err : new Error(String(err)),
+            };
+        }
+    }
+}
+
+function extractInvoiceClientSecret(subscription: Stripe.Subscription): string | null {
+    const invoice = subscription.latest_invoice;
+    if (!invoice || typeof invoice === "string") {
+        return null;
+    }
+    return invoice.confirmation_secret?.client_secret ?? null;
 }

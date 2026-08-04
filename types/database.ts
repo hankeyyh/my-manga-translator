@@ -335,6 +335,7 @@ export type Database = {
           id: string
           plan_tier: string
           status: string
+          stripe_subscription_id: string | null
           topup_config_id: string
           updated_at: string
           user_id: string
@@ -347,6 +348,7 @@ export type Database = {
           id?: string
           plan_tier: string
           status: string
+          stripe_subscription_id?: string | null
           topup_config_id: string
           updated_at?: string
           user_id: string
@@ -359,6 +361,7 @@ export type Database = {
           id?: string
           plan_tier?: string
           status?: string
+          stripe_subscription_id?: string | null
           topup_config_id?: string
           updated_at?: string
           user_id?: string
@@ -502,15 +505,10 @@ export type Database = {
         }
         Returns: undefined
       }
-      succeed_transaction:
-        | { Args: { p_transaction_id: string }; Returns: boolean }
-        | {
-            Args: {
-              p_stripe_subscription_id?: string
-              p_transaction_id: string
-            }
-            Returns: boolean
-          }
+      succeed_transaction: {
+        Args: { p_stripe_subscription_id?: string; p_transaction_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

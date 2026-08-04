@@ -22,6 +22,8 @@ export interface CreateSubscribeTransactionParam {
     planTier: string,
     billingCycle: string,
     topupConfigId: string,
+    /** "subscription" | "subscription_change" */
+    transactionType: string,
 }
 
 export interface UpdateTransactionParam {
@@ -86,7 +88,7 @@ export class UserTransactionsRepository {
         return { data: mapUserTransactionRowToUserTransaction(data), error: null };
     }
 
-    async createSubscribeTransaction(param: CreateSubscribeTransactionParam) {
+    async createSubscribeTransaction(param: CreateSubscribeTransactionParam): Promise<Result<UserTransaction>> {
         const insertData: TablesInsert<"user_transactions"> = {
             user_id: param.userId,
             plan_tier: param.planTier,
@@ -96,7 +98,7 @@ export class UserTransactionsRepository {
             subscription_ended_at: param.subscriptionEndedAt,
             credits: param.credits,
             transaction_status: param.transactionStatus,
-            transaction_type: "subscription",
+            transaction_type: param.transactionType,
             topup_config_id: param.topupConfigId,
         };
 

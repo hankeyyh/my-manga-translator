@@ -18,6 +18,7 @@ const TOPUP_MAX_RETRIES = 3;
 
 const TRANSACTION_TYPE_PAY_TO_USE = "pay-to-use";
 const TRANSACTION_TYPE_SUBSCRIPTION = "subscription";
+export const TRANSACTION_TYPE_SUBSCRIPTION_CHANGE = "subscription_change";
 
 const TRANSACTION_STATUS_PENDING = "pending";
 const TRANSACTION_STATUS_SUCCESS = "success";
@@ -87,10 +88,10 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: data, error: null };
     }
 
-    // 创建交易记录
-    async startUserTransaction(userId: string, topupConfig: TopUpConfig): Promise<BizResult<UserTransaction>> {
+    // 创建交易记录；订阅变更时传入 TRANSACTION_TYPE_SUBSCRIPTION_CHANGE
+    async startUserTransaction(userId: string, topupConfig: TopUpConfig, transactionType: string): Promise<BizResult<UserTransaction>> {
         let transactionResult: Result<UserTransaction>;
-        if (topupConfig.transactionType === TRANSACTION_TYPE_PAY_TO_USE) {
+        if (transactionType === TRANSACTION_TYPE_PAY_TO_USE) {
             // 一次性购买
             transactionResult = await this.userTransRepo.createPayToUseTransaction({
                 userId: userId,
@@ -100,8 +101,8 @@ export class CreditService {
                 packTier: topupConfig.packTier!,
                 topupConfigId: topupConfig.id,
             });
-        } else if (topupConfig.transactionType === TRANSACTION_TYPE_SUBSCRIPTION) {
-            // 订阅
+        } else if (transactionType === TRANSACTION_TYPE_SUBSCRIPTION || transactionType === TRANSACTION_TYPE_SUBSCRIPTION_CHANGE) {
+            // 新订阅 / 订阅计划变更
             const startedAt = new Date();
             const endedAt = getSubscriptionEndDate(topupConfig.billingCycle!, startedAt);
             transactionResult = await this.userTransRepo.createSubscribeTransaction({
@@ -114,9 +115,10 @@ export class CreditService {
                 subscriptionStartedAt: startedAt.toISOString(),
                 subscriptionEndedAt: endedAt.toISOString(),
                 topupConfigId: topupConfig.id,
+                transactionType,
             });
         } else {
-            console.error(`startUserTransaction, unsupported transactionType: ${topupConfig.transactionType}`);
+            console.error(`startUserTransaction, unsupported transactionType: ${transactionType}`);
             return { code: UNSUPPORTED_TRANSACTION_TYPE, data: null, error: new Error("unsupported transactionType") };
         }
         if (transactionResult.error) {

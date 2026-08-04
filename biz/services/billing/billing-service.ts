@@ -81,11 +81,15 @@ export class BillingService {
             return { data: null, error: null, code: UNAUTHORIZED_ERROR_CODE };
         }
 
-        const result = await this.userSubscriptionRepo.getActiveByUserId(
-            userResult.data.id,
-        );
+        return this.getActiveSubscriptionByUserId(userResult.data.id);
+    }
+
+    async getActiveSubscriptionByUserId(userId: string): Promise<BizResult<UserSubscription>> {
+        const result = await this.userSubscriptionRepo.getActiveByUserId(userId);
         if (result.error) {
-            console.error(`getUserSubscription, repo.getByUserId fail, error: ${result.error.message}`);
+            console.error(
+                `getActiveSubscriptionByUserId, repo.getActiveByUserId fail, error: ${result.error.message}`,
+            );
             return { data: null, error: result.error, code: DB_ERROR_CODE };
         }
 
@@ -96,7 +100,9 @@ export class BillingService {
 
         const configResult = await this.topupConfigRepo.getTopUpConfig(subscription.topupConfigId);
         if (configResult.error) {
-            console.error(`getUserSubscription, repo.getTopUpConfig fail, error: ${configResult.error.message}`);
+            console.error(
+                `getActiveSubscriptionByUserId, repo.getTopUpConfig fail, error: ${configResult.error.message}`,
+            );
             return { data: null, error: configResult.error, code: DB_ERROR_CODE };
         }
 

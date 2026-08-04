@@ -16,6 +16,7 @@ function mapUserSubscriptionRow(
         currentPeriodStartedAt: row.current_period_started_at,
         currentPeriodEndedAt: row.current_period_ended_at,
         topupConfigId: row.topup_config_id,
+        stripeSubscriptionId: row.stripe_subscription_id,
         price,
     };
 }

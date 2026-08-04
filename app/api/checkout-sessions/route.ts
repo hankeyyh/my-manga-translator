@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 4. 创建交易记录
-        const userTransResult = await creditService.startUserTransaction(userResult.data.id, topupConfig);
+        const userTransResult = await creditService.startUserTransaction(userResult.data.id, topupConfig, topupConfig.transactionType);
         if (userTransResult.error) {
             return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
         }

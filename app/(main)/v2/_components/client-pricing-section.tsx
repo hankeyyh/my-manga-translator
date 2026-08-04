@@ -2,8 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { changeSubscription } from "@/actions/change-subscription";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
     Card,
     CardDescription,
@@ -11,6 +23,10 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    SUCCESS_CODE,
+    UNAUTHORIZED_ERROR_CODE,
+} from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
 
@@ -26,13 +42,14 @@ export function ClientPricingSection({
     const [pricingTab, setPricingTab] = useState<"pay-to-use" | "subscription">(
         "subscription",
     );
+    const [pendingPlan, setPendingPlan] = useState<TopUpConfig | null>(null);
+    const [isChanging, setIsChanging] = useState(false);
     const router = useRouter();
 
     const plans = topUpConfigs
         .filter((config) => config.transactionType === pricingTab)
         .sort((a, b) => a.price - b.price);
 
-    // TODO 如果用户已订阅其他计划，需要改为调整订阅
     async function handlePayment(id: string) {
         try {
             const res = await fetch("/api/checkout-sessions", {
@@ -40,7 +57,7 @@ export function ClientPricingSection({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id }),
             });
-            const data = (await res.json()) as { url?: string; error?: string };
+            const data = (await res.json()) as { url?: string; error?: string; };
             if (res.status === 401) {
                 router.push("/auth/login");
                 return;
@@ -54,6 +71,45 @@ export function ClientPricingSection({
             }
         } catch (error) {
             console.error("Payment error", error);
+        }
+    }
+
+    function handlePlanClick(plan: TopUpConfig) {
+        if (currentSubscription && pricingTab === "subscription") {
+            setPendingPlan(plan);
+            return;
+        }
+        void handlePayment(plan.id);
+    }
+
+    async function handleConfirmChangePlan() {
+        if (!pendingPlan || isChanging) return;
+        setIsChanging(true);
+        try {
+            const result = await changeSubscription({
+                topupConfigId: pendingPlan.id,
+            });
+            if (result.code === UNAUTHORIZED_ERROR_CODE) {
+                setPendingPlan(null);
+                router.push("/auth/login");
+                return;
+            }
+            if (result.code !== SUCCESS_CODE || !result.data) {
+                toast.error(result.message || "调整计划失败");
+                return;
+            }
+            if (result.data.status === "requires_action") {
+                toast.message("需要完成银行卡验证后才会生效，请按提示完成验证");
+            } else {
+                toast.success("计划调整已提交，积分将稍后到账");
+            }
+            setPendingPlan(null);
+            router.refresh();
+        } catch (error) {
+            console.error("Change subscription error", error);
+            toast.error("调整计划失败");
+        } finally {
+            setIsChanging(false);
         }
     }
 
@@ -108,22 +164,22 @@ export function ClientPricingSection({
                                             isCurrentPlan
                                                 ? "secondary"
                                                 : featured
-                                                  ? "default"
-                                                  : "outline"
+                                                    ? "default"
+                                                    : "outline"
                                         }
-                                        disabled={isCurrentPlan}
+                                        disabled={isCurrentPlan || isChanging}
                                         onClick={
                                             isCurrentPlan
                                                 ? undefined
-                                                : () => handlePayment(plan.id)
+                                                : () => handlePlanClick(plan)
                                         }
                                     >
                                         {isCurrentPlan
                                             ? "已订阅"
                                             : currentSubscription &&
                                                 pricingTab === "subscription"
-                                              ? "Adjust Plan"
-                                              : "Get Started"}
+                                                ? "Adjust Plan"
+                                                : "Get Started"}
                                     </Button>
                                 </CardFooter>
                             </Card>
@@ -131,6 +187,36 @@ export function ClientPricingSection({
                     })}
                 </div>
             </div>
+
+            <AlertDialog
+                open={pendingPlan !== null}
+                onOpenChange={(open) => {
+                    if (!open && !isChanging) setPendingPlan(null);
+                }}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>确认调整订阅计划？</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {pendingPlan
+                                ? `将调整为 ${getPlanName(pendingPlan)}（${formatPrice(pendingPlan)}）。差价不会退回，现有积分将保留，确认后立即按新计划价格扣费。`
+                                : null}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isChanging}>取消</AlertDialogCancel>
+                        <AlertDialogAction
+                            disabled={isChanging}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                void handleConfirmChangePlan();
+                            }}
+                        >
+                            {isChanging ? "处理中…" : "确认调整"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </section>
     );
 }
