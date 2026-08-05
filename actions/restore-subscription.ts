@@ -14,9 +14,9 @@ import {
 } from "@/types/dto/response";
 
 /**
- * 取消订阅：Stripe 设为周期末取消，并更新本地 status=canceled。
+ * 恢复订阅：Stripe 撤销周期末取消，并更新本地 status=active。
  */
-export async function cancelSubscription(): Promise<Response<null>> {
+export async function restoreSubscription(): Promise<Response<null>> {
     try {
         // 获取用户订阅
         const supabase = await createServerClient();
@@ -36,36 +36,38 @@ export async function cancelSubscription(): Promise<Response<null>> {
         if (!currentSubscription?.stripeSubscriptionId) {
             return {
                 code: CHECK_PARAM_ERROR_CODE,
-                message: "No active subscription to cancel",
+                message: "No subscription to restore",
                 data: null,
             };
         }
-        if (currentSubscription.status !== "active") {
+        if (currentSubscription.status !== "canceled") {
             return {
                 code: CHECK_PARAM_ERROR_CODE,
-                message: "Subscription is not active",
+                message: "Subscription is not pending cancellation",
                 data: null,
             };
         }
 
-        // 取消stripe订阅
+        // 恢复stripe订阅
         const paymentService = new PaymentService(
             createStripeClient(),
             new UserRepository(supabase),
         );
-        const cancelResult = await paymentService.cancelSubscription(
+        const restoreResult = await paymentService.restoreSubscription(
             currentSubscription.stripeSubscriptionId,
         );
-        if (cancelResult.code !== SUCCESS_CODE) {
+        if (restoreResult.code !== SUCCESS_CODE) {
             return {
-                code: cancelResult.code,
-                message: cancelResult.error?.message ?? "Failed to cancel subscription",
+                code: restoreResult.code,
+                message: restoreResult.error?.message ?? "Failed to restore subscription",
                 data: null,
             };
         }
 
-        // 取消业务订阅
-        const updateResult = await billingService.cancelUserSubscription(currentSubscription.id);
+        // 恢复业务订阅
+        const updateResult = await billingService.restoreUserSubscription(
+            currentSubscription.id,
+        );
         if (updateResult.code !== SUCCESS_CODE) {
             return {
                 code: updateResult.code,
@@ -81,7 +83,7 @@ export async function cancelSubscription(): Promise<Response<null>> {
         };
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown Error";
-        console.error(`cancelSubscription unexpected error: ${errorMessage}`);
+        console.error(`restoreSubscription unexpected error: ${errorMessage}`);
         return {
             code: EXCEPTION_CODE,
             message: "Internal Server Error",

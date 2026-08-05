@@ -72,6 +72,6 @@ export async function getUserTranslationHistory(input: GetUserTranslationHistory
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown Error";
         console.error(`getUserTranslationHistory unexpected error: ${errorMessage}`);
-        return { code: EXCEPTION_CODE, message: errorMessage, data: null };
+        return { code: EXCEPTION_CODE, message: "Internal Server Error", data: null };
     }
 }

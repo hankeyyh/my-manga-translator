@@ -71,7 +71,8 @@ export class PaymentService {
                 error: null,
             };
         } catch (err) {
-            console.error(`createCheckoutSession fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`createCheckoutSession fail, error: ${errMsg}`);
             return {
                 code: NETWORK_ERROR_CODE,
                 data: null,
@@ -94,7 +95,8 @@ export class PaymentService {
                 error: null,
             };
         } catch (err) {
-            console.error(`retriveCheckoutSession fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`retriveCheckoutSession fail, error: ${errMsg}`);
             return {
                 code: NETWORK_ERROR_CODE,
                 data: null,
@@ -116,7 +118,8 @@ export class PaymentService {
             const event = this.stripe.webhooks.constructEvent(body, signature, signingSecret);
             return { code: SUCCESS_CODE, data: event, error: null };
         } catch (err) {
-            console.error(`constructWebhookEvent fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`constructWebhookEvent fail, error: ${errMsg}`);
             return {
                 code: CHECK_PARAM_ERROR_CODE,
                 data: null,
@@ -134,7 +137,8 @@ export class PaymentService {
                 error: null,
             };
         } catch (err) {
-            console.error(`retriveSubscription fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`retriveSubscription fail, error: ${errMsg}`);
             return {
                 code: NETWORK_ERROR_CODE,
                 data: null,
@@ -205,7 +209,82 @@ export class PaymentService {
                 error: null,
             };
         } catch (err) {
-            console.error(`changeSubscription fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`changeSubscription fail, error: ${errMsg}`);
+            return {
+                code: NETWORK_ERROR_CODE,
+                data: null,
+                error: err instanceof Error ? err : new Error(String(err)),
+            };
+        }
+    }
+
+    async cancelSubscription(subscriptionId: string): Promise<BizResult<null>> {
+        if (!subscriptionId) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("subscriptionId is required"),
+            };
+        }
+
+        try {
+            await this.stripe.subscriptions.update(subscriptionId, {
+                cancel_at_period_end: true,
+            });
+            return {
+                code: SUCCESS_CODE,
+                data: null,
+                error: null,
+            };
+        } catch (err) {
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`cancelSubscription fail, error: ${errMsg}`);
+            return {
+                code: NETWORK_ERROR_CODE,
+                data: null,
+                error: err instanceof Error ? err : new Error(String(err)),
+            };
+        }
+    }
+
+    async restoreSubscription(subscriptionId: string): Promise<BizResult<null>> {
+        if (!subscriptionId) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("subscriptionId is required"),
+            };
+        }
+
+        try {
+            const existing = await this.stripe.subscriptions.retrieve(subscriptionId);
+            if (existing.status === "canceled") {
+                return {
+                    code: REMOTE_LOGIC_ERROR_CODE,
+                    data: null,
+                    error: new Error("Subscription already ended, please subscribe again"),
+                };
+            }
+            if (!existing.cancel_at_period_end) {
+                return {
+                    code: SUCCESS_CODE,
+                    data: null,
+                    error: null,
+                };
+            }
+
+            await this.stripe.subscriptions.update(subscriptionId, {
+                cancel_at_period_end: false,
+            });
+            return {
+                code: SUCCESS_CODE,
+                data: null,
+                error: null,
+            };
+        } catch (err) {
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`restoreSubscription fail, error: ${errMsg}`);
             return {
                 code: NETWORK_ERROR_CODE,
                 data: null,

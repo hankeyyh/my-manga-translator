@@ -81,14 +81,14 @@ export class BillingService {
             return { data: null, error: null, code: UNAUTHORIZED_ERROR_CODE };
         }
 
-        return this.getActiveSubscriptionByUserId(userResult.data.id);
+        return this.getCurrentSubscriptionByUserId(userResult.data.id);
     }
 
-    async getActiveSubscriptionByUserId(userId: string): Promise<BizResult<UserSubscription>> {
-        const result = await this.userSubscriptionRepo.getActiveByUserId(userId);
+    async getCurrentSubscriptionByUserId(userId: string): Promise<BizResult<UserSubscription>> {
+        const result = await this.userSubscriptionRepo.getCurrentByUserId(userId);
         if (result.error) {
             console.error(
-                `getActiveSubscriptionByUserId, repo.getActiveByUserId fail, error: ${result.error.message}`,
+                `getCurrentSubscriptionByUserId, repo.getCurrentByUserId fail, error: ${result.error.message}`,
             );
             return { data: null, error: result.error, code: DB_ERROR_CODE };
         }
@@ -101,7 +101,7 @@ export class BillingService {
         const configResult = await this.topupConfigRepo.getTopUpConfig(subscription.topupConfigId);
         if (configResult.error) {
             console.error(
-                `getActiveSubscriptionByUserId, repo.getTopUpConfig fail, error: ${configResult.error.message}`,
+                `getCurrentSubscriptionByUserId, repo.getTopUpConfig fail, error: ${configResult.error.message}`,
             );
             return { data: null, error: configResult.error, code: DB_ERROR_CODE };
         }
@@ -171,5 +171,45 @@ export class BillingService {
             error: null,
             code: SUCCESS_CODE,
         };
+    }
+
+    async cancelUserSubscription(subscriptionId: string): Promise<BizResult<null>> {
+        if (!subscriptionId) {
+            return {
+                data: null,
+                error: new Error("subscriptionId is required"),
+                code: CHECK_PARAM_ERROR_CODE,
+            };
+        }
+
+        const result = await this.userSubscriptionRepo.update(subscriptionId, {
+            status: "canceled",
+        });
+        if (result.error) {
+            console.error(`cancelUserSubscription, repo.update fail, error: ${result.error.message}`);
+            return { data: null, error: result.error, code: DB_ERROR_CODE };
+        }
+
+        return { data: null, error: null, code: SUCCESS_CODE };
+    }
+
+    async restoreUserSubscription(subscriptionId: string): Promise<BizResult<null>> {
+        if (!subscriptionId) {
+            return {
+                data: null,
+                error: new Error("subscriptionId is required"),
+                code: CHECK_PARAM_ERROR_CODE,
+            };
+        }
+
+        const result = await this.userSubscriptionRepo.update(subscriptionId, {
+            status: "active",
+        });
+        if (result.error) {
+            console.error(`restoreUserSubscription, repo.update fail, error: ${result.error.message}`);
+            return { data: null, error: result.error, code: DB_ERROR_CODE };
+        }
+
+        return { data: null, error: null, code: SUCCESS_CODE };
     }
 }

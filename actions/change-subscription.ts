@@ -143,6 +143,6 @@ export async function changeSubscription({ topupConfigId }: { topupConfigId: str
         if (pendingTransactionId && creditService) {
             await creditService.failUserTransaction(pendingTransactionId).catch(console.error);
         }
-        return { code: EXCEPTION_CODE, message: errorMessage, data: null };
+        return { code: EXCEPTION_CODE, message: "Internal Server Error", data: null };
     }
 }

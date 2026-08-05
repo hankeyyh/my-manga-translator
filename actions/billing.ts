@@ -42,7 +42,7 @@ export async function getUserSubscription(): Promise<Response<UserSubscription>>
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown Error";
         console.error(`getUserSubscription unexpected error: ${errorMessage}`);
-        return { code: EXCEPTION_CODE, message: errorMessage, data: null };
+        return { code: EXCEPTION_CODE, message: "Internal Server Error", data: null };
     }
 }
 
@@ -82,6 +82,6 @@ export async function listUserTransactions(
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown Error";
         console.error(`listUserTransactions unexpected error: ${errorMessage}`);
-        return { code: EXCEPTION_CODE, message: errorMessage, data: null };
+        return { code: EXCEPTION_CODE, message: "Internal Server Error", data: null };
     }
 }

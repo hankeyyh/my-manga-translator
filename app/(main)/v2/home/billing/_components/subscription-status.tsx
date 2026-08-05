@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { ManageSubscriptionDialog } from "@/app/(main)/v2/home/billing/_components/manage-subscription-dialog";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -6,10 +10,12 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
 
 type Props = {
     subscription: UserSubscription | null;
+    topUpConfigs: TopUpConfig[];
 };
 
 function capitalize(value: string) {
@@ -46,7 +52,9 @@ function daysUntil(iso: string) {
     );
 }
 
-export function SubscriptionStatus({ subscription }: Props) {
+export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
+    const [manageOpen, setManageOpen] = useState(false);
+
     if (subscription) {
         const days = daysUntil(subscription.currentPeriodEndedAt);
         const resetLabel =
@@ -54,36 +62,48 @@ export function SubscriptionStatus({ subscription }: Props) {
                 ? `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)}`
                 : `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)} (${days} days)`;
 
-        // TODO manage 支持调整,取消订阅
         return (
-            <Card className="gap-0 py-4 shadow-none">
-                <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">
-                    <div className="min-w-0 flex-1">
-                        <p className="text-xs uppercase tracking-wide text-foreground/70">
-                            Current Plan
-                        </p>
-                        <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
-                            <CardTitle className="text-lg">
-                                {capitalize(subscription.planTier)}
-                            </CardTitle>
-                            <span className="text-sm text-muted-foreground">
-                                {formatPriceLabel(
-                                    subscription.price,
-                                    subscription.billingCycle,
-                                )}
-                            </span>
+            <>
+                <Card className="gap-0 py-4 shadow-none">
+                    <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">
+                        <div className="min-w-0 flex-1">
+                            <p className="text-xs uppercase tracking-wide text-foreground/70">
+                                Current Plan
+                            </p>
+                            <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
+                                <CardTitle className="text-lg">
+                                    {capitalize(subscription.planTier)}
+                                </CardTitle>
+                                <span className="text-sm text-muted-foreground">
+                                    {formatPriceLabel(
+                                        subscription.price,
+                                        subscription.billingCycle,
+                                    )}
+                                </span>
+                            </div>
+                            <CardDescription className="mt-1 text-sm">
+                                {resetLabel}
+                            </CardDescription>
                         </div>
-                        <CardDescription className="mt-1 text-sm">
-                            {resetLabel}
-                        </CardDescription>
-                    </div>
-                    <div className="shrink-0">
-                        <Button size="sm" type="button" variant="outline">
-                            Manage
-                        </Button>
-                    </div>
-                </CardHeader>
-            </Card>
+                        <div className="shrink-0">
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                                onClick={() => setManageOpen(true)}
+                            >
+                                Manage
+                            </Button>
+                        </div>
+                    </CardHeader>
+                </Card>
+                <ManageSubscriptionDialog
+                    open={manageOpen}
+                    onOpenChange={setManageOpen}
+                    topUpConfigs={topUpConfigs}
+                    currentSubscription={subscription}
+                />
+            </>
         );
     }
 

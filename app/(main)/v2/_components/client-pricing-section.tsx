@@ -3,33 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { changeSubscription } from "@/actions/change-subscription";
-import { Badge } from "@/components/ui/badge";
+import { restoreSubscription } from "@/actions/restore-subscription";
 import { Button } from "@/components/ui/button";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    SUCCESS_CODE,
-    UNAUTHORIZED_ERROR_CODE,
-} from "@/types/dto/response";
+import { SUCCESS_CODE } from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
-import { loadStripeClient } from "@/biz/utils/stripe/client";
+import { ChangePlanConfirmDialog } from "./change-plan-confirm-dialog";
+import { SubscriptionPlanCards } from "./subscription-plan-cards";
+import { useChangeSubscription } from "./use-change-subscription";
 
 type Props = {
     topUpConfigs: TopUpConfig[];
@@ -43,13 +24,21 @@ export function ClientPricingSection({
     const [pricingTab, setPricingTab] = useState<"pay-to-use" | "subscription">(
         "subscription",
     );
-    const [pendingPlan, setPendingPlan] = useState<TopUpConfig | null>(null);
-    const [isChanging, setIsChanging] = useState(false);
+    const [isRestoring, setIsRestoring] = useState(false);
     const router = useRouter();
+    const {
+        pendingPlan,
+        isChanging,
+        requestChange,
+        cancelPending,
+        confirmChange,
+    } = useChangeSubscription();
 
     const plans = topUpConfigs
         .filter((config) => config.transactionType === pricingTab)
         .sort((a, b) => a.price - b.price);
+
+    const isCanceled = currentSubscription?.status === "canceled";
 
     async function handlePayment(id: string) {
         try {
@@ -58,7 +47,7 @@ export function ClientPricingSection({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id }),
             });
-            const data = (await res.json()) as { url?: string; error?: string; };
+            const data = (await res.json()) as { url?: string; error?: string };
             if (res.status === 401) {
                 router.push("/auth/login");
                 return;
@@ -77,60 +66,28 @@ export function ClientPricingSection({
 
     function handlePlanClick(plan: TopUpConfig) {
         if (currentSubscription && pricingTab === "subscription") {
-            setPendingPlan(plan);
+            requestChange(plan);
             return;
         }
         void handlePayment(plan.id);
     }
 
-    async function handleConfirmChangePlan() {
-        if (!pendingPlan || isChanging) return;
-        setIsChanging(true);
+    async function handleRestore() {
+        if (isRestoring) return;
+        setIsRestoring(true);
         try {
-            const result = await changeSubscription({
-                topupConfigId: pendingPlan.id,
-            });
-            if (result.code === UNAUTHORIZED_ERROR_CODE) {
-                setPendingPlan(null);
-                router.push("/auth/login");
+            const result = await restoreSubscription();
+            if (result.code !== SUCCESS_CODE) {
+                toast.error(result.message || "恢复订阅失败");
                 return;
             }
-            if (result.code !== SUCCESS_CODE || !result.data) {
-                toast.error(result.message || "调整计划失败");
-                return;
-            }
-            if (result.data.status === "requires_action") {
-                const clientSecret = result.data.clientSecret;
-                if (!clientSecret) {
-                    toast.error("缺少支付确认信息，请稍后重试");
-                    return;
-                }
-                const stripeClient = await loadStripeClient();
-                if (!stripeClient) {
-                    toast.error("支付组件加载失败，请稍后重试");
-                    return;
-                }
-                toast.message("需要完成银行卡验证后才会生效，请按提示完成验证");
-                const { error, paymentIntent } = await stripeClient.confirmCardPayment(clientSecret);
-                if (error) {
-                    toast.error(error.message || "银行卡验证失败");
-                    return;
-                }
-                if (paymentIntent?.status === "succeeded") {
-                    toast.success("验证成功，计划调整已提交，积分将稍后到账");
-                } else {
-                    toast.message(`支付状态：${paymentIntent?.status ?? "unknown"}，请稍后刷新查看`);
-                }
-            } else if (result.data.status === "success") {
-                toast.success("计划调整已提交，积分将稍后到账");
-            }
-            setPendingPlan(null);
+            toast.success(result.message || "已恢复订阅");
             router.refresh();
         } catch (error) {
-            console.error("Change subscription error", error);
-            toast.error("调整计划失败");
+            console.error("Restore subscription error", error);
+            toast.error("恢复订阅失败");
         } finally {
-            setIsChanging(false);
+            setIsRestoring(false);
         }
     }
 
@@ -146,138 +103,52 @@ export function ClientPricingSection({
                         Pay As Needed
                     </Button>
                     <Button
-                        variant={pricingTab === "subscription" ? "default" : "outline"}
+                        variant={
+                            pricingTab === "subscription" ? "default" : "outline"
+                        }
                         onClick={() => setPricingTab("subscription")}
                     >
                         Subscription
                     </Button>
                 </div>
-                <div className="grid gap-4 md:grid-cols-3">
-                    {plans.map((plan) => {
-                        const name = getPlanName(plan);
-                        const featured = isFeatured(plan);
-                        const isCurrentPlan =
-                            pricingTab === "subscription" &&
-                            currentSubscription?.topupConfigId === plan.id;
-                        return (
-                            <Card
-                                key={plan.id}
-                                className={
-                                    featured ? "border-2 border-foreground" : undefined
-                                }
-                            >
-                                <CardHeader className="text-center">
-                                    <CardTitle className="flex items-center justify-center gap-2">
-                                        {name}
-                                        {featured && <Badge>★</Badge>}
-                                    </CardTitle>
-                                    <p className="text-2xl font-bold">
-                                        {formatPrice(plan)}
-                                    </p>
-                                    <CardDescription>
-                                        {formatCredits(plan)}
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardFooter>
-                                    <Button
-                                        className="w-full"
-                                        variant={
-                                            isCurrentPlan
-                                                ? "secondary"
-                                                : featured
-                                                    ? "default"
-                                                    : "outline"
-                                        }
-                                        disabled={isCurrentPlan || isChanging}
-                                        onClick={
-                                            isCurrentPlan
-                                                ? undefined
-                                                : () => handlePlanClick(plan)
-                                        }
-                                    >
-                                        {isCurrentPlan
-                                            ? "已订阅"
-                                            : currentSubscription &&
-                                                pricingTab === "subscription"
-                                                ? "Adjust Plan"
-                                                : "Get Started"}
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        );
-                    })}
-                </div>
+                <SubscriptionPlanCards
+                    plans={plans}
+                    currentTopupConfigId={
+                        pricingTab === "subscription"
+                            ? currentSubscription?.topupConfigId
+                            : null
+                    }
+                    subscriptionStatus={
+                        pricingTab === "subscription"
+                            ? currentSubscription?.status
+                            : null
+                    }
+                    adjustMode={
+                        Boolean(currentSubscription) &&
+                        pricingTab === "subscription"
+                    }
+                    busy={isChanging || isRestoring}
+                    onSelectPlan={handlePlanClick}
+                    onRestoreSubscription={
+                        isCanceled && pricingTab === "subscription"
+                            ? () => {
+                                  void handleRestore();
+                              }
+                            : undefined
+                    }
+                />
             </div>
 
-            <AlertDialog
-                open={pendingPlan !== null}
+            <ChangePlanConfirmDialog
+                pendingPlan={pendingPlan}
+                isChanging={isChanging}
                 onOpenChange={(open) => {
-                    if (!open && !isChanging) setPendingPlan(null);
+                    if (!open) cancelPending();
                 }}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>确认调整订阅计划？</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {pendingPlan
-                                ? `将调整为 ${getPlanName(pendingPlan)}（${formatPrice(pendingPlan)}）。差价不会退回，现有积分将保留，确认后立即按新计划价格扣费。`
-                                : null}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isChanging}>取消</AlertDialogCancel>
-                        <AlertDialogAction
-                            disabled={isChanging}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                void handleConfirmChangePlan();
-                            }}
-                        >
-                            {isChanging ? "处理中…" : "确认调整"}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+                onConfirm={() => {
+                    void confirmChange();
+                }}
+            />
         </section>
     );
-}
-
-function getPlanName(config: TopUpConfig) {
-    const tier =
-        config.transactionType === "subscription"
-            ? config.planTier
-            : config.packTier;
-    if (tier === "basic") return "Basic";
-    if (tier === "pro") return "Pro";
-    if (tier === "ultra") return "Ultra";
-    return tier ?? "Plan";
-}
-
-function isFeatured(config: TopUpConfig) {
-    const tier =
-        config.transactionType === "subscription"
-            ? config.planTier
-            : config.packTier;
-    return tier === "pro";
-}
-
-function formatPrice(config: TopUpConfig) {
-    const price = `$${config.price}`;
-    if (config.transactionType !== "subscription") return price;
-    if (config.billingCycle === "monthly") return `${price}/monthly`;
-    if (config.billingCycle === "yearly") return `${price}/yearly`;
-    return price;
-}
-
-function formatCredits(config: TopUpConfig) {
-    if (config.transactionType === "pay-to-use") {
-        return `${config.creditsIncluded} credits`;
-    }
-    if (config.billingCycle === "monthly") {
-        return `${config.creditsIncluded} credits / monthly`;
-    }
-    if (config.billingCycle === "yearly") {
-        return `${config.creditsIncluded} credits / yearly`;
-    }
-    return `${config.creditsIncluded} credits`;
 }

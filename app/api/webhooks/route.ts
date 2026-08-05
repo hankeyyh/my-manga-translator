@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: eventResult.error.message }, { status });
     }
     const event = eventResult.data!;
-    // TODO 要监听订阅续费事件
     if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
         // 首次充值 checkout-session
         const session = event.data.object as Stripe.Checkout.Session;
@@ -87,6 +86,14 @@ export async function POST(request: NextRequest) {
         if (transResult.error) {
             // stripe 会重试
             return NextResponse.json({}, { status: 500 });
+        }
+    } else if (event.type === "customer.subscription.deleted") {
+        // 计划到期终止（含 cancel_at_period_end 到期后）
+    } else if (event.type === "invoice.paid") {
+        // 计划续费（及订阅相关发票支付成功）
+        const invoice = event.data.object as Stripe.Invoice;
+        if (invoice.billing_reason === "subscription_cycle") {
+            // 周期续费
         }
     }
     return NextResponse.json({}, { status: 200 });
