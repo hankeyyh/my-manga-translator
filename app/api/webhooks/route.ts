@@ -1,6 +1,7 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
+import { createStripeClient } from "@/biz/utils/stripe/server";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { EXCEPTION_CODE } from "@/types/dto/response";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,9 +16,7 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
     const supabase = createServiceRoleClient();
     const paymentService = new PaymentService(
-        new Stripe(process.env.STRIPE_SECRET_KEY!, {
-            httpClient: Stripe.createFetchHttpClient(),
-        }),
+        createStripeClient(),
         new UserRepository(supabase),
     );
     const eventResult = paymentService.constructWebhookEvent(body, sig);

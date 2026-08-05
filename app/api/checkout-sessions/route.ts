@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
-import Stripe from 'stripe';
 import { AuthService } from '@/biz/services/auth/auth-service';
 import { PaymentService } from '@/biz/services/payment/payment-service';
 import { UserRepository } from '@/biz/repositories/auth/user-repository';
@@ -11,6 +10,7 @@ import { CreditService } from '@/biz/services/credit/credit-service';
 import { UserTransactionsRepository } from '@/biz/repositories/topup/user-transactions';
 import { PricingConfigRepository } from '@/biz/repositories/pricing/pricing-config';
 import { UserCreditsRepository } from '@/biz/repositories/credit/user-credits';
+import { createStripeClient } from '@/biz/utils/stripe/server';
 
 const checkoutSessionSchema = z.object({
     id: z.uuid()
@@ -69,9 +69,7 @@ export async function POST(request: NextRequest) {
         pendingTransactionId = userTransaction.id;
 
         // 5. 创建 Stripe 支付会话
-        const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!, {
-            httpClient: Stripe.createFetchHttpClient(),
-        }), new UserRepository(supabase));
+        const paymentService = new PaymentService(createStripeClient(), new UserRepository(supabase));
         const result = await paymentService.createCheckoutSession(userTransaction.id, topupConfig.stripePriceId, userTransaction.transactionType,
             `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`, // 成功回调 URL
             `${origin}/payment/cancel?session_id={CHECKOUT_SESSION_ID}` // 取消页

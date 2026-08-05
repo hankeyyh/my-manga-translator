@@ -29,6 +29,7 @@ import {
 } from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
+import { loadStripeClient } from "@/biz/utils/stripe/client";
 
 type Props = {
     topUpConfigs: TopUpConfig[];
@@ -99,8 +100,28 @@ export function ClientPricingSection({
                 return;
             }
             if (result.data.status === "requires_action") {
+                const clientSecret = result.data.clientSecret;
+                if (!clientSecret) {
+                    toast.error("缺少支付确认信息，请稍后重试");
+                    return;
+                }
+                const stripeClient = await loadStripeClient();
+                if (!stripeClient) {
+                    toast.error("支付组件加载失败，请稍后重试");
+                    return;
+                }
                 toast.message("需要完成银行卡验证后才会生效，请按提示完成验证");
-            } else {
+                const { error, paymentIntent } = await stripeClient.confirmCardPayment(clientSecret);
+                if (error) {
+                    toast.error(error.message || "银行卡验证失败");
+                    return;
+                }
+                if (paymentIntent?.status === "succeeded") {
+                    toast.success("验证成功，计划调整已提交，积分将稍后到账");
+                } else {
+                    toast.message(`支付状态：${paymentIntent?.status ?? "unknown"}，请稍后刷新查看`);
+                }
+            } else if (result.data.status === "success") {
                 toast.success("计划调整已提交，积分将稍后到账");
             }
             setPendingPlan(null);

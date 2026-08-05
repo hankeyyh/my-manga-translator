@@ -1,13 +1,11 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { beforeAll, describe, expect, test } from "@jest/globals";
-import Stripe from "stripe";
 import { PaymentService } from "./payment-service";
+import { createStripeClient } from "@/biz/utils/stripe/server";
 
 describe("PaymentService", () => {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-        httpClient: Stripe.createFetchHttpClient(),
-    });
+    const stripe = createStripeClient();
     let paymentService: PaymentService;
     beforeAll(async () => {
         const supabase = createServiceRoleClient();

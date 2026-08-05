@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import Stripe from "stripe";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { PaymentService } from "@/biz/services/payment/payment-service";
 import PaymentIncompleteDisplay from "@/components/payment/payment-incomplete";
 import PendingPaymentDisplay from "@/components/payment/payment-pending";
 import SuccessDisplay from "@/components/payment/payment-success";
+import { createStripeClient } from "@/biz/utils/stripe/server";
 
 export default function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
     return (
@@ -21,9 +21,8 @@ async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ 
 
     // 1. 获取stripe session
     const supabase = await createServerClient();
-    const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!, {
-        httpClient: Stripe.createFetchHttpClient(),
-    }),
+    const paymentService = new PaymentService(
+        createStripeClient(),
         new UserRepository(supabase)
     );
     const result = await paymentService.retriveCheckoutSession(sessionId);

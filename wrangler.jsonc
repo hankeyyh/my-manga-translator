@@ -20,7 +20,8 @@
                 "NEXT_PUBLIC_SUPABASE_URL": "http://127.0.0.1:64321",
                 "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH",
                 "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
-                "TRANSLATION_WORKFLOW_BASE_URL": "http://127.0.0.1:8787"
+                "TRANSLATION_WORKFLOW_BASE_URL": "http://127.0.0.1:8787",
+                "NEXT_PUBLIC_STRIPE_PUBLIC_KEY": "pk_test_51TT24FRFH3wtqUhbLBG7BR4K4pOuJ3PmIB7hSxHtx1VsmS3Y0YHTR0n2HdN7ulnxTU4WCo3Yb3X5V77n6PiAN50j00njVGGfVT"
             },
             "services": [
                 {
@@ -43,7 +44,8 @@
                 "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
                 "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_IxU_ISlH0UxwGIqP0HNFoA_siUuX0a5",
                 "SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID": "219181552992-ustvrh7jssk2et896guirglmf4o9tav9.apps.googleusercontent.com",
-                "TRANSLATION_WORKFLOW_BASE_URL": "https://my-manga-translator-workflow-prod.hankeyyh.workers.dev"
+                "TRANSLATION_WORKFLOW_BASE_URL": "https://my-manga-translator-workflow-prod.hankeyyh.workers.dev",
+                "NEXT_PUBLIC_STRIPE_PUBLIC_KEY": "pk_live_51TT242Ih7h5GKmbsljQFQWpmBylEHkvdvuSKyqFnVHnHcoffEmzU1muXoC98HWl8eVnSBUsZDk06Zg0aToXVlWZK00dEZn0s9Z"
             },
             "services": [
                 {

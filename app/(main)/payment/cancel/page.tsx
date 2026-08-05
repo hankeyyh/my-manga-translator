@@ -5,10 +5,10 @@ import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
+import { createStripeClient } from "@/biz/utils/stripe/server";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import Stripe from "stripe";
 
 export default function PaymentCancelPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
     return (
@@ -23,9 +23,8 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
 
     // 1. 获取stripe session
     const supabase = await createServerClient();
-    const paymentService = new PaymentService(new Stripe(process.env.STRIPE_SECRET_KEY!, {
-        httpClient: Stripe.createFetchHttpClient(),
-    }),
+    const paymentService = new PaymentService(
+        createStripeClient(),
         new UserRepository(supabase)
     );
     const stripeSessionResult = await paymentService.retriveCheckoutSession(sessionId);

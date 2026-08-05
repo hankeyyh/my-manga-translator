@@ -18,7 +18,7 @@ import {
     SUCCESS_CODE,
     UNAUTHORIZED_ERROR_CODE,
 } from "@/types/dto/response";
-import Stripe from "stripe";
+import { createStripeClient } from "@/biz/utils/stripe/server";
 
 
 export async function changeSubscription({ topupConfigId }: { topupConfigId: string; }): Promise<Response<ChangeSubscriptionData>> {
@@ -39,9 +39,7 @@ export async function changeSubscription({ topupConfigId }: { topupConfigId: str
         const billingService = BillingService.fromSupabase(supabase);
         creditService = CreditService.fromSupabase(supabase);
         const paymentService = new PaymentService(
-            new Stripe(process.env.STRIPE_SECRET_KEY!, {
-                httpClient: Stripe.createFetchHttpClient(),
-            }),
+            createStripeClient(),
             userRepo,
         );
 
