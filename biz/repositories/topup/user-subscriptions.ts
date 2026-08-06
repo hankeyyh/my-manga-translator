@@ -98,4 +98,14 @@ export class UserSubscriptionRepository {
         }
         return { data: null, error: null };
     }
+
+    async expireSubscriptionCycle(stripeSubscriptionId: string): Promise<Result<boolean>> {
+        const { data, error } = await this.supabase.rpc("expire_subscription_cycle", {
+            p_stripe_subscription_id: stripeSubscriptionId,
+        });
+        if (error) {
+            return { data: null, error };
+        }
+        return { data: data, error: null };
+    }
 }

@@ -1,7 +1,7 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserSubscriptionRepository } from "@/biz/repositories/topup/user-subscriptions";
-import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
+import { RenewSubscriptionParam, UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import {
     BizResult,
     CHECK_PARAM_ERROR_CODE,
@@ -207,6 +207,53 @@ export class BillingService {
         });
         if (result.error) {
             console.error(`restoreUserSubscription, repo.update fail, error: ${result.error.message}`);
+            return { data: null, error: result.error, code: DB_ERROR_CODE };
+        }
+
+        return { data: null, error: null, code: SUCCESS_CODE };
+    }
+
+    /** 周期续费：覆盖订阅可用积分并滚周期（幂等键 stripe_invoice_id） */
+    async renewSubscriptionCycle(param: RenewSubscriptionParam): Promise<BizResult<string>> {
+        if (
+            !param.stripeSubscriptionId ||
+            !param.stripeInvoiceId ||
+            !param.periodStartedAt ||
+            !param.periodEndedAt
+        ) {
+            return {
+                data: null,
+                error: new Error("renewSubscriptionCycle params incomplete"),
+                code: CHECK_PARAM_ERROR_CODE,
+            };
+        }
+
+        const result = await this.userTransRepo.renewSubscriptionCycle(param);
+        if (result.error) {
+            console.error(
+                `renewSubscriptionCycle, repo.renewSubscriptionCycle fail, error: ${result.error.message}`,
+            );
+            return { data: null, error: result.error, code: DB_ERROR_CODE };
+        }
+        return { data: result.data, error: null, code: SUCCESS_CODE };
+    }
+
+    async expireUserSubscription(stripeSubscriptionId: string): Promise<BizResult<null>> {
+        if (!stripeSubscriptionId) {
+            return {
+                data: null,
+                error: new Error("stripeSubscriptionId is required"),
+                code: CHECK_PARAM_ERROR_CODE,
+            };
+        }
+
+        const result = await this.userSubscriptionRepo.expireSubscriptionCycle(
+            stripeSubscriptionId,
+        );
+        if (result.error) {
+            console.error(
+                `expireUserSubscription, repo.expireSubscriptionCycle fail, error: ${result.error.message}`,
+            );
             return { data: null, error: result.error, code: DB_ERROR_CODE };
         }
 

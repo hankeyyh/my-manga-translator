@@ -44,6 +44,13 @@ export interface UpdateTransactionParam {
     topupConfigId?: string,
 }
 
+export interface RenewSubscriptionParam {
+    stripeSubscriptionId: string;
+    stripeInvoiceId: string;
+    periodStartedAt: string;
+    periodEndedAt: string;
+}
+
 export function mapUserTransactionRowToUserTransaction(row: Tables<'user_transactions'>): UserTransaction {
     return {
         id: row.id,
@@ -175,6 +182,19 @@ export class UserTransactionsRepository {
         const result = await this.supabase.rpc("succeed_transaction", {
             p_transaction_id: transactionId,
             p_stripe_subscription_id: subscriptionId
+        });
+        if (result.error) {
+            return { data: null, error: result.error };
+        }
+        return { data: result.data, error: null };
+    }
+
+    async renewSubscriptionCycle(param: RenewSubscriptionParam): Promise<Result<string>> {
+        const result = await this.supabase.rpc("renew_subscription_cycle", {
+            p_stripe_subscription_id: param.stripeSubscriptionId,
+            p_stripe_invoice_id: param.stripeInvoiceId,
+            p_period_started_at: param.periodStartedAt,
+            p_period_ended_at: param.periodEndedAt,
         });
         if (result.error) {
             return { data: null, error: result.error };

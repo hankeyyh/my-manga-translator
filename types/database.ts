@@ -387,6 +387,7 @@ export type Database = {
           pack_tier: string | null
           plan_tier: string | null
           recharge_amount: number
+          stripe_invoice_id: string | null
           stripe_session_id: string | null
           stripe_subscription_id: string | null
           subscription_ended_at: string | null
@@ -408,6 +409,7 @@ export type Database = {
           pack_tier?: string | null
           plan_tier?: string | null
           recharge_amount: number
+          stripe_invoice_id?: string | null
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
           subscription_ended_at?: string | null
@@ -429,6 +431,7 @@ export type Database = {
           pack_tier?: string | null
           plan_tier?: string | null
           recharge_amount?: number
+          stripe_invoice_id?: string | null
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
           subscription_ended_at?: string | null
@@ -472,6 +475,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      expire_subscription_cycle: {
+        Args: { p_stripe_subscription_id: string }
+        Returns: boolean
+      }
       freeze_image_credits_for_retry: {
         Args: {
           p_image_ids: string[]
@@ -504,6 +511,15 @@ export type Database = {
           p_user_id: string
         }
         Returns: undefined
+      }
+      renew_subscription_cycle: {
+        Args: {
+          p_period_ended_at: string
+          p_period_started_at: string
+          p_stripe_invoice_id: string
+          p_stripe_subscription_id: string
+        }
+        Returns: string
       }
       succeed_transaction: {
         Args: { p_stripe_subscription_id?: string; p_transaction_id: string }

@@ -1,4 +1,5 @@
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
+import { BillingService } from "@/biz/services/billing/billing-service";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
 import { createStripeClient } from "@/biz/utils/stripe/server";
@@ -89,12 +90,63 @@ export async function POST(request: NextRequest) {
         }
     } else if (event.type === "customer.subscription.deleted") {
         // 计划到期终止（含 cancel_at_period_end 到期后）
+        const subscription = event.data.object as Stripe.Subscription;
+        const expireResult = await BillingService.fromSupabase(supabase).expireUserSubscription(
+            subscription.id,
+        );
+        if (expireResult.error) {
+            // stripe 会重试
+            return NextResponse.json({}, { status: 500 });
+        }
     } else if (event.type === "invoice.paid") {
         // 计划续费（及订阅相关发票支付成功）
         const invoice = event.data.object as Stripe.Invoice;
         if (invoice.billing_reason === "subscription_cycle") {
-            // 周期续费
+            const stripeSubscriptionId = extractInvoiceSubscriptionId(invoice);
+            const period = extractInvoicePeriod(invoice);
+            if (!stripeSubscriptionId || !period) {
+                console.error(
+                    `subscription_cycle missing subscription/period, invoiceId: ${invoice.id}, subscriptionId: ${stripeSubscriptionId}, period: ${JSON.stringify(period)}`,
+                );
+                return NextResponse.json({}, { status: 200 }); // 重试无意义，需要人工介入
+            }
+
+            const renewResult = await BillingService.fromSupabase(supabase).renewSubscriptionCycle({
+                stripeSubscriptionId,
+                stripeInvoiceId: invoice.id,
+                periodStartedAt: period.startedAt,
+                periodEndedAt: period.endedAt,
+            });
+            if (renewResult.error) {
+                // stripe 会重试
+                return NextResponse.json({}, { status: 500 });
+            }
         }
     }
     return NextResponse.json({}, { status: 200 });
+}
+
+function extractInvoiceSubscriptionId(invoice: Stripe.Invoice): string | null {
+    const subscription = invoice.parent?.subscription_details?.subscription;
+    if (!subscription) {
+        return null;
+    }
+    return typeof subscription === "string" ? subscription : subscription.id;
+}
+
+function extractInvoicePeriod(
+    invoice: Stripe.Invoice,
+): { startedAt: string; endedAt: string } | null {
+    const lineWithPeriod = invoice.lines?.data?.find(
+        (line) => line.period?.start != null && line.period?.end != null,
+    );
+    const periodStart = lineWithPeriod?.period?.start ?? invoice.period_start;
+    const periodEnd = lineWithPeriod?.period?.end ?? invoice.period_end;
+    if (!periodStart || !periodEnd) {
+        return null;
+    }
+    return {
+        startedAt: new Date(periodStart * 1000).toISOString(),
+        endedAt: new Date(periodEnd * 1000).toISOString(),
+    };
 }
