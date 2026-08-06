@@ -109,7 +109,7 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
 
     return (
         <Card className="gap-0 py-4 shadow-none">
-            <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 px-4 py-0">
+            <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">
                 <div className="min-w-0 flex-1">
                     <p className="text-xs uppercase tracking-wide text-foreground/70">
                         Current Plan
