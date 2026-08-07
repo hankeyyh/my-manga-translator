@@ -67,4 +67,13 @@ export class UserCreditsRepository {
         });
         return handleRpcResult(result);
     }
+
+    // 发放注册奖励积分
+    async grantSignupBonus(userId: string, credits: number): Promise<Result<boolean>> {
+        const result = await this.supabase.rpc("grant_signup_bonus", {
+            p_user_id: userId,
+            p_credits: credits,
+        });
+        return handleRpcResult(result);
+    }
 }

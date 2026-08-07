@@ -28,6 +28,9 @@ const TRANSACTION_STATUS_CANCELED = "canceled";
 const BILLING_CYCLE_MONTHLY = "monthly";
 const BILLING_CYCLE_YEARLY = "yearly";
 
+// 注册奖励积分
+const BONUS_CREDITS = 5;
+
 function getSubscriptionEndDate(billingCycle: string, from: Date = new Date()): Date {
     const endedAt = new Date(from);
     if (billingCycle === BILLING_CYCLE_MONTHLY) {
@@ -255,5 +258,15 @@ export class CreditService {
         }
         console.debug(`prepareImagesForRetry, newly_prepared: ${result.data?.newly_prepared}, already_prepared: ${result.data?.already_prepared}`);
         return { code: SUCCESS_CODE, data: result.data, error: null };
+    }
+
+    // 发放注册奖励积分
+    async grantSignupBonus(userId: string): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.grantSignupBonus(userId, BONUS_CREDITS);
+        if (result.error) {
+            console.error(`grantSignupBouns, repo.grantSignupBonus fail, userId: ${userId}, error: ${result.error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
     }
 }

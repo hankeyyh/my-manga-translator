@@ -492,6 +492,10 @@ export type Database = {
         Args: { p_credits: number; p_task_id: string; p_user_id: string }
         Returns: undefined
       }
+      grant_signup_bonus: {
+        Args: { p_credits: number; p_user_id: string }
+        Returns: boolean
+      }
       handle_translate_image_failed: {
         Args: { p_err_message: string; p_image_ids: string[] }
         Returns: {
