@@ -16,9 +16,9 @@ export type ThumbNailProps = MangaPage & {
 };
 
 const statusFrameClass: Partial<Record<NonNullable<MangaPage["status"]>, string>> = {
-    completed: "border-[3px] border-lime-500 p-0.5",
-    failed: "border-[3px] border-red-500 p-0.5",
-    stalled: "border-[3px] border-yellow-400 p-0.5",
+    completed: "border-[2px] border-lime-500 p-0.5",
+    failed: "border-[2px] border-red-500 p-0.5",
+    stalled: "border-[2px] border-yellow-400 p-0.5",
 };
 
 export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, onContinueWait, onDownload, ...props }: ThumbNailProps) {

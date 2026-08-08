@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>Wireframe · ai-manga-translator.com/zh · 临时 Task</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+      color: #333;
+      background: #e8e8e8;
+      padding: 24px;
+    }
+    h1 { font-size: 13px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .06em; }
+    .meta { color: #666; margin-bottom: 20px; font-size: 11px; }
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      border: 2px solid #333;
+      background: #fff;
+    }
+    .box {
+      border-bottom: 1px solid #333;
+      padding: 10px 12px;
+    }
+    .box:last-child { border-bottom: none; }
+    .label {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 1px 6px;
+      margin-bottom: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: #f0f0f0;
+    }
+    .row { display: flex; gap: 8px; }
+    .col { flex: 1; border: 1px dashed #999; padding: 8px; min-height: 36px; }
+    .line { height: 8px; background: #ccc; margin: 4px 0; }
+    .line.w60 { width: 60%; }
+    .line.w40 { width: 40%; }
+    .line.w80 { width: 80%; }
+    .btn {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 4px 10px;
+      margin: 4px 4px 0 0;
+      font-size: 11px;
+    }
+    .btn.fill { background: #333; color: #fff; }
+    .btn.ghost { border-style: dashed; color: #666; }
+    .media {
+      border: 1px solid #999;
+      background: repeating-linear-gradient(-45deg, #ddd, #ddd 4px, #f5f5f5 4px, #f5f5f5 8px);
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 10px;
+    }
+    .center { text-align: center; }
+    .muted { color: #888; font-size: 10px; }
+    ul { padding-left: 14px; margin-top: 4px; }
+    li { margin: 2px 0; }
+    .note {
+      border: 1px dashed #999;
+      background: #f7f7f7;
+      padding: 8px 10px;
+      margin: 10px 0 0;
+      font-size: 10px;
+      color: #555;
+    }
+    .note strong { color: #333; }
+    .status {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 1px 6px;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .status.done { background: #333; color: #fff; }
+    .status.busy { background: #ddd; }
+    .status.wait { border-style: dashed; }
+    .status.fail { background: #fff; text-decoration: line-through; }
+    /* 红框样式：横向临时 task 条 */
+    .task-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      min-height: 28px;
+    }
+    .task-bar-label {
+      flex: 0 0 auto;
+      font-size: 11px;
+      color: #c00;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .task-slots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .task-slot {
+      width: 36px;
+      height: 22px;
+      border: 1px solid #999;
+      border-radius: 4px;
+      background: #f5f5f5;
+      font-size: 9px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .task-slot.active {
+      border-color: #333;
+      border-width: 2px;
+      background: #e8e8e8;
+      width: 34px;
+      height: 20px;
+    }
+    .task-slot.busy { background: #ddd; }
+    .task-slot.done { background: #333; color: #fff; border-color: #333; }
+    .task-slot.fail { border-style: dashed; }
+    .task-slot.empty {
+      border-style: dashed;
+      background: transparent;
+      color: #bbb;
+    }
+    .task-more {
+      flex: 0 0 auto;
+      border: none;
+      background: none;
+      font-size: 16px;
+      line-height: 1;
+      color: #666;
+      padding: 0 4px;
+      cursor: default;
+    }
+    .highlight {
+      outline: 2px solid #333;
+      outline-offset: -2px;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reference Wireframe · 临时 Task 条</h1>
+  <p class="meta">source: https://ai-manga-translator.com/zh · 上传区与缩略图之间：New Task + 5 槽 + » · structure only</p>
+
+  <div class="page">
+
+    <!-- 1 Header -->
+    <div class="box">
+      <div class="label">1 · Header</div>
+      <div class="row" style="align-items:center; flex-wrap:nowrap; gap:6px; overflow-x:auto">
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Logo</div>
+        <div style="flex:1 1 auto; min-width:8px"></div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Manga Translate</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Pricing</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">FAQ</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Discord</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Credits · 200</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Lang ▾</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">◐ 肤色</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Login</div>
+      </div>
+    </div>
+
+    <!-- 2 Hero -->
+    <div class="box center">
+      <div class="label">2 · Hero</div>
+      <div class="line w60" style="margin:8px auto"></div>
+      <div class="line w80" style="margin:4px auto"></div>
+      <div class="line w40" style="margin:4px auto"></div>
+      <div class="row" style="margin-top:12px; text-align:center">
+        <div class="col">100,000+ 页</div>
+        <div class="col">20+ 语言</div>
+        <div class="col">99% 准确率</div>
+      </div>
+      <div style="margin-top:10px">
+        <span class="btn fill">免费试用</span>
+        <span class="btn">使用流程</span>
+      </div>
+    </div>
+
+    <!-- 3 Translate Tool -->
+    <div class="box">
+      <div class="label">3 · Translate Tool（首页主工具）</div>
+
+      <!-- A · 待上传 -->
+      <p class="muted" style="margin-bottom:6px">A · 待上传</p>
+      <div class="col" style="min-height:100px; text-align:center; padding:16px 8px">
+        ↑ 上传图标<br>
+        将漫画页拖放到此处，或 <span style="text-decoration:underline">浏览文件</span><br>
+        <span class="muted">JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大 50MB, 文档最大 200MB</span><br>
+        <span class="muted">已上传 0/200 页 · 剩余 200 页</span>
+      </div>
+
+      <!-- B · 已上传 -->
+      <p class="muted" style="margin:12px 0 6px">B · 已上传文件</p>
+      <div class="col" style="min-height:72px; text-align:center; padding:12px 8px">
+        ↑ 上传图标<br>
+        将漫画页拖放到此处，或 <span style="text-decoration:underline">浏览文件</span><br>
+        <span class="muted">JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大 50MB, 文档最大 200MB</span><br>
+        <span class="muted">已上传 1/20 页 · 剩余 19 页</span>
+      </div>
+
+      <!-- C · 临时 Task 条（对齐红框：横向一行） -->
+      <div class="highlight" style="margin-top:8px; padding:6px 8px">
+        <div class="label" style="margin-bottom:4px">3C · 临时 Task 条</div>
+
+        <!-- 有任务：New Task + 5 槽 + » · 右侧全部清除 -->
+        <p class="muted" style="margin-bottom:2px">有任务（最多 5 槽）</p>
+        <div class="task-bar">
+          <span class="task-bar-label">New Task</span>
+          <div class="task-slots">
+            <div class="task-slot active busy" title="#T-1042 翻译中 · 点击切换缩略图">中</div>
+            <div class="task-slot" title="#T-1041 排队">排</div>
+            <div class="task-slot done" title="#T-1040 完成">完</div>
+            <div class="task-slot fail" title="#T-1039 失败">败</div>
+            <div class="task-slot fail" title="#T-1038 失败">败</div>
+          </div>
+          <span class="task-more" title="查看更多任务">»</span>
+          <div style="flex:1"></div>
+          <span class="muted" style="white-space:nowrap">× 全部清除</span>
+        </div>
+
+        <!-- 空 / 未满示意 -->
+        <p class="muted" style="margin:8px 0 2px">空 / 未满（无 task 时可不显示整条，或只留空槽）</p>
+        <div class="task-bar" style="opacity:.7">
+          <span class="task-bar-label">New Task</span>
+          <div class="task-slots">
+            <div class="task-slot empty">·</div>
+            <div class="task-slot empty">·</div>
+            <div class="task-slot empty">·</div>
+            <div class="task-slot empty">·</div>
+            <div class="task-slot empty">·</div>
+          </div>
+          <span class="task-more">»</span>
+          <div style="flex:1"></div>
+          <span class="muted" style="white-space:nowrap">× 全部清除</span>
+        </div>
+
+        <div class="note" style="margin-top:6px">
+          <strong>交互</strong>
+          点槽位 → 下方缩略图区切换为该 task 页；
+          「»」→ 查看更多任务（持久历史）；
+          会话内存最多缓存 5 个，刷新清空；
+          「× 全部清除」清当前缩略图/上传草稿（与现网一致）。
+        </div>
+      </div>
+
+      <!-- B2 · 缩略图区：默认=当前上传；点击 task 槽后切换 -->
+      <div style="margin-top:10px; padding:0">
+        <div class="row" style="align-items:baseline; margin-bottom:6px; flex-wrap:wrap; gap:4px">
+          <div class="label" style="margin:0">3B · 缩略图区（复用）</div>
+          <span class="muted">点上方槽位切换内容</span>
+        </div>
+
+        <p class="muted" style="margin-bottom:4px">态① · 未选 task / 当前上传草稿</p>
+        <div class="row" style="align-items:flex-start; flex-wrap:wrap; margin-bottom:10px; opacity:.55">
+          <div class="col" style="flex:0 0 120px; padding:5px">
+            <div class="media" style="min-height:72px; margin-bottom:4px">缩略图</div>
+            <div style="font-size:10px">147-6.jpg</div>
+            <div class="muted">472.9 KB · 待翻译</div>
+          </div>
+        </div>
+
+        <p class="muted" style="margin-bottom:4px">态② · 已选槽位（示意 New Task 第 1 格）</p>
+        <div class="row" style="align-items:center; margin-bottom:4px">
+          <span class="muted" style="flex:1">正在查看 · #T-1042 · 3 页</span>
+          <span class="btn" style="margin:0; padding:2px 8px">← 返回上传</span>
+        </div>
+        <div class="row" style="align-items:flex-start; flex-wrap:wrap">
+          <div class="col" style="flex:0 0 120px; padding:5px">
+            <div class="media" style="min-height:72px; margin-bottom:4px">缩略图</div>
+            <div class="row" style="align-items:center">
+              <div style="flex:1; min-width:0">
+                <div style="font-size:10px">p1.jpg</div>
+                <div class="muted">完成</div>
+              </div>
+              <span class="btn" style="margin:0; padding:1px 6px; font-size:10px">下载</span>
+            </div>
+          </div>
+          <div class="col" style="flex:0 0 120px; padding:5px">
+            <div class="media" style="min-height:72px; margin-bottom:4px">缩略图</div>
+            <div class="row" style="align-items:center">
+              <div style="flex:1; min-width:0">
+                <div style="font-size:10px">p2.jpg</div>
+                <div class="muted">翻译中…</div>
+              </div>
+            </div>
+          </div>
+          <div class="col" style="flex:0 0 120px; padding:5px">
+            <div class="media" style="min-height:72px; margin-bottom:4px">缩略图</div>
+            <div class="row" style="align-items:center">
+              <div style="flex:1; min-width:0">
+                <div style="font-size:10px">p3.jpg</div>
+                <div class="muted">失败</div>
+              </div>
+              <span class="btn" style="margin:0; padding:1px 6px; font-size:10px">重试</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px; align-items:center">
+        <div class="col">翻译为<br><span class="muted">简体中文 ▾</span></div>
+        <div class="col">翻译模式<br><span class="muted">快速翻译 (1 credit) ▾</span></div>
+        <div class="col">字体风格<br><span class="muted">漫画 ▾</span></div>
+        <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:4px">
+          <div class="col center" style="background:#333; color:#fff; border-style:solid; border-color:#333">
+            ↑ 开始翻译
+          </div>
+          <div class="col center">下载全部</div>
+        </div>
+      </div>
+      <p class="muted center" style="margin-top:8px">✦ AI 自动识别日语、中文、英语、韩语等多种语言</p>
+    </div>
+
+    <!-- 4 How it works -->
+    <div class="box">
+      <div class="label">4 · 使用流程</div>
+      <div class="row" style="flex-direction:column">
+        <div class="col">① 上传漫画</div>
+        <div class="col">② 选择语言</div>
+        <div class="col">③ 查看与下载</div>
+      </div>
+    </div>
+
+    <!-- 5 Showcase -->
+    <div class="box">
+      <div class="label">5 · 翻译效果展示</div>
+      <p class="muted center" style="margin-bottom:8px">拖动滑块对比原图 / 翻译</p>
+      <div class="media" style="min-height:100px">Before ←|→ After · 示例图</div>
+    </div>
+
+    <!-- 6 Pricing -->
+    <div class="box">
+      <div class="label">6 · 价格</div>
+      <div class="center" style="margin-bottom:10px">
+        <span class="btn">Pay As Needed</span>
+        <span class="btn fill">Subscription</span>
+      </div>
+
+      <!-- A · Pay As Needed -->
+      <p class="muted" style="margin-bottom:6px">A · Pay As Needed（按量付费）</p>
+      <div class="row">
+        <div class="col center">
+          Basic<br>$0<br><span class="muted">试用 · 无需账户</span><br>
+          <span class="btn" style="margin-top:6px">Get Started</span>
+        </div>
+        <div class="col center" style="border-style:solid; border-color:#333; border-width:2px">
+          Pro ★<br>$0.020/page<br><span class="muted">页数包 · 永不过期</span><br>
+          <span class="btn fill" style="margin-top:6px">Get Started</span>
+        </div>
+        <div class="col center">
+          Ultra<br>$0.018/page<br><span class="muted">大额页数包</span><br>
+          <span class="btn" style="margin-top:6px">Get Started</span>
+        </div>
+      </div>
+
+      <!-- B · Subscription -->
+      <p class="muted" style="margin:12px 0 6px">B · Subscription（订阅）</p>
+      <div class="row">
+        <div class="col center">
+          Basic<br>$0.015/page<br><span class="muted">入门订阅</span><br>
+          <span class="btn" style="margin-top:6px">Get Started</span>
+        </div>
+        <div class="col center" style="border-style:solid; border-color:#333; border-width:2px">
+          Pro ★<br>$0.013/page<br><span class="muted">高频用户</span><br>
+          <span class="btn fill" style="margin-top:6px">Get Started</span>
+        </div>
+        <div class="col center">
+          Ultra<br>$0.010/page<br><span class="muted">重度订阅</span><br>
+          <span class="btn" style="margin-top:6px">Get Started</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 FAQ -->
+    <div class="box">
+      <div class="label">7 · 常见问题</div>
+      <ul>
+        <li>可以翻译日漫吗？ ▾</li>
+        <li>可以翻译韩漫吗？ +</li>
+        <li>可以翻译中漫吗？ +</li>
+        <li>使用什么 AI？ +</li>
+        <li>翻译需要多久？ +</li>
+        <li>支持哪些格式？ +</li>
+        <li>页数会过期吗？ +</li>
+        <li>支持哪些语言？ +</li>
+        <li>数据安全吗？ +</li>
+        <li>如何退款？ +</li>
+        <li>有浏览器插件吗？ +</li>
+      </ul>
+    </div>
+
+    <!-- 8 Blog -->
+    <div class="box">
+      <div class="label">8 · 最新博客</div>
+      <div class="row">
+        <div class="col"><div class="media" style="min-height:40px">文章</div><div class="line"></div><div class="line w60"></div></div>
+        <div class="col"><div class="media" style="min-height:40px">文章</div><div class="line"></div><div class="line w60"></div></div>
+        <div class="col"><div class="media" style="min-height:40px">文章</div><div class="line"></div><div class="line w60"></div></div>
+      </div>
+      <p class="muted center" style="margin-top:8px">查看所有文章 →</p>
+    </div>
+
+    <!-- 9 Footer -->
+    <div class="box">
+      <div class="label">9 · Footer</div>
+      <div class="row">
+        <div class="col">Brand / ©</div>
+        <div class="col">Links</div>
+        <div class="col">Social</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

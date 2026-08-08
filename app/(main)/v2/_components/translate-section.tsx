@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     ChevronDown,
     Download,
-    Languages,
     Upload,
-    X,
 } from "lucide-react";
 import {
     AlertDialog,
@@ -25,7 +23,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
 import { ThumbNail } from "@/components/v2/thumbnail";
 import { MangaPage } from "@/types/web/manga-page";
 import { ImagePreview } from "@/components/v2/image-preview";
@@ -34,6 +31,8 @@ import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
 import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
+import { MAX_SESSION_TASKS, SessionTask } from "@/types/web/session-task";
+import { NewTaskBar } from "./new-task-bar";
 
 const SUPPORTED_LANGS = [
     { code: "CHS", label: "简体中文" },
@@ -56,6 +55,40 @@ function isTaskEnded(taskStatus: TaskStatus | null) {
         return false;
     }
     return TASK_ENDED_STATUSES.includes(taskStatus);
+}
+
+function revokePages(pages: MangaPage[]) {
+    for (const page of pages) {
+        URL.revokeObjectURL(page.originalUrl);
+    }
+}
+
+function mergeFilesIntoPages(prev: MangaPage[], files: File[]): MangaPage[] {
+    const next = [...prev];
+    const seen = new Set(prev.map((p) => p.name));
+    for (const file of files) {
+        if (seen.has(file.name)) continue;
+        if (next.length >= 20) break;
+        seen.add(file.name);
+        next.push({
+            name: file.name,
+            originalFile: file,
+            originalUrl: URL.createObjectURL(file),
+            originalSize: formatFileSize(file.size),
+        });
+    }
+    return next;
+}
+
+function createDraftTask(files: File[]): SessionTask {
+    return {
+        localId: crypto.randomUUID(),
+        taskId: null,
+        status: null,
+        pages: mergeFilesIntoPages([], files),
+        createdAt: Date.now(),
+        showTranslated: true,
+    };
 }
 
 /**
@@ -128,8 +161,11 @@ function hasCompletedResults(pages: MangaPage[]) {
 }
 
 export function TranslateSection() {
-    const [pages, setPages] = useState<MangaPage[]>([]);
-    const pagesRef = useRef<MangaPage[]>([]);
+    const [sessionTasks, setSessionTasks] = useState<SessionTask[]>([]);
+    const [activeLocalId, setActiveLocalId] = useState<string | null>(null);
+    const sessionTasksRef = useRef<SessionTask[]>([]);
+    const activeLocalIdRef = useRef<string | null>(null);
+
     const [previewIndex, setPreviewIndex] = useState<number | null>(null);
     const [targetLang, setTargetLang] = useState<{ code: string, label: string; }>(SUPPORTED_LANGS[0]);
     const [translateMode, setTranslateMode] = useState<string>(SUPPORTED_MODE[0]);
@@ -138,39 +174,112 @@ export function TranslateSection() {
     const [retryLoading, setRetryLoading] = useState<boolean>(false);
     const [polling, setPolling] = useState<boolean>(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const [taskId, setTaskId] = useState<string | null>(null);
-    const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
-    const [showTranslated, setShowTranslated] = useState(true);
     const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
 
-    // 选择图片
-    const onFilesSelected = (files: File[]): void => {
-        setPages((prev) => {
-            const next = [...prev];
-            const seen = new Set(prev.map(p => p.name));
-            for (const file of files) {
-                if (seen.has(file.name)) {
-                    continue;
-                }
-                // 添加上限
-                if (next.length > 20) {
-                    break;
-                }
-                seen.add(file.name);
-                next.push({
-                    name: file.name,
-                    originalFile: file,
-                    originalUrl: URL.createObjectURL(file),
-                    originalSize: formatFileSize(file.size),
-                });
+    const activeTask = useMemo(
+        () => sessionTasks.find((t) => t.localId === activeLocalId) ?? null,
+        [sessionTasks, activeLocalId],
+    );
+    const pages = activeTask?.pages ?? [];
+    const taskId = activeTask?.taskId ?? null;
+    const taskStatus = activeTask?.status ?? null;
+    const showTranslated = activeTask?.showTranslated ?? true;
+
+    /** 存在未提交草稿时不可再 New Task；草稿不存在且已有任务时才可开新任务 */
+    const draftTask = useMemo(
+        () => sessionTasks.find((t) => t.taskId === null) ?? null,
+        [sessionTasks],
+    );
+    const canCreateNewTask = sessionTasks.length > 0 && draftTask === null;
+
+    const showNewTaskBar = sessionTasks.length > 0;
+
+    /** 仅当前选中 task 有完成译图时显示语言开关 */
+    const showLanguageSwitch = hasCompletedResults(pages);
+
+    /** UploadZone 计数对齐「将写入的未提交 task」 */
+    const uploadZoneCount = draftTask?.pages.length ?? 0;
+
+    const updateActiveTask = (updater: (task: SessionTask) => SessionTask) => {
+        setSessionTasks((prev) =>
+            prev.map((task) => (task.localId === activeLocalIdRef.current ? updater(task) : task)),
+        );
+    };
+
+    const setShowTranslated = (value: boolean) => {
+        updateActiveTask((task) => ({ ...task, showTranslated: value }));
+    };
+
+    /** 开启新草稿并设为 active（UploadZone / New Task 共用） */
+    const startNewDraftWithFiles = (files: File[]): void => {
+        const draft = createDraftTask(files);
+        setSessionTasks((prev) => {
+            const next = [draft, ...prev];
+            while (next.length > MAX_SESSION_TASKS) {
+                const dropped = next.pop();
+                if (dropped) revokePages(dropped.pages);
             }
             return next;
         });
+        setActiveLocalId(draft.localId);
+        setPreviewIndex(null);
+        setSubmitLoading(false);
+        setRetryLoading(false);
+        setPolling(false);
+        clearIntervalRef();
     };
 
-    const revokeAllObjectUrls = () => {
-        for (const page of pagesRef.current) {
-            URL.revokeObjectURL(page.originalUrl);
+    /**
+     * UploadZone：始终写入当前未提交 task；
+     * 若还没有未提交 task，行为与 New Task 相同（新建并激活）。
+     */
+    const onFilesSelected = (files: File[]): void => {
+        if (files.length === 0) return;
+
+        const draft = sessionTasksRef.current.find((t) => t.taskId === null);
+        if (!draft) {
+            startNewDraftWithFiles(files);
+            return;
+        }
+
+        setSessionTasks((prev) =>
+            prev.map((task) => {
+                if (task.localId !== draft.localId) return task;
+                return {
+                    ...task,
+                    pages: mergeFilesIntoPages(task.pages, files),
+                };
+            }),
+        );
+
+        if (activeLocalIdRef.current !== draft.localId) {
+            setActiveLocalId(draft.localId);
+            setPreviewIndex(null);
+            setPolling(false);
+            clearIntervalRef();
+        }
+    };
+
+    /** New Task：无未提交草稿时，新建草稿并激活 */
+    const onNewTaskFiles = (files: File[]): void => {
+        if (files.length === 0 || !canCreateNewTask) return;
+        startNewDraftWithFiles(files);
+    };
+
+    const onSelectTask = (localId: string): void => {
+        if (localId === activeLocalIdRef.current) return;
+
+        const target = sessionTasksRef.current.find((t) => t.localId === localId);
+        if (!target) return;
+
+        setActiveLocalId(localId);
+        setPreviewIndex(null);
+        clearIntervalRef();
+
+        if (target.taskId && !isTaskEnded(target.status)) {
+            setPolling(true);
+        } else {
+            setPolling(false);
         }
     };
 
@@ -181,84 +290,119 @@ export function TranslateSection() {
         }
     };
 
-    // 为了释放object url，需要保存pages引用
     useEffect(() => {
-        pagesRef.current = pages;
-    }, [pages]);
+        sessionTasksRef.current = sessionTasks;
+    }, [sessionTasks]);
+
+    useEffect(() => {
+        activeLocalIdRef.current = activeLocalId;
+    }, [activeLocalId]);
 
     // 退出页面，清理资源
     useEffect(() => {
         return () => {
-            revokeAllObjectUrls();
+            for (const task of sessionTasksRef.current) {
+                revokePages(task.pages);
+            }
             clearIntervalRef();
         };
     }, []);
 
-    // 重置工作区状态
-    const resetWorkspace = (): void => {
-        revokeAllObjectUrls();
-        setPages([]);
+    // 清除当前激活任务槽（会话内其余任务保留）
+    const resetActiveWorkspace = (): void => {
+        const activeId = activeLocalIdRef.current;
+        clearIntervalRef();
         setPreviewIndex(null);
-        setTaskId(null);
-        setTaskStatus(null);
         setSubmitLoading(false);
         setRetryLoading(false);
         setPolling(false);
-        setShowTranslated(true);
-        clearIntervalRef();
+
+        setSessionTasks((prev) => {
+            const active = prev.find((t) => t.localId === activeId);
+            if (active) revokePages(active.pages);
+            const next = prev.filter((t) => t.localId !== activeId);
+            if (next.length === 0) {
+                setActiveLocalId(null);
+            } else {
+                const nextActive = next[0];
+                setActiveLocalId(nextActive.localId);
+                if (nextActive.taskId && !isTaskEnded(nextActive.status)) {
+                    setPolling(true);
+                }
+            }
+            return next;
+        });
     };
 
     const onClearAll = (): void => {
         if (taskId && !isTaskEnded(taskStatus)) {
             setClearConfirmOpen(true);
         } else {
-            resetWorkspace();
+            resetActiveWorkspace();
         }
     };
 
     // 删除单张图片
     const removePage = (name: string): void => {
-        setPages((prev) => {
-            const targetIndex = prev.findIndex((p) => p.name === name);
+        const activeId = activeLocalIdRef.current;
+        if (!activeId) return;
+
+        setSessionTasks((prev) => {
+            const taskIndex = prev.findIndex((t) => t.localId === activeId);
+            if (taskIndex < 0) return prev;
+
+            const task = prev[taskIndex];
+            const targetIndex = task.pages.findIndex((p) => p.name === name);
             if (targetIndex < 0) return prev;
 
-            URL.revokeObjectURL(prev[targetIndex].originalUrl);
-            const next = prev.filter((p) => p.name !== name);
+            URL.revokeObjectURL(task.pages[targetIndex].originalUrl);
+            const nextPages = task.pages.filter((p) => p.name !== name);
 
             setPreviewIndex((current) => {
                 if (current === null) return null;
-                if (next.length === 0) return null;
+                if (nextPages.length === 0) return null;
                 if (targetIndex < current) return current - 1;
-                if (targetIndex === current) return Math.min(current, next.length - 1);
+                if (targetIndex === current) return Math.min(current, nextPages.length - 1);
                 return current;
             });
 
-            if (next.length === 0) {
-                setTaskId(null);
-                setTaskStatus(null);
-                setPolling(false);
-                setSubmitLoading(false);
-                setRetryLoading(false);
-                clearIntervalRef();
+            // 页被删空：移除该槽
+            if (nextPages.length === 0) {
+                const next = prev.filter((t) => t.localId !== activeId);
+                if (next.length === 0) {
+                    setActiveLocalId(null);
+                    setPolling(false);
+                    clearIntervalRef();
+                } else {
+                    const nextActive = next[0];
+                    setActiveLocalId(nextActive.localId);
+                    if (nextActive.taskId && !isTaskEnded(nextActive.status)) {
+                        setPolling(true);
+                    } else {
+                        setPolling(false);
+                        clearIntervalRef();
+                    }
+                }
+                return next;
             }
 
-            return next;
+            return prev.map((t, i) =>
+                i === taskIndex ? { ...t, pages: nextPages } : t,
+            );
         });
     };
 
     // 提交翻译
     const submitTask = async () => {
-        if (pages.length === 0 || submitLoading || polling) {
+        if (pages.length === 0 || taskId || submitLoading || polling) {
             return;
         }
         setSubmitLoading(true);
         try {
             const conf = buildTranslationConfig(targetLang, translateMode, fontStyle);
-            setPages((prev) => prev.map((value) => {
-                return {
-                    ...value,
-                    status: "pending",
-                };
+            updateActiveTask((task) => ({
+                ...task,
+                pages: task.pages.map((value) => ({ ...value, status: "pending" })),
             }));
 
             const formData = new FormData();
@@ -276,22 +420,23 @@ export function TranslateSection() {
             if (!response.ok || data.error) {
                 throw new Error(data.error);
             }
-            setTaskId(data.taskId!);
-            setTaskStatus("pending");
+            updateActiveTask((task) => ({
+                ...task,
+                taskId: data.taskId!,
+                status: "pending",
+            }));
             setPolling(true);
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
             toast.error(errMsg);
             console.error(errMsg);
-            setPages((prev) => prev.map((value) => {
-                if (value.status === "completed") {
-                    return value;
-                } else {
-                    return {
-                        ...value,
-                        status: "failed",
-                    };
-                }
+            updateActiveTask((task) => ({
+                ...task,
+                pages: task.pages.map((value) =>
+                    value.status === "completed"
+                        ? value
+                        : { ...value, status: "failed" },
+                ),
             }));
         } finally {
             setSubmitLoading(false);
@@ -302,17 +447,19 @@ export function TranslateSection() {
      * TODO 如果重试的时候变换了config无法生效，retry默认使用提交时的task配置
      */
     // 重试翻译
-    const retryTaskImages = async (taskId: string | null, imageIds: string[]) => {
-        if (!taskId || imageIds.length === 0 || retryLoading) {
+    const retryTaskImages = async (retryTaskId: string | null, imageIds: string[]) => {
+        if (!retryTaskId || imageIds.length === 0 || retryLoading) {
             return;
         }
         setRetryLoading(true);
         const retryIdSet = new Set(imageIds);
-        setPages((prev) => prev.map((value) => {
-            return value.imageId && retryIdSet.has(value.imageId) ? {
-                ...value,
-                status: "pending",
-            } : value;
+        updateActiveTask((task) => ({
+            ...task,
+            pages: task.pages.map((value) =>
+                value.imageId && retryIdSet.has(value.imageId)
+                    ? { ...value, status: "pending" }
+                    : value,
+            ),
         }));
         try {
             const response = await fetch("/api/translate/retry", {
@@ -320,74 +467,92 @@ export function TranslateSection() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ taskId, imageIds })
+                body: JSON.stringify({ taskId: retryTaskId, imageIds })
             });
             if (!response.ok) {
                 const { error } = await response.json() as { error: string; };
                 throw new Error(error);
             }
             setPolling(true);
-            setTaskStatus("pending");
+            updateActiveTask((task) => ({
+                ...task,
+                status: "pending",
+            }));
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
             toast.error(errMsg);
             console.error(errMsg);
-            setPages((prev) => prev.map((value) => {
-                return value.imageId && retryIdSet.has(value.imageId) ? {
-                    ...value,
-                    status: "failed",
-                } : value;
+            updateActiveTask((task) => ({
+                ...task,
+                pages: task.pages.map((value) =>
+                    value.imageId && retryIdSet.has(value.imageId)
+                        ? { ...value, status: "failed" }
+                        : value,
+                ),
             }));
         } finally {
             setRetryLoading(false);
         }
     };
 
-    // 轮询任务 
+    // 轮询当前激活任务
+    // TODO 轮询多个任务
     useEffect(() => {
         if (!taskId || !polling) {
             return;
         }
 
-        // 当开启新任务，查之前任务的fetch需要中止，防止造成写竞态
+        const polledTaskId = taskId;
+        const polledLocalId = activeLocalId;
         const abortController = new AbortController();
 
         const startedAt = Date.now();
         const poll = async () => {
-            // 轮询 limit 5min
             if (Date.now() - startedAt > 5 * 60 * 1000) {
                 clearIntervalRef();
                 setPolling(false);
                 toast.error("翻译超时，请重试");
                 console.error("Translation timeout");
-                // 标记剩余图片失败
-                setPages((prev) => prev.map((page) => {
-                    return page.status !== "completed" ? { ...page, status: "stalled" } : page;
-                }));
+                setSessionTasks((prev) =>
+                    prev.map((task) => {
+                        if (task.localId !== polledLocalId) return task;
+                        return {
+                            ...task,
+                            pages: task.pages.map((page) =>
+                                page.status !== "completed" ? { ...page, status: "stalled" } : page,
+                            ),
+                        };
+                    }),
+                );
                 return;
             }
             try {
-                const response = await fetch(`/api/translate/task/${taskId}`, { signal: abortController.signal });
+                const response = await fetch(`/api/translate/task/${polledTaskId}`, {
+                    signal: abortController.signal,
+                });
                 const data = await response.json() as { error?: string; } & ApiGetTranslationTaskResponse;
                 if (!response.ok) {
                     throw new Error(data.error);
                 }
-                setTaskStatus(data.status);
-                setPages((prev) => {
-                    return prev.map((page) => {
-                        // 需要保证前后端图片顺序一致
-                        const img = data.images.find((value) => value.filename === page.name);
-                        // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
-                        if (!img || page.status === "completed") return page;
+                setSessionTasks((prev) =>
+                    prev.map((task) => {
+                        if (task.localId !== polledLocalId) return task;
                         return {
-                            ...page,
-                            status: img.status,
-                            resultUrl: img.resultImageUrl,
-                            imageId: img.id,
+                            ...task,
+                            status: data.status,
+                            pages: task.pages.map((page) => {
+                                const img = data.images.find((value) => value.filename === page.name);
+                                if (!img || page.status === "completed") return page;
+                                return {
+                                    ...page,
+                                    status: img.status,
+                                    resultUrl: img.resultImageUrl,
+                                    imageId: img.id,
+                                };
+                            }),
                         };
-                    });
-                });
-                // 任务结束
+                    }),
+                );
                 if (isTaskEnded(data.status)) {
                     clearIntervalRef();
                     setPolling(false);
@@ -411,46 +576,34 @@ export function TranslateSection() {
             clearIntervalRef();
             abortController.abort();
         };
-    }, [taskId, polling]);
-
-    // TODO 用户提交任务后，要给引导，可以继续开启新任务。如何查看任务历史。
+    }, [taskId, polling, activeLocalId]);
 
     return (
         <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
             <div className="mx-auto max-w-5xl space-y-4 px-4">
-                <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
+                <UploadZone uploaded={uploadZoneCount} maxPages={20} onFilesSelected={onFilesSelected} />
+
+                {showNewTaskBar && (
+                    <NewTaskBar
+                        tasks={sessionTasks}
+                        activeLocalId={activeLocalId}
+                        canCreateNewTask={canCreateNewTask}
+                        showTranslated={showTranslated}
+                        onShowTranslatedChange={setShowTranslated}
+                        showLanguageSwitch={showLanguageSwitch}
+                        onSelectTask={onSelectTask}
+                        onNewTaskFiles={onNewTaskFiles}
+                        onClearAll={onClearAll}
+                    />
+                )}
 
                 {pages.length > 0 && (
                     <>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-end gap-3">
-                                {hasCompletedResults(pages) && (
-                                    <div className="flex items-center gap-1.5">
-                                        <Languages
-                                            className={`size-3.5 ${showTranslated ? "text-foreground" : "text-muted-foreground"}`}
-                                            aria-hidden
-                                        />
-                                        <Switch
-                                            checked={showTranslated}
-                                            onCheckedChange={setShowTranslated}
-                                            aria-label={showTranslated ? "查看翻译图" : "查看原图"}
-                                        />
-                                    </div>
-                                )}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-muted-foreground"
-                                    onClick={onClearAll}
-                                >
-                                    <X className="size-3" />
-                                    全部清除
-                                </Button>
-                            </div>
                             <div className="grid grid-cols-5 items-start gap-3">
                                 {pages.map((page, index) => (
                                     <ThumbNail
-                                        key={page.name}
+                                        key={`${activeLocalId}-${page.name}`}
                                         {...page}
                                         showTranslated={showTranslated}
                                         onRemove={() => removePage(page.name)}
@@ -471,7 +624,7 @@ export function TranslateSection() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>取消</AlertDialogCancel>
-                                        <AlertDialogAction onClick={resetWorkspace}>
+                                        <AlertDialogAction onClick={resetActiveWorkspace}>
                                             确认清除
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
@@ -494,7 +647,7 @@ export function TranslateSection() {
                                 <p className="text-sm font-medium">翻译为</p>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
+                                        <Button variant="outline" className="w-full justify-between" disabled={Boolean(taskId)}>
                                             {targetLang.label}
                                             <ChevronDown className="size-4" />
                                         </Button>
@@ -510,7 +663,7 @@ export function TranslateSection() {
                                 <p className="text-sm font-medium">翻译模式</p>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
+                                        <Button variant="outline" className="w-full justify-between" disabled={Boolean(taskId)}>
                                             {translateMode}
                                             <ChevronDown className="size-4" />
                                         </Button>
@@ -526,7 +679,7 @@ export function TranslateSection() {
                                 <p className="text-sm font-medium">字体风格</p>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-between">
+                                        <Button variant="outline" className="w-full justify-between" disabled={Boolean(taskId)}>
                                             {fontStyle}
                                             <ChevronDown className="size-4" />
                                         </Button>
@@ -539,7 +692,11 @@ export function TranslateSection() {
                                 </DropdownMenu>
                             </div>
                             <div className="flex w-full flex-col gap-2 sm:w-40">
-                                <Button className="w-full" onClick={submitTask}>
+                                <Button
+                                    className="w-full"
+                                    onClick={submitTask}
+                                    disabled={Boolean(taskId) || submitLoading || pages.length === 0}
+                                >
                                     <Upload className="size-4" />
                                     开始翻译
                                 </Button>
