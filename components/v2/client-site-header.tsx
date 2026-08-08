@@ -6,9 +6,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import {
     ChevronDown,
     Moon,
+    Sun,
 } from "lucide-react";
 import { UserInfo } from "@/types/api/user-info";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 type Props = {
     userInfo: UserInfo | null
@@ -16,6 +18,7 @@ type Props = {
 
 export function ClientSiteHeader({ userInfo }: Props) {
     const router = useRouter();
+    const { resolvedTheme, setTheme } = useTheme();
 
     const isLogin = () => {
         return userInfo !== null;
@@ -27,6 +30,10 @@ export function ClientSiteHeader({ userInfo }: Props) {
 
     const onClickDashboard = () => {
         router.push("/v2/home/history");
+    };
+
+    const onToggleTheme = () => {
+        setTheme(resolvedTheme === "dark" ? "light" : "dark");
     };
 
     const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
@@ -66,8 +73,14 @@ export function ClientSiteHeader({ userInfo }: Props) {
                             <DropdownMenuItem>日本語</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button variant="ghost" size="icon" aria-label="主题">
-                        <Moon className="size-4" />
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="切换主题"
+                        onClick={onToggleTheme}
+                    >
+                        <Sun className="size-4 dark:hidden" />
+                        <Moon className="hidden size-4 dark:block" />
                     </Button>
                     {isLogin() ? <Button size="sm" onClick={onClickDashboard}>Dashboard</Button> : <Button size="sm" onClick={onClickLogin}>Login</Button>}
                 </div>

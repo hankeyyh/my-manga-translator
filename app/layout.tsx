@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import { ThemeProvider } from "@/components/v2/theme-provider";
 
 export const metadata: Metadata = {
     title: "Comic Translation",
@@ -17,13 +18,15 @@ const geistSans = Geist({
 export default function RootLayout({
     children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.className} antialiased`}>
-                {children}
-                <Toaster position="top-center" />
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                    {children}
+                    <Toaster position="top-center" />
+                </ThemeProvider>
             </body>
         </html>
     );
