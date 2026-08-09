@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
+import { UserEntity } from "@/types/entity/user";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -23,12 +24,14 @@ export async function GET(request: NextRequest) {
     const supabase = await createServerClient();
     const authService = new AuthService(new UserRepository(supabase));
     let isSuccess: boolean = false;
+    let user: UserEntity | null = null;
 
     if (token_hash && type) {
         // Email OTP 验证
-        const { error } = await authService.verifyOtp(token_hash, type);
+        const { data, error } = await authService.verifyOtp(token_hash, type);
         if (!error) {
             isSuccess = true;
+            user = data;
         } else {
             console.error("verifyOtp error", error);
             redirect(`/auth/error?error=${error?.message}`);
@@ -38,21 +41,26 @@ export async function GET(request: NextRequest) {
         // 出现过报错：supabase PKCE code verifier not found in storage。网上建议增加cookies.getAll，但之后没有复现该问题
         // 参见：https://github.com/orgs/supabase/discussions/21183#discussioncomment-12013759
         (await cookies()).getAll();
-        const { error } = await authService.exchangeCodeForSession(code);
+        const { data, error } = await authService.exchangeCodeForSession(code);
         if (!error) {
             isSuccess = true;
+            user = data;
         } else {
             console.error("exchangeCodeForSession error", error);
             redirect(`/auth/error?error=${error?.message}`);
         }
     }
+    console.debug(`/auth/confirm, isSuccess: ${isSuccess}, userId: ${user?.id}`);
 
     if (isSuccess) {
         // 发放bonus credit
-        const user = await authService.getCurrentUser();
-        if (user.data) {
+        if (user) {
             const serviceSupabase = createServiceRoleClient();
-            await CreditService.fromSupabase(serviceSupabase).grantSignupBonus(user.data.id);
+            // TODO 为什么生产环境没有生效
+            const bonusResult = await CreditService.fromSupabase(serviceSupabase).grantSignupBonus(user.id);
+            if (bonusResult.error) {
+                console.error(`/auth/confirm, service.grantSignupBonus fail, error: ${bonusResult.error.message}`);
+            }
         }
         redirect(next);
     }
