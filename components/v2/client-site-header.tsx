@@ -42,7 +42,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
         <header className="sticky top-0 z-50 border-b bg-background">
             <div className="mx-auto flex h-14 max-w-5xl items-center gap-2 px-4">
                 <a href="/v2" className="shrink-0 text-sm font-semibold">
-                    AI Manga Translator
+                    Manga Sense
                 </a>
                 <nav className="ml-4 hidden items-center gap-1 md:flex">
                     <Button variant="ghost" size="sm" asChild>

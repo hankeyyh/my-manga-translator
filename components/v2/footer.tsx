@@ -5,7 +5,7 @@ export function Footer() {
         <footer className="border-t py-10">
             <div className="mx-auto grid max-w-5xl gap-8 px-4 sm:grid-cols-3">
                 <div>
-                    <p className="font-semibold">AI Manga Translator</p>
+                    <p className="font-semibold">Manga Sense</p>
                     <p className="mt-1 text-sm text-muted-foreground">
                         © 2026 All rights reserved.
                     </p>

@@ -5,8 +5,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/v2/theme-provider";
 
 export const metadata: Metadata = {
-    title: "Comic Translation",
-    description: "Comic Translation",
+    title: "Manga Translation",
+    description: "Ai Powered Manga Translation",
 };
 
 const geistSans = Geist({
