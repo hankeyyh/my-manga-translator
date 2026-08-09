@@ -279,7 +279,7 @@ export class TranslationService {
     async getUserTranslationHistoryByTasks(input: GetUserTranslationHistoryInput = {}): Promise<BizResult<TranslationHistoryPage>> {
         const userResult = await this.userRepo.getCurrentUser();
         if (userResult.error) {
-            console.error(`getUserTranslationHistoryByTasks, repo.getCurrentUser fail, error: ${userResult.error}`);
+            console.error(`getUserTranslationHistoryByTasks, repo.getCurrentUser fail, error: ${userResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: userResult.error };
         }
         if (!userResult.data) {
@@ -583,7 +583,8 @@ export class TranslationService {
             }
             return { code: SUCCESS_CODE, data: reader, error: null };
         } catch (err) {
-            console.error(`submitBatchTranslation, fetch algo svr fail, error: ${err}`);
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`submitBatchTranslation, fetch algo svr fail, error: ${errMsg}`);
             return {
                 code: NETWORK_ERROR_CODE,
                 data: null,

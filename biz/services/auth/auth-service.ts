@@ -69,7 +69,7 @@ export class AuthService {
     async getCurrentUser(): Promise<Result<UserEntity>> {
         const result =  await this.userRepo.getCurrentUser();
         if (result.error) {
-            console.error(`getCurrentUser, repo.getCurrentUser fail, error: ${result.error}`);
+            console.error(`getCurrentUser, repo.getCurrentUser fail, error: ${result.error.message}`);
         }
         return result;
     }

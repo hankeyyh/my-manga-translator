@@ -23,7 +23,7 @@ export const getCurrentUserInfo = cache(async (): Promise<BizResult<UserInfo>> =
         const userResult = await authService.getCurrentUser();
 
         if (userResult.error) {
-            console.error(`getCurrentUserInfo getCurrentUser fail: ${userResult.error}`);
+            console.error(`getCurrentUserInfo getCurrentUser fail: ${userResult.error.message}`);
             return { data: null, error: userResult.error, code: DB_ERROR_CODE };
         }
         if (!userResult.data) {
@@ -38,13 +38,13 @@ export const getCurrentUserInfo = cache(async (): Promise<BizResult<UserInfo>> =
         );
         const creditsResult = await creditService.getCreditBalance(userResult.data.id);
         if (creditsResult.error) {
-            console.error(`getCurrentUserInfo getCreditBalance fail: ${creditsResult.error}`);
+            console.error(`getCurrentUserInfo getCreditBalance fail: ${creditsResult.error.message}`);
             return { data: null, error: creditsResult.error, code: DB_ERROR_CODE };
         }
 
         return {
             data: {
-                credit: creditsResult.data!,
+                credit: creditsResult.data,
                 user: {
                     id: userResult.data.id,
                     email: userResult.data.email,

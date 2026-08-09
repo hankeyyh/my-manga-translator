@@ -66,7 +66,7 @@ export class CreditService {
     async getCreditBalance(userId: string): Promise<BizResult<UserCredit>> {
         const { data, error } = await this.userCreditRepo.getCredits(userId);
         if (error) {
-            console.error(`getCreditBalance, repo.getCredits fail, userId: ${userId}, error: ${error}`);
+            console.error(`getCreditBalance, repo.getCredits fail, userId: ${userId}, error: ${error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: error };
         }
         return { code: SUCCESS_CODE, data: data, error: null };
@@ -183,7 +183,7 @@ export class CreditService {
     async getAllPricingConfig(): Promise<BizResult<PricingConfig[]>> {
         const result = await this.pricingConfigRepo.getAllPricingConfig();
         if (result.error) {
-            console.error(`getAllPricingConfig, repo.getAllPricingConfig fail, error: ${result.error}`);
+            console.error(`getAllPricingConfig, repo.getAllPricingConfig fail, error: ${result.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: result.error };
         }
         return { code: SUCCESS_CODE, data: result.data, error: null };
@@ -208,7 +208,7 @@ export class CreditService {
     async freezeTaskCredits(userId: string, taskId: string, frozenCredits: number): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.freezeTaskCredits(userId, taskId, frozenCredits);
         if (result.error) {
-            console.error(`freezeTaskCredits, repo.freezeTaskCredits fail, error: ${result.error}, 
+            console.error(`freezeTaskCredits, repo.freezeTaskCredits fail, error: ${result.error.message}, 
                 taskId: ${taskId}, frozenCredits: ${frozenCredits}`);
             if (result.error.name === CREDIT_BALANCE_NOT_ENOUGH_NAME) {
                 return { code: CREDIT_BALANCE_NOT_ENOUGH, data: null, error: result.error };
@@ -222,7 +222,7 @@ export class CreditService {
     async batchCaptureImageCredits(userId: string, imageIds: string[]): Promise<BizResult<void>> {
         const result = await this.userCreditRepo.batchCaptureImageCredits(userId, imageIds);
         if (result.error) {
-            console.error(`batchCaptureImageCredits, repo.batchCaptureImageCredits fail, error: ${result.error}, 
+            console.error(`batchCaptureImageCredits, repo.batchCaptureImageCredits fail, error: ${result.error.message}, 
                 imageIds: ${imageIds}`);
             if (result.error.name === CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME) {
                 return { code: CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, data: null, error: result.error };

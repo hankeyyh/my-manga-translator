@@ -20,13 +20,16 @@ export class UserCreditsRepository {
         const result = await this.supabase.from("user_credits")
             .select("*")
             .eq("user_id", userId)
-            .single();
+            .maybeSingle();
         if (result.error) {
             return { data: null, error: result.error };
         }
-        return { 
-            data: mapUserCreditRowToUserCredit(result.data), 
-            error: null 
+        if (!result.data) {
+            return { data: null, error: null };
+        }
+        return {
+            data: mapUserCreditRowToUserCredit(result.data),
+            error: null
         };
     }
 

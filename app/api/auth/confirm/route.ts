@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 import { CreditService } from "@/biz/services/credit/credit-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -50,7 +51,8 @@ export async function GET(request: NextRequest) {
         // 发放bonus credit
         const user = await authService.getCurrentUser();
         if (user.data) {
-            await CreditService.fromSupabase(supabase).grantSignupBonus(user.data.id);
+            const serviceSupabase = createServiceRoleClient();
+            await CreditService.fromSupabase(serviceSupabase).grantSignupBonus(user.data.id);
         }
         redirect(next);
     }
