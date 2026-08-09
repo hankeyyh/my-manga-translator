@@ -15,6 +15,7 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "workflow:preview": "wrangler dev --config wrangler.workflow.jsonc -e dev",
     "workflow:deploy": "wrangler deploy --config wrangler.workflow.jsonc -e prod",
+    "workflow:upload": "wrangler versions upload --config wrangler.workflow.jsonc -e prod",
     "workflow:typegen": "wrangler types --config wrangler.workflow.jsonc --env-interface WorkflowEnv workflow-env.d.ts"
   },
   "dependencies": {
