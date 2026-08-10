@@ -1,4 +1,4 @@
-import { getUserTranslationHistory } from "@/actions/history";
+import { getUserTranslationHistory } from "@/actions/get-user-translation-history";
 import { TranslationHistory } from "@/app/(main)/v2/home/history/_components/translation-history";
 
 export default async function HistoryPage() {

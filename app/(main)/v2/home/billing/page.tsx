@@ -1,4 +1,5 @@
-import { getUserSubscription, listUserTransactions } from "@/actions/billing";
+import { getUserSubscription } from "@/actions/get-user-subscription";
+import { listUserTransactions } from "@/actions/list-user-transactions";
 import { SubscriptionStatus } from "@/app/(main)/v2/home/billing/_components/subscription-status";
 import { TransactionList } from "@/app/(main)/v2/home/billing/_components/transaction-list";
 import { CreditService } from "@/biz/services/credit/credit-service";

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { listUserTransactions } from "@/actions/billing";
+import { listUserTransactions } from "@/actions/list-user-transactions";
 import type { ListUserTransactionsPage } from "@/types/dto/user-transaction";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
