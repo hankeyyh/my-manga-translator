@@ -2,15 +2,18 @@ import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
     return (
-        <section className="relative flex min-h-[60vh] items-center overflow-hidden">
-            <img
-                src="/hero_image.webp"
-                alt=""
-                aria-hidden
-                className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-background/40" />
-            <div className="relative mx-auto w-full max-w-5xl px-4 py-16 text-center">
+        <section className="relative flex min-h-[60vh] items-center">
+            {/* 固定于视口；后续 section 用更高 z-index + 不透明背景盖过 */}
+            <div className="pointer-events-none fixed inset-0 z-0">
+                <img
+                    src="/hero_image.webp"
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-background/30" />
+            </div>
+            <div className="relative z-10 mx-auto w-full max-w-5xl px-4 py-16 text-center">
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                     AI 漫画翻译，一键完成
                 </h1>

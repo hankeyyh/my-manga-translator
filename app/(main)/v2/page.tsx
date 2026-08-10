@@ -12,18 +12,21 @@ export default function Page() {
     return (
         <>
             <SiteHeader />
-            <div className="min-h-screen bg-background">
+            <div className="min-h-screen">
                 <main>
                     <HeroSection />
-                    <TranslateSection />
-                    <HowSection />
-                    <ShowcaseSection />
-                    <PricingSection />
-                    <FaqSection />
-                    <BlogSection />
+                    {/* 不透明层盖过 fixed 背景，滚动时前景盖住 hero 图 */}
+                    <div className="relative z-10 bg-background">
+                        <TranslateSection />
+                        <HowSection />
+                        <ShowcaseSection />
+                        <PricingSection />
+                        <FaqSection />
+                        <BlogSection />
+                        <Footer />
+                    </div>
                 </main>
             </div>
-            <Footer />
         </>
     );
 }
