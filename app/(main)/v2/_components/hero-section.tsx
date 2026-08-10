@@ -1,17 +1,15 @@
 import { Button } from "@/components/ui/button";
 
-const PLACEHOLDER_HERO = "https://placehold.co/1200x480/e5e5e5/a3a3a3?text=Hero";
-
 export function HeroSection() {
     return (
-        <section className="relative flex min-h-[50vh] items-center overflow-hidden">
+        <section className="relative flex min-h-[60vh] items-center overflow-hidden">
             <img
-                src={PLACEHOLDER_HERO}
+                src="/hero_image.webp"
                 alt=""
                 aria-hidden
                 className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-background/60" />
+            <div className="absolute inset-0 bg-background/40" />
             <div className="relative mx-auto w-full max-w-5xl px-4 py-16 text-center">
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                     AI 漫画翻译，一键完成
