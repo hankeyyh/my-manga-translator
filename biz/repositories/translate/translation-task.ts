@@ -157,6 +157,48 @@ export class TranslationTaskRepository {
     }
 
     /**
+     * 批量获取任务详情 (含图片列表)
+     */
+    async batchGetTaskWithImages(taskIds: string[]): Promise<Result<TranslationTaskDetail[]>> {
+        if (taskIds.length === 0) {
+            return { data: null, error: null };
+        }
+
+        const { data, error } = await this.supabase
+            .from('translation_tasks')
+            .select('*, translation_images(*)')
+            .in('id', taskIds)
+            .order('image_index', { ascending: true, referencedTable: 'translation_images' });
+
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`批量获取任务详情失败：${error.message}`),
+            };
+        }
+
+        if (!data || data.length === 0) {
+            return {
+                data: null,
+                error: null,
+            };
+        }
+
+        return {
+            data: data.map((row) => {
+                const images = (row.translation_images as Tables<'translation_images'>[])
+                    .map(mapTranslationImageRowToTranslationImage)
+                    .sort((a, b) => a.imageIndex - b.imageIndex);
+                return {
+                    ...mapTranslationTaskRowToTranslationTask(row),
+                    images,
+                };
+            }),
+            error: null,
+        };
+    }
+
+    /**
    * 获取任务详情 (含图片列表)
    */
     async getTaskWithImages(taskId: string): Promise<Result<TranslationTaskDetail>> {

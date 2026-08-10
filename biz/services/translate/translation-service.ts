@@ -228,6 +228,79 @@ export class TranslationService {
         };
     }
 
+    async batchGetTranslationTaskDetail(taskIds: string[]): Promise<BizResult<TranslationTaskDetailView[]>> {
+        const userResult = await this.userRepo.getCurrentUser();
+        if (userResult.error || !userResult.data) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
+        }
+        const user = userResult.data!;
+
+        if (taskIds.length === 0) {
+            return { code: SUCCESS_CODE, data: [], error: null };
+        }
+
+        const tasksResult = await this.taskRepo.batchGetTaskWithImages(taskIds);
+        if (tasksResult.error) {
+            return { code: DB_ERROR_CODE, data: null, error: tasksResult.error };
+        }
+        const tasks = tasksResult.data ?? [];
+        if (tasks.some((task) => task.userId !== user.id)) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: new Error("Task not belonged") };
+        }
+
+        const allImages = tasks.flatMap((task) => task.images);
+        const originalUrls: string[] = allImages.map(() => "");
+        const resultSignedUrls: string[] = allImages.map(() => "");
+
+        if (allImages.length > 0) {
+            const originalImagePaths = allImages.map((img) => img.originalImagePath);
+            const originalUrlResult = await this.imageStorage.createSignedUrls(originalImagePaths, 3600);
+            if (originalUrlResult.error) {
+                console.error("batchGetTranslationTaskDetail, createSignedUrls failed, error: ", originalUrlResult.error.message);
+                return { code: DB_ERROR_CODE, data: null, error: originalUrlResult.error };
+            }
+            originalUrlResult.data!.forEach((url, i) => {
+                originalUrls[i] = url ?? "";
+            });
+
+            const resultPathsToSign: string[] = [];
+            const resultPathIndices: number[] = [];
+            allImages.forEach((img, i) => {
+                if (img.resultImagePath) {
+                    resultPathsToSign.push(img.resultImagePath);
+                    resultPathIndices.push(i);
+                }
+            });
+            if (resultPathsToSign.length > 0) {
+                const resultUrlResult = await this.imageStorage.createSignedUrls(resultPathsToSign, 3600);
+                if (resultUrlResult.error) {
+                    console.error("batchGetTranslationTaskDetail, createSignedUrls failed, error: ", resultUrlResult.error.message);
+                    return { code: DB_ERROR_CODE, data: null, error: resultUrlResult.error };
+                }
+                const signedResultUrls = resultUrlResult.data!;
+                resultPathIndices.forEach((imageIndex, j) => {
+                    resultSignedUrls[imageIndex] = signedResultUrls[j] ?? "";
+                });
+            }
+        }
+
+        let imageOffset = 0;
+        const taskViews: TranslationTaskDetailView[] = tasks.map((task) => {
+            const images = task.images.map((img, i): TranslationImageView => ({
+                ...img,
+                originalImageUrl: originalUrls[imageOffset + i] ?? "",
+                resultImageUrl: resultSignedUrls[imageOffset + i] ?? "",
+            }));
+            imageOffset += task.images.length;
+            return {
+                ...task,
+                images,
+            };
+        });
+
+        return { code: SUCCESS_CODE, data: taskViews, error: null };
+    }
+
     // 用户翻译历史
     async getUserTranslationHistory(): Promise<BizResult<TranslationImageView[]>> {
         // 1. 获取当前用户
