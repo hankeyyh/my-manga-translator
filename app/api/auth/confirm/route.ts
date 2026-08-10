@@ -26,18 +26,12 @@ export async function GET(request: NextRequest) {
     const next = searchParams.get("next") ?? "/v2";
     const wantsJson = request.headers.get("accept")?.includes("application/json") ?? false;
 
-    console.log("token_hash", token_hash);
-    console.log("type", type);
-    console.log("code", code);
-    console.log("next", next);
-
     const supabase = await createServerClient();
     const authService = new AuthService(new UserRepository(supabase));
 
     if (token_hash && type) {
         const { data, error } = await authService.verifyOtp(token_hash, type);
         if (error) {
-            console.error("verifyOtp error", error);
             if (wantsJson) {
                 return NextResponse.json(
                     { ok: false, error: error.message, next },
