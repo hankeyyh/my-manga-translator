@@ -7,15 +7,15 @@ const PRODUCT_LINKS = [
 ] as const;
 
 const LEGAL_LINKS = [
-    { label: "关于", href: "#" },
-    { label: "隐私政策", href: "#" },
-    { label: "使用条款", href: "#" },
-    { label: "退款政策", href: "#" },
-    { label: "常见问题", href: "#" },
-    { label: "DMCA", href: "#" },
+    { label: "关于", href: "/v2/legal/about" },
+    { label: "隐私政策", href: "/v2/legal/privacy" },
+    { label: "使用条款", href: "/v2/legal/terms" },
+    { label: "退款政策", href: "/v2/legal/refund" },
+    { label: "常见问题", href: "/v2#faq" },
+    { label: "DMCA", href: "/v2/legal/dmca" },
 ] as const;
 
-function XIcon({ className }: { className?: string }) {
+function XIcon({ className }: { className?: string; }) {
     return (
         <svg
             className={className}
