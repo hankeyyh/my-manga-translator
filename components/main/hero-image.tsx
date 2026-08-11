@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const HERO_IMAGE = "/hero.avif";
+const HERO_IMAGE = "/hero_image.webp";
 
 export function HeroImage() {
     return (

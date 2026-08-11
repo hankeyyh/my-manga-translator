@@ -59,7 +59,8 @@ function isTaskEnded(taskStatus: TaskStatus | null) {
 }
 
 /**
- * TODO fontstyle 没有使用
+ * TODO fontstyle 没有使用. 
+ * TODO 根据srclang, tarlang 决定翻译方向
  */
 function buildTranslationConfig(selLang: { code: string, label: string; }, selMode: string, selFontStyle: string): TranslationConfig {
     let company: Translator;
@@ -412,8 +413,6 @@ export function TranslateSection() {
             abortController.abort();
         };
     }, [taskId, polling]);
-
-    // TODO 用户提交任务后，要给引导，可以继续开启新任务。如何查看任务历史。
 
     return (
         <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
