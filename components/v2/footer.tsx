@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const PRODUCT_LINKS = [
-    { label: "工具", href: "#" },
-    { label: "博客", href: "#" },
-    { label: "价格", href: "#" },
+    { label: "工具", href: "/v2#tool" },
+    { label: "博客", href: "/v2/blogs" },
+    { label: "价格", href: "/v2#pricing" },
 ] as const;
 
 const LEGAL_LINKS = [

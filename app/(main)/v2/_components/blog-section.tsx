@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -35,7 +36,9 @@ export function BlogSection() {
                     ))}
                 </div>
                 <p className="mt-6 text-center">
-                    <Button variant="link">查看所有文章 →</Button>
+                    <Button variant="link" asChild>
+                        <Link href="/v2/blogs">查看所有文章 →</Link>
+                    </Button>
                 </p>
             </div>
         </section>
