@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     title: "博客 | Manga Sense",
 };
 
+const PLACEHOLDER_BLOG = "https://placehold.co/400x400/e5e5e5/a3a3a3?text=Blog";
+
 function formatBlogDate(date: string) {
     const [year, month, day] = date.split("-").map(Number);
     if (!year || !month || !day) return date;
@@ -31,8 +33,14 @@ export default async function Page() {
                         href={`/v2/blogs/${post.slug}`}
                         className="group"
                     >
-                        <Card className="transition-colors group-hover:bg-accent/50">
-                            <CardHeader>
+                        <Card className="flex-row overflow-hidden py-0 transition-colors group-hover:bg-accent/50">
+                            <img
+                                src={post.cover || PLACEHOLDER_BLOG}
+                                alt=""
+                                aria-hidden
+                                className="aspect-square w-28 shrink-0 object-cover sm:w-36"
+                            />
+                            <CardHeader className="min-w-0 flex-1 justify-center py-4 pl-1">
                                 {post.date ? (
                                     <CardDescription>
                                         {formatBlogDate(post.date)}
@@ -42,7 +50,7 @@ export default async function Page() {
                                     {post.title}
                                 </CardTitle>
                                 {post.description ? (
-                                    <CardDescription>
+                                    <CardDescription className="line-clamp-2">
                                         {post.description}
                                     </CardDescription>
                                 ) : null}

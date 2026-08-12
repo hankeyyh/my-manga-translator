@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -13,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
+const LANGS = ["简体中文", "English", "日本語"] as const;
+
 type Props = {
     userInfo: UserInfo | null
 }
@@ -20,6 +23,7 @@ type Props = {
 export function ClientSiteHeader({ userInfo }: Props) {
     const router = useRouter();
     const { resolvedTheme, setTheme } = useTheme();
+    const [lang, setLang] = useState<string>("简体中文");
 
     const isLogin = () => {
         return userInfo !== null;
@@ -66,17 +70,19 @@ export function ClientSiteHeader({ userInfo }: Props) {
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
                         <Badge variant="secondary">Credits · {totalCredits}</Badge>
-                        <DropdownMenu>
+                        <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm">
-                                    Lang
+                                    {lang}
                                     <ChevronDown className="size-3" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>中文</DropdownMenuItem>
-                                <DropdownMenuItem>English</DropdownMenuItem>
-                                <DropdownMenuItem>日本語</DropdownMenuItem>
+                                {LANGS.map((item) => (
+                                    <DropdownMenuItem key={item} onSelect={() => setLang(item)}>
+                                        {item}
+                                    </DropdownMenuItem>
+                                ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <Button
