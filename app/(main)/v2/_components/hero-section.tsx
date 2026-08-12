@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 export function HeroSection() {
     return (
         <section className="relative flex min-h-[60vh] items-center">
-            {/* 固定于视口；后续 section 用更高 z-index + 不透明背景盖过 */}
-            <div className="pointer-events-none fixed inset-0 z-0">
+            {/* 固定于 header 下方、高度对齐 hero；后续不透明层滚动盖过 */}
+            <div className="pointer-events-none fixed inset-x-0 top-14 z-0 h-[60vh]">
                 <img
                     src="/hero_image.webp"
                     alt=""
