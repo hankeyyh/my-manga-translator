@@ -6,12 +6,19 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { getBlogPosts } from "@/biz/utils/blog";
+import { BlogService } from "@/biz/services/blog/blog-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
+import { createServerClient } from "@/biz/utils/supabase/server";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x240/e5e5e5/a3a3a3?text=Blog";
 
 export async function BlogSection() {
-    const posts = (await getBlogPosts()).slice(0, 3);
+    const supabase = await createServerClient();
+    const result = await BlogService.fromSupabase(
+        supabase,
+        createServiceRoleClient(),
+    ).listPublishedPosts();
+    const posts = (result.data ?? []).slice(0, 3);
 
     return (
         <section className="py-16">
@@ -26,7 +33,7 @@ export async function BlogSection() {
                         >
                             <Card className="overflow-hidden py-0 transition-colors group-hover:bg-accent/50">
                                 <img
-                                    src={post.cover || PLACEHOLDER_BLOG}
+                                    src={post.coverUrl || PLACEHOLDER_BLOG}
                                     alt={post.title}
                                     className="aspect-[5/3] w-full object-cover"
                                 />
@@ -34,7 +41,9 @@ export async function BlogSection() {
                                     <CardTitle className="line-clamp-2 text-base transition-colors group-hover:text-primary">
                                         {post.title}
                                     </CardTitle>
-                                    <CardDescription>{post.date}</CardDescription>
+                                    <CardDescription>
+                                        {post.publishedAt?.slice(0, 10) ?? ""}
+                                    </CardDescription>
                                 </CardHeader>
                             </Card>
                         </Link>

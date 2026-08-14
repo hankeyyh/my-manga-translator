@@ -6,22 +6,34 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { getBlogPosts } from "@/biz/utils/blog";
+import { BlogService } from "@/biz/services/blog/blog-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
+import { createServerClient } from "@/biz/utils/supabase/server";
 
 export const metadata: Metadata = {
     title: "博客 | Manga Sense",
 };
 
+/** cover signed URL 24h，列表页按小时刷新 */
+export const revalidate = 3600;
+
 const PLACEHOLDER_BLOG = "https://placehold.co/400x400/e5e5e5/a3a3a3?text=Blog";
 
-function formatBlogDate(date: string) {
+function formatBlogDate(publishedAt: string | null) {
+    if (!publishedAt) return "";
+    const date = publishedAt.slice(0, 10);
     const [year, month, day] = date.split("-").map(Number);
     if (!year || !month || !day) return date;
     return `${year}年${month}月${day}日`;
 }
 
 export default async function Page() {
-    const posts = await getBlogPosts();
+    const supabase = await createServerClient();
+    const result = await BlogService.fromSupabase(
+        supabase,
+        createServiceRoleClient(),
+    ).listPublishedPosts();
+    const posts = result.data ?? [];
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
@@ -35,15 +47,15 @@ export default async function Page() {
                     >
                         <Card className="flex-row overflow-hidden py-0 transition-colors group-hover:bg-accent/50">
                             <img
-                                src={post.cover || PLACEHOLDER_BLOG}
+                                src={post.coverUrl || PLACEHOLDER_BLOG}
                                 alt=""
                                 aria-hidden
                                 className="aspect-square w-28 shrink-0 object-cover sm:w-36"
                             />
                             <CardHeader className="min-w-0 flex-1 justify-center py-4 pl-1">
-                                {post.date ? (
+                                {post.publishedAt ? (
                                     <CardDescription>
-                                        {formatBlogDate(post.date)}
+                                        {formatBlogDate(post.publishedAt)}
                                     </CardDescription>
                                 ) : null}
                                 <CardTitle className="transition-colors group-hover:text-primary">
