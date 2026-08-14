@@ -10,9 +10,6 @@ import type { BlogPost } from "@/types/do/blog-post";
 import type { BlogPostMetaView, BlogPostView } from "@/types/dto/blog-post";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-/** cover signed URL 有效期（秒）；页面配合 revalidate 刷新 */
-const COVER_SIGNED_URL_EXPIRES_IN = 60 * 60 * 24;
-
 /**
  * 博客
  */
@@ -22,14 +19,10 @@ export class BlogService {
         private blogMediaStorage: BlogMediaStorageRepository,
     ) {}
 
-    /**
-     * @param supabase DB 客户端（可读 published blog_posts）
-     * @param storageClient 可选；blog_media 为 private 时应用 service role 签 URL
-     */
-    static fromSupabase(supabase: SupabaseClient, storageClient?: SupabaseClient) {
+    static fromSupabase(supabase: SupabaseClient) {
         return new BlogService(
             new BlogPostsRepository(supabase),
-            new BlogMediaStorageRepository(storageClient ?? supabase),
+            new BlogMediaStorageRepository(supabase),
         );
     }
 
@@ -43,7 +36,7 @@ export class BlogService {
         }
 
         const posts = data ?? [];
-        const coverUrls = await this.resolveCoverUrls(posts.map((p) => p.cover));
+        const coverUrls = this.resolveCoverUrls(posts.map((p) => p.cover));
         if (coverUrls.error) {
             console.error(
                 `listPublishedPosts, resolveCoverUrls fail, error: ${coverUrls.error.message}`,
@@ -75,7 +68,7 @@ export class BlogService {
             return { code: DB_ERROR_CODE, data: null, error };
         }
 
-        const coverUrls = await this.resolveCoverUrls([data!.cover]);
+        const coverUrls = this.resolveCoverUrls([data!.cover]);
         if (coverUrls.error) {
             console.error(
                 `getPublishedPost, resolveCoverUrls fail, slug: ${slug}, error: ${coverUrls.error.message}`,
@@ -104,23 +97,20 @@ export class BlogService {
         };
     }
 
-    private async resolveCoverUrls(covers: string[]) {
+    private resolveCoverUrls(covers: string[]) {
         const paths = covers.map((c) => c.trim()).filter(Boolean);
         if (paths.length === 0) {
             return { data: covers.map(() => ""), error: null as Error | null };
         }
 
-        const signed = await this.blogMediaStorage.createSignedUrls(
-            paths,
-            COVER_SIGNED_URL_EXPIRES_IN,
-        );
-        if (signed.error || !signed.data) {
-            return { data: null, error: signed.error };
+        const publicUrls = this.blogMediaStorage.getPublicUrls(paths);
+        if (publicUrls.error || !publicUrls.data) {
+            return { data: null, error: publicUrls.error };
         }
 
         const urlByPath = new Map<string, string>();
         paths.forEach((path, i) => {
-            urlByPath.set(path, signed.data![i] ?? "");
+            urlByPath.set(path, publicUrls.data![i] ?? "");
         });
 
         return {

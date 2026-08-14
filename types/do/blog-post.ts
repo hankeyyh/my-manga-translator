@@ -4,7 +4,7 @@ export interface BlogPost {
     slug: string;
     title: string;
     description: string;
-    /** supabase storage path in blog_media bucket */
+    /** supabase storage path in public blog_media bucket */
     cover: string;
     content: string;
     author: string | null;

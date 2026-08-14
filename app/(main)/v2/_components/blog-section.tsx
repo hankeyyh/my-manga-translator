@@ -7,17 +7,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { BlogService } from "@/biz/services/blog/blog-service";
-import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x240/e5e5e5/a3a3a3?text=Blog";
 
 export async function BlogSection() {
     const supabase = await createServerClient();
-    const result = await BlogService.fromSupabase(
-        supabase,
-        createServiceRoleClient(),
-    ).listPublishedPosts();
+    const result = await BlogService.fromSupabase(supabase).listPublishedPosts();
     const posts = (result.data ?? []).slice(0, 3);
 
     return (

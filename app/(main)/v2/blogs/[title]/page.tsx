@@ -3,27 +3,16 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MarkdownContent } from "@/components/v2/markdown-content";
 import { BlogService } from "@/biz/services/blog/blog-service";
-import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
 type Props = {
     params: Promise<{ title: string }>;
 };
 
-export const revalidate = 3600;
-
-async function getBlogService() {
-    const supabase = await createServerClient();
-    return BlogService.fromSupabase(supabase, createServiceRoleClient());
-}
-
-// 不在 build 期调 Supabase：CF/CI 的 next build 读不到 wrangler secrets，
-// 且路由已是动态渲染（ƒ），运行时按 slug 取数即可。
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { title: slug } = await params;
-    const service = await getBlogService();
-    const result = await service.getPublishedPost(slug);
+    const supabase = await createServerClient();
+    const result = await BlogService.fromSupabase(supabase).getPublishedPost(slug);
     if (result.error || !result.data) {
         return { title: "博客 | Manga Sense" };
     }
@@ -53,8 +42,8 @@ function splitLeadingH1(content: string) {
 
 export default async function Page({ params }: Props) {
     const { title: slug } = await params;
-    const service = await getBlogService();
-    const result = await service.getPublishedPost(slug);
+    const supabase = await createServerClient();
+    const result = await BlogService.fromSupabase(supabase).getPublishedPost(slug);
     if (result.error || !result.data) {
         notFound();
     }

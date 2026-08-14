@@ -7,15 +7,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { BlogService } from "@/biz/services/blog/blog-service";
-import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
 export const metadata: Metadata = {
     title: "博客 | Manga Sense",
 };
-
-/** cover signed URL 24h，列表页按小时刷新 */
-export const revalidate = 3600;
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x400/e5e5e5/a3a3a3?text=Blog";
 
@@ -29,10 +25,7 @@ function formatBlogDate(publishedAt: string | null) {
 
 export default async function Page() {
     const supabase = await createServerClient();
-    const result = await BlogService.fromSupabase(
-        supabase,
-        createServiceRoleClient(),
-    ).listPublishedPosts();
+    const result = await BlogService.fromSupabase(supabase).listPublishedPosts();
     const posts = result.data ?? [];
 
     return (

@@ -7,27 +7,26 @@ export class BlogMediaStorageRepository {
     constructor(private supabase: SupabaseClient) {}
 
     /**
-     * 为 blog_media 对象创建签名 URL（bucket 为 private）
+     * blog_media 为 public bucket，返回稳定可缓存的公开 URL
      */
-    async createSignedUrls(filePaths: string[], expiresIn: number): Promise<Result<string[]>> {
+    getPublicUrls(filePaths: string[]): Result<string[]> {
         if (filePaths.length === 0) {
             return { data: [], error: null };
         }
 
-        const { data, error } = await this.supabase.storage
-            .from(this.bucketName)
-            .createSignedUrls(filePaths, expiresIn);
-
-        if (error) {
+        try {
+            const urls = filePaths.map((path) => {
+                const { data } = this.supabase.storage
+                    .from(this.bucketName)
+                    .getPublicUrl(path);
+                return data.publicUrl;
+            });
+            return { data: urls, error: null };
+        } catch (err) {
             return {
                 data: null,
-                error: new Error(`Failed to create signed URLs: ${error.message}`),
+                error: err instanceof Error ? err : new Error(String(err)),
             };
         }
-
-        return {
-            data: (data ?? []).map((item) => item.signedUrl ?? ""),
-            error: null,
-        };
     }
 }
