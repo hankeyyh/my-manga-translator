@@ -34,6 +34,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author: string | null
+          content: string
+          cover: string
+          created_at: string
+          description: string
+          id: string
+          published_at: string | null
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          content: string
+          cover?: string
+          created_at?: string
+          description?: string
+          id?: string
+          published_at?: string | null
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          content?: string
+          cover?: string
+          created_at?: string
+          description?: string
+          id?: string
+          published_at?: string | null
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       credit_logs: {
         Row: {
           biz_type: string | null
@@ -92,6 +134,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      legal_docs: {
+        Row: {
+          content: string
+          created_at: string
+          effective_at: string | null
+          id: string
+          kind: string
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          effective_at?: string | null
+          id?: string
+          kind: string
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          effective_at?: string | null
+          id?: string
+          kind?: string
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       pricing_config: {
         Row: {

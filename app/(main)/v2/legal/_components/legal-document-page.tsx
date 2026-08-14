@@ -1,21 +1,23 @@
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/v2/markdown-content";
-import {
-    getLegalDocument,
-    isLegalSlug,
-    type LegalSlug,
-} from "@/biz/utils/legal";
+import { LegalService } from "@/biz/services/legal/legal-service";
+import { createServerClient } from "@/biz/utils/supabase/server";
+import { isLegalSlug } from "@/types/do/legal-doc";
 
 export async function LegalDocumentPage({ slug }: { slug: string; }) {
     if (!isLegalSlug(slug)) {
         notFound();
     }
 
-    const document = await getLegalDocument(slug as LegalSlug);
+    const supabase = await createServerClient();
+    const result = await LegalService.fromSupabase(supabase).getPublishedDocument(slug);
+    if (result.error || !result.data) {
+        notFound();
+    }
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-            <MarkdownContent content={document.content} />
+            <MarkdownContent content={result.data.content} />
         </div>
     );
 }
