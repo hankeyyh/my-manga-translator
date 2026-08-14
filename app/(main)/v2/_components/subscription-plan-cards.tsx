@@ -112,7 +112,7 @@ export function SubscriptionPlanCards({
                                         : isCurrentPlan
                                             ? "已订阅"
                                             : adjustMode
-                                                ? "Adjust Plan"
+                                                ? "调整方案"
                                                 : "Get Started"}
                             </Button>
                         </CardFooter>
