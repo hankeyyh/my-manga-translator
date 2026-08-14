@@ -17,16 +17,8 @@ async function getBlogService() {
     return BlogService.fromSupabase(supabase, createServiceRoleClient());
 }
 
-/** 构建期无 HTTP/cookies，只能用 service role */
-function getBlogServiceForBuild() {
-    const supabase = createServiceRoleClient();
-    return BlogService.fromSupabase(supabase, supabase);
-}
-
-export async function generateStaticParams() {
-    const result = await getBlogServiceForBuild().listPublishedPosts();
-    return (result.data ?? []).map((post) => ({ title: post.slug }));
-}
+// 不在 build 期调 Supabase：CF/CI 的 next build 读不到 wrangler secrets，
+// 且路由已是动态渲染（ƒ），运行时按 slug 取数即可。
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { title: slug } = await params;
