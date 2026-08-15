@@ -1,4 +1,7 @@
-const PLACEHOLDER_WIDE = "https://placehold.co/800x400/e5e5e5/a3a3a3?text=Before+%2F+After";
+import { ImageCompareSlider } from "./image-compare-slider";
+
+const BEFORE_SRC = "/showcase/1183-14.webp";
+const AFTER_SRC = "/showcase/1183-14-chs.webp";
 
 export function ShowcaseSection() {
     return (
@@ -8,11 +11,12 @@ export function ShowcaseSection() {
                 <p className="mb-6 text-sm text-muted-foreground">
                     拖动滑块对比原图 / 翻译
                 </p>
-                <div className="overflow-hidden rounded-xl border bg-background">
-                    <img
-                        src={PLACEHOLDER_WIDE}
-                        alt="翻译前后对比"
-                        className="mx-auto h-auto w-full max-w-3xl object-cover"
+                <div className="mx-auto max-w-[38.4rem] overflow-hidden rounded-xl border bg-background">
+                    <ImageCompareSlider
+                        beforeSrc={BEFORE_SRC}
+                        afterSrc={AFTER_SRC}
+                        beforeAlt="翻译前原图"
+                        afterAlt="翻译后效果"
                     />
                 </div>
             </div>
