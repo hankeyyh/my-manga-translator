@@ -7,8 +7,8 @@ import { TranslationTaskRepository } from "@/biz/repositories/translate/translat
 import { CreateImageParams, TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { TranslationHistoryPage, TranslationTaskDetailView } from "@/types/dto/translation-task";
-import { TranslationImageView } from "@/types/dto/translation-image";
+import { TranslationHistoryPage, TranslationTaskDetailView, TranslationTaskLiteView } from "@/types/dto/translation-task";
+import { TranslationImageView, TranslationImageLiteView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
@@ -225,6 +225,59 @@ export class TranslationService {
 
         return {
             code: SUCCESS_CODE, data: taskDetailView, error: null
+        };
+    }
+
+    /**
+     * Lightweight task detail for polling: skip original image signed URLs;
+     * only sign result images that already have a storage path.
+     */
+    async getTranslationTaskLiteDetail(taskId: string): Promise<BizResult<TranslationTaskLiteView>> {
+        const userResult = await this.userRepo.getCurrentUser();
+        if (userResult.error || !userResult.data) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
+        }
+        const user = userResult.data!;
+
+        const taskResult = await this.taskRepo.getTaskWithImages(taskId);
+        if (taskResult.error) {
+            return { code: DB_ERROR_CODE, data: null, error: taskResult.error };
+        }
+        const taskDetail = taskResult.data!;
+        if (taskDetail.userId !== user.id) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: new Error("Task not belonged") };
+        }
+
+        const resultSignedUrls: string[] = taskDetail.images.map(() => "");
+        const resultPathsToSign: string[] = [];
+        const resultPathIndices: number[] = [];
+        taskDetail.images.forEach((img, i) => {
+            if (img.resultImagePath) {
+                resultPathsToSign.push(img.resultImagePath);
+                resultPathIndices.push(i);
+            }
+        });
+        if (resultPathsToSign.length > 0) {
+            const resultUrlResult = await this.imageStorage.createSignedUrls(resultPathsToSign, 3600);
+            if (resultUrlResult.error) {
+                console.error("getTranslationTaskLiteDetail, createSignedUrls failed, error: ", resultUrlResult.error.message);
+                return { code: DB_ERROR_CODE, data: null, error: resultUrlResult.error };
+            }
+            const signedResultUrls = resultUrlResult.data!;
+            resultPathIndices.forEach((imageIndex, j) => {
+                resultSignedUrls[imageIndex] = signedResultUrls[j] ?? "";
+            });
+        }
+
+        const images = taskDetail.images.map((img, i): TranslationImageLiteView => ({
+            ...img,
+            resultImageUrl: resultSignedUrls[i],
+        }));
+
+        return {
+            code: SUCCESS_CODE,
+            data: { ...taskDetail, images },
+            error: null,
         };
     }
 

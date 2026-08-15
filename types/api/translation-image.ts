@@ -11,3 +11,14 @@ export interface ApiTranslationTaskImage {
     resultImageUrl: string;
     errorMessage?: string;
 }
+
+/** Image fields needed while polling; originals are client-local. */
+export interface ApiTranslationTaskLiteImage {
+    id: string;
+    status: ImageStatus;
+    imageIndex: number;
+    filename: string;
+    taskId: string;
+    resultImageUrl: string;
+    errorMessage?: string;
+}

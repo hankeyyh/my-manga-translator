@@ -32,7 +32,7 @@ import { ImagePreview } from "@/components/v2/image-preview";
 import { UploadZone } from "@/components/v2/upload-zone";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
-import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
+import { ApiGetTranslationTaskLiteResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
 
 const SUPPORTED_LANGS = [
@@ -138,7 +138,7 @@ export function TranslateSection() {
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
     const [retryLoading, setRetryLoading] = useState<boolean>(false);
     const [polling, setPolling] = useState<boolean>(false);
-    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const pollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [taskId, setTaskId] = useState<string | null>(null);
     const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
     const [showTranslated, setShowTranslated] = useState(true);
@@ -175,10 +175,10 @@ export function TranslateSection() {
         }
     };
 
-    const clearIntervalRef = (): void => {
-        if (intervalRef.current !== null) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
+    const clearPollTimeout = (): void => {
+        if (pollTimeoutRef.current !== null) {
+            clearTimeout(pollTimeoutRef.current);
+            pollTimeoutRef.current = null;
         }
     };
 
@@ -191,7 +191,7 @@ export function TranslateSection() {
     useEffect(() => {
         return () => {
             revokeAllObjectUrls();
-            clearIntervalRef();
+            clearPollTimeout();
         };
     }, []);
 
@@ -206,7 +206,7 @@ export function TranslateSection() {
         setRetryLoading(false);
         setPolling(false);
         setShowTranslated(true);
-        clearIntervalRef();
+        clearPollTimeout();
     };
 
     const onClearAll = (): void => {
@@ -240,7 +240,7 @@ export function TranslateSection() {
                 setPolling(false);
                 setSubmitLoading(false);
                 setRetryLoading(false);
-                clearIntervalRef();
+                clearPollTimeout();
             }
 
             return next;
@@ -344,7 +344,7 @@ export function TranslateSection() {
         }
     };
 
-    // 轮询任务 
+    // 串行轮询：上一次结束后再调度下一次，避免 setInterval 叠请求
     useEffect(() => {
         if (!taskId || !polling) {
             return;
@@ -352,12 +352,23 @@ export function TranslateSection() {
 
         // 当开启新任务，查之前任务的fetch需要中止，防止造成写竞态
         const abortController = new AbortController();
-
+        let cancelled = false;
         const startedAt = Date.now();
+        const POLL_INTERVAL_MS = 1000;
+
+        const scheduleNext = () => {
+            if (cancelled) return;
+            clearPollTimeout();
+            pollTimeoutRef.current = setTimeout(() => {
+                void poll();
+            }, POLL_INTERVAL_MS);
+        };
+
         const poll = async () => {
-            // 轮询 limit 5min
+            if (cancelled) return;
+            // limit 5min
             if (Date.now() - startedAt > 5 * 60 * 1000) {
-                clearIntervalRef();
+                clearPollTimeout();
                 setPolling(false);
                 toast.error("翻译超时，请重试");
                 console.error("Translation timeout");
@@ -368,8 +379,8 @@ export function TranslateSection() {
                 return;
             }
             try {
-                const response = await fetch(`/api/translate/task/${taskId}`, { signal: abortController.signal });
-                const data = await response.json() as { error?: string; } & ApiGetTranslationTaskResponse;
+                const response = await fetch(`/api/translate/task-lite/${taskId}`, { signal: abortController.signal });
+                const data = await response.json() as { error?: string; } & ApiGetTranslationTaskLiteResponse;
                 if (!response.ok) {
                     throw new Error(data.error);
                 }
@@ -390,9 +401,11 @@ export function TranslateSection() {
                 });
                 // 任务结束
                 if (isTaskEnded(data.status)) {
-                    clearIntervalRef();
+                    clearPollTimeout();
                     setPolling(false);
+                    return;
                 }
+                scheduleNext();
             } catch (err) {
                 if (err instanceof Error && err.name === "AbortError") {
                     return;
@@ -400,16 +413,16 @@ export function TranslateSection() {
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
                 toast.error(errMsg);
                 console.error(errMsg);
-                clearIntervalRef();
+                clearPollTimeout();
                 setPolling(false);
             }
         };
 
         void poll();
-        intervalRef.current = setInterval(() => void poll(), 1000);
 
         return () => {
-            clearIntervalRef();
+            cancelled = true;
+            clearPollTimeout();
             abortController.abort();
         };
     }, [taskId, polling]);
