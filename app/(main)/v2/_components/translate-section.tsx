@@ -91,8 +91,8 @@ function buildTranslationConfig(selLang: { code: string, label: string; }, selMo
             inpainter: "default",
         },
         ocr: {
-            ocr: "mocr",
-            use_mocr_merge: true,
+            ocr: "48px",
+            // 目前算法对目标语言=chs，cht，jp，会根据原文方向渲染翻译文字方向，这要求不能开启'use_mocr_merge'
         },
         upscale: {
             upscaler: "esrgan",
