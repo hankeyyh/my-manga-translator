@@ -88,7 +88,7 @@ function buildTranslationConfig(selLang: { code: string, label: string; }, selMo
             detector: "ctd",
         },
         inpainter: {
-            inpainter: "default",
+            inpainter: "lama_mpe",
         },
         ocr: {
             ocr: "48px",
