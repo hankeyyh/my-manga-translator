@@ -1,7 +1,7 @@
 import { ImageCompareSlider } from "./image-compare-slider";
 
-const BEFORE_SRC = "/showcase/1183-14.webp";
-const AFTER_SRC = "/showcase/1183-14-chs.webp";
+const BEFORE_SRC = "/showcase/frieren.webp";
+const AFTER_SRC = "/showcase/frieren-chs.webp";
 
 export function ShowcaseSection() {
     return (
@@ -11,7 +11,7 @@ export function ShowcaseSection() {
                 <p className="mb-6 text-sm text-muted-foreground">
                     拖动滑块对比原图 / 翻译
                 </p>
-                <div className="mx-auto max-w-[38.4rem] overflow-hidden rounded-xl border bg-background">
+                <div className="mx-auto max-w-5xl overflow-hidden rounded-xl border bg-background">
                     <ImageCompareSlider
                         beforeSrc={BEFORE_SRC}
                         afterSrc={AFTER_SRC}

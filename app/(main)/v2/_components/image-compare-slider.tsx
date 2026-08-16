@@ -63,20 +63,24 @@ export function ImageCompareSlider({
                 }
             }}
         >
+            {/* max-w-none：取消图片不能比父级宽的限制
+                overflow-hidder: 超出盒子部分不画出来
+                -translate-x-*: 图片向左移动
+            */}
             <img
                 src={beforeSrc}
                 alt={beforeAlt}
-                className="block h-auto w-full"
+                className="block h-auto max-w-none -translate-x-2"
                 draggable={false}
             />
             <div
-                className="absolute inset-0"
+                className="absolute inset-0 overflow-hidden"
                 style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
             >
                 <img
                     src={afterSrc}
                     alt={afterAlt}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute left-0 top-0 h-auto max-w-none -translate-x-2"
                     draggable={false}
                 />
             </div>
