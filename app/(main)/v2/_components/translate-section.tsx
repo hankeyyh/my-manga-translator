@@ -435,7 +435,7 @@ export function TranslateSection() {
     return (
         <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
             <div className="mx-auto max-w-5xl space-y-4 px-4">
-                <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} />
+                <UploadZone uploaded={pages.length} maxPages={20} onFilesSelected={onFilesSelected} compact={false} />
 
                 {pages.length > 0 && (
                     <>
