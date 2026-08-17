@@ -357,6 +357,59 @@ export class TranslationService {
         return { code: SUCCESS_CODE, data: taskViews, error: null };
     }
 
+    /**
+     * Lightweight batch image fetch for polling: skip original image signed URLs;
+     * only sign result images that already have a storage path.
+     */
+    async batchGetTranslationImageLite(imageIds: string[]): Promise<BizResult<TranslationImageLiteView[]>> {
+        const userResult = await this.userRepo.getCurrentUser();
+        if (userResult.error || !userResult.data) {
+            return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
+        }
+        const user = userResult.data!;
+
+        if (imageIds.length === 0) {
+            return { code: SUCCESS_CODE, data: [], error: null };
+        }
+
+        const imagesResult = await this.imageRepo.batchGetImages(imageIds);
+        if (imagesResult.error) {
+            return { code: DB_ERROR_CODE, data: null, error: imagesResult.error };
+        }
+        const images = imagesResult.data ?? [];
+        if (images.length === 0) {
+            return { code: SUCCESS_CODE, data: [], error: null };
+        }
+
+        const resultSignedUrls: string[] = images.map(() => "");
+        const resultPathsToSign: string[] = [];
+        const resultPathIndices: number[] = [];
+        images.forEach((img, i) => {
+            if (img.resultImagePath) {
+                resultPathsToSign.push(img.resultImagePath);
+                resultPathIndices.push(i);
+            }
+        });
+        if (resultPathsToSign.length > 0) {
+            const resultUrlResult = await this.imageStorage.createSignedUrls(resultPathsToSign, 3600);
+            if (resultUrlResult.error) {
+                console.error("batchGetTranslationImageLite, createSignedUrls failed, error: ", resultUrlResult.error.message);
+                return { code: DB_ERROR_CODE, data: null, error: resultUrlResult.error };
+            }
+            const signedResultUrls = resultUrlResult.data!;
+            resultPathIndices.forEach((imageIndex, j) => {
+                resultSignedUrls[imageIndex] = signedResultUrls[j] ?? "";
+            });
+        }
+
+        const imageViews = images.map((img, i): TranslationImageLiteView => ({
+            ...img,
+            resultImageUrl: resultSignedUrls[i],
+        }));
+
+        return { code: SUCCESS_CODE, data: imageViews, error: null };
+    }
+
     // 用户翻译历史
     async getUserTranslationHistory(): Promise<BizResult<TranslationImageView[]>> {
         // 1. 获取当前用户
