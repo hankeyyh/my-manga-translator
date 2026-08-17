@@ -38,7 +38,7 @@ export function ImageCompareSlider({
         <div
             ref={containerRef}
             className={cn(
-                "relative w-full cursor-col-resize touch-none select-none overflow-hidden",
+                "relative max-w-full cursor-col-resize touch-none select-none overflow-hidden",
                 className,
             )}
             onPointerMove={(event) => updateFromClientX(event.clientX)}
@@ -63,14 +63,10 @@ export function ImageCompareSlider({
                 }
             }}
         >
-            {/* max-w-none：取消图片不能比父级宽的限制
-                overflow-hidder: 超出盒子部分不画出来
-                -translate-x-*: 图片向左移动
-            */}
             <img
                 src={beforeSrc}
                 alt={beforeAlt}
-                className="block h-auto max-w-none -translate-x-2"
+                className="block h-auto max-w-full"
                 draggable={false}
             />
             <div
@@ -80,16 +76,16 @@ export function ImageCompareSlider({
                 <img
                     src={afterSrc}
                     alt={afterAlt}
-                    className="absolute left-0 top-0 h-auto max-w-none -translate-x-2"
+                    className="absolute left-0 top-0 h-full w-full object-cover object-left-top"
                     draggable={false}
                 />
             </div>
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 z-10 w-px -translate-x-1/2 bg-border"
+                className="pointer-events-none absolute inset-y-0 z-10 w-px  bg-border"
                 style={{ left: `${position}%` }}
             >
-                <div className="absolute top-1/2 left-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border bg-background shadow">
+                <div className="absolute top-1/2 left-1/2 flex size-8  items-center justify-center rounded-full border bg-background shadow">
                     <ChevronsLeftRight className="size-4 text-muted-foreground" />
                 </div>
             </div>

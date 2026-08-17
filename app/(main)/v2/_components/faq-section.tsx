@@ -10,7 +10,7 @@ export function FaqSection() {
 
     return (
         <section id="faq" className="scroll-mt-16 border-t bg-muted/40 py-16">
-            <div className="mx-auto max-w-2xl px-4">
+            <div className="mx-auto max-w-3xl px-4">
                 <h2 className="mb-8 text-center text-2xl font-semibold">常见问题</h2>
                 <div className="divide-y rounded-xl border bg-background">
                     {faqData.faqs.map((item, index) => (

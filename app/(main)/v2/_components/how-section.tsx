@@ -15,7 +15,7 @@ const STEPS = [
 export function HowSection() {
     return (
         <section id="how" className="scroll-mt-16 py-16">
-            <div className="mx-auto max-w-5xl px-4">
+            <div className="mx-auto max-w-7xl px-4">
                 <h2 className="mb-8 text-center text-2xl font-semibold">使用流程</h2>
                 <div className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((item) => (

@@ -47,7 +47,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
         <>
             {/* fixed 避免触控板顶部弹性回弹把 sticky header 一起拽走 */}
             <header className="fixed inset-x-0 top-0 z-50 border-b bg-background">
-                <div className="mx-auto flex h-14 max-w-5xl items-center gap-2 px-4">
+                <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
                     <a href="/v2" className="shrink-0 text-sm font-semibold">
                         Manga Sense
                     </a>

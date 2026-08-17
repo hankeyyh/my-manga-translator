@@ -93,7 +93,7 @@ export function ClientPricingSection({
 
     return (
         <section id="pricing" className="scroll-mt-16 py-16">
-            <div className="mx-auto max-w-5xl px-4">
+            <div className="mx-auto max-w-7xl px-4">
                 <h2 className="mb-6 text-center text-2xl font-semibold">价格</h2>
                 <div className="mb-8 flex justify-center gap-2">
                     <Button
