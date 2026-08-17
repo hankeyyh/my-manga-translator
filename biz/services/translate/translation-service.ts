@@ -7,7 +7,7 @@ import { TranslationTaskRepository } from "@/biz/repositories/translate/translat
 import { CreateImageParams, TranslationImageRepository } from "@/biz/repositories/translate/translation-image";
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
-import { TranslationHistoryPage, TranslationTaskDetailView, TranslationTaskLiteView } from "@/types/dto/translation-task";
+import { SubmitTaskData, TranslationHistoryPage, TranslationTaskDetailView, TranslationTaskLiteView } from "@/types/dto/translation-task";
 import { TranslationImageView, TranslationImageLiteView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
@@ -91,7 +91,7 @@ export class TranslationService {
     }
 
     // 提交任务
-    async submitTranslationTask(taskId: string, images: File[], config: TranslationConfig): Promise<BizResult<string>> {
+    async submitTranslationTask(taskId: string, images: File[], config: TranslationConfig): Promise<BizResult<SubmitTaskData>> {
         // 参数检查
         if (!images || images.length === 0) {
             return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error('No images provided') };
@@ -160,8 +160,11 @@ export class TranslationService {
             console.error(`submitTranslationTask, repo.createImages failed, error: ${imageResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
         }
+        const imageIds = imageResult.data?.
+            sort((a, b) => a.imageIndex - b.imageIndex).
+            map((value) => value.id);
 
-        return { code: SUCCESS_CODE, data: task.id, error: null };
+        return { code: SUCCESS_CODE, data: { taskId: task.id, imageIds: imageIds! }, error: null };
     }
 
     // 任务详情

@@ -28,3 +28,8 @@ export interface ApiGetTranslationTaskLiteResponse {
     completed_at?: string;
     images: ApiTranslationTaskLiteImage[];
 }
+
+export interface ApiSubmitTaskResponse {
+    taskId: string,
+    imageIds: string[];
+}

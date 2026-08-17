@@ -10,7 +10,7 @@ import {
 } from "@/components/translate";
 import { TASK_ENDED_STATUSES } from "@/types/do/translation-task";
 import { FONT_NAME_OPTIONS, TranslationConfig, type FontName } from "@/types/do/translation-config";
-import { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
+import { ApiGetTranslationTaskResponse, ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
 import { ApiPricingConfig } from "@/types/api/pricing-config";
@@ -285,7 +285,7 @@ export default function TranslatePage() {
                 method: "POST",
                 body: formData,
             });
-            const data = (await response.json()) as { error?: string, taskId?: string; };
+            const data: ApiSubmitTaskResponse & { error?: string } = await response.json();
             if (!response.ok || !data.taskId) {
                 throw new Error(data.error || "Failed to submit translation");
             }

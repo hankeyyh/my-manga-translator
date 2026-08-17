@@ -14,3 +14,9 @@ export interface TranslationHistoryPage {
     tasks: TranslationTaskDetailView[],
     nextCursor: string | null,
 }
+
+// 提交任务返回数据
+export interface SubmitTaskData {
+    taskId: string,
+    imageIds: string[]
+}

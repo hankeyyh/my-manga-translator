@@ -32,7 +32,7 @@ import { ImagePreview } from "@/components/v2/image-preview";
 import { UploadZone } from "@/components/v2/upload-zone";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
-import { ApiGetTranslationTaskLiteResponse } from "@/types/api/translation-task";
+import { ApiGetTranslationTaskLiteResponse, ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { TASK_ENDED_STATUSES, TaskStatus } from "@/types/do/translation-task";
 
 const SUPPORTED_LANGS = [
@@ -273,13 +273,18 @@ export function TranslateSection() {
                 method: "POST",
                 body: formData,
             });
-            const data = await response.json() as { error?: string, taskId?: string; };
+            const data: ApiSubmitTaskResponse & { error?: string } = await response.json();
             if (!response.ok || data.error) {
                 throw new Error(data.error);
             }
             setTaskId(data.taskId!);
             setTaskStatus("pending");
             setPolling(true);
+            setPages((prev) => prev.map((page, i) => ({
+                ...page,
+                imageId: data.imageIds[i],
+                status: "pending" as const,
+            })))
         } catch (err) {
             const errMsg = err instanceof Error ? err.message : "Unknown Error";
             toast.error(errMsg);
@@ -388,7 +393,7 @@ export function TranslateSection() {
                 setPages((prev) => {
                     return prev.map((page) => {
                         // 需要保证前后端图片顺序一致
-                        const img = data.images.find((value) => value.filename === page.name);
+                        const img = data.images.find((value) => value.id === page.imageId);
                         // 跳过已完成图片，避免resultUrl因签名不同，导致重复下载资源
                         if (!img || page.status === "completed") return page;
                         return {

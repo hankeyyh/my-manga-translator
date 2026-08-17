@@ -16,6 +16,15 @@ import { AuthService } from "@/biz/services/auth/auth-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { randomUUID } from "crypto";
 import { startTranslationWorkflow } from "@/biz/utils/cloudflare";
+import { SubmitTaskData } from "@/types/dto/translation-task";
+import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
+
+function mapSubmitTaskDataToSubmitTaskResponse(data: SubmitTaskData): ApiSubmitTaskResponse {
+    return {
+        taskId: data.taskId,
+        imageIds: data.imageIds,
+    };
+}
 
 export async function POST(request: NextRequest) {
     // 0. 验证用户登录
@@ -56,7 +65,7 @@ export async function POST(request: NextRequest) {
     const taskId = randomUUID();
     const frozenResult = await creditService.freezeTaskCredits(userResult.data.id, taskId, creditResult.data!);
     if (frozenResult.code === CREDIT_BALANCE_NOT_ENOUGH) {
-        return NextResponse.json({ error: "Not Enough Credits" }, { status: 500 });
+        return NextResponse.json({ error: "Not Enough Credits" }, { status: 402 });
     }
     if (frozenResult.error) {
         return NextResponse.json({ error: frozenResult.error.message }, { status: 500 });
@@ -83,8 +92,10 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. 调用 workflow（生产必须用 Service Binding 否则404，本地 next dev 走 HTTP）
-    const workflowResponse = await startTranslationWorkflow({ userId: userResult.data.id, taskId: submitResult.data });
+    const workflowResponse = await startTranslationWorkflow({ userId: userResult.data.id, taskId: submitResult.data.taskId });
     if (!workflowResponse.ok) {
+        await translationService.markImagesFailed(submitResult.data.imageIds, `Workflow start fail: ${workflowResponse.statusText}`);
+        await creditService.batchRefundImageCredits(userResult.data.id, submitResult.data.imageIds);
         console.error(`Failed to start workflow, status: ${workflowResponse.status}, error: ${workflowResponse.statusText}`);
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
@@ -92,14 +103,18 @@ export async function POST(request: NextRequest) {
     try {
         workflowResult = await workflowResponse.json();
     } catch {
+        await translationService.markImagesFailed(submitResult.data.imageIds, "Workflow start fail: response.json fail");
+        await creditService.batchRefundImageCredits(userResult.data.id, submitResult.data.imageIds);
         console.error("Failed to parse workflow response");
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
     if (!workflowResult.success) {
+        await translationService.markImagesFailed(submitResult.data.imageIds, `Workflow start fail: ${workflowResult.message}`);
+        await creditService.batchRefundImageCredits(userResult.data.id, submitResult.data.imageIds);
         console.error("Failed to start workflow:", workflowResult.message);
         return NextResponse.json({ error: "Failed to start translation workflow" }, { status: 500 });
     }
 
     // 5. 返回任务 ID
-    return NextResponse.json({ taskId: submitResult.data }, { status: 200 });
+    return NextResponse.json(mapSubmitTaskDataToSubmitTaskResponse(submitResult.data), { status: 200 });
 }
