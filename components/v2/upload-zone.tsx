@@ -101,6 +101,19 @@ export function UploadZone(props: {
                 multiple
                 className="hidden"
                 onChange={onChange}
+                /**
+                 * 需要通过stopPropagation 截住子控件的点击事件向父控件传递
+                 * 用自定义控件打开input的通用做法：
+                 * 1. 在自定义控件上注册onClick事件
+                 * 2. onClick事件上通过ref执行input.click，打开文件选择器
+                 * 3. 选好文件「确定」后，input onChange 处理选中文件
+                 * 4. input onClick 需要阻止点击事件向父组件传递，不然会发生递归click：
+                 *      4.1 父组件onClick通过ref执行input.click
+                 *      4.2 input click事件向上传递，又触发了父组件onClick
+                 *  注意：递归会让父组件上的onClick执行两次，不会无限递归，因为浏览器对 click() 有重入保护：
+                 *      第一次 input.click() 还在派发、冒泡的过程中，元素会带「click 进行中」标记，
+                 *      第二次 input.click() 往往直接 return
+                 */
                 onClick={(e) => e.stopPropagation()}
             />
         </Card>
