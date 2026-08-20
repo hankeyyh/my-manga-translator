@@ -1,44 +1,83 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { cn } from "@/components/utils";
+
 type MarkdownContentProps = {
     content: string;
     className?: string;
+    variant?: "default" | "cc";
 };
 
-export function MarkdownContent({ content, className }: MarkdownContentProps) {
+export function MarkdownContent({
+    content,
+    className,
+    variant = "default",
+}: MarkdownContentProps) {
+    const isCc = variant === "cc";
+
     return (
         <article className={className}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                     h1: ({ children }) => (
-                        <h1 className="mb-6 text-3xl font-bold tracking-tight">
+                        <h1
+                            className={cn(
+                                "mb-6 text-3xl font-bold tracking-tight",
+                                isCc && "font-headline text-cc-text-primary",
+                            )}
+                        >
                             {children}
                         </h1>
                     ),
                     h2: ({ children }) => (
-                        <h2 className="mb-3 mt-8 text-xl font-semibold tracking-tight">
+                        <h2
+                            className={cn(
+                                "mb-3 mt-8 text-xl font-semibold tracking-tight",
+                                isCc && "font-headline text-cc-text-primary",
+                            )}
+                        >
                             {children}
                         </h2>
                     ),
                     h3: ({ children }) => (
-                        <h3 className="mb-2 mt-6 text-lg font-semibold">
+                        <h3
+                            className={cn(
+                                "mb-2 mt-6 text-lg font-semibold",
+                                isCc && "font-headline text-cc-text-primary",
+                            )}
+                        >
                             {children}
                         </h3>
                     ),
                     p: ({ children }) => (
-                        <p className="mb-4 leading-relaxed text-muted-foreground">
+                        <p
+                            className={cn(
+                                "mb-4 leading-relaxed",
+                                isCc ? "text-cc-text-secondary" : "text-muted-foreground",
+                            )}
+                        >
                             {children}
                         </p>
                     ),
                     ul: ({ children }) => (
-                        <ul className="mb-4 list-disc space-y-2 pl-5 text-muted-foreground">
+                        <ul
+                            className={cn(
+                                "mb-4 list-disc space-y-2 pl-5",
+                                isCc ? "text-cc-text-secondary" : "text-muted-foreground",
+                            )}
+                        >
                             {children}
                         </ul>
                     ),
                     ol: ({ children }) => (
-                        <ol className="mb-4 list-decimal space-y-2 pl-5 text-muted-foreground">
+                        <ol
+                            className={cn(
+                                "mb-4 list-decimal space-y-2 pl-5",
+                                isCc ? "text-cc-text-secondary" : "text-muted-foreground",
+                            )}
+                        >
                             {children}
                         </ol>
                     ),
@@ -48,31 +87,62 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
                     a: ({ href, children }) => (
                         <a
                             href={href}
-                            className="text-rose-500 underline-offset-4 hover:underline"
+                            className={cn(
+                                "underline-offset-4 hover:underline",
+                                isCc
+                                    ? "text-cc-brand-primary hover:text-cc-brand-primary-hover"
+                                    : "text-rose-500",
+                            )}
                         >
                             {children}
                         </a>
                     ),
                     strong: ({ children }) => (
-                        <strong className="font-semibold text-foreground">
+                        <strong
+                            className={cn(
+                                "font-semibold",
+                                isCc ? "text-cc-text-primary" : "text-foreground",
+                            )}
+                        >
                             {children}
                         </strong>
                     ),
-                    hr: () => <hr className="my-8 border-border" />,
+                    hr: () => (
+                        <hr
+                            className={cn(
+                                "my-8",
+                                isCc ? "border-cc-border/40" : "border-border",
+                            )}
+                        />
+                    ),
                     pre: ({ children }) => (
-                        <pre className="mb-4 overflow-x-auto rounded-lg border bg-muted p-4 text-sm">
+                        <pre
+                            className={cn(
+                                "mb-4 overflow-x-auto rounded-lg border p-4 text-sm",
+                                isCc
+                                    ? "border-cc-border/40 bg-cc-surface-page text-cc-text-primary"
+                                    : "border bg-muted",
+                            )}
+                        >
                             {children}
                         </pre>
                     ),
-                    code: ({ children, className }) => {
-                        const isBlock = Boolean(className);
+                    code: ({ children, className: codeClassName }) => {
+                        const isBlock = Boolean(codeClassName);
                         if (isBlock) {
                             return (
-                                <code className={className}>{children}</code>
+                                <code className={codeClassName}>{children}</code>
                             );
                         }
                         return (
-                            <code className="rounded bg-muted px-1.5 py-0.5 text-sm">
+                            <code
+                                className={cn(
+                                    "rounded px-1.5 py-0.5 text-sm",
+                                    isCc
+                                        ? "bg-cc-surface-page text-cc-brand-primary"
+                                        : "bg-muted",
+                                )}
+                            >
                                 {children}
                             </code>
                         );
@@ -85,15 +155,31 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
                         </div>
                     ),
                     thead: ({ children }) => (
-                        <thead className="border-b">{children}</thead>
+                        <thead
+                            className={cn(isCc ? "border-b border-cc-border/40" : "border-b")}
+                        >
+                            {children}
+                        </thead>
                     ),
                     th: ({ children }) => (
-                        <th className="px-3 py-2 text-left font-semibold">
+                        <th
+                            className={cn(
+                                "px-3 py-2 text-left font-semibold",
+                                isCc && "text-cc-text-primary",
+                            )}
+                        >
                             {children}
                         </th>
                     ),
                     td: ({ children }) => (
-                        <td className="border-t px-3 py-2 text-muted-foreground">
+                        <td
+                            className={cn(
+                                "border-t px-3 py-2",
+                                isCc
+                                    ? "border-cc-border/40 text-cc-text-secondary"
+                                    : "text-muted-foreground",
+                            )}
+                        >
                             {children}
                         </td>
                     ),

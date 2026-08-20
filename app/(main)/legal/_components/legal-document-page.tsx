@@ -17,7 +17,7 @@ export async function LegalDocumentPage({ slug }: { slug: string; }) {
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-            <MarkdownContent content={result.data.content} />
+            <MarkdownContent content={result.data.content} variant="cc" />
         </div>
     );
 }
