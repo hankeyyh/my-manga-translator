@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Plus, Upload } from "lucide-react";
 import { cn } from "@/components/utils";
 
@@ -14,25 +14,81 @@ export function UploadZone(props: {
     onFilesSelected: (files: File[]) => void;
 }) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const dragDepthRef = useRef(0);
+    const [isDragging, setIsDragging] = useState(false);
     const remaining = Math.max(0, props.maxPages - props.uploaded);
 
     function openFilePicker() {
         inputRef.current?.click();
     }
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        // FileList 是 input 的实时视图，清空 value 后会变空；先拷成 File[]
-        const files = Array.from(e.target.files ?? []);
-        e.target.value = "";
+    function emitFiles(files: File[]) {
         if (files.length > 0) {
             props.onFilesSelected(files);
         }
     }
 
+    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+        // FileList 是 input 的实时视图，清空 value 后会变空；先拷成 File[]
+        const files = Array.from(e.target.files ?? []);
+        e.target.value = "";
+        emitFiles(files);
+    }
+
+    function hasFiles(e: React.DragEvent) {
+        return Array.from(e.dataTransfer.types).includes("Files");
+    }
+
+    function onDragEnter(e: React.DragEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!hasFiles(e)) {
+            return;
+        }
+        dragDepthRef.current += 1;
+        setIsDragging(true);
+    }
+
+    function onDragLeave(e: React.DragEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        dragDepthRef.current -= 1;
+        if (dragDepthRef.current <= 0) {
+            dragDepthRef.current = 0;
+            setIsDragging(false);
+        }
+    }
+
+    function onDragOver(e: React.DragEvent) {
+        // 不 preventDefault 的话浏览器不派发 drop，只会打开文件
+        e.preventDefault();
+        e.stopPropagation();
+        if (hasFiles(e)) {
+            e.dataTransfer.dropEffect = "copy";
+        }
+    }
+
+    function onDrop(e: React.DragEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        dragDepthRef.current = 0;
+        setIsDragging(false);
+        emitFiles(Array.from(e.dataTransfer.files));
+    }
+
     return (
         <div
-            className="cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-cc-brand-primary/30 bg-cc-surface-white shadow-[var(--cc-shadow-sm)] transition-colors hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
+            className={cn(
+                "cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed bg-cc-surface-white shadow-[var(--cc-shadow-sm)] transition-colors hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]",
+                isDragging
+                    ? "border-cc-brand-primary bg-[var(--cc-brand-tint)]"
+                    : "border-cc-brand-primary/30",
+            )}
             onClick={openFilePicker}
+            onDragEnter={onDragEnter}
+            onDragLeave={onDragLeave}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
