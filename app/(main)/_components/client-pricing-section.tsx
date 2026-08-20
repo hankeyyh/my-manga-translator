@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { restoreSubscription } from "@/actions/restore-subscription";
-import { Button } from "@/components/ui/button";
 import { SUCCESS_CODE } from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
+import {
+    CcSectionHeading,
+    CcSegmentedControl,
+} from "@/design/design-system/components";
 import { ChangePlanConfirmDialog } from "./change-plan-confirm-dialog";
 import { SubscriptionPlanCards } from "./subscription-plan-cards";
 import { useChangeSubscription } from "./use-change-subscription";
@@ -92,24 +95,18 @@ export function ClientPricingSection({
     }
 
     return (
-        <section id="pricing" className="scroll-mt-16 py-16">
+        <section id="pricing" className="scroll-mt-16 bg-cc-surface-white py-16">
             <div className="mx-auto max-w-7xl px-4">
-                <h2 className="mb-6 text-center text-2xl font-semibold">价格</h2>
-                <div className="mb-8 flex justify-center gap-2">
-                    <Button
-                        variant={pricingTab === "pay-to-use" ? "default" : "outline"}
-                        onClick={() => setPricingTab("pay-to-use")}
-                    >
-                        Pay As Needed
-                    </Button>
-                    <Button
-                        variant={
-                            pricingTab === "subscription" ? "default" : "outline"
-                        }
-                        onClick={() => setPricingTab("subscription")}
-                    >
-                        Subscription
-                    </Button>
+                <CcSectionHeading className="mb-6" size="md" title="价格" />
+                <div className="mb-8 flex justify-center">
+                    <CcSegmentedControl
+                        onChange={setPricingTab}
+                        options={[
+                            { value: "pay-to-use", label: "Pay As Needed" },
+                            { value: "subscription", label: "Subscription" },
+                        ]}
+                        value={pricingTab}
+                    />
                 </div>
                 <SubscriptionPlanCards
                     plans={plans}

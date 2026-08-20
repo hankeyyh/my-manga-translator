@@ -9,17 +9,17 @@
   --cc-brand-primary-hover: #0046b8;
   --cc-brand-accent: #3370ff;
   --cc-brand-accent-secondary: #1d5ef5;
-  --cc-brand-tint: #e8f0fe;
-  --cc-brand-tint-strong: #d4e4fc;
+  --cc-brand-tint: #f8fafc;
+  --cc-brand-tint-strong: #eef2f7;
 
   /* Surface — white + ice-blue */
-  --cc-surface-page: #f5f8ff;
-  --cc-surface-muted: #eef4ff;
-  --cc-surface-subtle: #e4edfb;
-  --cc-surface-panel: #dce8f8;
-  --cc-surface-panel-dark: #d0dff2;
+  --cc-surface-page: #f8fafc;
+  --cc-surface-muted: #f7f9fc;
+  --cc-surface-subtle: #f1f4f8;
+  --cc-surface-panel: #eef2f7;
+  --cc-surface-panel-dark: #e6ebf2;
   --cc-surface-white: #ffffff;
-  --cc-surface-avatar: #d6e4f5;
+  --cc-surface-avatar: #e8eef5;
 
   /* Text — cool navy / slate */
   --cc-text-primary: #1a2744;
@@ -41,7 +41,7 @@
   --cc-status-warning: #b45309;
   --cc-status-warning-bg: #fef3c7;
   --cc-status-info: #0053dd;
-  --cc-status-info-bg: #e8f0fe;
+  --cc-status-info-bg: #f8fafc;
 
   /* Radius */
   --cc-radius-sm: 0.375rem;

@@ -85,9 +85,9 @@ export function ImageCompareSlider({
                 className="pointer-events-none absolute inset-y-0 z-10"
                 style={{ left: `${position}%` }}
             >
-                <div className="absolute inset-y-0 left-0 w-px -translate-x-1/2 bg-border" />
-                <div className="absolute top-1/2 left-0 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border bg-background shadow">
-                    <ChevronsLeftRight className="size-4 text-muted-foreground" />
+                <div className="absolute inset-y-0 left-0 w-px -translate-x-1/2 bg-cc-brand-primary" />
+                <div className="absolute top-1/2 left-0 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-cc-border bg-cc-surface-white shadow-[var(--cc-shadow-card)]">
+                    <ChevronsLeftRight className="size-4 text-cc-brand-primary" />
                 </div>
             </div>
         </div>

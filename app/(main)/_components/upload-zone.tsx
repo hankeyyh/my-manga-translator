@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { Plus, Upload } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/components/utils";
 
 const ACCEPT =
@@ -31,8 +30,8 @@ export function UploadZone(props: {
     }
 
     return (
-        <Card
-            className="cursor-pointer gap-0 overflow-hidden py-0 transition-colors hover:bg-muted/50"
+        <div
+            className="cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-cc-brand-primary/30 bg-cc-surface-white shadow-[var(--cc-shadow-sm)] transition-colors hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
             onClick={openFilePicker}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -50,25 +49,27 @@ export function UploadZone(props: {
                 )}
             >
                 <div className="overflow-hidden">
-                    <CardContent
+                    <div
                         className={cn(
-                            "flex flex-col items-center gap-2 py-10 text-center transition-opacity duration-300",
+                            "flex flex-col items-center gap-2 px-6 py-10 text-center transition-opacity duration-300",
                             props.compact ? "opacity-0" : "opacity-100",
                         )}
                     >
-                        <Upload className="size-8 text-muted-foreground" />
-                        <p className="text-sm">
+                        <div className="flex size-14 items-center justify-center rounded-full bg-[var(--cc-brand-tint)]">
+                            <Upload className="size-7 text-cc-brand-primary" />
+                        </div>
+                        <p className="font-headline text-sm font-semibold text-cc-text-primary">
                             将漫画页拖放到此处，或{" "}
-                            <span className="underline">浏览文件</span>
+                            <span className="text-cc-brand-primary underline">浏览文件</span>
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-cc-text-muted">
                             JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大
                             50MB, 文档最大 200MB
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-cc-text-muted">
                             已上传 {props.uploaded}/{props.maxPages} 页 · 剩余 {remaining} 页
                         </p>
-                    </CardContent>
+                    </div>
                 </div>
             </div>
             <div
@@ -78,20 +79,20 @@ export function UploadZone(props: {
                 )}
             >
                 <div className="overflow-hidden">
-                    <CardContent
+                    <div
                         className={cn(
-                            "flex items-center justify-between py-2.5 transition-opacity duration-300",
+                            "flex items-center justify-between px-4 py-2.5 transition-opacity duration-300",
                             props.compact ? "opacity-100" : "opacity-0",
                         )}
                     >
-                        <p className="flex items-center gap-1.5 text-sm">
-                            <Plus className="size-4" />
+                        <p className="flex items-center gap-1.5 text-sm text-cc-text-primary">
+                            <Plus className="size-4 text-cc-brand-primary" />
                             添加图片 / 拖拽上传
                         </p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-cc-text-muted">
                             {props.uploaded} / {props.maxPages} 页
                         </p>
-                    </CardContent>
+                    </div>
                 </div>
             </div>
             <input
@@ -116,6 +117,6 @@ export function UploadZone(props: {
                  */
                 onClick={(e) => e.stopPropagation()}
             />
-        </Card>
+        </div>
     );
 }

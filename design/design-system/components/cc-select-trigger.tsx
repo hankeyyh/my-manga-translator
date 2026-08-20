@@ -13,7 +13,7 @@ export const CcSelectTrigger = React.forwardRef<HTMLButtonElement, CcSelectTrigg
             <button
                 ref={ref}
                 className={cn(
-                    "flex h-auto w-full items-center justify-between rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] px-4 py-3 font-body font-medium text-[var(--cc-text-primary)] transition-colors hover:border-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)]",
+                    "flex h-auto w-full items-center justify-between rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] px-4 py-3 font-body font-medium text-[var(--cc-text-primary)] transition-colors hover:border-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)] disabled:cursor-not-allowed disabled:opacity-50",
                     className,
                 )}
                 type="button"

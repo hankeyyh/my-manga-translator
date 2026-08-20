@@ -54,7 +54,7 @@ export default async function Page({ params }: Props) {
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
             <Link
-                href="/v2/blogs"
+                href="/blogs"
                 className="mb-8 inline-block text-sm text-muted-foreground hover:text-foreground"
             >
                 ← 返回博客

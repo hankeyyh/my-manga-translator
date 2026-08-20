@@ -10,16 +10,16 @@ import { cn } from "@/components/utils";
 
 const NAV_ITEMS = [
     {
-        href: "/v2/home/history",
+        href: "/home/history",
         label: "翻译历史",
         icon: History,
-        match: (pathname: string) => pathname.startsWith("/v2/home/history"),
+        match: (pathname: string) => pathname.startsWith("/home/history"),
     },
     {
-        href: "/v2/home/billing",
+        href: "/home/billing",
         label: "账单与订阅",
         icon: CreditCard,
-        match: (pathname: string) => pathname.startsWith("/v2/home/billing"),
+        match: (pathname: string) => pathname.startsWith("/home/billing"),
     },
 ] as const;
 

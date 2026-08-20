@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
     Check,
-    ChevronDown,
     CircleAlert,
     Clock,
     Download,
@@ -24,16 +23,20 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import {
+    CcButton,
+    CcCard,
+    CcCardTitle,
+    CcLabel,
+    CcSelectTrigger,
+    CcSwitch,
+} from "@/design/design-system/components";
 import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/(main)/_components/upload-zone";
@@ -58,11 +61,11 @@ const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
-const WORKSPACE_BG = "bg-muted";
+const WORKSPACE_BG = "bg-[var(--cc-surface-page)]";
 const EAR_LEFT =
-    "pointer-events-none absolute bottom-0 -left-3 size-3 rounded-br-xl shadow-[6px_6px_0_6px_hsl(var(--muted))]";
+    "pointer-events-none absolute bottom-0 -left-3 size-3 rounded-br-xl shadow-[6px_6px_0_6px_var(--cc-surface-page)]";
 const EAR_RIGHT =
-    "pointer-events-none absolute bottom-0 -right-3 size-3 rounded-bl-xl shadow-[-6px_6px_0_6px_hsl(var(--muted))]";
+    "pointer-events-none absolute bottom-0 -right-3 size-3 rounded-bl-xl shadow-[-6px_6px_0_6px_var(--cc-surface-page)]";
 
 type TaskKind = "draft" | "processing" | "completed" | "failed" | "stalled";
 type CloseConfirm =
@@ -245,32 +248,32 @@ function mergeLiteImages(pages: MangaPage[], images: ApiTranslationTaskLiteImage
 function TaskStatusIcon({ kind }: { kind: TaskKind; }) {
     if (kind === "completed") {
         return (
-            <span className="flex size-4 items-center justify-center rounded-full bg-green-500 text-white">
+            <span className="flex size-4 items-center justify-center rounded-full bg-[var(--cc-status-success)] text-white">
                 <Check className="size-2.5" strokeWidth={3} />
             </span>
         );
     }
     if (kind === "failed") {
         return (
-            <CircleAlert className="size-4 text-red-500" strokeWidth={2.5} />
+            <CircleAlert className="size-4 text-[var(--cc-status-error)]" strokeWidth={2.5} />
         );
     }
     if (kind === "stalled") {
         return (
-            <span className="flex size-4 items-center justify-center rounded-full bg-orange-400 text-white">
+            <span className="flex size-4 items-center justify-center rounded-full bg-[var(--cc-status-warning)] text-white">
                 <Clock className="size-2.5" />
             </span>
         );
     }
     if (kind === "processing") {
         return (
-            <span className="flex size-4 items-center justify-center rounded-full bg-blue-500 text-white">
+            <span className="flex size-4 items-center justify-center rounded-full bg-[var(--cc-brand-primary)] text-white">
                 <Clock className="size-2.5" />
             </span>
         );
     }
     return (
-        <span className="flex size-4 items-center justify-center rounded-full bg-zinc-400 text-white">
+        <span className="flex size-4 items-center justify-center rounded-full bg-[var(--cc-text-muted)] text-white">
             <Clock className="size-2.5" />
         </span>
     );
@@ -733,7 +736,7 @@ export function TranslateSection() {
     }, [polling]);
 
     return (
-        <section id="tool" className="scroll-mt-16 border-t bg-muted/40 py-12">
+        <section id="tool" className="scroll-mt-16 border-t border-cc-border/40 bg-cc-surface-page py-12">
             <div className="mx-auto max-w-7xl space-y-4 px-4">
                 <UploadZone
                     uploaded={activeTask ? activeTask.pages.length : 0}
@@ -757,8 +760,8 @@ export function TranslateSection() {
                                             className={cn(
                                                 "relative inline-flex h-9 shrink-0 items-center text-sm",
                                                 active
-                                                    ? cn("z-10 rounded-t-xl font-medium", WORKSPACE_BG)
-                                                    : "mb-px rounded-t-lg text-muted-foreground hover:bg-muted/60",
+                                                    ? cn("z-10 rounded-t-xl font-medium text-cc-text-primary", WORKSPACE_BG)
+                                                    : "mb-px rounded-t-lg text-cc-text-muted hover:bg-[var(--cc-brand-tint-strong)]",
                                             )}
                                         >
                                             {active && !firstActive && <span aria-hidden className={EAR_LEFT} />}
@@ -773,7 +776,7 @@ export function TranslateSection() {
                                             </button>
                                             <button
                                                 type="button"
-                                                className="pr-2 text-muted-foreground hover:text-foreground"
+                                                className="pr-2 text-cc-text-muted hover:text-cc-brand-primary"
                                                 aria-label={`关闭${shortTaskLabel(item)}`}
                                                 onClick={() => closeTask(item.localId)}
                                             >
@@ -782,37 +785,37 @@ export function TranslateSection() {
                                         </div>
                                     );
                                 })}
-                                <Button
+                                <CcButton
                                     type="button"
                                     variant="ghost"
                                     size="icon"
-                                    className="mb-0.5 size-8 shrink-0 text-muted-foreground"
+                                    className="mb-0.5 size-8 shrink-0 text-cc-text-muted"
                                     onClick={() => ensureDraftTask()}
                                 >
                                     <Plus />
-                                </Button>
+                                </CcButton>
                             </div>
-                            <Button
+                            <CcButton
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                className="mb-0.5 shrink-0 text-muted-foreground"
+                                className="mb-0.5 shrink-0 text-cc-text-muted"
                                 disabled={tasks.length <= 1}
                                 onClick={closeOtherTasks}
                             >
                                 关闭其他
-                            </Button>
-                            <Button
+                            </CcButton>
+                            <CcButton
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                className="mb-0.5 size-8 shrink-0 text-muted-foreground"
+                                className="mb-0.5 size-8 shrink-0 text-cc-text-muted"
                                 asChild
                             >
-                                <Link href="/v2/home/history">
+                                <Link href="/home/history">
                                     <List />
                                 </Link>
-                            </Button>
+                            </CcButton>
                         </div>
 
                         <div
@@ -823,24 +826,16 @@ export function TranslateSection() {
                             )}
                         >
                             {/* 操作区 */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="text-base">操作设置</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                            <CcCard className="gap-4 p-5 lg:p-6" variant="elevated">
+                                <CcCardTitle className="text-base">操作设置</CcCardTitle>
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                                         <div className="flex-1 space-y-1">
-                                            <Label>翻译为</Label>
+                                            <CcLabel>翻译为</CcLabel>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="w-full justify-between"
-                                                        disabled={configLocked}
-                                                    >
+                                                    <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.targetLang.label}
-                                                        <ChevronDown />
-                                                    </Button>
+                                                    </CcSelectTrigger>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent>
                                                     {SUPPORTED_LANGS.map((lang) => (
@@ -858,17 +853,12 @@ export function TranslateSection() {
                                             </DropdownMenu>
                                         </div>
                                         <div className="flex-1 space-y-1">
-                                            <Label>翻译模式</Label>
+                                            <CcLabel>翻译模式</CcLabel>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="w-full justify-between"
-                                                        disabled={configLocked}
-                                                    >
+                                                    <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.translateMode}
-                                                        <ChevronDown />
-                                                    </Button>
+                                                    </CcSelectTrigger>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent>
                                                     {SUPPORTED_MODE.map((mode) => (
@@ -886,17 +876,12 @@ export function TranslateSection() {
                                             </DropdownMenu>
                                         </div>
                                         <div className="flex-1 space-y-1">
-                                            <Label>字体风格</Label>
+                                            <CcLabel>字体风格</CcLabel>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        className="w-full justify-between"
-                                                        disabled={configLocked}
-                                                    >
+                                                    <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.fontStyle}
-                                                        <ChevronDown />
-                                                    </Button>
+                                                    </CcSelectTrigger>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent>
                                                     {SUPPORTED_FONT_STYLE.map((style) => (
@@ -914,7 +899,7 @@ export function TranslateSection() {
                                             </DropdownMenu>
                                         </div>
                                         {activeKind !== "draft" && activeKind !== "processing" ? (
-                                            <Button
+                                            <CcButton
                                                 variant="outline"
                                                 className="w-full sm:w-40"
                                                 disabled={!hasCompletedResults(pages)}
@@ -922,37 +907,36 @@ export function TranslateSection() {
                                             >
                                                 <Download />
                                                 下载全部
-                                            </Button>
+                                            </CcButton>
                                         ) : (
-                                            <Button
+                                            <CcButton
                                                 className="w-full sm:w-40"
                                                 disabled={activeKind === "processing" || activeTask.submitLoading || pages.length === 0}
                                                 onClick={() => void submitTask(activeTask.localId)}
                                             >
                                                 <Upload />
                                                 提交翻译
-                                            </Button>
+                                            </CcButton>
                                         )}
                                     </div>
-                                </CardContent>
-                            </Card>
+                            </CcCard>
 
                             {/* 预览区 */}
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0">
-                                    <CardTitle className="text-base">
+                            <CcCard className="gap-4 p-5 lg:p-6" variant="elevated">
+                                <div className="flex flex-row items-center justify-between gap-2">
+                                    <CcCardTitle className="text-base">
                                         图片预览（共 {pages.length} 张）
-                                    </CardTitle>
+                                    </CcCardTitle>
                                     <div className="flex items-center gap-2">
                                         {activeKind === "completed" && hasCompletedResults(pages) && (
                                             <div className="flex items-center gap-1.5">
                                                 <Languages
                                                     className={cn(
                                                         "size-3.5",
-                                                        activeTask.showTranslated ? "text-foreground" : "text-muted-foreground",
+                                                        activeTask.showTranslated ? "text-cc-brand-primary" : "text-cc-text-muted",
                                                     )}
                                                 />
-                                                <Switch
+                                                <CcSwitch
                                                     checked={activeTask.showTranslated}
                                                     onCheckedChange={(checked) => updateTask(activeTask.localId, (task) => ({
                                                         ...task,
@@ -962,7 +946,7 @@ export function TranslateSection() {
                                                 />
                                             </div>
                                         )}
-                                        <Button
+                                        <CcButton
                                             variant="ghost"
                                             size="sm"
                                             disabled={configLocked}
@@ -970,10 +954,9 @@ export function TranslateSection() {
                                         >
                                             <X className="size-3" />
                                             全部清除
-                                        </Button>
+                                        </CcButton>
                                     </div>
-                                </CardHeader>
-                                <CardContent>
+                                </div>
                                     <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4 lg:grid-cols-6">
                                         {pages.map((page, index) => (
                                             <ThumbNail
@@ -992,11 +975,11 @@ export function TranslateSection() {
                                         {activeKind === "draft" && pages.length < MAX_PAGES && (
                                             <button
                                                 type="button"
-                                                className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed text-muted-foreground"
+                                                className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-cc-brand-primary/30 text-cc-text-muted hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
                                                 onClick={() => addInputRef.current?.click()}
                                             >
-                                                <span className="flex size-8 items-center justify-center rounded-full border">
-                                                    <Plus className="size-4" />
+                                                <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
+                                                    <Plus className="size-4 text-cc-brand-primary" />
                                                 </span>
                                                 <span className="text-sm">添加图片</span>
                                             </button>
@@ -1017,13 +1000,12 @@ export function TranslateSection() {
                                             }
                                         }}
                                     />
-                                </CardContent>
-                            </Card>
+                            </CcCard>
                         </div>
                     </div>
                 )}
 
-                <p className="text-center text-xs text-muted-foreground">
+                <p className="text-center text-xs text-cc-text-muted">
                     ✦ AI 自动识别日语、中文、英语、韩语等多种语言
                 </p>
             </div>

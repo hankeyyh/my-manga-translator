@@ -1,14 +1,12 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+    CcBadge,
+    CcButton,
+    CcCard,
+    CcCardDescription,
+    CcCardTitle,
+} from "@/design/design-system/components";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import {
     formatCredits,
@@ -57,66 +55,61 @@ export function SubscriptionPlanCards({
                     subscriptionStatus === "active" &&
                     Boolean(onCancelSubscription);
                 return (
-                    <Card
+                    <CcCard
                         key={plan.id}
-                        className={
-                            featured ? "border-2 border-foreground" : undefined
-                        }
+                        className="items-center p-6 text-center lg:p-8"
+                        variant={featured ? "featured" : "outlined"}
                     >
-                        <CardHeader className="text-center">
-                            <CardTitle className="flex items-center justify-center gap-2">
-                                {name}
-                                {featured && <Badge>★</Badge>}
-                            </CardTitle>
-                            <p className="text-2xl font-bold">
-                                {formatPrice(plan)}
-                            </p>
-                            <CardDescription>
-                                {formatCredits(plan)}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardFooter>
-                            <Button
-                                className="w-full"
-                                variant={
-                                    canCancelCurrent
-                                        ? "destructive"
-                                        : canRestoreCurrent
-                                            ? "default"
-                                            : isCurrentPlan
-                                                ? "secondary"
-                                                : featured
-                                                    ? "default"
-                                                    : "outline"
-                                }
-                                disabled={
-                                    (isCurrentPlan &&
-                                        !canCancelCurrent &&
-                                        !canRestoreCurrent) ||
-                                    busy
-                                }
-                                onClick={
-                                    canRestoreCurrent
-                                        ? onRestoreSubscription
-                                        : canCancelCurrent
-                                            ? onCancelSubscription
-                                            : isCurrentPlan
-                                                ? undefined
-                                                : () => onSelectPlan(plan)
-                                }
-                            >
-                                {canRestoreCurrent
-                                    ? "恢复订阅"
-                                    : canCancelCurrent
-                                        ? "取消订阅"
+                        <CcCardTitle className="flex items-center justify-center gap-2">
+                            {name}
+                            {featured && <CcBadge>★</CcBadge>}
+                        </CcCardTitle>
+                        <p className="mt-3 font-headline text-3xl font-extrabold text-cc-text-primary">
+                            {formatPrice(plan)}
+                        </p>
+                        <CcCardDescription className="mt-1">
+                            {formatCredits(plan)}
+                        </CcCardDescription>
+                        <CcButton
+                            className="mt-6 w-full"
+                            variant={
+                                canCancelCurrent
+                                    ? "destructive"
+                                    : canRestoreCurrent
+                                        ? "primary"
                                         : isCurrentPlan
-                                            ? "已订阅"
-                                            : adjustMode
-                                                ? "调整方案"
-                                                : "Get Started"}
-                            </Button>
-                        </CardFooter>
-                    </Card>
+                                            ? "secondary"
+                                            : featured
+                                                ? "primary"
+                                                : "outline"
+                            }
+                            disabled={
+                                (isCurrentPlan &&
+                                    !canCancelCurrent &&
+                                    !canRestoreCurrent) ||
+                                busy
+                            }
+                            onClick={
+                                canRestoreCurrent
+                                    ? onRestoreSubscription
+                                    : canCancelCurrent
+                                        ? onCancelSubscription
+                                        : isCurrentPlan
+                                            ? undefined
+                                            : () => onSelectPlan(plan)
+                            }
+                        >
+                            {canRestoreCurrent
+                                ? "恢复订阅"
+                                : canCancelCurrent
+                                    ? "取消订阅"
+                                    : isCurrentPlan
+                                        ? "已订阅"
+                                        : adjustMode
+                                            ? "调整方案"
+                                            : "Get Started"}
+                        </CcButton>
+                    </CcCard>
                 );
             })}
         </div>

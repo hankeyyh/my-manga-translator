@@ -1,10 +1,9 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+    CcCard,
+    CcCardDescription,
+    CcCardTitle,
+    CcSectionHeading,
+} from "@/design/design-system/components";
 
 const STEPS = [
     { step: "①", title: "上传漫画", desc: "拖放图片或文档，支持批量上传。" },
@@ -14,20 +13,18 @@ const STEPS = [
 
 export function HowSection() {
     return (
-        <section id="how" className="scroll-mt-16 py-16">
+        <section id="how" className="scroll-mt-16 bg-cc-surface-white py-16">
             <div className="mx-auto max-w-7xl px-4">
-                <h2 className="mb-8 text-center text-2xl font-semibold">使用流程</h2>
+                <CcSectionHeading className="mb-8" size="md" title="使用流程" />
                 <div className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((item) => (
-                        <Card key={item.title}>
-                            <CardHeader>
-                                <CardDescription>{item.step}</CardDescription>
-                                <CardTitle>{item.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">{item.desc}</p>
-                            </CardContent>
-                        </Card>
+                        <CcCard className="gap-3 p-6 lg:p-8" key={item.title} variant="outlined">
+                            <CcCardDescription className="text-cc-brand-primary">
+                                {item.step}
+                            </CcCardDescription>
+                            <CcCardTitle>{item.title}</CcCardTitle>
+                            <p className="text-sm text-cc-text-secondary">{item.desc}</p>
+                        </CcCard>
                     ))}
                 </div>
             </div>

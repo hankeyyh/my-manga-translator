@@ -35,7 +35,7 @@ export default async function Page() {
                 {posts.map((post) => (
                     <Link
                         key={post.slug}
-                        href={`/v2/blogs/${post.slug}`}
+                        href={`/blogs/${post.slug}`}
                         className="group"
                     >
                         <Card className="flex-row overflow-hidden py-0 transition-colors group-hover:bg-accent/50">

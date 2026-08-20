@@ -6,12 +6,14 @@ export interface CcSectionHeadingProps extends React.HTMLAttributes<HTMLDivEleme
     title: string;
     description?: string;
     align?: "left" | "center";
+    size?: "md" | "lg";
 }
 
 export function CcSectionHeading({
     title,
     description,
     align = "center",
+    size = "lg",
     className,
     children,
     ...props
@@ -24,11 +26,21 @@ export function CcSectionHeading({
             )}
             {...props}
         >
-            <h2 className="mb-4 font-headline text-4xl font-bold text-[var(--cc-text-primary)] md:text-5xl">
+            <h2
+                className={cn(
+                    "mb-4 font-headline font-bold text-[var(--cc-text-primary)]",
+                    size === "lg" ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl",
+                )}
+            >
                 {title}
             </h2>
             {description && (
-                <p className="mx-auto max-w-2xl text-lg text-[var(--cc-text-secondary)]">
+                <p
+                    className={cn(
+                        "mx-auto max-w-2xl text-[var(--cc-text-secondary)]",
+                        size === "lg" ? "text-lg" : "text-sm",
+                    )}
+                >
                     {description}
                 </p>
             )}

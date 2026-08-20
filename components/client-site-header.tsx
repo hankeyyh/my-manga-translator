@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import {
+    CcBadge,
+    CcButton,
+} from "@/design/design-system/components";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
     ChevronDown,
@@ -46,36 +48,36 @@ export function ClientSiteHeader({ userInfo }: Props) {
     return (
         <>
             {/* fixed 避免触控板顶部弹性回弹把 sticky header 一起拽走 */}
-            <header className="fixed inset-x-0 top-0 z-50 border-b bg-background">
+            <header className="fixed inset-x-0 top-0 z-50 border-b border-cc-border/60 bg-cc-surface-white/90 backdrop-blur-xl">
                 <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-                    <a href="/" className="shrink-0 text-sm font-semibold">
+                    <a href="/" className="shrink-0 font-headline text-sm font-bold text-cc-text-primary">
                         Manga Sense
                     </a>
                     <nav className="ml-4 hidden items-center gap-1 md:flex">
-                        <Button variant="ghost" size="sm" asChild>
+                        <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/#tool">Manga Translate</Link>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild>
+                        </CcButton>
+                        <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/#pricing">Pricing</Link>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild>
+                        </CcButton>
+                        <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/#faq">FAQ</Link>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild>
+                        </CcButton>
+                        <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/blogs">Blog</Link>
-                        </Button>
-                        <Button variant="ghost" size="sm">
+                        </CcButton>
+                        <CcButton variant="ghost" size="sm">
                             Join Discord
-                        </Button>
+                        </CcButton>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
-                        <Badge variant="secondary">Credits · {totalCredits}</Badge>
+                        <CcBadge variant="accent">Credits · {totalCredits}</CcBadge>
                         <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm">
+                                <CcButton variant="outline" size="sm">
                                     {lang}
                                     <ChevronDown className="size-3" />
-                                </Button>
+                                </CcButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 {LANGS.map((item) => (
@@ -85,16 +87,21 @@ export function ClientSiteHeader({ userInfo }: Props) {
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Button
+                        <CcButton
                             variant="ghost"
                             size="icon"
+                            className="size-9"
                             aria-label="切换主题"
                             onClick={onToggleTheme}
                         >
                             <Sun className="size-4 dark:hidden" />
                             <Moon className="hidden size-4 dark:block" />
-                        </Button>
-                        {isLogin() ? <Button size="sm" onClick={onClickDashboard}>Dashboard</Button> : <Button size="sm" onClick={onClickLogin}>Login</Button>}
+                        </CcButton>
+                        {isLogin() ? (
+                            <CcButton size="sm" onClick={onClickDashboard}>Dashboard</CcButton>
+                        ) : (
+                            <CcButton size="sm" onClick={onClickLogin}>Login</CcButton>
+                        )}
                     </div>
                 </div>
             </header>
