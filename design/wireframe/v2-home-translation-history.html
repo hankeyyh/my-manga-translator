@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>Wireframe · /v2/home · 翻译历史</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+      color: #333;
+      background: #e8e8e8;
+      padding: 24px;
+    }
+    h1 { font-size: 13px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .06em; }
+    .meta { color: #666; margin-bottom: 20px; font-size: 11px; }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      border: 2px solid #333;
+      background: #fff;
+    }
+    .box {
+      border-bottom: 1px solid #333;
+      padding: 10px 12px;
+    }
+    .box:last-child { border-bottom: none; }
+    .label {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 1px 6px;
+      margin-bottom: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: #f0f0f0;
+    }
+    .row { display: flex; gap: 8px; }
+    .col { flex: 1; border: 1px dashed #999; padding: 8px; min-height: 36px; }
+    .line { height: 8px; background: #ccc; margin: 4px 0; }
+    .line.w60 { width: 60%; }
+    .line.w40 { width: 40%; }
+    .line.w80 { width: 80%; }
+    .btn {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 4px 10px;
+      margin: 2px 4px 2px 0;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .btn.fill { background: #333; color: #fff; }
+    .btn.ghost { border-style: dashed; color: #666; }
+    .btn.danger { border-color: #333; color: #333; }
+    .muted { color: #888; font-size: 10px; }
+    .nav-item {
+      border: 1px solid #333;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+    .nav-item.active {
+      background: #333;
+      color: #fff;
+      font-weight: 700;
+    }
+    .nav-item.danger {
+      margin-top: 12px;
+      border-style: dashed;
+    }
+    .status {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 1px 6px;
+      font-size: 10px;
+    }
+    .status.done { background: #333; color: #fff; }
+    .status.busy { background: #ddd; }
+    .status.wait { border-style: dashed; }
+    .status.fail { background: #fff; text-decoration: line-through; }
+    .chip {
+      display: inline-block;
+      border: 1px solid #333;
+      padding: 3px 8px;
+      margin: 2px 4px 2px 0;
+      font-size: 10px;
+    }
+    .chip.active { background: #333; color: #fff; }
+    .chip.ghost { border-style: dashed; color: #666; }
+    .task-list { display: flex; flex-direction: column; gap: 8px; }
+    .task-item {
+      border: 1px solid #333;
+      padding: 10px 12px;
+    }
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin: 8px 0;
+      font-size: 11px;
+    }
+    .task-meta span { color: #555; }
+    .task-meta .k { color: #888; font-size: 10px; margin-right: 4px; }
+    .layout {
+      display: flex;
+      gap: 0;
+      min-height: 420px;
+    }
+    .sidebar {
+      flex: 0 0 200px;
+      border-right: 1px solid #333;
+      padding: 10px 12px;
+    }
+    .main {
+      flex: 1;
+      padding: 10px 12px;
+      min-width: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wireframe · Translation History</h1>
+  <p class="meta">route: /v2/home · page: 翻译历史 · structure only · 1 HTML</p>
+
+  <div class="page">
+
+    <!-- 1 Header -->
+    <div class="box">
+      <div class="label">1 · Header</div>
+      <div class="row" style="align-items:center; flex-wrap:nowrap; gap:6px">
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Logo</div>
+        <div style="flex:1 1 auto; min-width:8px"></div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">Credits · N</div>
+        <div class="col" style="flex:0 0 auto; padding:6px 8px; white-space:nowrap">User ▾</div>
+      </div>
+    </div>
+
+    <!-- 2 Body: Nav + History -->
+    <div class="box" style="padding:0">
+      <div class="layout">
+
+        <!-- Sidebar / User + Page directory -->
+        <aside class="sidebar">
+          <div class="label">2 · 用户信息（常驻）</div>
+          <div class="col" style="margin-bottom:12px; padding:10px">
+            <div class="muted">邮箱</div>
+            <div style="font-size:11px; word-break:break-all; margin:2px 0 10px">user@example.com</div>
+            <div class="muted">积分余额</div>
+            <div style="font-size:14px; font-weight:700; margin-top:2px">2,450</div>
+          </div>
+
+          <div class="label">3 · Page Nav（目录）</div>
+          <div class="nav-item active">翻译历史</div>
+          <div class="nav-item">账单与订阅</div>
+          <div class="nav-item danger">退出登录</div>
+          <p class="muted" style="margin-top:12px">当前选中：翻译历史</p>
+        </aside>
+
+        <!-- Main: Translation History -->
+        <section class="main">
+          <div class="label">4 · 翻译历史（translation-task 列表）</div>
+
+          <div style="margin-bottom:12px">
+            <div style="font-size:13px; font-weight:700; margin-bottom:4px">翻译历史</div>
+            <div class="muted">展示当前用户的 translation-task</div>
+          </div>
+
+          <!-- Filters -->
+          <div class="col" style="margin-bottom:12px; padding:10px">
+            <div class="label" style="margin-bottom:6px">筛选</div>
+
+            <div class="row" style="align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:10px">
+              <div style="flex:1; min-width:200px">
+                <p class="muted" style="margin-bottom:4px">按状态</p>
+                <div>
+                  <span class="chip active">全部</span>
+                  <span class="chip">pending</span>
+                  <span class="chip">processing</span>
+                  <span class="chip">completed</span>
+                  <span class="chip">failed</span>
+                  <span class="chip">partial</span>
+                </div>
+              </div>
+              <div style="flex:0 0 auto; text-align:right">
+                <p class="muted" style="margin-bottom:4px">按日期</p>
+                <div class="col" style="padding:4px 10px; white-space:nowrap">
+                  日期范围 ▾
+                  <span class="muted" style="margin-left:6px">最近1天 · 最近7天 · 最近1月 · 全部</span>
+                </div>
+              </div>
+            </div>
+            <p class="muted" style="margin-top:6px">默认日期：全部 · 下拉单选，无需手动输入日期</p>
+          </div>
+
+          <!-- Task list (not table) -->
+          <div class="task-list">
+
+            <!-- Item 1: completed -->
+            <div class="task-item">
+              <div class="row" style="align-items:flex-start">
+                <div style="flex:1; min-width:0">
+                  <div class="row" style="align-items:center; gap:8px; margin-bottom:2px">
+                    <span style="font-size:12px; font-weight:700">JP → EN</span>
+                    <span class="status done">completed</span>
+                  </div>
+                  <div class="task-meta">
+                    <span><span class="k">源语言</span>日语 JP</span>
+                    <span><span class="k">目标语言</span>英语 EN</span>
+                    <span><span class="k">翻译页数</span>24 页</span>
+                    <span><span class="k">开始日期</span>2024-05-12</span>
+                  </div>
+                </div>
+                <div style="flex:0 0 auto; text-align:right">
+                  <span class="btn">下载</span>
+                  <span class="btn ghost">详情</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 2: processing -->
+            <div class="task-item">
+              <div class="row" style="align-items:flex-start">
+                <div style="flex:1; min-width:0">
+                  <div class="row" style="align-items:center; gap:8px; margin-bottom:2px">
+                    <span style="font-size:12px; font-weight:700">KR → EN</span>
+                    <span class="status busy">processing</span>
+                  </div>
+                  <div class="task-meta">
+                    <span><span class="k">源语言</span>韩语 KR</span>
+                    <span><span class="k">目标语言</span>英语 EN</span>
+                    <span><span class="k">翻译页数</span>12 页</span>
+                    <span><span class="k">开始日期</span>2024-05-10</span>
+                  </div>
+                </div>
+                <div style="flex:0 0 auto; text-align:right">
+                  <span class="btn ghost" style="opacity:.45">下载</span>
+                  <span class="btn ghost">详情</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 3: pending -->
+            <div class="task-item">
+              <div class="row" style="align-items:flex-start">
+                <div style="flex:1; min-width:0">
+                  <div class="row" style="align-items:center; gap:8px; margin-bottom:2px">
+                    <span style="font-size:12px; font-weight:700">CN → EN</span>
+                    <span class="status wait">pending</span>
+                  </div>
+                  <div class="task-meta">
+                    <span><span class="k">源语言</span>中文 CN</span>
+                    <span><span class="k">目标语言</span>英语 EN</span>
+                    <span><span class="k">翻译页数</span>8 页</span>
+                    <span><span class="k">开始日期</span>2024-05-08</span>
+                  </div>
+                </div>
+                <div style="flex:0 0 auto; text-align:right">
+                  <span class="btn ghost" style="opacity:.45">下载</span>
+                  <span class="btn ghost">详情</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 4: failed -->
+            <div class="task-item">
+              <div class="row" style="align-items:flex-start">
+                <div style="flex:1; min-width:0">
+                  <div class="row" style="align-items:center; gap:8px; margin-bottom:2px">
+                    <span style="font-size:12px; font-weight:700">JP → ZH</span>
+                    <span class="status fail">failed</span>
+                  </div>
+                  <div class="task-meta">
+                    <span><span class="k">源语言</span>日语 JP</span>
+                    <span><span class="k">目标语言</span>中文 ZH</span>
+                    <span><span class="k">翻译页数</span>16 页</span>
+                    <span><span class="k">开始日期</span>2024-05-05</span>
+                  </div>
+                </div>
+                <div style="flex:0 0 auto; text-align:right">
+                  <span class="btn ghost" style="opacity:.45">下载</span>
+                  <span class="btn ghost">详情</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 5: partial -->
+            <div class="task-item">
+              <div class="row" style="align-items:flex-start">
+                <div style="flex:1; min-width:0">
+                  <div class="row" style="align-items:center; gap:8px; margin-bottom:2px">
+                    <span style="font-size:12px; font-weight:700">EN → JP</span>
+                    <span class="status">partial</span>
+                  </div>
+                  <div class="task-meta">
+                    <span><span class="k">源语言</span>英语 EN</span>
+                    <span><span class="k">目标语言</span>日语 JP</span>
+                    <span><span class="k">翻译页数</span>32 页</span>
+                    <span><span class="k">开始日期</span>2024-05-01</span>
+                  </div>
+                </div>
+                <div style="flex:0 0 auto; text-align:right">
+                  <span class="btn">下载</span>
+                  <span class="btn ghost">详情</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <p class="muted" style="margin-top:10px">
+            列表项结构：标题（语言对 + 状态）→ 元信息行（源/目标/页数/日期）→ 右侧操作（下载 / 详情）
+          </p>
+          <p class="muted" style="margin-top:4px">
+            筛选：状态 chip · 日期下拉（最近1天 / 最近7天 / 最近1月 / 全部）；操作：completed / partial → 可下载；详情始终可点
+          </p>
+
+          <!-- Empty / no-match state -->
+          <p class="muted" style="margin:14px 0 6px">空状态（无 task / 筛选无结果）</p>
+          <div class="col" style="text-align:center; padding:20px 8px; min-height:72px">
+            <div class="line w40" style="margin:0 auto 8px"></div>
+            <div class="muted">暂无翻译历史 / 无匹配结果</div>
+            <span class="btn fill" style="margin-top:8px">去翻译</span>
+            <span class="btn ghost" style="margin-top:8px">清除筛选</span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- 3 Footer -->
+    <div class="box">
+      <div class="label">5 · Footer</div>
+      <div class="row">
+        <div class="col center muted">© · Links · Legal</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
