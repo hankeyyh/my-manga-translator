@@ -36,7 +36,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ThumbNail } from "@/components/v2/thumbnail";
 import { ImagePreview } from "@/components/v2/image-preview";
-import { UploadZone } from "@/components/v2/upload-zone";
+import { UploadZone } from "@/app/(main)/v2/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
