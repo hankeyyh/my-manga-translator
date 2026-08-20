@@ -43,7 +43,7 @@ import { toast } from "sonner";
 import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
-import { WorkspaceTask } from "@/types/web/workspace-task";
+import { LangOption, WorkspaceTask } from "@/types/web/workspace-task";
 
 const SUPPORTED_LANGS = [
     { code: "CHS", label: "简体中文" },
@@ -65,8 +65,6 @@ const EAR_RIGHT =
     "pointer-events-none absolute bottom-0 -right-3 size-3 rounded-bl-xl shadow-[-6px_6px_0_6px_hsl(var(--muted))]";
 
 type TaskKind = "draft" | "processing" | "completed" | "failed" | "stalled";
-export type LangOption = { code: string; label: string; };
-
 type CloseConfirm =
     | { type: "task"; localId: string; }
     | { type: "others"; };

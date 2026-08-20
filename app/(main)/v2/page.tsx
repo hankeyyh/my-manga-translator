@@ -6,7 +6,7 @@ import { PricingSection } from "./_components/pricing-section";
 import { FaqSection } from "./_components/faq-section";
 import { BlogSection } from "./_components/blog-section";
 import { Footer } from "@/components/footer";
-import { TranslateSection } from "./_components/translate-section-2";
+import { TranslateSection } from "./_components/translate-section";
 
 export default function Page() {
     return (

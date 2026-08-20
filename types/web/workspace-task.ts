@@ -1,6 +1,6 @@
-import { LangOption } from "@/app/(main)/v2/_components/translate-section-2";
 import { MangaPage } from "./manga-page";
 
+export type LangOption = { code: string; label: string; };
 
 export type WorkspaceTask = {
     localId: string;
@@ -14,3 +14,4 @@ export type WorkspaceTask = {
     showTranslated: boolean;
     pollStartedAt: number | null;
 };
+
