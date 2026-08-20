@@ -49,12 +49,12 @@ export default function SuccessDisplay({ email }: Props) {
 
     useEffect(() => {
         if (seconds === 0) {
-            router.push("/v2");
+            router.push("/");
         }
     }, [seconds, router]);
 
     function handleClick() {
-        router.push("/v2");
+        router.push("/");
     }
 
     return (

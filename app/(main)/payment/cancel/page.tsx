@@ -45,5 +45,5 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
         return <div>Error: {transResult.error.message}</div>;
     }
 
-    return redirect("/v2");
+    return redirect("/");
 }

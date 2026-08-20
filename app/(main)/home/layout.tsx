@@ -1,7 +1,7 @@
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { Footer } from "@/components/footer";
-import { AccountNav } from "@/app/(main)/v2/home/_components/account-nav";
-import { ProfileCard } from "@/app/(main)/v2/home/_components/profile-card";
+import { AccountNav } from "@/app/(main)/home/_components/account-nav";
+import { ProfileCard } from "@/app/(main)/home/_components/profile-card";
 import { SiteHeader } from "@/components/site-header";
 
 export default async function HomeLayout({

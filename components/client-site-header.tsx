@@ -34,7 +34,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
     };
 
     const onClickDashboard = () => {
-        router.push("/v2/home/history");
+        router.push("/home/history");
     };
 
     const onToggleTheme = () => {
@@ -48,21 +48,21 @@ export function ClientSiteHeader({ userInfo }: Props) {
             {/* fixed 避免触控板顶部弹性回弹把 sticky header 一起拽走 */}
             <header className="fixed inset-x-0 top-0 z-50 border-b bg-background">
                 <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-                    <a href="/v2" className="shrink-0 text-sm font-semibold">
+                    <a href="/" className="shrink-0 text-sm font-semibold">
                         Manga Sense
                     </a>
                     <nav className="ml-4 hidden items-center gap-1 md:flex">
                         <Button variant="ghost" size="sm" asChild>
-                            <Link href="/v2#tool">Manga Translate</Link>
+                            <Link href="/#tool">Manga Translate</Link>
                         </Button>
                         <Button variant="ghost" size="sm" asChild>
-                            <Link href="/v2#pricing">Pricing</Link>
+                            <Link href="/#pricing">Pricing</Link>
                         </Button>
                         <Button variant="ghost" size="sm" asChild>
-                            <Link href="/v2#faq">FAQ</Link>
+                            <Link href="/#faq">FAQ</Link>
                         </Button>
                         <Button variant="ghost" size="sm" asChild>
-                            <Link href="/v2/blogs">Blog</Link>
+                            <Link href="/blogs">Blog</Link>
                         </Button>
                         <Button variant="ghost" size="sm">
                             Join Discord

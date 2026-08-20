@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const token_hash = searchParams.get("token_hash");
     const type = searchParams.get("type") as EmailOtpType | null;
     const code = searchParams.get("code");
-    const next = searchParams.get("next") ?? "/v2";
+    const next = searchParams.get("next") ?? "/";
     const wantsJson = request.headers.get("accept")?.includes("application/json") ?? false;
 
     const supabase = await createServerClient();

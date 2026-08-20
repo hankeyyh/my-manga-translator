@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ManageSubscriptionDialog } from "@/app/(main)/v2/home/billing/_components/manage-subscription-dialog";
+import { ManageSubscriptionDialog } from "@/app/(main)/home/billing/_components/manage-subscription-dialog";
 import { Button } from "@/components/ui/button";
 import {
     Card,

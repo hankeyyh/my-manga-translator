@@ -50,7 +50,7 @@ export function LoginForm({
             if (data.code !== API_SUCCESS_CODE) {
                 throw new Error(data.message || "登录失败");
             }
-            router.push("/v2");
+            router.push("/");
         } catch (error: unknown) {
             setError(error instanceof Error ? error.message : "发生错误，请重试");
         } finally {

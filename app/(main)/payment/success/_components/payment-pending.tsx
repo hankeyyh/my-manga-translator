@@ -90,7 +90,7 @@ export default function PendingPaymentDisplay({ email }: Props) {
                         <CardFooter className="flex justify-center pb-4 pt-0">
                             <Button
                                 className="bg-gradient-to-br from-[#3370FF] to-[#2e6dfc] font-headline text-base font-bold text-white shadow-lg shadow-[#3370FF]/20 hover:from-[#3370FF]/90 hover:to-[#2e6dfc]/90"
-                                onClick={() => router.push("/v2")}
+                                onClick={() => router.push("/")}
                                 size="lg"
                                 variant="default"
                             >

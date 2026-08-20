@@ -6,7 +6,7 @@ import { listUserTransactions } from "@/actions/list-user-transactions";
 import type { ListUserTransactionsPage } from "@/types/dto/user-transaction";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TransactionListEmpty } from "@/app/(main)/v2/home/billing/_components/transaction-list-empty";
+import { TransactionListEmpty } from "@/app/(main)/home/billing/_components/transaction-list-empty";
 import type { UserTransaction } from "@/types/do/user-transaction";
 import { SUCCESS_CODE } from "@/types/dto/response";
 

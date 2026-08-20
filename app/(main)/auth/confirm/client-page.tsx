@@ -25,7 +25,7 @@ const COUNTDOWN_SECONDS = 5;
 const inflightConfirms = new Map<string, Promise<ConfirmJson & { httpOk: boolean; }>>();
 
 function resolveNext(raw: string | null): string {
-    if (!raw) return "/v2";
+    if (!raw) return "/";
     try {
         if (raw.startsWith("/") && !raw.startsWith("//")) return raw;
         const url = new URL(raw);
@@ -35,7 +35,7 @@ function resolveNext(raw: string | null): string {
     } catch {
         // ignore
     }
-    return "/v2";
+    return "/";
 }
 
 function confirmEmail(tokenHash: string, type: string, next: string) {
@@ -73,7 +73,7 @@ export function ClientPage() {
     const [state, setState] = useState<ConfirmState>("verifying");
     const [error, setError] = useState<string | null>(null);
     const [secondsLeft, setSecondsLeft] = useState(COUNTDOWN_SECONDS);
-    const [nextPath, setNextPath] = useState("/v2");
+    const [nextPath, setNextPath] = useState("/");
 
     const goHome = useCallback(() => {
         router.replace(nextPath);

@@ -1,18 +1,18 @@
 import Link from "next/link";
 
 const PRODUCT_LINKS = [
-    { label: "工具", href: "/v2#tool" },
-    { label: "博客", href: "/v2/blogs" },
-    { label: "价格", href: "/v2#pricing" },
+    { label: "工具", href: "/#tool" },
+    { label: "博客", href: "/blogs" },
+    { label: "价格", href: "/#pricing" },
 ] as const;
 
 const LEGAL_LINKS = [
-    { label: "关于", href: "/v2/legal/about" },
-    { label: "隐私政策", href: "/v2/legal/privacy" },
-    { label: "使用条款", href: "/v2/legal/terms" },
-    { label: "退款政策", href: "/v2/legal/refund" },
-    { label: "常见问题", href: "/v2#faq" },
-    { label: "DMCA", href: "/v2/legal/dmca" },
+    { label: "关于", href: "/legal/about" },
+    { label: "隐私政策", href: "/legal/privacy" },
+    { label: "使用条款", href: "/legal/terms" },
+    { label: "退款政策", href: "/legal/refund" },
+    { label: "常见问题", href: "/#faq" },
+    { label: "DMCA", href: "/legal/dmca" },
 ] as const;
 
 function XIcon({ className }: { className?: string; }) {
