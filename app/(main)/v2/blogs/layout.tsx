@@ -1,5 +1,5 @@
-import { SiteHeader } from "@/components/v2/site-header";
-import { Footer } from "@/components/v2/footer";
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
 
 export default function BlogsLayout({
     children,

@@ -10,8 +10,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { ImagePreview } from "@/components/v2/image-preview";
-import { ThumbNail } from "@/components/v2/thumbnail";
+import { ImagePreview } from "@/components/image-preview";
+import { ThumbNail } from "@/components/thumbnail";
 import type { ApiGetTranslationTaskResponse } from "@/types/api/translation-task";
 import type { ApiTranslationTaskImage } from "@/types/api/translation-image";
 import type { TaskStatus } from "@/types/do/translation-task";

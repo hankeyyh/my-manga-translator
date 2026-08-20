@@ -34,8 +34,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ThumbNail } from "@/components/v2/thumbnail";
-import { ImagePreview } from "@/components/v2/image-preview";
+import { ThumbNail } from "@/components/thumbnail";
+import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/(main)/v2/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";

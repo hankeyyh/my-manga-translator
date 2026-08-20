@@ -1,9 +1,9 @@
 "use client";
 
 import { Clock, Eye, Loader2, X } from "lucide-react";
-import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
-import { cn } from "../utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/components/utils";
 import { MangaPage } from "@/types/web/manga-page";
 
 export type ThumbNailProps = MangaPage & {

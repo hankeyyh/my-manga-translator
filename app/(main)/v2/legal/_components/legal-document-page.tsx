@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { MarkdownContent } from "@/components/v2/markdown-content";
+import { MarkdownContent } from "@/components/markdown-content";
 import { LegalService } from "@/biz/services/legal/legal-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { isLegalSlug } from "@/types/do/legal-doc";

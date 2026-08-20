@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MarkdownContent } from "@/components/v2/markdown-content";
+import { MarkdownContent } from "@/components/markdown-content";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
 type Props = {
-    params: Promise<{ title: string }>;
+    params: Promise<{ title: string; }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
