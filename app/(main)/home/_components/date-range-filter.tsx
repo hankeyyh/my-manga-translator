@@ -2,7 +2,7 @@
 
 import { ChevronDown } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { CcButton } from "@/design/design-system/components";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,10 +32,10 @@ export function DateRangeFilter({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="justify-between gap-2">
+                <CcButton variant="secondary" className="justify-between gap-2">
                     {selected.label}
                     <ChevronDown className="size-4" />
-                </Button>
+                </CcButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
                 {DATE_OPTIONS.map((opt) => (

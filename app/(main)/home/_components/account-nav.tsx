@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreditCard, History, LogOut } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { CcButton } from "@/design/design-system/components";
 import { cn } from "@/components/utils";
 
 const NAV_ITEMS = [
@@ -34,7 +34,7 @@ export function AccountNav() {
         try {
             const res = await fetch("/api/auth/signout", { method: "POST" });
             if (res.ok) {
-                router.push("/v2");
+                router.push("/");
             }
         } finally {
             setSigningOut(false);
@@ -46,33 +46,33 @@ export function AccountNav() {
             {NAV_ITEMS.map(({ href, label, icon: Icon, match }) => {
                 const active = match(pathname);
                 return (
-                    <Button
+                    <CcButton
                         key={href}
                         asChild
-                        variant={active ? "secondary" : "ghost"}
+                        variant={active ? "soft" : "ghost"}
                         className={cn(
                             "h-auto w-full justify-start gap-2 px-3 py-2.5",
-                            !active && "text-muted-foreground",
+                            !active && "text-cc-text-muted",
                         )}
                     >
                         <Link href={href}>
                             <Icon className="size-4" />
                             {label}
                         </Link>
-                    </Button>
+                    </CcButton>
                 );
             })}
-            <div className="border-t pt-2">
-                <Button
+            <div className="border-t border-cc-border/40 pt-2">
+                <CcButton
                     variant="ghost"
-                    className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-destructive"
+                    className="h-auto w-full justify-start gap-2 px-3 py-2.5 text-[var(--cc-status-error)] hover:text-[var(--cc-status-error)]"
                     disabled={signingOut}
                     onClick={handleSignOut}
                     type="button"
                 >
                     <LogOut className="size-4" />
                     退出登录
-                </Button>
+                </CcButton>
             </div>
         </nav>
     );

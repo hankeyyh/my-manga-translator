@@ -3,13 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ManageSubscriptionDialog } from "@/app/(main)/home/billing/_components/manage-subscription-dialog";
-import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+    CcButton,
+    CcCard,
+    CcCardDescription,
+    CcCardTitle,
+} from "@/design/design-system/components";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
 
@@ -64,39 +63,39 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
 
         return (
             <>
-                <Card className="gap-0 py-4 shadow-none">
-                    <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">
+                <CcCard className="rounded-[var(--cc-radius-lg)] p-4 lg:p-4" variant="outlined">
+                    <div className="flex flex-row items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
-                            <p className="text-xs uppercase tracking-wide text-foreground/70">
+                            <p className="text-xs uppercase tracking-wide text-cc-text-muted">
                                 Current Plan
                             </p>
                             <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
-                                <CardTitle className="text-lg">
+                                <CcCardTitle className="text-lg">
                                     {capitalize(subscription.planTier)}
-                                </CardTitle>
-                                <span className="text-sm text-muted-foreground">
+                                </CcCardTitle>
+                                <span className="text-sm text-cc-text-muted">
                                     {formatPriceLabel(
                                         subscription.price,
                                         subscription.billingCycle,
                                     )}
                                 </span>
                             </div>
-                            <CardDescription className="mt-1 text-sm">
+                            <CcCardDescription className="mt-1 text-sm">
                                 {resetLabel}
-                            </CardDescription>
+                            </CcCardDescription>
                         </div>
                         <div className="shrink-0">
-                            <Button
+                            <CcButton
                                 size="sm"
                                 type="button"
                                 variant="outline"
                                 onClick={() => setManageOpen(true)}
                             >
                                 Manage
-                            </Button>
+                            </CcButton>
                         </div>
-                    </CardHeader>
-                </Card>
+                    </div>
+                </CcCard>
                 <ManageSubscriptionDialog
                     open={manageOpen}
                     onOpenChange={setManageOpen}
@@ -108,23 +107,23 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
     }
 
     return (
-        <Card className="gap-0 py-4 shadow-none">
-            <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 px-4 py-0">
+        <CcCard className="rounded-[var(--cc-radius-lg)] p-4 lg:p-4" variant="outlined">
+            <div className="flex flex-row items-center justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                    <p className="text-xs uppercase tracking-wide text-foreground/70">
+                    <p className="text-xs uppercase tracking-wide text-cc-text-muted">
                         Current Plan
                     </p>
-                    <CardTitle className="mt-1 text-lg">未订阅</CardTitle>
-                    <CardDescription className="mt-1 text-sm">
+                    <CcCardTitle className="mt-1 text-lg">未订阅</CcCardTitle>
+                    <CcCardDescription className="mt-1 text-sm">
                         订阅后可按周期获得 Credits，并解锁对应套餐权益
-                    </CardDescription>
+                    </CcCardDescription>
                 </div>
                 <div className="shrink-0">
-                    <Button size="sm" type="button" asChild>
-                        <Link href="/v2#pricing">订阅</Link>
-                    </Button>
+                    <CcButton size="sm" type="button" asChild>
+                        <Link href="/#pricing">订阅</Link>
+                    </CcButton>
                 </div>
-            </CardHeader>
-        </Card>
+            </div>
+        </CcCard>
     );
 }

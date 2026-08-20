@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { CcCard } from "@/design/design-system/components";
 
 export type ProfileCardProps = {
     email: string;
@@ -7,19 +7,17 @@ export type ProfileCardProps = {
 
 export function ProfileCard({ email, totalCredits }: ProfileCardProps) {
     return (
-        <Card className="gap-0 py-4 shadow-none">
-            <CardContent className="space-y-4 px-4">
-                <div>
-                    <p className="text-xs text-muted-foreground">邮箱</p>
-                    <p className="mt-1 break-all text-sm">{email}</p>
-                </div>
-                <div>
-                    <p className="text-xs text-muted-foreground">积分余额</p>
-                    <p className="mt-1 text-xl font-semibold">
-                        {totalCredits.toLocaleString()}
-                    </p>
-                </div>
-            </CardContent>
-        </Card>
+        <CcCard className="rounded-[var(--cc-radius-lg)] p-4 lg:p-4" variant="outlined">
+            <div>
+                <p className="text-xs text-cc-text-muted">邮箱</p>
+                <p className="mt-1 break-all text-sm text-cc-text-primary">{email}</p>
+            </div>
+            <div className="mt-4">
+                <p className="text-xs text-cc-text-muted">积分余额</p>
+                <p className="mt-1 font-headline text-xl font-semibold text-cc-brand-primary">
+                    {totalCredits.toLocaleString()}
+                </p>
+            </div>
+        </CcCard>
     );
 }

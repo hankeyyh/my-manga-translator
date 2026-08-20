@@ -8,7 +8,7 @@ export default async function HistoryPage() {
     return (
         <>
             <div>
-                <h1 className="text-xl font-semibold">翻译历史</h1>
+                <h1 className="font-headline text-xl font-bold text-cc-text-primary">翻译历史</h1>
             </div>
             <TranslationHistory initialPage={page} />
         </>

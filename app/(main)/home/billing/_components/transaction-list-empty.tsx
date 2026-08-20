@@ -1,13 +1,9 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { CcCard } from "@/design/design-system/components";
 
 export function TransactionListEmpty() {
     return (
-        <Card className="gap-0 py-10 shadow-none">
-            <CardContent className="flex flex-col items-center gap-3 px-4 text-center">
-                <p className="text-sm text-muted-foreground">暂无账单记录</p>
-            </CardContent>
-        </Card>
+        <CcCard className="items-center rounded-[var(--cc-radius-lg)] p-10 text-center lg:p-10" variant="outlined">
+            <p className="text-sm text-cc-text-muted">暂无账单记录</p>
+        </CcCard>
     );
 }

@@ -1,8 +1,22 @@
+import { Manrope, Inter } from "next/font/google";
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { Footer } from "@/components/footer";
 import { AccountNav } from "@/app/(main)/home/_components/account-nav";
 import { ProfileCard } from "@/app/(main)/home/_components/profile-card";
 import { SiteHeader } from "@/components/site-header";
+import { cn } from "@/components/utils";
+
+const manrope = Manrope({
+    subsets: ["latin"],
+    weight: ["400", "600", "700", "800"],
+    variable: "--font-manrope",
+});
+
+const inter = Inter({
+    subsets: ["latin"],
+    weight: ["400", "500", "600"],
+    variable: "--font-inter",
+});
 
 export default async function HomeLayout({
     children,
@@ -15,9 +29,15 @@ export default async function HomeLayout({
     const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
 
     return (
-        <>
+        <div
+            className={cn(
+                manrope.variable,
+                inter.variable,
+                "flex min-h-screen flex-col font-body text-cc-text-primary",
+            )}
+        >
             <SiteHeader />
-            <div className="min-h-screen bg-background">
+            <div className="relative z-10 flex-1 bg-cc-surface-page">
                 <main className="mx-auto max-w-5xl px-4 py-10">
                     <div className="grid gap-8 md:grid-cols-[220px_1fr]">
                         <aside className="space-y-4">
@@ -29,6 +49,6 @@ export default async function HomeLayout({
                 </main>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }

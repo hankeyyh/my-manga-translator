@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { getUserTranslationHistory } from "@/actions/get-user-translation-history";
-import { Button } from "@/components/ui/button";
+import { CcButton } from "@/design/design-system/components";
 import {
     DateRangeFilter,
     type DateRangeValue,
@@ -89,18 +89,18 @@ export function TranslationHistory({ initialPage }: Props) {
                 <div className="min-w-[200px] flex-1">
                     <div className="flex flex-wrap gap-1.5">
                         {STATUS_FILTERS.map((status) => (
-                            <Button
+                            <CcButton
                                 key={status}
                                 size="sm"
                                 type="button"
                                 variant={
-                                    status === statusFilter ? "default" : "outline"
+                                    status === statusFilter ? "primary" : "secondary"
                                 }
                                 className="h-7 px-2.5 text-xs"
                                 onClick={() => setStatusFilter(status)}
                             >
                                 {status}
-                            </Button>
+                            </CcButton>
                         ))}
                     </div>
                 </div>
@@ -121,7 +121,7 @@ export function TranslationHistory({ initialPage }: Props) {
                     </ul>
                     {nextCursor && (
                         <div className="flex justify-center">
-                            <Button
+                            <CcButton
                                 size="sm"
                                 type="button"
                                 variant="outline"
@@ -129,7 +129,7 @@ export function TranslationHistory({ initialPage }: Props) {
                                 onClick={handleLoadMore}
                             >
                                 {isPending ? "加载中…" : "加载更多"}
-                            </Button>
+                            </CcButton>
                         </div>
                     )}
                 </>

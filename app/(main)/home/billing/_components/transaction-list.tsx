@@ -4,8 +4,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { listUserTransactions } from "@/actions/list-user-transactions";
 import type { ListUserTransactionsPage } from "@/types/dto/user-transaction";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { CcBadge, CcButton } from "@/design/design-system/components";
 import { TransactionListEmpty } from "@/app/(main)/home/billing/_components/transaction-list-empty";
 import type { UserTransaction } from "@/types/do/user-transaction";
 import { SUCCESS_CODE } from "@/types/dto/response";
@@ -27,18 +26,18 @@ function formatCredits(credits: number | null) {
     return credits.toLocaleString();
 }
 
-function statusBadgeClassName(status: string) {
+function statusBadgeVariant(status: string) {
     switch (status) {
         case "success":
-            return "border-transparent bg-green-100 text-green-700 hover:bg-green-100";
+            return "success" as const;
         case "failed":
-            return "border-transparent bg-red-100 text-red-700 hover:bg-red-100";
+            return "error" as const;
         case "pending":
-            return "border-transparent bg-yellow-100 text-yellow-700 hover:bg-yellow-100";
+            return "warning" as const;
         case "canceled":
-            return "border-transparent bg-muted text-muted-foreground hover:bg-muted";
+            return "outline" as const;
         default:
-            return "";
+            return "outline" as const;
     }
 }
 
@@ -67,16 +66,16 @@ export function TransactionList({ initialPage }: Props) {
     return (
         <div className="space-y-3">
             <div>
-                <h2 className="text-sm font-semibold">交易记录</h2>
+                <h2 className="font-headline text-sm font-semibold text-cc-text-primary">交易记录</h2>
             </div>
 
             {transactions.length === 0 ? (
                 <TransactionListEmpty />
             ) : (
                 <>
-                    <div className="overflow-x-auto rounded-md border">
+                    <div className="overflow-x-auto rounded-[var(--cc-radius-lg)] border border-cc-border/40 bg-cc-surface-white">
                         <table className="w-full min-w-[560px] text-left text-xs">
-                            <thead className="bg-muted/50 text-[10px] uppercase tracking-wide text-muted-foreground">
+                            <thead className="bg-cc-surface-page text-[10px] uppercase tracking-wide text-cc-text-muted">
                                 <tr>
                                     <th className="px-3 py-2 font-medium">
                                         created_at
@@ -95,9 +94,9 @@ export function TransactionList({ initialPage }: Props) {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="text-cc-text-secondary">
                                 {transactions.map((tx) => (
-                                    <tr key={tx.id} className="border-t">
+                                    <tr key={tx.id} className="border-t border-cc-border/40">
                                         <td className="px-3 py-2 whitespace-nowrap">
                                             {formatDateTime(tx.createdAt)}
                                         </td>
@@ -111,14 +110,13 @@ export function TransactionList({ initialPage }: Props) {
                                             {tx.transactionType}
                                         </td>
                                         <td className="px-3 py-2">
-                                            <Badge
-                                                variant="outline"
-                                                className={statusBadgeClassName(
+                                            <CcBadge
+                                                variant={statusBadgeVariant(
                                                     tx.transactionStatus,
                                                 )}
                                             >
                                                 {tx.transactionStatus}
-                                            </Badge>
+                                            </CcBadge>
                                         </td>
                                     </tr>
                                 ))}
@@ -127,7 +125,7 @@ export function TransactionList({ initialPage }: Props) {
                     </div>
                     {nextCursor && (
                         <div className="flex justify-center">
-                            <Button
+                            <CcButton
                                 size="sm"
                                 type="button"
                                 variant="outline"
@@ -135,7 +133,7 @@ export function TransactionList({ initialPage }: Props) {
                                 onClick={handleLoadMore}
                             >
                                 {isPending ? "加载中…" : "加载更多"}
-                            </Button>
+                            </CcButton>
                         </div>
                     )}
                 </>

@@ -21,7 +21,7 @@ export default async function BillingPage() {
     return (
         <>
             <div>
-                <h1 className="text-xl font-semibold">账单与订阅</h1>
+                <h1 className="font-headline text-xl font-bold text-cc-text-primary">账单与订阅</h1>
             </div>
             <SubscriptionStatus
                 subscription={subscription}

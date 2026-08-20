@@ -131,7 +131,7 @@ export function ManageSubscriptionDialog({
                     onOpenChange(next);
                 }}
             >
-                <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-cc-border bg-cc-surface-white text-cc-text-primary">
                     <DialogHeader>
                         <DialogTitle>管理订阅</DialogTitle>
                         <DialogDescription>

@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { CcButton, CcCard } from "@/design/design-system/components";
 
 type Props = {
     onClearFilters: () => void;
@@ -7,17 +6,13 @@ type Props = {
 
 export function TranslationHistoryEmpty({ onClearFilters }: Props) {
     return (
-        <Card className="gap-0 py-10 shadow-none">
-            <CardContent className="flex flex-col items-center gap-3 px-4 text-center">
-                <p className="text-sm text-muted-foreground">
-                    暂无翻译历史 / 无匹配结果
-                </p>
-                <div className="flex gap-2">
-                    <Button size="sm" type="button" variant="outline" onClick={onClearFilters}>
-                        清除筛选
-                    </Button>
-                </div>
-            </CardContent>
-        </Card>
+        <CcCard className="items-center rounded-[var(--cc-radius-lg)] p-10 text-center lg:p-10" variant="outlined">
+            <p className="text-sm text-cc-text-muted">
+                暂无翻译历史 / 无匹配结果
+            </p>
+            <CcButton className="mt-3" size="sm" type="button" variant="outline" onClick={onClearFilters}>
+                清除筛选
+            </CcButton>
+        </CcCard>
     );
 }
