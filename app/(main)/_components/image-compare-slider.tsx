@@ -82,10 +82,11 @@ export function ImageCompareSlider({
             </div>
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 z-10 w-px  bg-border"
+                className="pointer-events-none absolute inset-y-0 z-10"
                 style={{ left: `${position}%` }}
             >
-                <div className="absolute top-1/2 left-1/2 flex size-8  items-center justify-center rounded-full border bg-background shadow">
+                <div className="absolute inset-y-0 left-0 w-px -translate-x-1/2 bg-border" />
+                <div className="absolute top-1/2 left-0 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border bg-background shadow">
                     <ChevronsLeftRight className="size-4 text-muted-foreground" />
                 </div>
             </div>
