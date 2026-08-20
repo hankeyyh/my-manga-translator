@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { MangaPage } from "@/types/web/manga-page";
 
@@ -22,6 +23,11 @@ export function ImagePreview({
 }: ImagePreviewProps) {
     const page = pages[index];
     const imageUrl = showTranslated && page?.status === "completed" && page.resultUrl ? page.resultUrl : page?.originalUrl;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         if (!page || pages.length === 0) return;
@@ -46,14 +52,14 @@ export function ImagePreview({
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [index, onClose, onIndexChange, page, pages.length]);
 
-    if (!page) return null;
+    if (!mounted || !page) return null;
 
-    return (
+    return createPortal(
         <div
             role="dialog"
             aria-modal="true"
             aria-label={page.name}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+            className="fixed inset-0 z-[100] flex flex-col bg-black/80"
             onClick={onClose}
         >
             <Button
@@ -61,16 +67,60 @@ export function ImagePreview({
                 size="icon"
                 variant="ghost"
                 aria-label="关闭预览"
-                className="absolute top-4 right-4 size-9 rounded-full text-white hover:bg-white/10 hover:text-white"
+                className="absolute top-4 right-4 z-10 size-9 rounded-full text-white hover:bg-white/10 hover:text-white"
                 onClick={onClose}
             >
                 <X className="size-5" />
             </Button>
-            <img
-                src={imageUrl}
-                alt={page.name}
-                className="max-h-full max-w-full object-contain"
-                onClick={(e) => e.stopPropagation()} />
-        </div>
+            {pages.length > 1 && (
+                <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label="上一张，或按左方向键"
+                    disabled={index === 0}
+                    className="absolute top-1/2 left-2 z-10 h-24 w-24 -translate-y-1/2 rounded-full text-white hover:bg-white/10 hover:text-white disabled:text-white/30 [&_svg]:size-16"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (index > 0) onIndexChange(index - 1);
+                    }}
+                >
+                    <ChevronLeft strokeWidth={1} />
+                </Button>
+            )}
+            {pages.length > 1 && (
+                <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label="下一张，或按右方向键"
+                    disabled={index >= pages.length - 1}
+                    className="absolute top-1/2 right-2 z-10 h-24 w-24 -translate-y-1/2 rounded-full text-white hover:bg-white/10 hover:text-white disabled:text-white/30 [&_svg]:size-16"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (index < pages.length - 1) onIndexChange(index + 1);
+                    }}
+                >
+                    <ChevronRight strokeWidth={1} />
+                </Button>
+            )}
+            <div
+                className="flex min-h-0 flex-1 items-center justify-center px-32 py-4"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <img
+                    src={imageUrl}
+                    alt={page.name}
+                    className="max-h-full max-w-full object-contain"
+                />
+            </div>
+            <p
+                className="shrink-0 pb-6 text-center text-sm text-white"
+                onClick={(e) => e.stopPropagation()}
+            >
+                {index + 1} / {pages.length}
+            </p>
+        </div>,
+        document.body,
     );
 }
