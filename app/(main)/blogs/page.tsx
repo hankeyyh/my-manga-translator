@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-    Card,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { CcCard, CcSectionHeading } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
@@ -13,7 +8,7 @@ export const metadata: Metadata = {
     title: "博客 | Manga Sense",
 };
 
-const PLACEHOLDER_BLOG = "https://placehold.co/400x400/e5e5e5/a3a3a3?text=Blog";
+const PLACEHOLDER_BLOG = "https://placehold.co/400x400/f8fafc/0053dd?text=Blog";
 
 function formatBlogDate(publishedAt: string | null) {
     if (!publishedAt) return "";
@@ -30,7 +25,7 @@ export default async function Page() {
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-            <h1 className="mb-8 text-3xl font-bold tracking-tight">博客</h1>
+            <CcSectionHeading align="left" className="mb-8" size="md" title="博客" />
             <div className="flex flex-col gap-4">
                 {posts.map((post) => (
                     <Link
@@ -38,32 +33,35 @@ export default async function Page() {
                         href={`/blogs/${post.slug}`}
                         className="group"
                     >
-                        <Card className="flex-row overflow-hidden py-0 transition-colors group-hover:bg-accent/50">
+                        <CcCard
+                            className="flex-row items-center overflow-hidden rounded-[var(--cc-radius-lg)] p-3 transition-colors hover:bg-[var(--cc-brand-tint)] sm:p-4"
+                            variant="outlined"
+                        >
                             <img
                                 src={post.coverUrl || PLACEHOLDER_BLOG}
                                 alt=""
                                 aria-hidden
-                                className="aspect-square w-28 shrink-0 object-cover sm:w-36"
+                                className="aspect-square w-28 shrink-0 rounded-lg object-cover sm:w-36"
                             />
-                            <CardHeader className="min-w-0 flex-1 justify-center py-4 pl-1">
+                            <div className="min-w-0 flex-1 space-y-1 py-1 pl-4 sm:pl-5">
                                 {post.publishedAt ? (
-                                    <CardDescription>
+                                    <p className="text-sm text-cc-text-muted">
                                         {formatBlogDate(post.publishedAt)}
-                                    </CardDescription>
+                                    </p>
                                 ) : null}
-                                <CardTitle className="transition-colors group-hover:text-primary">
+                                <h2 className="font-headline text-lg font-bold text-cc-text-primary transition-colors group-hover:text-cc-brand-primary">
                                     {post.title}
-                                </CardTitle>
+                                </h2>
                                 {post.description ? (
-                                    <CardDescription className="line-clamp-2">
+                                    <p className="line-clamp-2 text-sm text-cc-text-secondary">
                                         {post.description}
-                                    </CardDescription>
+                                    </p>
                                 ) : null}
-                                <CardDescription className="transition-colors group-hover:text-primary group-hover:underline">
+                                <p className="text-sm font-semibold text-cc-brand-primary group-hover:underline">
                                     阅读更多 →
-                                </CardDescription>
-                            </CardHeader>
-                        </Card>
+                                </p>
+                            </div>
+                        </CcCard>
                     </Link>
                 ))}
             </div>

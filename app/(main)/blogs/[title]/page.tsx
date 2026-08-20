@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MarkdownContent } from "@/components/markdown-content";
+import { CcButton } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 
@@ -53,28 +54,27 @@ export default async function Page({ params }: Props) {
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-            <Link
-                href="/blogs"
-                className="mb-8 inline-block text-sm text-muted-foreground hover:text-foreground"
-            >
-                ← 返回博客
-            </Link>
+            <CcButton className="mb-8 px-0" variant="link" asChild>
+                <Link href="/blogs">← 返回博客</Link>
+            </CcButton>
             {post.publishedAt ? (
-                <p className="mb-4 text-sm text-muted-foreground">
+                <p className="mb-4 text-sm text-cc-text-muted">
                     {formatBlogDate(post.publishedAt)}
                 </p>
             ) : null}
             {heading ? (
-                <h1 className="mb-6 text-3xl font-bold tracking-tight">{heading}</h1>
+                <h1 className="mb-6 font-headline text-3xl font-bold tracking-tight text-cc-text-primary">
+                    {heading}
+                </h1>
             ) : null}
             {post.coverUrl ? (
                 <img
                     src={post.coverUrl}
                     alt={heading ?? post.title}
-                    className="mb-8 w-full rounded-lg object-cover"
+                    className="mb-8 w-full rounded-2xl object-cover"
                 />
             ) : null}
-            <MarkdownContent content={body} />
+            <MarkdownContent content={body} variant="cc" />
         </div>
     );
 }
