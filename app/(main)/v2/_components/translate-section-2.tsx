@@ -392,7 +392,7 @@ export function TranslateSection() {
      * - 关闭单个任务
      * - 关闭其他任务
      * - 关闭进行中的任务，需要确认
-     * - 清空草稿，自动删除该任务
+     * - 清空草稿
      * - 删除任务中的图片
      */
     const removeTask = (localId: string) => {
@@ -478,14 +478,11 @@ export function TranslateSection() {
             return;
         }
         revokePageUrls(activeTask.pages);
-        if (tasks.length === 1) {
-            tasksRef.current = [];
-            setTasks([]);
-            setActiveId(null);
-            setPreviewIndex(null);
-            return;
-        }
-        removeTask(activeTask.localId);
+        updateTask(activeTask.localId, (task) => ({
+            ...task,
+            pages: [],
+        }));
+        setPreviewIndex(null);
     };
 
     const removePage = (name: string): void => {
@@ -826,7 +823,7 @@ export function TranslateSection() {
                                 WORKSPACE_BG,
                                 activeIndex !== 0 && "rounded-tl-xl",
                             )}
-                            >
+                        >
                             {/* 操作区 */}
                             <Card>
                                 <CardHeader>
