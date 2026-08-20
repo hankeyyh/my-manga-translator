@@ -58,3 +58,5 @@ prds/
 sslkeys.log
 
 .scratch
+
+docs/private

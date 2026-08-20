@@ -133,6 +133,7 @@ function filesToPages(files: File[], existingNames: Set<string>): MangaPage[] {
     return pages;
 }
 
+// UploadZone，任务栏新增任务会触发
 function createDraftTask(files: File[] = []): WorkspaceTask {
     return {
         localId: crypto.randomUUID(),
@@ -344,7 +345,7 @@ export function TranslateSection() {
             appendFilesToTask(activeTask.localId, files);
             return;
         }
-        const existingDraft = tasks.find((task) => deriveTaskKind(task) === "draft");
+        const existingDraft = tasksRef.current.find((task) => deriveTaskKind(task) === "draft");
         if (existingDraft) {
             appendFilesToTask(existingDraft.localId, files);
             selectTask(existingDraft.localId);
@@ -354,22 +355,46 @@ export function TranslateSection() {
         if (draft.pages.length === 0) {
             return;
         }
-        setTasks((prev) => [...prev, draft]);
+        setTasks((prev) => {
+            const next = [...prev, draft];
+            tasksRef.current = next;
+            return next;
+        });
         selectTask(draft.localId);
     };
 
+    /**
+     * 关于何时从tasks读取，何时从ref读取：
+     * - 这次读取会不会跨过一次「render 边界」？
+     * - 这次读取要不要和「即将写入的setTasks」一致？
+     *      - 如果随后有setTasks，且使用函数式更新，要读tasksRef，和之后的prev对齐
+     * - 这次读取是不是为了纯展示？
+     */
     const ensureDraftTask = (): string => {
+        // 随后setTasks函数式更新，所以这里使用tasksRef保证读取最新，和prev对齐
         const existingDraft = tasksRef.current.find((task) => deriveTaskKind(task) === "draft");
         if (existingDraft) {
             selectTask(existingDraft.localId);
             return existingDraft.localId;
         }
         const draft = createDraftTask();
-        setTasks((prev) => [...prev, draft]);
+        setTasks((prev) => {
+            const next = [...prev, draft];
+            tasksRef.current = next;
+            return next;
+        });
         selectTask(draft.localId);
         return draft.localId;
     };
 
+    /**
+     * 删除操作
+     * - 关闭单个任务
+     * - 关闭其他任务
+     * - 关闭进行中的任务，需要确认
+     * - 清空草稿，自动删除该任务
+     * - 删除任务中的图片
+     */
     const removeTask = (localId: string) => {
         const target = tasksRef.current.find((task) => task.localId === localId);
         if (target) {
@@ -378,6 +403,7 @@ export function TranslateSection() {
         setPreviewIndex(null);
         setTasks((prev) => {
             const next = prev.filter((task) => task.localId !== localId);
+            tasksRef.current = next;
             if (activeId === localId) {
                 setActiveId(next[0]?.localId ?? null);
             }
@@ -414,7 +440,11 @@ export function TranslateSection() {
         for (const task of others) {
             revokePageUrls(task.pages);
         }
-        setTasks((prev) => prev.filter((task) => task.localId === activeTask.localId));
+        setTasks((prev) => {
+            const next = prev.filter((task) => task.localId === activeTask.localId);
+            tasksRef.current = next;
+            return next;
+        });
         setPreviewIndex(null);
     };
 
@@ -434,7 +464,11 @@ export function TranslateSection() {
         for (const task of others) {
             revokePageUrls(task.pages);
         }
-        setTasks((prev) => prev.filter((task) => task.localId === activeTask.localId));
+        setTasks((prev) => {
+            const next = prev.filter((task) => task.localId === activeTask.localId);
+            tasksRef.current = next;
+            return next;
+        });
         setPreviewIndex(null);
         setCloseConfirm(null);
     };
@@ -445,6 +479,7 @@ export function TranslateSection() {
         }
         revokePageUrls(activeTask.pages);
         if (tasks.length === 1) {
+            tasksRef.current = [];
             setTasks([]);
             setActiveId(null);
             setPreviewIndex(null);
@@ -602,12 +637,14 @@ export function TranslateSection() {
         const abortController = new AbortController();
         let cancelled = false;
 
+        // poll->scheduleNext->poll循环，不setTimeout(scheduleNext)，是因为：
+        // 终止轮询的条件有多个：图片处理结束，超时，abort signal。如果写成setTimeout(scheduleNext)，
+        // 需要poll在每种终止情况下，都显示设置cancelled=true，如果后续增加终止分支，也要设置
+        // 而将是否进行下一轮的决定权交给poll，只需要在决定轮询的地方调用scheduleNext即可。关键在：谁有权决定还要不要下一轮
         const scheduleNext = () => {
             if (cancelled) return;
             clearPollTimeout();
-            pollTimeoutRef.current = setTimeout(() => {
-                void poll();
-            }, POLL_INTERVAL_MS);
+            pollTimeoutRef.current = setTimeout(() => void poll(), POLL_INTERVAL_MS);
         };
 
         const applyTimeout = (current: WorkspaceTask[], now: number): { next: WorkspaceTask[]; timedOut: boolean; } => {
@@ -653,23 +690,31 @@ export function TranslateSection() {
                     throw new Error(data.error);
                 }
                 const images = data.images ?? [];
-                const now = Date.now();
+                // 合并，更新page.status，如果成功，更新resultUrl
                 const merged = tasksRef.current.map((task) => ({
                     ...task,
                     pages: mergeLiteImages(task.pages, images),
                 }));
-                const applied = applyTimeout(merged, now);
+                // 检查是否有任务是否超时，如果超时page.status=stalled
+                const applied = applyTimeout(merged, Date.now());
                 tasksRef.current = applied.next;
+                /**
+                 * 注意区分两种setTasks:
+                 * - poll闭包外，其他代码都使用函数式更新，本质是以上一份React state为源
+                 * - poll闭包中，不使用函数式更新，本质是以tasksRef为源，tasks是setup那一刻的旧状态，不能以它为源
+                 */
                 setTasks(applied.next);
                 if (applied.timedOut) {
                     toast.error("翻译超时，请重试");
                     console.error("Translation timeout");
                 }
+                // 所有图片处理结束
                 if (collectPollIds(applied.next).length === 0) {
                     clearPollTimeout();
                     setPolling(false);
                     return;
                 }
+                // 还有图片在处理中，需要继续轮询
                 scheduleNext();
             } catch (err) {
                 if (err instanceof Error && err.name === "AbortError") {
@@ -969,8 +1014,9 @@ export function TranslateSection() {
                                         multiple
                                         className="hidden"
                                         onChange={(e) => {
+                                            // e.target.files 是input实时视图，如果用户选择新一批文件，target.files会跟随改变，所以需要转为File[]快照
                                             const files = Array.from(e.target.files ?? []);
-                                            e.target.value = "";
+                                            e.target.value = ""; // 如果不清空，连续选择同一个文件，value不变不会触发onChange
                                             if (files.length > 0 && activeTask) {
                                                 appendFilesToTask(activeTask.localId, files);
                                             }
