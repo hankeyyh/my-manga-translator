@@ -7,15 +7,21 @@ import { BookOpen, CheckCircle2, Download, Phone, Star } from "lucide-react";
 import { cn } from "@/components/utils";
 import { tokenGroups, typography } from "@/design/design-system/tokens";
 import {
+    CcAccordion,
+    CcAlert,
     CcBadge,
     CcButton,
     CcCard,
     CcCardDescription,
     CcCardTitle,
+    CcCheckbox,
+    CcDialog,
+    CcInput,
     CcLabel,
     CcSectionHeading,
     CcSegmentedControl,
     CcSelectTrigger,
+    CcSwitch,
     CcUploadZone,
 } from "@/design/design-system/components";
 import {
@@ -45,14 +51,17 @@ const NAV_ITEMS = [
     { id: "buttons", label: "Buttons" },
     { id: "cards", label: "Cards" },
     { id: "forms", label: "Forms" },
+    { id: "feedback", label: "Feedback" },
     { id: "patterns", label: "Patterns" },
 ] as const;
 
 export default function DesignSystemPage() {
     const [plan, setPlan] = useState<"pay" | "subscription">("subscription");
+    const [autoDetect, setAutoDetect] = useState(true);
+    const [agree, setAgree] = useState(true);
 
     const colorGroups = tokenGroups.filter((g) =>
-        ["Brand", "Surface", "Text", "Border"].includes(g.name),
+        ["Brand", "Surface", "Text", "Border", "Status"].includes(g.name),
     );
     const radiusGroup = tokenGroups.find((g) => g.name === "Radius");
     const shadowGroup = tokenGroups.find((g) => g.name === "Shadow");
@@ -66,7 +75,7 @@ export default function DesignSystemPage() {
                 "min-h-screen bg-cc-surface-page font-body text-cc-text-primary",
             )}
         >
-            <header className="sticky top-0 z-50 border-b border-white/40 bg-cc-surface-page/80 shadow-sm backdrop-blur-xl">
+            <header className="sticky top-0 z-50 border-b border-cc-border/60 bg-cc-surface-white/90 shadow-[var(--cc-shadow-header)] backdrop-blur-xl">
                 <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-8">
                     <div className="flex items-center gap-3">
                         <div className="flex size-8 items-center justify-center rounded-lg bg-cc-brand-primary text-cc-text-on-brand">
@@ -76,7 +85,7 @@ export default function DesignSystemPage() {
                             <p className="font-headline text-lg font-bold tracking-tight">
                                 ComicCurator Design System
                             </p>
-                            <p className="text-xs text-cc-text-muted">/design</p>
+                            <p className="text-xs text-cc-text-muted">蓝白主题 · /design</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -86,7 +95,7 @@ export default function DesignSystemPage() {
                         >
                             Wireframes →
                         </a>
-                        <CcBadge variant="accent">v1.0</CcBadge>
+                        <CcBadge variant="accent">v1.1</CcBadge>
                     </div>
                 </div>
             </header>
@@ -96,7 +105,7 @@ export default function DesignSystemPage() {
                     {NAV_ITEMS.map((item) => (
                         <a
                             key={item.id}
-                            className="rounded-lg px-3 py-2 text-sm font-medium text-cc-text-secondary transition-colors hover:bg-cc-surface-muted hover:text-cc-brand-primary"
+                            className="rounded-lg px-3 py-2 text-sm font-medium text-cc-text-secondary transition-colors hover:bg-[var(--cc-brand-tint)] hover:text-cc-brand-primary"
                             href={`#${item.id}`}
                         >
                             {item.label}
@@ -106,17 +115,20 @@ export default function DesignSystemPage() {
 
                 <main className="min-w-0 flex-1 space-y-16">
                     <div className="space-y-4">
+                        <p className="text-sm font-semibold text-cc-brand-primary">
+                            Blue / White
+                        </p>
                         <h1 className="font-headline text-4xl font-extrabold md:text-5xl">
                             Design Tokens & Components
                         </h1>
                         <p className="max-w-2xl text-lg text-cc-text-secondary">
-                            Extracted from the ComicCurator app — homepage, translate workbench,
-                            pricing, and auth flows. Use these tokens and components for consistent UI.
+                            从首页、翻译工作台、定价、登录与账单流程提取。主体为品牌蓝 + 冰白底，
+                            中性色带蓝调，用于保持 UI 一致。
                         </p>
                     </div>
 
                     <DesignSection
-                        description="Semantic color palette used across the app."
+                        description="品牌蓝、冰白表面、冷色文字与状态色。"
                         id="colors"
                         title="Colors"
                     >
@@ -141,8 +153,8 @@ export default function DesignSystemPage() {
                         title="Typography"
                     >
                         <div className="grid gap-6 md:grid-cols-2">
-                            <div className="rounded-xl border border-cc-border/20 bg-cc-surface-white p-6">
-                                <p className="mb-2 font-mono text-xs text-cc-brand-accent">
+                            <div className="rounded-xl border border-cc-border/40 bg-cc-surface-white p-6">
+                                <p className="mb-2 font-mono text-xs text-cc-brand-primary">
                                     font-headline · Manrope
                                 </p>
                                 <p className="font-headline text-4xl font-extrabold">
@@ -152,8 +164,8 @@ export default function DesignSystemPage() {
                                     Quick Translation Preview
                                 </p>
                             </div>
-                            <div className="rounded-xl border border-cc-border/20 bg-cc-surface-white p-6">
-                                <p className="mb-2 font-mono text-xs text-cc-brand-accent">
+                            <div className="rounded-xl border border-cc-border/40 bg-cc-surface-white p-6">
+                                <p className="mb-2 font-mono text-xs text-cc-brand-primary">
                                     font-body · Inter
                                 </p>
                                 <p className="text-lg text-cc-text-secondary">
@@ -168,7 +180,7 @@ export default function DesignSystemPage() {
                             {Object.entries(typography.fontSize).map(([key, value]) => (
                                 <div
                                     key={key}
-                                    className="flex flex-col gap-2 rounded-xl border border-cc-border/20 bg-cc-surface-white p-4"
+                                    className="flex flex-col gap-2 rounded-xl border border-cc-border/40 bg-cc-surface-white p-4"
                                 >
                                     <p
                                         className="font-headline font-bold text-cc-text-primary"
@@ -218,7 +230,7 @@ export default function DesignSystemPage() {
                     </DesignSection>
 
                     <DesignSection
-                        description="Elevation levels for cards, panels, and CTAs."
+                        description="Elevation with a light blue tint instead of neutral gray."
                         id="shadows"
                         title="Shadows"
                     >
@@ -238,7 +250,7 @@ export default function DesignSystemPage() {
                     </DesignSection>
 
                     <DesignSection
-                        description="Button variants matching header, task bar, pricing, and CTA styles."
+                        description="Header、CTA、定价、取消订阅等场景。"
                         id="buttons"
                         title="Buttons"
                     >
@@ -262,12 +274,14 @@ export default function DesignSystemPage() {
                                         <Download className="size-4" />
                                         Download All
                                     </CcButton>
+                                    <CcButton variant="soft">Credits · 120</CcButton>
                                 </div>
                             </ComponentPreview>
-                            <ComponentPreview title="Ghost & Link">
+                            <ComponentPreview title="Ghost, Link & Destructive">
                                 <div className="flex flex-wrap items-center gap-3">
                                     <CcButton variant="ghost">Login</CcButton>
                                     <CcButton variant="link">Contact our support team</CcButton>
+                                    <CcButton variant="destructive">取消订阅</CcButton>
                                 </div>
                             </ComponentPreview>
                             <ComponentPreview title="Pill & Icon">
@@ -284,7 +298,7 @@ export default function DesignSystemPage() {
                     </DesignSection>
 
                     <DesignSection
-                        description="Surface containers for marketing, pricing, and workbench."
+                        description="营销卡片、定价 featured、工作台面板。"
                         id="cards"
                         title="Cards & Badges"
                     >
@@ -295,11 +309,14 @@ export default function DesignSystemPage() {
                                     Start your journey from raw panels to translated masterpieces.
                                 </CcCardDescription>
                             </CcCard>
-                            <CcCard variant="outlined">
-                                <CcCardTitle>Pro</CcCardTitle>
+                            <CcCard variant="featured">
+                                <div className="mb-2 flex items-center gap-2">
+                                    <CcCardTitle>Pro</CcCardTitle>
+                                    <CcBadge>★</CcBadge>
+                                </div>
                                 <p className="font-headline text-4xl font-extrabold">$19</p>
                                 <CcCardDescription>500 credits / monthly</CcCardDescription>
-                                <CcButton className="mt-4" variant="outline">
+                                <CcButton className="mt-4" variant="primary">
                                     Get Started
                                 </CcButton>
                             </CcCard>
@@ -310,32 +327,110 @@ export default function DesignSystemPage() {
                                 <CcBadge variant="accent">Processing</CcBadge>
                                 <CcBadge variant="neutral">History</CcBadge>
                                 <CcBadge variant="outline">Beta</CcBadge>
+                                <CcBadge variant="success">completed</CcBadge>
+                                <CcBadge variant="warning">pending</CcBadge>
+                                <CcBadge variant="error">failed</CcBadge>
                             </div>
                         </ComponentPreview>
                     </DesignSection>
 
                     <DesignSection
-                        description="Form controls from Quick Translate and settings panels."
+                        description="登录、翻译工作台：Input、Select、Switch、Checkbox、Upload。"
                         id="forms"
                         title="Form Controls"
                     >
                         <div className="grid gap-6 lg:grid-cols-2">
+                            <div className="space-y-4 rounded-xl border border-cc-border/40 bg-cc-surface-white p-6">
+                                <div className="space-y-2">
+                                    <CcLabel htmlFor="ds-email">邮箱</CcLabel>
+                                    <CcInput
+                                        id="ds-email"
+                                        placeholder="you@example.com"
+                                        type="email"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <CcLabel htmlFor="ds-password">密码</CcLabel>
+                                    <CcInput
+                                        id="ds-password"
+                                        placeholder="密码"
+                                        type="password"
+                                    />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <CcLabel>自动识别语言</CcLabel>
+                                    <CcSwitch
+                                        aria-label="自动识别语言"
+                                        checked={autoDetect}
+                                        onCheckedChange={setAutoDetect}
+                                    />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <CcCheckbox
+                                        aria-label="同意条款"
+                                        checked={agree}
+                                        onCheckedChange={setAgree}
+                                    />
+                                    <CcLabel>同意服务条款</CcLabel>
+                                </div>
+                            </div>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <CcLabel>Source Language</CcLabel>
+                                    <CcLabel uppercase>Source Language</CcLabel>
                                     <CcSelectTrigger>Japanese</CcSelectTrigger>
                                 </div>
                                 <div className="space-y-2">
-                                    <CcLabel>Target Language</CcLabel>
+                                    <CcLabel uppercase>Target Language</CcLabel>
                                     <CcSelectTrigger>English</CcSelectTrigger>
                                 </div>
+                                <CcUploadZone className="min-h-[180px]" />
                             </div>
-                            <CcUploadZone />
                         </div>
                     </DesignSection>
 
                     <DesignSection
-                        description="Composite UI patterns from pricing and FAQ sections."
+                        description="表单错误、账单确认 Dialog、FAQ 手风琴。"
+                        id="feedback"
+                        title="Feedback"
+                    >
+                        <div className="grid gap-6 lg:grid-cols-2">
+                            <ComponentPreview title="Alerts">
+                                <div className="space-y-3">
+                                    <CcAlert variant="info">翻译任务已加入队列，通常数秒完成。</CcAlert>
+                                    <CcAlert variant="success">支付成功，积分已到账。</CcAlert>
+                                    <CcAlert variant="warning">订阅将于周期结束时失效。</CcAlert>
+                                    <CcAlert variant="error">邮箱或密码不正确，请重试。</CcAlert>
+                                </div>
+                            </ComponentPreview>
+                            <ComponentPreview title="Dialog">
+                                <CcDialog
+                                    description="将从 Pro 调整为 Standard，下一账单周期生效。"
+                                    title="确认调整方案"
+                                />
+                            </ComponentPreview>
+                        </div>
+                        <ComponentPreview title="FAQ Accordion">
+                            <CcAccordion
+                                items={[
+                                    {
+                                        question: "可以翻译日漫吗？",
+                                        answer: "可以。支持日语漫画自动识别与翻译，保留气泡排版与画风。",
+                                    },
+                                    {
+                                        question: "翻译需要多久？",
+                                        answer: "单页通常数秒到数十秒，具体取决于图片尺寸与队列负载。",
+                                    },
+                                    {
+                                        question: "数据安全吗？",
+                                        answer: "上传内容仅用于翻译处理，不会用于公开训练或对外分享。",
+                                    },
+                                ]}
+                            />
+                        </ComponentPreview>
+                    </DesignSection>
+
+                    <DesignSection
+                        description="定价分区标题 + 订阅切换。"
                         id="patterns"
                         title="Composite Patterns"
                     >
@@ -366,7 +461,7 @@ export default function DesignSystemPage() {
                                         key={text}
                                         className="flex items-start gap-3 text-sm text-cc-text-secondary"
                                     >
-                                        <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-cc-brand-accent" />
+                                        <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-cc-brand-primary" />
                                         {text}
                                     </li>
                                 ))}

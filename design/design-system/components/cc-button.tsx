@@ -14,15 +14,19 @@ const ccButtonVariants = cva(
                 accent:
                     "bg-gradient-to-br from-[var(--cc-brand-accent)] to-[var(--cc-brand-accent-secondary)] text-[var(--cc-text-on-brand)] shadow-[var(--cc-shadow-accent)] hover:opacity-90",
                 outline:
-                    "border-2 border-[var(--cc-brand-accent)] bg-transparent font-headline font-bold text-[var(--cc-brand-accent)] hover:bg-[var(--cc-brand-accent)] hover:text-[var(--cc-text-on-brand)]",
+                    "border border-[var(--cc-brand-primary)] bg-[var(--cc-surface-white)] font-semibold text-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)]",
                 secondary:
-                    "border border-[var(--cc-border-default)] bg-transparent font-bold text-[var(--cc-text-secondary)] hover:border-[var(--cc-brand-primary)] hover:text-[var(--cc-brand-primary)]",
+                    "border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] font-semibold text-[var(--cc-text-secondary)] hover:border-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)] hover:text-[var(--cc-brand-primary)]",
                 ghost:
-                    "bg-[var(--cc-surface-avatar)] font-bold text-[var(--cc-text-primary)] hover:bg-[var(--cc-surface-muted)]",
+                    "bg-transparent font-medium text-[var(--cc-text-primary)] hover:bg-[var(--cc-brand-tint)] hover:text-[var(--cc-brand-primary)]",
                 link:
-                    "font-bold text-[var(--cc-brand-accent)] underline-offset-4 hover:underline",
+                    "font-semibold text-[var(--cc-brand-primary)] underline-offset-4 hover:underline",
                 pill:
-                    "rounded-full bg-[var(--cc-brand-primary)] font-bold text-[var(--cc-text-on-brand)] hover:bg-[var(--cc-brand-primary)]/90",
+                    "rounded-full bg-[var(--cc-brand-primary)] font-bold text-[var(--cc-text-on-brand)] hover:bg-[var(--cc-brand-primary-hover)]",
+                destructive:
+                    "bg-[var(--cc-status-error)] text-[var(--cc-text-on-brand)] hover:bg-[#b91c1c]",
+                soft:
+                    "bg-[var(--cc-brand-tint)] font-semibold text-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint-strong)]",
             },
             size: {
                 sm: "h-8 rounded-md px-3 text-xs [&_svg]:size-3.5",

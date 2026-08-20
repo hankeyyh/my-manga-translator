@@ -1,34 +1,47 @@
 /**
  * ComicCurator design tokens as CSS custom properties.
+ * Blue-white theme extracted from Manga Sense UI.
  * Import in globals.css; consumed by Tailwind and design-system components.
  */
 :root {
-  /* Brand */
+  /* Brand — primary blue */
   --cc-brand-primary: #0053dd;
   --cc-brand-primary-hover: #0046b8;
   --cc-brand-accent: #3370ff;
-  --cc-brand-accent-secondary: #2e6dfc;
+  --cc-brand-accent-secondary: #1d5ef5;
+  --cc-brand-tint: #e8f0fe;
+  --cc-brand-tint-strong: #d4e4fc;
 
-  /* Surface */
-  --cc-surface-page: #f8f9fb;
-  --cc-surface-muted: #f1f4f7;
-  --cc-surface-subtle: #ebeef1;
-  --cc-surface-panel: #e8edf0;
-  --cc-surface-panel-dark: #dfe5ea;
+  /* Surface — white + ice-blue */
+  --cc-surface-page: #f5f8ff;
+  --cc-surface-muted: #eef4ff;
+  --cc-surface-subtle: #e4edfb;
+  --cc-surface-panel: #dce8f8;
+  --cc-surface-panel-dark: #d0dff2;
   --cc-surface-white: #ffffff;
-  --cc-surface-avatar: #dee3e7;
+  --cc-surface-avatar: #d6e4f5;
 
-  /* Text */
-  --cc-text-primary: #2d3337;
-  --cc-text-secondary: #5a6064;
-  --cc-text-muted: #767b7f;
-  --cc-text-tool-rail: #5f6368;
+  /* Text — cool navy / slate */
+  --cc-text-primary: #1a2744;
+  --cc-text-secondary: #4a5b78;
+  --cc-text-muted: #6b7c96;
+  --cc-text-tool-rail: #5a6d88;
   --cc-text-on-brand: #ffffff;
 
-  /* Border */
-  --cc-border-default: #dee3e7;
-  --cc-border-light: #d6dce1;
-  --cc-border-subtle: #adb3b7;
+  /* Border — blue-tinted */
+  --cc-border-default: #d4e0f0;
+  --cc-border-light: #e2ebf6;
+  --cc-border-subtle: #b4c6dc;
+
+  /* Status */
+  --cc-status-error: #dc2626;
+  --cc-status-error-bg: #fef2f2;
+  --cc-status-success: #15803d;
+  --cc-status-success-bg: #dcfce7;
+  --cc-status-warning: #b45309;
+  --cc-status-warning-bg: #fef3c7;
+  --cc-status-info: #0053dd;
+  --cc-status-info-bg: #e8f0fe;
 
   /* Radius */
   --cc-radius-sm: 0.375rem;
@@ -40,12 +53,12 @@
   --cc-radius-pill: 9999px;
   --cc-radius-tool-rail: 1.75rem;
 
-  /* Shadow */
-  --cc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --cc-shadow-card: 0px 8px 24px rgba(12, 15, 16, 0.06);
-  --cc-shadow-panel: 0 4px 20px rgba(15, 23, 42, 0.08);
-  --cc-shadow-accent: 0 10px 15px -3px rgba(51, 112, 255, 0.2);
-  --cc-shadow-header: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* Shadow — blue-tinted elevation */
+  --cc-shadow-sm: 0 1px 2px 0 rgba(0, 83, 221, 0.06);
+  --cc-shadow-card: 0px 8px 24px rgba(0, 83, 221, 0.08);
+  --cc-shadow-panel: 0 4px 20px rgba(0, 83, 221, 0.1);
+  --cc-shadow-accent: 0 10px 15px -3px rgba(51, 112, 255, 0.28);
+  --cc-shadow-header: 0 1px 2px 0 rgba(0, 83, 221, 0.06);
 
   /* Spacing */
   --cc-spacing-page: 2rem;

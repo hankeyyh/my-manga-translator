@@ -25,7 +25,7 @@ export function CcSegmentedControl<T extends string>({
     return (
         <div
             className={cn(
-                "inline-flex rounded-full border border-[color-mix(in_srgb,var(--cc-border-subtle)_20%,transparent)] bg-[var(--cc-surface-subtle)] p-1",
+                "inline-flex rounded-full border border-[var(--cc-border-default)] bg-[var(--cc-brand-tint)] p-1",
                 className,
             )}
             role="tablist"
@@ -38,8 +38,8 @@ export function CcSegmentedControl<T extends string>({
                         className={cn(
                             "rounded-full px-6 py-2 font-body text-sm font-bold transition-colors",
                             isActive
-                                ? "bg-[var(--cc-surface-white)] text-[var(--cc-brand-accent)] shadow-[var(--cc-shadow-sm)]"
-                                : "bg-transparent text-[var(--cc-text-secondary)] hover:text-[var(--cc-text-primary)]",
+                                ? "bg-[var(--cc-brand-primary)] text-[var(--cc-text-on-brand)] shadow-[var(--cc-shadow-sm)]"
+                                : "bg-transparent text-[var(--cc-text-secondary)] hover:text-[var(--cc-brand-primary)]",
                         )}
                         onClick={() => onChange(option.value)}
                         role="tab"

@@ -14,10 +14,10 @@ export function TokenSwatch({ name, value, cssVar, type = "color" }: TokenSwatch
     const isSpacing = type === "spacing";
 
     return (
-        <div className="flex flex-col gap-2 rounded-xl border border-cc-border/20 bg-cc-surface-white p-4">
+        <div className="flex flex-col gap-2 rounded-xl border border-cc-border/40 bg-cc-surface-white p-4">
             <div
                 className={cn(
-                    "flex items-center justify-center overflow-hidden border border-cc-border/10 bg-cc-surface-muted",
+                    "flex items-center justify-center overflow-hidden border border-cc-border/30 bg-cc-surface-muted",
                     isColor ? "h-16" : "h-12",
                 )}
                 style={{
@@ -38,7 +38,7 @@ export function TokenSwatch({ name, value, cssVar, type = "color" }: TokenSwatch
                 <p className="font-mono text-xs font-semibold text-cc-text-primary">{name}</p>
                 <p className="mt-0.5 truncate font-mono text-[10px] text-cc-text-muted">{value}</p>
                 {cssVar && (
-                    <p className="mt-0.5 truncate font-mono text-[10px] text-cc-brand-accent">
+                    <p className="mt-0.5 truncate font-mono text-[10px] text-cc-brand-primary">
                         {cssVar}
                     </p>
                 )}
@@ -77,7 +77,7 @@ export function DesignSection({
 }) {
     return (
         <section className="scroll-mt-24 space-y-8" id={id}>
-            <div className="border-b border-cc-border/20 pb-4">
+            <div className="border-b border-cc-border/40 pb-4">
                 <h2 className="font-headline text-3xl font-bold text-cc-text-primary">{title}</h2>
                 {description && (
                     <p className="mt-2 font-body text-cc-text-secondary">{description}</p>
@@ -98,7 +98,7 @@ export function ComponentPreview({
     return (
         <div className="space-y-3">
             <p className="font-body text-sm font-semibold text-cc-text-secondary">{title}</p>
-            <div className="rounded-xl border border-cc-border/20 bg-cc-surface-white p-6">
+            <div className="rounded-xl border border-cc-border/40 bg-cc-surface-white p-6">
                 {children}
             </div>
         </div>

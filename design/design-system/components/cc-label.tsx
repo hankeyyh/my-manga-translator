@@ -6,12 +6,12 @@ export interface CcLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement
     uppercase?: boolean;
 }
 
-export function CcLabel({ className, uppercase = true, ...props }: CcLabelProps) {
+export function CcLabel({ className, uppercase = false, ...props }: CcLabelProps) {
     return (
         <label
             className={cn(
-                "font-body text-xs font-bold text-[var(--cc-text-secondary)]",
-                uppercase && "ml-2 uppercase tracking-widest",
+                "font-body text-sm font-medium text-[var(--cc-text-primary)]",
+                uppercase && "text-xs font-bold uppercase tracking-widest text-[var(--cc-text-secondary)]",
                 className,
             )}
             {...props}
