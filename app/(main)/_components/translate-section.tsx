@@ -831,7 +831,8 @@ export function TranslateSection() {
                                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                                         <div className="flex-1 space-y-1">
                                             <CcLabel>翻译为</CcLabel>
-                                            <DropdownMenu>
+                                            {/* modal=false，当下拉框展开，仍然允许与页面其他部分交互 */}
+                                            <DropdownMenu modal={false}>
                                                 <DropdownMenuTrigger asChild>
                                                     <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.targetLang.label}
@@ -854,7 +855,7 @@ export function TranslateSection() {
                                         </div>
                                         <div className="flex-1 space-y-1">
                                             <CcLabel>翻译模式</CcLabel>
-                                            <DropdownMenu>
+                                            <DropdownMenu modal={false}>
                                                 <DropdownMenuTrigger asChild>
                                                     <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.translateMode}
@@ -877,7 +878,7 @@ export function TranslateSection() {
                                         </div>
                                         <div className="flex-1 space-y-1">
                                             <CcLabel>字体风格</CcLabel>
-                                            <DropdownMenu>
+                                            <DropdownMenu modal={false}>
                                                 <DropdownMenuTrigger asChild>
                                                     <CcSelectTrigger disabled={configLocked}>
                                                         {activeTask.fontStyle}
