@@ -776,7 +776,7 @@ export function TranslateSection() {
                                             </button>
                                             <button
                                                 type="button"
-                                                className="pr-2 text-cc-text-muted hover:text-cc-brand-primary"
+                                                className="mr-1.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md text-cc-text-muted transition-colors hover:bg-[var(--cc-brand-tint-strong)] hover:text-cc-brand-primary"
                                                 aria-label={`关闭${shortTaskLabel(item)}`}
                                                 onClick={() => closeTask(item.localId)}
                                             >
