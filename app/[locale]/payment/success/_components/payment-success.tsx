@@ -2,7 +2,8 @@
 
 import { Manrope, Inter } from "next/font/google";
 import { CheckCircle2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,8 @@ interface Props {
 
 export default function SuccessDisplay({ email }: Props) {
     const router = useRouter();
-    const [seconds, setSeconds] = useState(5); // 倒计时5s返回
+    const t = useTranslations("payment.success");
+    const [seconds, setSeconds] = useState(5);
     useEffect(() => {
         const intervalId = setInterval(() => {
             setSeconds((prev) => {
@@ -88,20 +90,13 @@ export default function SuccessDisplay({ email }: Props) {
                                     "font-headline text-2xl font-bold tracking-tight text-[#2d3337]",
                                 )}
                             >
-                                Subscription Success
+                                {t("title")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3 pb-0 text-center text-sm leading-relaxed text-[#2d3337]/85">
-                            <p>
-                                Thanks for your subscription! A confirmation
-                                email will be sent to{" "}
-                                <span className="font-medium text-[#2d3337]">
-                                    {email}
-                                </span>
-                                .
-                            </p>
+                            <p>{t("thanks", { email })}</p>
                             <p className="text-muted-foreground">
-                                Redirecting to the translator in {seconds}s…
+                                {t("redirecting", { seconds })}
                             </p>
                         </CardContent>
                         <CardFooter className="flex justify-center pb-4 pt-0">
@@ -110,7 +105,7 @@ export default function SuccessDisplay({ email }: Props) {
                                 onClick={handleClick}
                                 size="lg"
                             >
-                                Start Translating
+                                {t("start")}
                             </Button>
                         </CardFooter>
                     </Card>

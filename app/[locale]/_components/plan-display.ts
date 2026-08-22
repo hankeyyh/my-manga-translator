@@ -1,6 +1,9 @@
 import type { TopUpConfig } from "@/types/do/topup-config";
+import type { useTranslations } from "next-intl";
 
-export function getPlanName(config: TopUpConfig) {
+type PricingT = ReturnType<typeof useTranslations<"pricing">>;
+
+export function getPlanName(config: TopUpConfig, t: PricingT) {
     const tier =
         config.transactionType === "subscription"
             ? config.planTier
@@ -8,7 +11,7 @@ export function getPlanName(config: TopUpConfig) {
     if (tier === "basic") return "Basic";
     if (tier === "pro") return "Pro";
     if (tier === "ultra") return "Ultra";
-    return tier ?? "Plan";
+    return tier ?? t("planFallback");
 }
 
 export function isFeatured(config: TopUpConfig) {
@@ -19,23 +22,22 @@ export function isFeatured(config: TopUpConfig) {
     return tier === "pro";
 }
 
-export function formatPrice(config: TopUpConfig) {
-    const price = `$${config.price}`;
-    if (config.transactionType !== "subscription") return price;
-    if (config.billingCycle === "monthly") return `${price}/monthly`;
-    if (config.billingCycle === "yearly") return `${price}/yearly`;
-    return price;
+export function formatPrice(config: TopUpConfig, t: PricingT) {
+    if (config.transactionType !== "subscription") return `$${config.price}`;
+    if (config.billingCycle === "monthly") return t("priceMonthly", { price: config.price });
+    if (config.billingCycle === "yearly") return t("priceYearly", { price: config.price });
+    return `$${config.price}`;
 }
 
-export function formatCredits(config: TopUpConfig) {
+export function formatCredits(config: TopUpConfig, t: PricingT) {
     if (config.transactionType === "pay-to-use") {
-        return `${config.creditsIncluded} credits`;
+        return t("creditsPayToUse", { count: config.creditsIncluded });
     }
     if (config.billingCycle === "monthly") {
-        return `${config.creditsIncluded} credits / monthly`;
+        return t("creditsMonthly", { count: config.creditsIncluded });
     }
     if (config.billingCycle === "yearly") {
-        return `${config.creditsIncluded} credits / yearly`;
+        return t("creditsYearly", { count: config.creditsIncluded });
     }
-    return `${config.creditsIncluded} credits`;
+    return t("creditsPayToUse", { count: config.creditsIncluded });
 }

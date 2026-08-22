@@ -11,6 +11,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import type { TopUpConfig } from "@/types/do/topup-config";
+import { useTranslations } from "next-intl";
 import { formatPrice, getPlanName } from "./plan-display";
 
 type Props = {
@@ -26,6 +27,10 @@ export function ChangePlanConfirmDialog({
     onOpenChange,
     onConfirm,
 }: Props) {
+    const t = useTranslations("changePlan");
+    const tPricing = useTranslations("pricing");
+    const tCommon = useTranslations("common");
+
     return (
         <AlertDialog
             open={pendingPlan !== null}
@@ -35,16 +40,19 @@ export function ChangePlanConfirmDialog({
         >
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>确认调整订阅计划？</AlertDialogTitle>
+                    <AlertDialogTitle>{t("title")}</AlertDialogTitle>
                     <AlertDialogDescription>
                         {pendingPlan
-                            ? `将调整为 ${getPlanName(pendingPlan)}（${formatPrice(pendingPlan)}）。差价不会退回，现有积分将保留，确认后立即按新计划价格扣费。`
+                            ? t("description", {
+                                planName: getPlanName(pendingPlan, tPricing),
+                                price: formatPrice(pendingPlan, tPricing),
+                            })
                             : null}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={isChanging}>
-                        取消
+                        {tCommon("cancel")}
                     </AlertDialogCancel>
                     <AlertDialogAction
                         disabled={isChanging}
@@ -53,7 +61,7 @@ export function ChangePlanConfirmDialog({
                             onConfirm();
                         }}
                     >
-                        {isChanging ? "处理中…" : "确认调整"}
+                        {isChanging ? tCommon("processing") : t("confirm")}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

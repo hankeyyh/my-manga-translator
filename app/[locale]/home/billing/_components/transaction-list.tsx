@@ -8,6 +8,7 @@ import { CcBadge, CcButton } from "@/design/design-system/components";
 import { TransactionListEmpty } from "@/app/[locale]/home/billing/_components/transaction-list-empty";
 import type { UserTransaction } from "@/types/do/user-transaction";
 import { SUCCESS_CODE } from "@/types/dto/response";
+import { useTranslations } from "next-intl";
 
 type Props = {
     initialPage: ListUserTransactionsPage;
@@ -42,6 +43,10 @@ function statusBadgeVariant(status: string) {
 }
 
 export function TransactionList({ initialPage }: Props) {
+    const t = useTranslations("billing");
+    const tHistory = useTranslations("history");
+    const tStatus = useTranslations("status");
+    const tCommon = useTranslations("common");
     const [transactions, setTransactions] = useState<UserTransaction[]>(initialPage.items);
     const [nextCursor, setNextCursor] = useState<string | null>(initialPage.nextCursor);
     const [isPending, startTransition] = useTransition();
@@ -53,7 +58,7 @@ export function TransactionList({ initialPage }: Props) {
                 cursor: nextCursor,
             });
             if (result.code !== SUCCESS_CODE || !result.data) {
-                toast(result.message || "Unknown Error");
+                toast(result.message || tCommon("unknownError"));
                 return;
             }
             startTransition(() => {
@@ -66,7 +71,7 @@ export function TransactionList({ initialPage }: Props) {
     return (
         <div className="space-y-3">
             <div>
-                <h2 className="font-headline text-sm font-semibold text-cc-text-primary">交易记录</h2>
+                <h2 className="font-headline text-sm font-semibold text-cc-text-primary">{t("transactions")}</h2>
             </div>
 
             {transactions.length === 0 ? (
@@ -78,19 +83,19 @@ export function TransactionList({ initialPage }: Props) {
                             <thead className="bg-cc-surface-page text-[10px] uppercase tracking-wide text-cc-text-muted">
                                 <tr>
                                     <th className="px-3 py-2 font-medium">
-                                        created_at
+                                        {t("columns.createdAt")}
                                     </th>
                                     <th className="px-3 py-2 text-right font-medium">
-                                        recharge_amount
+                                        {t("columns.amount")}
                                     </th>
                                     <th className="px-3 py-2 text-right font-medium">
-                                        Credits
+                                        {t("columns.credits")}
                                     </th>
                                     <th className="px-3 py-2 font-medium">
-                                        transaction_type
+                                        {t("columns.type")}
                                     </th>
                                     <th className="px-3 py-2 font-medium">
-                                        transaction_status
+                                        {t("columns.status")}
                                     </th>
                                 </tr>
                             </thead>
@@ -107,7 +112,9 @@ export function TransactionList({ initialPage }: Props) {
                                             {formatCredits(tx.credits)}
                                         </td>
                                         <td className="px-3 py-2">
-                                            {tx.transactionType}
+                                            {tx.transactionType === "pay-to-use" || tx.transactionType === "subscription"
+                                                ? t(`transactionType.${tx.transactionType}`)
+                                                : tx.transactionType}
                                         </td>
                                         <td className="px-3 py-2">
                                             <CcBadge
@@ -115,7 +122,12 @@ export function TransactionList({ initialPage }: Props) {
                                                     tx.transactionStatus,
                                                 )}
                                             >
-                                                {tx.transactionStatus}
+                                                {tx.transactionStatus === "success"
+                                                    || tx.transactionStatus === "failed"
+                                                    || tx.transactionStatus === "pending"
+                                                    || tx.transactionStatus === "canceled"
+                                                    ? tStatus(tx.transactionStatus)
+                                                    : tx.transactionStatus}
                                             </CcBadge>
                                         </td>
                                     </tr>
@@ -132,7 +144,7 @@ export function TransactionList({ initialPage }: Props) {
                                 disabled={isPending}
                                 onClick={handleLoadMore}
                             >
-                                {isPending ? "加载中…" : "加载更多"}
+                                {isPending ? tHistory("loading") : tHistory("loadMore")}
                             </CcButton>
                         </div>
                     )}

@@ -1,31 +1,37 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CcCard, CcSectionHeading } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
-
-export const metadata: Metadata = {
-    title: "博客 | Manga Sense",
-};
+import { getTranslations } from "next-intl/server";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x400/f8fafc/0053dd?text=Blog";
 
-function formatBlogDate(publishedAt: string | null) {
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("meta");
+    return { title: t("blogTitle") };
+}
+
+function formatBlogDate(
+    publishedAt: string | null,
+    t: Awaited<ReturnType<typeof getTranslations<"blog">>>,
+) {
     if (!publishedAt) return "";
     const date = publishedAt.slice(0, 10);
     const [year, month, day] = date.split("-").map(Number);
     if (!year || !month || !day) return date;
-    return `${year}年${month}月${day}日`;
+    return t("date", { year, month, day });
 }
 
 export default async function Page() {
+    const t = await getTranslations("blog");
     const supabase = await createServerClient();
     const result = await BlogService.fromSupabase(supabase).listPublishedPosts();
     const posts = result.data ?? [];
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-            <CcSectionHeading align="left" className="mb-8" size="md" title="博客" />
+            <CcSectionHeading align="left" className="mb-8" size="md" title={t("title")} />
             <div className="flex flex-col gap-4">
                 {posts.map((post) => (
                     <Link
@@ -46,7 +52,7 @@ export default async function Page() {
                             <div className="min-w-0 flex-1 space-y-1 py-1 pl-4 sm:pl-5">
                                 {post.publishedAt ? (
                                     <p className="text-sm text-cc-text-muted">
-                                        {formatBlogDate(post.publishedAt)}
+                                        {formatBlogDate(post.publishedAt, t)}
                                     </p>
                                 ) : null}
                                 <h2 className="font-headline text-lg font-bold text-cc-text-primary transition-colors group-hover:text-cc-brand-primary">
@@ -58,7 +64,7 @@ export default async function Page() {
                                     </p>
                                 ) : null}
                                 <p className="text-sm font-semibold text-cc-brand-primary group-hover:underline">
-                                    阅读更多 →
+                                    {t("readMore")}
                                 </p>
                             </div>
                         </CcCard>

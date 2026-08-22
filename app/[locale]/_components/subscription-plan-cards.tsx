@@ -14,6 +14,7 @@ import {
     getPlanName,
     isFeatured,
 } from "./plan-display";
+import { useTranslations } from "next-intl";
 
 type Props = {
     plans: TopUpConfig[];
@@ -40,10 +41,11 @@ export function SubscriptionPlanCards({
     onCancelSubscription,
     onRestoreSubscription,
 }: Props) {
+    const t = useTranslations("pricing");
     return (
         <div className="grid gap-4 md:grid-cols-3">
             {plans.map((plan) => {
-                const name = getPlanName(plan);
+                const name = getPlanName(plan, t);
                 const featured = isFeatured(plan);
                 const isCurrentPlan = currentTopupConfigId === plan.id;
                 const canRestoreCurrent =
@@ -65,10 +67,10 @@ export function SubscriptionPlanCards({
                             {featured && <CcBadge>★</CcBadge>}
                         </CcCardTitle>
                         <p className="mt-3 font-headline text-3xl font-extrabold text-cc-text-primary">
-                            {formatPrice(plan)}
+                            {formatPrice(plan, t)}
                         </p>
                         <CcCardDescription className="mt-1">
-                            {formatCredits(plan)}
+                            {formatCredits(plan, t)}
                         </CcCardDescription>
                         <CcButton
                             className="mt-6 w-full"
@@ -100,14 +102,14 @@ export function SubscriptionPlanCards({
                             }
                         >
                             {canRestoreCurrent
-                                ? "恢复订阅"
+                                ? t("restore")
                                 : canCancelCurrent
-                                    ? "取消订阅"
+                                    ? t("cancel")
                                     : isCurrentPlan
-                                        ? "已订阅"
+                                        ? t("subscribed")
                                         : adjustMode
-                                            ? "调整方案"
-                                            : "Get Started"}
+                                            ? t("adjustPlan")
+                                            : t("getStarted")}
                         </CcButton>
                     </CcCard>
                 );

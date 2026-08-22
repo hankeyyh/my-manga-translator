@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { ChevronsLeftRight } from "lucide-react";
 
 import { cn } from "@/components/utils";
+import { useTranslations } from "next-intl";
 
 type ImageCompareSliderProps = {
     beforeSrc: string;
@@ -17,11 +18,12 @@ type ImageCompareSliderProps = {
 export function ImageCompareSlider({
     beforeSrc,
     afterSrc,
-    beforeAlt = "原图",
-    afterAlt = "翻译后",
+    beforeAlt,
+    afterAlt,
     initialPosition = 50,
     className,
 }: ImageCompareSliderProps) {
+    const t = useTranslations("showcase");
     const [position, setPosition] = useState(initialPosition);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +50,7 @@ export function ImageCompareSlider({
                 updateFromClientX(event.clientX);
             }}
             role="slider"
-            aria-label="翻译前后对比"
+            aria-label={t("compareAria")}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(position)}
@@ -65,7 +67,7 @@ export function ImageCompareSlider({
         >
             <img
                 src={beforeSrc}
-                alt={beforeAlt}
+                alt={beforeAlt ?? t("originalAlt")}
                 className="block h-auto max-w-full"
                 draggable={false}
             />
@@ -75,7 +77,7 @@ export function ImageCompareSlider({
             >
                 <img
                     src={afterSrc}
-                    alt={afterAlt}
+                    alt={afterAlt ?? t("translatedAlt")}
                     className="absolute left-0 top-0 h-full w-full object-cover object-left-top"
                     draggable={false}
                 />

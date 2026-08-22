@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import Form from "next/form";
 import { API_SUCCESS_CODE } from "@/types/api/response";
 import { SignInOAuthResponse, SignInResponse } from "@/types/api/auth";
+import { useTranslations } from "next-intl";
 
 const linkClass =
     "font-medium text-[#0053dd] hover:text-[#0046b8] hover:underline underline-offset-2";
@@ -30,6 +31,8 @@ export function LoginForm({
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const t = useTranslations("auth.login");
+    const tCommon = useTranslations("common");
 
     async function handleLogin(formData: FormData) {
         const email = formData.get("login-email") as string;
@@ -48,11 +51,11 @@ export function LoginForm({
 
             const data = (await response.json()) as SignInResponse;
             if (data.code !== API_SUCCESS_CODE) {
-                throw new Error(data.message || "登录失败");
+                throw new Error(data.message || t("failed"));
             }
             router.push("/");
         } catch (error: unknown) {
-            setError(error instanceof Error ? error.message : "发生错误，请重试");
+            setError(error instanceof Error ? error.message : t("genericError"));
         } finally {
             setIsLoading(false);
         }
@@ -71,11 +74,11 @@ export function LoginForm({
             });
             const data = (await response.json()) as SignInOAuthResponse;
             if (data.code !== API_SUCCESS_CODE) {
-                throw new Error(data.message || "登录失败");
+                throw new Error(data.message || t("failed"));
             }
             window.location.href = data.data?.url!;
         } catch (error: unknown) {
-            setError(error instanceof Error ? error.message : "发生错误，请重试");
+            setError(error instanceof Error ? error.message : t("genericError"));
         } finally {
             setIsLoading(false);
         }
@@ -86,10 +89,10 @@ export function LoginForm({
             <Card className="rounded-xl border-gray-200 bg-white shadow-sm">
                 <CardHeader className="pb-6">
                     <CardTitle className="text-center text-2xl font-bold tracking-tight text-gray-900">
-                        登录
+                        {t("title")}
                     </CardTitle>
                     <CardDescription className="text-center text-sm text-gray-500">
-                        使用邮箱和密码登录你的账号
+                        {t("description")}
                     </CardDescription>
                 </CardHeader>
 
@@ -97,14 +100,14 @@ export function LoginForm({
                     <Form action={handleLogin} className="flex flex-col gap-5">
                         <div className="grid gap-2">
                             <Label htmlFor="login-email" className="text-gray-700">
-                                邮箱
+                                {tCommon("email")}
                             </Label>
                             <Input
                                 id="login-email"
                                 name="login-email"
                                 type="email"
                                 autoComplete="email"
-                                placeholder="邮箱"
+                                placeholder={t("emailPlaceholder")}
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -115,10 +118,10 @@ export function LoginForm({
                         <div className="grid gap-2">
                             <div className="flex items-center gap-3">
                                 <Label htmlFor="login-password" className="text-gray-700">
-                                    密码
+                                    {tCommon("password")}
                                 </Label>
                                 <Link href="/auth/forgot-password" className={cn("ml-auto text-sm", linkClass)}>
-                                    忘记密码？
+                                    {t("forgotPassword")}
                                 </Link>
                             </div>
                             <Input
@@ -126,7 +129,7 @@ export function LoginForm({
                                 name="login-password"
                                 type="password"
                                 autoComplete="current-password"
-                                placeholder="密码"
+                                placeholder={t("passwordPlaceholder")}
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -145,27 +148,27 @@ export function LoginForm({
                             className="h-11 w-full rounded-lg bg-[#0053dd] text-base font-semibold text-white hover:bg-[#0046b8]"
                             disabled={isLoading}
                         >
-                            {isLoading ? "请稍候…" : "登录"}
+                            {isLoading ? tCommon("pleaseWait") : t("submit")}
                         </Button>
 
                         <div className="pt-1 text-center text-sm text-gray-600">
-                            还没有账号？{" "}
+                            {t("noAccount")}{" "}
                             <Link href="/auth/sign-up" className={linkClass}>
-                                去注册
+                                {t("goSignUp")}
                             </Link>
                         </div>
 
                         <div className="pt-2">
                             <div className="flex items-center gap-3">
                                 <div className="h-px flex-1 bg-gray-200" />
-                                <span className="text-xs text-gray-500">或使用</span>
+                                <span className="text-xs text-gray-500">{t("orUse")}</span>
                                 <div className="h-px flex-1 bg-gray-200" />
                             </div>
                             <Button
                                 type="button"
                                 variant="outline"
                                 className="mt-4 h-11 w-full gap-3 rounded-lg border-gray-200 bg-white text-base font-semibold text-gray-900 hover:bg-gray-50"
-                                aria-label="使用 Google 登录"
+                                aria-label={t("google")}
                                 disabled={isLoading}
                                 onClick={handleLoginWithGoogle}
                             >
@@ -194,7 +197,7 @@ export function LoginForm({
                                         d="M43.611 20.083H42V20H24v8h11.303c-.79 2.217-2.177 4.063-3.989 5.565l.003-.002 6.19 5.238C36.969 39.29 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
                                     />
                                 </svg>
-                                使用 Google 登录
+                                {t("google")}
                             </Button>
                         </div>
                     </Form>

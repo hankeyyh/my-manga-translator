@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
     CcBadge,
     CcButton,
@@ -12,11 +11,19 @@ import {
     Sun,
 } from "lucide-react";
 import { UserInfo } from "@/types/api/user-info";
-import { useRouter } from "next/navigation";
+import { getPathname, Link, usePathname, useRouter } from "@/i18n/navigation";
+import { routing, type AppLocale } from "@/i18n/routing";
+import { hasLocale, useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 
-const LANGS = ["简体中文", "English", "日本語"] as const;
+function pathnameWithoutLocale(pathname: string): string {
+    const first = pathname.split("/")[1];
+    if (!hasLocale(routing.locales, first)) {
+        return pathname;
+    }
+    const rest = pathname.slice(`/${first}`.length);
+    return rest === "" ? "/" : rest;
+}
 
 type Props = {
     userInfo: UserInfo | null
@@ -24,8 +31,12 @@ type Props = {
 
 export function ClientSiteHeader({ userInfo }: Props) {
     const router = useRouter();
+    const pathname = usePathname();
+    const locale = useLocale();
+    const tLocale = useTranslations("locales");
+    const tHeader = useTranslations("header");
+    const tCommon = useTranslations("common");
     const { resolvedTheme, setTheme } = useTheme();
-    const [lang, setLang] = useState<string>("简体中文");
 
     const isLogin = () => {
         return userInfo !== null;
@@ -43,6 +54,18 @@ export function ClientSiteHeader({ userInfo }: Props) {
         setTheme(resolvedTheme === "dark" ? "light" : "dark");
     };
 
+    const onSelectLocale = (nextLocale: AppLocale) => {
+        if (nextLocale === locale) return;
+        // App Router 的 client navigation 会把新前缀叠在当前 [locale] 段上
+        // （/zh-cn/blogs → /zh-cn/zh-tw/blogs）。走完整 URL 由 middleware 换前缀。
+        const href = getPathname({
+            href: pathnameWithoutLocale(pathname),
+            locale: nextLocale,
+            forcePrefix: true,
+        });
+        window.location.replace(`${href}${window.location.search}${window.location.hash}`);
+    };
+
     const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
 
     return (
@@ -50,39 +73,39 @@ export function ClientSiteHeader({ userInfo }: Props) {
             {/* fixed 避免触控板顶部弹性回弹把 sticky header 一起拽走 */}
             <header className="fixed inset-x-0 top-0 z-50 border-b border-cc-border/60 bg-cc-surface-white/90 backdrop-blur-xl">
                 <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-                    <a href="/" className="shrink-0 font-headline text-sm font-bold text-cc-text-primary">
-                        Manga Sense
-                    </a>
+                    <Link href="/" className="shrink-0 font-headline text-sm font-bold text-cc-text-primary">
+                        {tCommon("brand")}
+                    </Link>
                     <nav className="ml-4 hidden items-center gap-1 md:flex">
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/#tool">Manga Translate</Link>
+                            <Link href="/#tool">{tHeader("mangaTranslate")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/#pricing">Pricing</Link>
+                            <Link href="/#pricing">{tHeader("pricing")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/#faq">FAQ</Link>
+                            <Link href="/#faq">{tHeader("faq")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/blogs">Blog</Link>
+                            <Link href="/blogs">{tHeader("blog")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm">
-                            Join Discord
+                            {tHeader("joinDiscord")}
                         </CcButton>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
-                        <CcBadge variant="accent">Credits · {totalCredits}</CcBadge>
+                        <CcBadge variant="accent">{tCommon("creditsCount", { count: totalCredits })}</CcBadge>
                         <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <CcButton variant="outline" size="sm">
-                                    {lang}
+                                    {tLocale(locale)}
                                     <ChevronDown className="size-3" />
                                 </CcButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                {LANGS.map((item) => (
-                                    <DropdownMenuItem key={item} onSelect={() => setLang(item)}>
-                                        {item}
+                                {routing.locales.map((item) => (
+                                    <DropdownMenuItem key={item} onSelect={() => onSelectLocale(item)}>
+                                        {tLocale(item)}
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
@@ -91,16 +114,16 @@ export function ClientSiteHeader({ userInfo }: Props) {
                             variant="ghost"
                             size="icon"
                             className="size-9"
-                            aria-label="切换主题"
+                            aria-label={tHeader("toggleTheme")}
                             onClick={onToggleTheme}
                         >
                             <Sun className="size-4 dark:hidden" />
                             <Moon className="hidden size-4 dark:block" />
                         </CcButton>
                         {isLogin() ? (
-                            <CcButton size="sm" onClick={onClickDashboard}>Dashboard</CcButton>
+                            <CcButton size="sm" onClick={onClickDashboard}>{tHeader("dashboard")}</CcButton>
                         ) : (
-                            <CcButton size="sm" onClick={onClickLogin}>Login</CcButton>
+                            <CcButton size="sm" onClick={onClickLogin}>{tHeader("login")}</CcButton>
                         )}
                     </div>
                 </div>

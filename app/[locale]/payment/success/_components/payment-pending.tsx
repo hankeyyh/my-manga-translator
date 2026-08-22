@@ -2,7 +2,8 @@
 
 import { Manrope, Inter } from "next/font/google";
 import { Clock } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +33,7 @@ interface Props {
 
 export default function PendingPaymentDisplay({ email }: Props) {
     const router = useRouter();
+    const t = useTranslations("payment.pending");
 
     return (
         <div
@@ -64,27 +66,16 @@ export default function PendingPaymentDisplay({ email }: Props) {
                                     "font-headline text-2xl font-bold tracking-tight text-[#2d3337]",
                                 )}
                             >
-                                Payment Processing
+                                {t("title")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3 pb-0 text-center text-sm leading-relaxed text-[#2d3337]/85">
-                            <p>
-                                Your payment is being confirmed. Credits will be
-                                added to your account once the payment clears.
-                            </p>
+                            <p>{t("body")}</p>
                             {email ? (
-                                <p>
-                                    We will notify{" "}
-                                    <span className="font-medium text-[#2d3337]">
-                                        {email}
-                                    </span>{" "}
-                                    when it is complete.
-                                </p>
+                                <p>{t("notify", { email })}</p>
                             ) : null}
                             <p className="text-muted-foreground">
-                                This may take a few minutes or longer depending
-                                on your payment method. You can leave this page
-                                safely.
+                                {t("hint")}
                             </p>
                         </CardContent>
                         <CardFooter className="flex justify-center pb-4 pt-0">
@@ -94,7 +85,7 @@ export default function PendingPaymentDisplay({ email }: Props) {
                                 size="lg"
                                 variant="default"
                             >
-                                Back to Home
+                                {t("backHome")}
                             </Button>
                         </CardFooter>
                     </Card>

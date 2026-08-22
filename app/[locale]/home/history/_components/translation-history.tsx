@@ -13,22 +13,20 @@ import { TranslationHistoryTaskItem } from "@/app/[locale]/home/history/_compone
 import type { TaskStatus } from "@/types/do/translation-task";
 import { SUCCESS_CODE } from "@/types/dto/response";
 import { TranslationHistoryPage, TranslationTaskDetailView } from "@/types/dto/translation-task";
+import { useTranslations } from "next-intl";
 
-const STATUS_FILTERS: Array<"全部" | TaskStatus> = [
-    "全部",
-    "pending",
-    "processing",
-    "completed",
-    "failed",
-    "partial",
-];
+const STATUS_FILTERS = ["all", "pending", "processing", "completed", "failed", "partial"] as const;
+type StatusFilter = (typeof STATUS_FILTERS)[number];
 
 type Props = {
     initialPage: TranslationHistoryPage;
 };
 
 export function TranslationHistory({ initialPage }: Props) {
-    const [statusFilter, setStatusFilter] = useState<"全部" | TaskStatus>("全部");
+    const t = useTranslations("history");
+    const tStatus = useTranslations("status");
+    const tCommon = useTranslations("common");
+    const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
     const [dateRange, setDateRange] = useState<DateRangeValue>("all");
     const [tasks, setTasks] = useState<TranslationTaskDetailView[]>(initialPage.tasks);
     const [nextCursor, setNextCursor] = useState<string | null>(initialPage.nextCursor);
@@ -43,11 +41,11 @@ export function TranslationHistory({ initialPage }: Props) {
 
         startTransition(async () => {
             const result = await getUserTranslationHistory({
-                status: statusFilter === "全部" ? undefined : statusFilter,
+                status: statusFilter === "all" ? undefined : statusFilter,
                 range: dateRange,
             });
             if (result.code !== SUCCESS_CODE || !result.data) {
-                toast(result.message || "Unknown Error");
+                toast(result.message || tCommon("unknownError"));
                 setTasks([]);
                 setNextCursor(null);
                 return;
@@ -57,18 +55,18 @@ export function TranslationHistory({ initialPage }: Props) {
                 setNextCursor(result.data!.nextCursor);
             });
         });
-    }, [statusFilter, dateRange]);
+    }, [statusFilter, dateRange, tCommon]);
 
     function handleLoadMore() {
         if (!nextCursor || isPending) return;
         startTransition(async () => {
             const result = await getUserTranslationHistory({
-                status: statusFilter === "全部" ? undefined : statusFilter,
+                status: statusFilter === "all" ? undefined : statusFilter,
                 range: dateRange,
                 cursor: nextCursor,
             });
             if (result.code !== SUCCESS_CODE || !result.data) {
-                toast(result.message || "Unknown Error");
+                toast(result.message || tCommon("unknownError"));
                 return;
             }
             startTransition(() => {
@@ -79,7 +77,7 @@ export function TranslationHistory({ initialPage }: Props) {
     }
 
     function clearFilters() {
-        setStatusFilter("全部");
+        setStatusFilter("all");
         setDateRange("all");
     }
 
@@ -99,7 +97,7 @@ export function TranslationHistory({ initialPage }: Props) {
                                 className="h-7 px-2.5 text-xs"
                                 onClick={() => setStatusFilter(status)}
                             >
-                                {status}
+                                {tStatus(status)}
                             </CcButton>
                         ))}
                     </div>
@@ -128,7 +126,7 @@ export function TranslationHistory({ initialPage }: Props) {
                                 disabled={isPending}
                                 onClick={handleLoadMore}
                             >
-                                {isPending ? "加载中…" : "加载更多"}
+                                {isPending ? t("loading") : t("loadMore")}
                             </CcButton>
                         </div>
                     )}

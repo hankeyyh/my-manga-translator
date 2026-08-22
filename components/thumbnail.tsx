@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/components/utils";
 import { MangaPage } from "@/types/web/manga-page";
+import { useTranslations } from "next-intl";
 
 export type ThumbNailProps = MangaPage & {
     showTranslated?: boolean;
@@ -22,6 +23,7 @@ const statusFrameClass: Partial<Record<NonNullable<MangaPage["status"]>, string>
 };
 
 export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, onContinueWait, onDownload, ...props }: ThumbNailProps) {
+    const t = useTranslations("thumbnail");
     const isPending = props.status === "pending";
     const isProcessing = props.status === "processing";
     const showStatusOverlay = isPending || isProcessing;
@@ -41,7 +43,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                         {showStatusOverlay && (
                             <div
                                 className="absolute inset-0 flex items-center justify-center bg-black/50"
-                                aria-label={isPending ? "等待中" : "处理中"}
+                                aria-label={isPending ? t("waiting") : t("processing")}
                             >
                                 {isPending && (
                                     <Clock className="size-8 text-white" strokeWidth={1.75} />
@@ -57,7 +59,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                                     <Button
                                         type="button"
                                         size="icon"
-                                        aria-label={`预览 ${props.name}`}
+                                        aria-label={t("preview", { name: props.name })}
                                         className="size-10 rounded-full bg-white text-foreground shadow-sm hover:bg-white/90"
                                         onClick={onPreview}
                                     >
@@ -68,7 +70,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                                     <Button
                                         type="button"
                                         size="icon"
-                                        aria-label={`移除 ${props.name}`}
+                                        aria-label={t("remove", { name: props.name })}
                                         className="size-10 rounded-full bg-red-500 text-white shadow-sm hover:bg-red-600"
                                         onClick={onRemove}
                                     >
@@ -90,27 +92,27 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                         </div>
                         {isPending && (
                             <span className="shrink-0 text-xs text-muted-foreground">
-                                pending
+                                {t("waiting")}
                             </span>
                         )}
                         {isProcessing && (
                             <span className="shrink-0 text-xs text-muted-foreground">
-                                processing
+                                {t("processing")}
                             </span>
                         )}
                         {props.status === "stalled" && onContinueWait && (
                             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onContinueWait}>
-                                继续等待
+                                {t("continueWait")}
                             </Button>
                         )}
                         {props.status === "failed" && onRetry && (
                             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onRetry}>
-                                重试
+                                {t("retry")}
                             </Button>
                         )}
                         {props.status === "completed" && onDownload && (
                             <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onDownload}>
-                                下载
+                                {t("download")}
                             </Button>
                         )}
                     </div>

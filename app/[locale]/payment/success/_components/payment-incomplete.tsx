@@ -2,7 +2,8 @@
 
 import { Manrope, Inter } from "next/font/google";
 import { CircleX } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,22 +32,18 @@ interface Props {
     paymentStatus?: string;
 }
 
-function getMessage(status?: string | null, paymentStatus?: string): string {
-    if (status === "expired") {
-        return "This checkout session has expired. Please start a new purchase if you still want to continue.";
-    }
-    if (paymentStatus === "no_payment_required") {
-        return "No payment was required for this session. If you expected a charge, please contact support.";
-    }
-    return "We could not confirm your payment. You have not been charged, or the payment did not complete successfully.";
-}
-
 export default function PaymentIncompleteDisplay({
     status,
     paymentStatus,
 }: Props) {
     const router = useRouter();
-    const message = getMessage(status, paymentStatus);
+    const t = useTranslations("payment.incomplete");
+    const message =
+        status === "expired"
+            ? t("expired")
+            : paymentStatus === "no_payment_required"
+                ? t("noPaymentRequired")
+                : t("generic");
 
     return (
         <div
@@ -79,14 +76,13 @@ export default function PaymentIncompleteDisplay({
                                     "font-headline text-2xl font-bold tracking-tight text-[#2d3337]",
                                 )}
                             >
-                                Payment Incomplete
+                                {t("title")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3 pb-0 text-center text-sm leading-relaxed text-[#2d3337]/85">
                             <p>{message}</p>
                             <p className="text-muted-foreground">
-                                If you believe this is a mistake, try again or
-                                contact support with your payment details.
+                                {t("hint")}
                             </p>
                         </CardContent>
                         <CardFooter className="flex flex-col justify-center gap-3 pb-4 pt-0 sm:flex-row">
@@ -95,7 +91,7 @@ export default function PaymentIncompleteDisplay({
                                 onClick={() => router.push("/#pricing")}
                                 size="lg"
                             >
-                                Try Again
+                                {t("tryAgain")}
                             </Button>
                             <Button
                                 className="w-full font-headline text-base font-semibold sm:w-auto"
@@ -103,7 +99,7 @@ export default function PaymentIncompleteDisplay({
                                 size="lg"
                                 variant="outline"
                             >
-                                Back to Home
+                                {t("backHome")}
                             </Button>
                         </CardFooter>
                     </Card>

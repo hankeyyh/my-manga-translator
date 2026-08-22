@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { changeSubscription } from "@/actions/change-subscription";
 import { loadStripeClient } from "@/biz/utils/stripe/client";
@@ -15,6 +16,7 @@ export function useChangeSubscription() {
     const [pendingPlan, setPendingPlan] = useState<TopUpConfig | null>(null);
     const [isChanging, setIsChanging] = useState(false);
     const router = useRouter();
+    const t = useTranslations("changePlan");
 
     function requestChange(plan: TopUpConfig) {
         setPendingPlan(plan);
@@ -37,42 +39,42 @@ export function useChangeSubscription() {
                 return;
             }
             if (result.code !== SUCCESS_CODE || !result.data) {
-                toast.error(result.message || "调整计划失败");
+                toast.error(result.message || t("failed"));
                 return;
             }
             if (result.data.status === "requires_action") {
                 const clientSecret = result.data.clientSecret;
                 if (!clientSecret) {
-                    toast.error("缺少支付确认信息，请稍后重试");
+                    toast.error(t("missingPaymentInfo"));
                     return;
                 }
                 const stripeClient = await loadStripeClient();
                 if (!stripeClient) {
-                    toast.error("支付组件加载失败，请稍后重试");
+                    toast.error(t("stripeLoadFailed"));
                     return;
                 }
-                toast.message("需要完成银行卡验证后才会生效，请按提示完成验证");
+                toast.message(t("needCardVerification"));
                 const { error, paymentIntent } =
                     await stripeClient.confirmCardPayment(clientSecret);
                 if (error) {
-                    toast.error(error.message || "银行卡验证失败");
+                    toast.error(error.message || t("cardVerificationFailed"));
                     return;
                 }
                 if (paymentIntent?.status === "succeeded") {
-                    toast.success("验证成功，计划调整已提交，积分将稍后到账");
+                    toast.success(t("verified"));
                 } else {
                     toast.message(
-                        `支付状态：${paymentIntent?.status ?? "unknown"}，请稍后刷新查看`,
+                        t("paymentStatus", { status: paymentIntent?.status ?? "unknown" }),
                     );
                 }
             } else if (result.data.status === "success") {
-                toast.success("计划调整已提交，积分将稍后到账");
+                toast.success(t("submitted"));
             }
             setPendingPlan(null);
             router.refresh();
         } catch (error) {
             console.error("Change subscription error", error);
-            toast.error("调整计划失败");
+            toast.error(t("failed"));
         } finally {
             setIsChanging(false);
         }

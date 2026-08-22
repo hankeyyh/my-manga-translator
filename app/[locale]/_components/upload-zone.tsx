@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Plus, Upload } from "lucide-react";
 import { cn } from "@/components/utils";
+import { useTranslations } from "next-intl";
 
 const ACCEPT =
     ".jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.pdf,.epub,.cbz,.zip,image/*,application/pdf,application/epub+zip,application/zip";
@@ -17,6 +18,7 @@ export function UploadZone(props: {
     const dragDepthRef = useRef(0);
     const [isDragging, setIsDragging] = useState(false);
     const remaining = Math.max(0, props.maxPages - props.uploaded);
+    const t = useTranslations("upload");
 
     function openFilePicker() {
         inputRef.current?.click();
@@ -115,15 +117,14 @@ export function UploadZone(props: {
                             <Upload className="size-7 text-cc-brand-primary" />
                         </div>
                         <p className="font-headline text-sm font-semibold text-cc-text-primary">
-                            将漫画页拖放到此处，或{" "}
-                            <span className="text-cc-brand-primary underline">浏览文件</span>
+                            {t("dropHint")}{" "}
+                            <span className="text-cc-brand-primary underline">{t("browse")}</span>
                         </p>
                         <p className="text-xs text-cc-text-muted">
-                            JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大
-                            50MB, 文档最大 200MB
+                            {t("formats")}
                         </p>
                         <p className="text-xs text-cc-text-muted">
-                            已上传 {props.uploaded}/{props.maxPages} 页 · 剩余 {remaining} 页
+                            {t("quota", { uploaded: props.uploaded, max: props.maxPages, remaining })}
                         </p>
                     </div>
                 </div>
@@ -143,10 +144,10 @@ export function UploadZone(props: {
                     >
                         <p className="flex items-center gap-1.5 text-sm text-cc-text-primary">
                             <Plus className="size-4 text-cc-brand-primary" />
-                            添加图片 / 拖拽上传
+                            {t("addOrDrop")}
                         </p>
                         <p className="text-sm text-cc-text-muted">
-                            {props.uploaded} / {props.maxPages} 页
+                            {t("compactQuota", { uploaded: props.uploaded, max: props.maxPages })}
                         </p>
                     </div>
                 </div>

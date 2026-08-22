@@ -7,12 +7,14 @@ import { CreditService } from "@/biz/services/credit/credit-service";
 import { PaymentService } from "@/biz/services/payment/payment-service";
 import { createStripeClient } from "@/biz/utils/stripe/server";
 import { createServerClient } from "@/biz/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
 import { Suspense } from "react";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export default function PaymentCancelPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
+export default async function PaymentCancelPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
+    const t = await getTranslations("payment");
     return (
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<p>{t("loading")}</p>}>
             <PaymentCancelDetail searchParams={searchParams} />
         </Suspense>
     );
@@ -29,10 +31,11 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
     );
     const stripeSessionResult = await paymentService.retriveCheckoutSession(sessionId);
     if (stripeSessionResult.error) {
-        return <div>Error: {stripeSessionResult.error.message}</div>;
+        const t = await getTranslations("payment");
+        return <div>{t("error", { message: stripeSessionResult.error.message })}</div>;
     }
 
-    const { status, paymentStatus, email, transactionId } = stripeSessionResult.data!;
+    const { transactionId } = stripeSessionResult.data!;
     // 2. 取消交易
     const creditService = new CreditService(
         new TopUpConfigRepository(supabase),
@@ -42,8 +45,9 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
     );
     const transResult = await creditService.cancelUserTransaction(transactionId!);
     if (transResult.error) {
-        return <div>Error: {transResult.error.message}</div>;
+        const t = await getTranslations("payment");
+        return <div>{t("error", { message: transResult.error.message })}</div>;
     }
 
-    return redirect("/");
+    return redirect({ href: "/", locale: await getLocale() });
 }

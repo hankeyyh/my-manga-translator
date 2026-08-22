@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { PaymentService } from "@/biz/services/payment/payment-service";
@@ -7,10 +7,12 @@ import PaymentIncompleteDisplay from "@/app/[locale]/payment/success/_components
 import PendingPaymentDisplay from "@/app/[locale]/payment/success/_components/payment-pending";
 import SuccessDisplay from "@/app/[locale]/payment/success/_components/payment-success";
 import { createStripeClient } from "@/biz/utils/stripe/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export default function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
+export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {
+    const t = await getTranslations("payment");
     return (
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<p>{t("loading")}</p>}>
             <PaymentSuccessDetail searchParams={searchParams} />
         </Suspense>
     );
@@ -27,13 +29,14 @@ async function PaymentSuccessDetail({ searchParams }: { searchParams: Promise<{ 
     );
     const result = await paymentService.retriveCheckoutSession(sessionId);
     if (result.error) {
-        return <div>Error: {result.error.message}</div>;
+        const t = await getTranslations("payment");
+        return <div>{t("error", { message: result.error.message })}</div>;
     }
     // 2. 状态检查
     const { status, paymentStatus, email } = result.data!;
     // 2.1 不应该出现
     if (status === "open") {
-        return redirect("/");
+        return redirect({ href: "/", locale: await getLocale() });
     }
     // 2.2 款已到账
     if (status === "complete" && paymentStatus == "paid") {

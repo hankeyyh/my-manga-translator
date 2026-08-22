@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MangaPage } from "@/types/web/manga-page";
+import { useTranslations } from "next-intl";
 
 export type ImagePreviewProps = {
     pages: MangaPage[];
@@ -22,6 +23,7 @@ export function ImagePreview({
     onIndexChange,
 }: ImagePreviewProps) {
     const page = pages[index];
+    const t = useTranslations("imagePreview");
     const imageUrl = showTranslated && page?.status === "completed" && page.resultUrl ? page.resultUrl : page?.originalUrl;
     const [mounted, setMounted] = useState(false);
 
@@ -66,7 +68,7 @@ export function ImagePreview({
                 type="button"
                 size="icon"
                 variant="ghost"
-                aria-label="关闭预览"
+                aria-label={t("close")}
                 className="absolute top-4 right-4 z-10 size-9 rounded-full text-white hover:bg-white/10 hover:text-white"
                 onClick={(e) => {
                     e.stopPropagation();
@@ -84,7 +86,7 @@ export function ImagePreview({
                         type="button"
                         size="icon"
                         variant="ghost"
-                        aria-label="上一张，或按左方向键"
+                        aria-label={t("prev")}
                         disabled={index === 0}
                         className="h-24 w-24 rounded-full text-white hover:bg-white/10 hover:text-white disabled:pointer-events-auto disabled:text-white/30 [&_svg]:size-16"
                         onClick={() => index > 0 && onIndexChange(index - 1)}
@@ -102,7 +104,7 @@ export function ImagePreview({
                         type="button"
                         size="icon"
                         variant="ghost"
-                        aria-label="下一张，或按右方向键"
+                        aria-label={t("next")}
                         disabled={index >= pages.length - 1}
                         className="h-24 w-24 rounded-full text-white hover:bg-white/10 hover:text-white disabled:pointer-events-auto disabled:text-white/30 [&_svg]:size-16"
                         onClick={() => index < pages.length - 1 && onIndexChange(index + 1)}

@@ -4,8 +4,10 @@ import { SubscriptionStatus } from "@/app/[locale]/home/billing/_components/subs
 import { TransactionList } from "@/app/[locale]/home/billing/_components/transaction-list";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
+import { getTranslations } from "next-intl/server";
 
 export default async function BillingPage() {
+    const t = await getTranslations("billing");
     const supabase = await createServerClient();
     const [subscriptionResult, transactionsResult, topupConfigResult] =
         await Promise.all([
@@ -21,7 +23,7 @@ export default async function BillingPage() {
     return (
         <>
             <div>
-                <h1 className="font-headline text-xl font-bold text-cc-text-primary">账单与订阅</h1>
+                <h1 className="font-headline text-xl font-bold text-cc-text-primary">{t("title")}</h1>
             </div>
             <SubscriptionStatus
                 subscription={subscription}

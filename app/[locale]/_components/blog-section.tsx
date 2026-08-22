@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
     CcButton,
     CcCard,
@@ -8,10 +8,23 @@ import {
 } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
+import { getTranslations } from "next-intl/server";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x240/e8f0fe/0053dd?text=Blog";
 
+function formatBlogDate(
+    publishedAt: string | null,
+    t: Awaited<ReturnType<typeof getTranslations<"blog">>>,
+) {
+    if (!publishedAt) return "";
+    const date = publishedAt.slice(0, 10);
+    const [year, month, day] = date.split("-").map(Number);
+    if (!year || !month || !day) return date;
+    return t("date", { year, month, day });
+}
+
 export async function BlogSection() {
+    const t = await getTranslations("blog");
     const supabase = await createServerClient();
     const result = await BlogService.fromSupabase(supabase).listPublishedPosts();
     const posts = (result.data ?? []).slice(0, 3);
@@ -19,7 +32,7 @@ export async function BlogSection() {
     return (
         <section className="bg-cc-surface-white py-16">
             <div className="mx-auto max-w-7xl px-4">
-                <CcSectionHeading className="mb-8" size="md" title="最新博客" />
+                <CcSectionHeading className="mb-8" size="md" title={t("latest")} />
                 <div className="grid gap-4 md:grid-cols-3">
                     {posts.map((post) => (
                         <Link
@@ -41,7 +54,7 @@ export async function BlogSection() {
                                         {post.title}
                                     </CcCardTitle>
                                     <CcCardDescription>
-                                        {post.publishedAt?.slice(0, 10) ?? ""}
+                                        {formatBlogDate(post.publishedAt, t)}
                                     </CcCardDescription>
                                 </div>
                             </CcCard>
@@ -50,7 +63,7 @@ export async function BlogSection() {
                 </div>
                 <p className="mt-6 text-center">
                     <CcButton variant="link" asChild>
-                        <Link href="/blogs">查看所有文章 →</Link>
+                        <Link href="/blogs">{t("viewAll")}</Link>
                     </CcButton>
                 </p>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { CcButton } from "@/design/design-system/components";
 import {
@@ -10,14 +11,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const DATE_OPTIONS = [
-    { value: "1d", label: "最近1天" },
-    { value: "7d", label: "最近7天" },
-    { value: "1m", label: "最近1月" },
-    { value: "all", label: "全部" },
-] as const;
+const DATE_OPTIONS = ["1d", "7d", "1m", "all"] as const;
 
-export type DateRangeValue = (typeof DATE_OPTIONS)[number]["value"];
+export type DateRangeValue = (typeof DATE_OPTIONS)[number];
 
 export function DateRangeFilter({
     value,
@@ -26,24 +22,24 @@ export function DateRangeFilter({
     value: DateRangeValue;
     onValueChange: (value: DateRangeValue) => void;
 }) {
-    const selected =
-        DATE_OPTIONS.find((opt) => opt.value === value) ?? DATE_OPTIONS[3];
+    const t = useTranslations("history.dateRange");
+    const selected = DATE_OPTIONS.includes(value) ? value : "all";
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <CcButton variant="secondary" className="justify-between gap-2">
-                    {selected.label}
+                    {t(selected)}
                     <ChevronDown className="size-4" />
                 </CcButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
                 {DATE_OPTIONS.map((opt) => (
                     <DropdownMenuItem
-                        key={opt.value}
-                        onSelect={() => onValueChange(opt.value)}
+                        key={opt}
+                        onSelect={() => onValueChange(opt)}
                     >
-                        {opt.label}
+                        {t(opt)}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

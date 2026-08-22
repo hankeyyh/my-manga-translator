@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { CreditCard, History, LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { CcButton } from "@/design/design-system/components";
 import { cn } from "@/components/utils";
@@ -11,13 +11,13 @@ import { cn } from "@/components/utils";
 const NAV_ITEMS = [
     {
         href: "/home/history",
-        label: "翻译历史",
+        labelKey: "history",
         icon: History,
         match: (pathname: string) => pathname.startsWith("/home/history"),
     },
     {
         href: "/home/billing",
-        label: "账单与订阅",
+        labelKey: "billing",
         icon: CreditCard,
         match: (pathname: string) => pathname.startsWith("/home/billing"),
     },
@@ -26,6 +26,7 @@ const NAV_ITEMS = [
 export function AccountNav() {
     const router = useRouter();
     const pathname = usePathname();
+    const t = useTranslations("home");
     const [signingOut, setSigningOut] = useState(false);
 
     async function handleSignOut() {
@@ -42,8 +43,8 @@ export function AccountNav() {
     }
 
     return (
-        <nav aria-label="Account" className="space-y-1">
-            {NAV_ITEMS.map(({ href, label, icon: Icon, match }) => {
+        <nav aria-label={t("navAria")} className="space-y-1">
+            {NAV_ITEMS.map(({ href, labelKey, icon: Icon, match }) => {
                 const active = match(pathname);
                 return (
                     <CcButton
@@ -57,7 +58,7 @@ export function AccountNav() {
                     >
                         <Link href={href}>
                             <Icon className="size-4" />
-                            {label}
+                            {t(labelKey)}
                         </Link>
                     </CcButton>
                 );
@@ -71,7 +72,7 @@ export function AccountNav() {
                     type="button"
                 >
                     <LogOut className="size-4" />
-                    退出登录
+                    {t("signOut")}
                 </CcButton>
             </div>
         </nav>

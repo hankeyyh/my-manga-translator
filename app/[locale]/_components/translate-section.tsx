@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import {
     Check,
     CircleAlert,
@@ -47,19 +46,39 @@ import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
 import { LangOption, WorkspaceTask } from "@/types/web/workspace-task";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
-const SUPPORTED_LANGS = [
-    { code: "CHS", label: "简体中文" },
-    { code: "CHT", label: "繁體中文" },
-    { code: "ENG", label: "English" },
-    { code: "JPN", label: "日本語" },
-    { code: "KOR", label: "한국어" },
-];
-const SUPPORTED_MODE = ["快速翻译 (1 credit)", "精确翻译 (2 credits)"];
-const SUPPORTED_FONT_STYLE = ["漫画", "手写", "印刷"];
+const SUPPORTED_LANG_CODES = ["CHS", "CHT", "ENG", "JPN", "KOR"] as const;
+const MODE_FAST = "fast";
+const MODE_PRECISE = "precise";
+const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
+const SUPPORTED_FONT_STYLES = ["comic", "handwritten", "print"] as const;
 const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+
+type LangCode = (typeof SUPPORTED_LANG_CODES)[number];
+type TranslateMode = (typeof SUPPORTED_MODES)[number];
+type FontStyle = (typeof SUPPORTED_FONT_STYLES)[number];
+
+function asLangCode(code: string): LangCode {
+    return (SUPPORTED_LANG_CODES as readonly string[]).includes(code)
+        ? (code as LangCode)
+        : SUPPORTED_LANG_CODES[0];
+}
+
+function asTranslateMode(mode: string): TranslateMode {
+    return (SUPPORTED_MODES as readonly string[]).includes(mode)
+        ? (mode as TranslateMode)
+        : SUPPORTED_MODES[0];
+}
+
+function asFontStyle(style: string): FontStyle {
+    return (SUPPORTED_FONT_STYLES as readonly string[]).includes(style)
+        ? (style as FontStyle)
+        : SUPPORTED_FONT_STYLES[0];
+}
 
 const WORKSPACE_BG = "bg-[var(--cc-surface-page)]";
 const EAR_LEFT =
@@ -140,9 +159,9 @@ function createDraftTask(files: File[] = []): WorkspaceTask {
         localId: crypto.randomUUID(),
         serverTaskId: null,
         pages: filesToPages(files, new Set()),
-        targetLang: SUPPORTED_LANGS[0],
-        translateMode: SUPPORTED_MODE[0],
-        fontStyle: SUPPORTED_FONT_STYLE[0],
+        targetLang: { code: SUPPORTED_LANG_CODES[0], label: SUPPORTED_LANG_CODES[0] },
+        translateMode: MODE_FAST,
+        fontStyle: SUPPORTED_FONT_STYLES[0],
         submitLoading: false,
         retryLoading: false,
         showTranslated: true,
@@ -158,11 +177,14 @@ function revokePageUrls(pages: MangaPage[]): void {
     }
 }
 
-function shortTaskLabel(task: WorkspaceTask): string {
+function shortTaskLabel(
+    task: WorkspaceTask,
+    t: ReturnType<typeof useTranslations<"translate">>,
+): string {
     if (!task.serverTaskId) {
-        return `草稿 · ${task.pages.length} 页`;
+        return t("draftLabel", { count: task.pages.length });
     }
-    return `任务 ${task.serverTaskId.slice(0, 8)}`;
+    return t("taskLabel", { id: task.serverTaskId.slice(0, 8) });
 }
 
 function hasCompletedResults(pages: MangaPage[]): boolean {
@@ -177,7 +199,7 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, _selFontSt
     let company: Translator;
     let modelName: string;
 
-    if (selMode === SUPPORTED_MODE[0]) {
+    if (selMode === MODE_FAST) {
         company = "deepseek";
         modelName = "deepseek-v4-flash";
     } else {
@@ -280,6 +302,8 @@ function TaskStatusIcon({ kind }: { kind: TaskKind; }) {
 }
 
 export function TranslateSection() {
+    const t = useTranslations("translate");
+    const tCommon = useTranslations("common");
     const [tasks, setTasks] = useState<WorkspaceTask[]>([]);
     const tasksRef = useRef<WorkspaceTask[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -550,7 +574,7 @@ export function TranslateSection() {
             }));
             setPolling(true);
         } catch (err) {
-            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            const errMsg = err instanceof Error ? err.message : tCommon("unknownError");
             toast.error(errMsg);
             console.error(errMsg);
             updateTask(localId, (current) => ({
@@ -599,7 +623,7 @@ export function TranslateSection() {
             }));
             setPolling(true);
         } catch (err) {
-            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            const errMsg = err instanceof Error ? err.message : tCommon("unknownError");
             toast.error(errMsg);
             console.error(errMsg);
             updateTask(owner.localId, (current) => ({
@@ -703,7 +727,7 @@ export function TranslateSection() {
                  */
                 setTasks(applied.next);
                 if (applied.timedOut) {
-                    toast.error("翻译超时，请重试");
+                    toast.error(t("timeout"));
                     console.error("Translation timeout");
                 }
                 // 所有图片处理结束
@@ -718,7 +742,7 @@ export function TranslateSection() {
                 if (err instanceof Error && err.name === "AbortError") {
                     return;
                 }
-                const errMsg = err instanceof Error ? err.message : "Unknown Error";
+                const errMsg = err instanceof Error ? err.message : tCommon("unknownError");
                 toast.error(errMsg);
                 console.error(errMsg);
                 clearPollTimeout();
@@ -772,12 +796,12 @@ export function TranslateSection() {
                                                 onClick={() => selectTask(item.localId)}
                                             >
                                                 <TaskStatusIcon kind={kind} />
-                                                {shortTaskLabel(item)}
+                                                {shortTaskLabel(item, t)}
                                             </button>
                                             <button
                                                 type="button"
                                                 className="mr-1.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md text-cc-text-muted transition-colors hover:bg-[var(--cc-brand-tint-strong)] hover:text-cc-brand-primary"
-                                                aria-label={`关闭${shortTaskLabel(item)}`}
+                                                aria-label={t("closeTask", { label: shortTaskLabel(item, t) })}
                                                 onClick={() => closeTask(item.localId)}
                                             >
                                                 <X className="size-3" />
@@ -803,7 +827,7 @@ export function TranslateSection() {
                                 disabled={tasks.length <= 1}
                                 onClick={closeOtherTasks}
                             >
-                                关闭其他
+                                {t("closeOthers")}
                             </CcButton>
                             <CcButton
                                 type="button"
@@ -827,42 +851,42 @@ export function TranslateSection() {
                         >
                             {/* 操作区 */}
                             <CcCard className="gap-4 p-5 lg:p-6" variant="elevated">
-                                <CcCardTitle className="text-base">操作设置</CcCardTitle>
+                                <CcCardTitle className="text-base">{t("settingsTitle")}</CcCardTitle>
                                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                                     <div className="flex-1 space-y-1">
-                                        <CcLabel>翻译为</CcLabel>
+                                        <CcLabel>{t("translateTo")}</CcLabel>
                                         {/* modal=false，当下拉框展开，仍然允许与页面其他部分交互 */}
                                         <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger asChild>
                                                 <CcSelectTrigger disabled={configLocked}>
-                                                    {activeTask.targetLang.label}
+                                                    {t(`languages.${asLangCode(activeTask.targetLang.code)}`)}
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                {SUPPORTED_LANGS.map((lang) => (
+                                                {SUPPORTED_LANG_CODES.map((code) => (
                                                     <DropdownMenuItem
-                                                        key={lang.code}
+                                                        key={code}
                                                         onSelect={() => updateTask(activeTask.localId, (task) => ({
                                                             ...task,
-                                                            targetLang: lang,
+                                                            targetLang: { code, label: code },
                                                         }))}
                                                     >
-                                                        {lang.label}
+                                                        {t(`languages.${code}`)}
                                                     </DropdownMenuItem>
                                                 ))}
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
                                     <div className="flex-1 space-y-1">
-                                        <CcLabel>翻译模式</CcLabel>
+                                        <CcLabel>{t("translateMode")}</CcLabel>
                                         <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger asChild>
                                                 <CcSelectTrigger disabled={configLocked}>
-                                                    {activeTask.translateMode}
+                                                    {t(`modes.${asTranslateMode(activeTask.translateMode)}`)}
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                {SUPPORTED_MODE.map((mode) => (
+                                                {SUPPORTED_MODES.map((mode) => (
                                                     <DropdownMenuItem
                                                         key={mode}
                                                         onSelect={() => updateTask(activeTask.localId, (task) => ({
@@ -870,22 +894,22 @@ export function TranslateSection() {
                                                             translateMode: mode,
                                                         }))}
                                                     >
-                                                        {mode}
+                                                        {t(`modes.${mode}`)}
                                                     </DropdownMenuItem>
                                                 ))}
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
                                     <div className="flex-1 space-y-1">
-                                        <CcLabel>字体风格</CcLabel>
+                                        <CcLabel>{t("fontStyle")}</CcLabel>
                                         <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger asChild>
                                                 <CcSelectTrigger disabled={configLocked}>
-                                                    {activeTask.fontStyle}
+                                                    {t(`fontStyles.${asFontStyle(activeTask.fontStyle)}`)}
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                {SUPPORTED_FONT_STYLE.map((style) => (
+                                                {SUPPORTED_FONT_STYLES.map((style) => (
                                                     <DropdownMenuItem
                                                         key={style}
                                                         onSelect={() => updateTask(activeTask.localId, (task) => ({
@@ -893,7 +917,7 @@ export function TranslateSection() {
                                                             fontStyle: style,
                                                         }))}
                                                     >
-                                                        {style}
+                                                        {t(`fontStyles.${style}`)}
                                                     </DropdownMenuItem>
                                                 ))}
                                             </DropdownMenuContent>
@@ -907,7 +931,7 @@ export function TranslateSection() {
                                             onClick={() => onDownload(pages)}
                                         >
                                             <Download />
-                                            下载全部
+                                            {t("downloadAll")}
                                         </CcButton>
                                     ) : (
                                         <CcButton
@@ -916,7 +940,7 @@ export function TranslateSection() {
                                             onClick={() => void submitTask(activeTask.localId)}
                                         >
                                             <Upload />
-                                            提交翻译
+                                            {t("submit")}
                                         </CcButton>
                                     )}
                                 </div>
@@ -926,7 +950,7 @@ export function TranslateSection() {
                             <CcCard className="gap-4 p-5 lg:p-6" variant="elevated">
                                 <div className="flex flex-row items-center justify-between gap-2">
                                     <CcCardTitle className="text-base">
-                                        图片预览（共 {pages.length} 张）
+                                        {t("previewTitle", { count: pages.length })}
                                     </CcCardTitle>
                                     <div className="flex items-center gap-2">
                                         {activeKind === "completed" && hasCompletedResults(pages) && (
@@ -943,7 +967,7 @@ export function TranslateSection() {
                                                         ...task,
                                                         showTranslated: checked,
                                                     }))}
-                                                    aria-label={activeTask.showTranslated ? "查看翻译图" : "查看原图"}
+                                                    aria-label={activeTask.showTranslated ? t("showTranslated") : t("showOriginal")}
                                                 />
                                             </div>
                                         )}
@@ -954,7 +978,7 @@ export function TranslateSection() {
                                             onClick={clearDraft}
                                         >
                                             <X className="size-3" />
-                                            全部清除
+                                            {t("clearAll")}
                                         </CcButton>
                                     </div>
                                 </div>
@@ -982,7 +1006,7 @@ export function TranslateSection() {
                                             <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
                                                 <Plus className="size-4 text-cc-brand-primary" />
                                             </span>
-                                            <span className="text-sm">添加图片</span>
+                                            <span className="text-sm">{t("addImage")}</span>
                                         </button>
                                     )}
                                 </div>
@@ -1007,7 +1031,7 @@ export function TranslateSection() {
                 )}
 
                 <p className="text-center text-xs text-cc-text-muted">
-                    ✦ AI 自动识别日语、中文、英语、韩语等多种语言
+                    {t("hint")}
                 </p>
             </div>
 
@@ -1024,14 +1048,14 @@ export function TranslateSection() {
             <AlertDialog open={closeConfirm !== null} onOpenChange={(open) => !open && setCloseConfirm(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>确认关闭进行中的任务？</AlertDialogTitle>
+                        <AlertDialogTitle>{t("closeConfirmTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            翻译任务仍在进行中。关闭后仅会从当前工作区移除，后台翻译不会中止，已消耗的额度也不会退回。
+                            {t("closeConfirmDescription")}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>取消</AlertDialogCancel>
-                        <AlertDialogAction onClick={confirmClose}>确认关闭</AlertDialogAction>
+                        <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmClose}>{t("confirmClose")}</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

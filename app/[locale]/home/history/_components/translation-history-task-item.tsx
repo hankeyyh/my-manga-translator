@@ -15,8 +15,7 @@ import type { TaskStatus } from "@/types/do/translation-task";
 import type { MangaPage } from "@/types/web/manga-page";
 import { useState } from "react";
 import { TranslationTaskDetailView } from "@/types/dto/translation-task";
-
-const SOURCE_LANG = "Auto";
+import { useTranslations } from "next-intl";
 
 function canDownload(status: TaskStatus) {
     return status === "completed" || status === "partial";
@@ -65,6 +64,9 @@ type Props = {
 };
 
 export function TranslationHistoryTaskItem({ task }: Props) {
+    const t = useTranslations("history");
+    const tStatus = useTranslations("status");
+    const tCommon = useTranslations("common");
     const downloadable = canDownload(task.status);
     const targetCode = task.config.translator?.target_lang ?? "—";
     const [isShowDetail, setIsShowDetail] = useState(false);
@@ -81,10 +83,10 @@ export function TranslationHistoryTaskItem({ task }: Props) {
                     <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                             <CcCardTitle className="text-sm">
-                                {SOURCE_LANG} → {targetCode}
+                                {t("sourceAuto")} → {targetCode}
                             </CcCardTitle>
                             <CcBadge variant={statusBadgeVariant(task.status)}>
-                                {task.status}
+                                {tStatus(task.status)}
                             </CcBadge>
                         </div>
                         <CcCardDescription className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
@@ -92,7 +94,7 @@ export function TranslationHistoryTaskItem({ task }: Props) {
                                 <Clock className="size-3 text-cc-text-muted" />
                                 {formatDate(task.createdAt)}
                             </span>
-                            <span>{task.totalImages} 页</span>
+                            <span>{tCommon("pages", { count: task.totalImages })}</span>
                         </CcCardDescription>
                     </div>
                     <div className="flex shrink-0 gap-2">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { restoreSubscription } from "@/actions/restore-subscription";
 import { SUCCESS_CODE } from "@/types/dto/response";
@@ -11,6 +11,7 @@ import {
     CcSectionHeading,
     CcSegmentedControl,
 } from "@/design/design-system/components";
+import { useTranslations } from "next-intl";
 import { ChangePlanConfirmDialog } from "./change-plan-confirm-dialog";
 import { SubscriptionPlanCards } from "./subscription-plan-cards";
 import { useChangeSubscription } from "./use-change-subscription";
@@ -29,6 +30,8 @@ export function ClientPricingSection({
     );
     const [isRestoring, setIsRestoring] = useState(false);
     const router = useRouter();
+    const t = useTranslations("pricing");
+    const tManage = useTranslations("manageSubscription");
     const {
         pendingPlan,
         isChanging,
@@ -81,14 +84,14 @@ export function ClientPricingSection({
         try {
             const result = await restoreSubscription();
             if (result.code !== SUCCESS_CODE) {
-                toast.error(result.message || "恢复订阅失败");
+                toast.error(result.message || tManage("restoreFailed"));
                 return;
             }
-            toast.success(result.message || "已恢复订阅");
+            toast.success(result.message || tManage("restored"));
             router.refresh();
         } catch (error) {
             console.error("Restore subscription error", error);
-            toast.error("恢复订阅失败");
+            toast.error(tManage("restoreFailed"));
         } finally {
             setIsRestoring(false);
         }
@@ -97,13 +100,13 @@ export function ClientPricingSection({
     return (
         <section id="pricing" className="scroll-mt-16 bg-cc-surface-white py-16">
             <div className="mx-auto max-w-7xl px-4">
-                <CcSectionHeading className="mb-6" size="md" title="价格" />
+                <CcSectionHeading className="mb-6" size="md" title={t("title")} />
                 <div className="mb-8 flex justify-center">
                     <CcSegmentedControl
                         onChange={setPricingTab}
                         options={[
-                            { value: "pay-to-use", label: "Pay As Needed" },
-                            { value: "subscription", label: "Subscription" },
+                            { value: "pay-to-use", label: t("payAsNeeded") },
+                            { value: "subscription", label: t("subscription") },
                         ]}
                         value={pricingTab}
                     />

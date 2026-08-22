@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -10,6 +11,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 type ConfirmState = "verifying" | "success" | "error";
 
@@ -69,6 +71,7 @@ function confirmEmail(tokenHash: string, type: string, next: string) {
 export function ClientPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const t = useTranslations("auth.confirm");
 
     const [state, setState] = useState<ConfirmState>("verifying");
     const [error, setError] = useState<string | null>(null);
@@ -87,7 +90,7 @@ export function ClientPage() {
 
         if (!tokenHash || !type) {
             setState("error");
-            setError("缺少确认参数，请重新打开邮件中的链接。");
+            setError(t("missingParams"));
             return;
         }
 
@@ -110,7 +113,7 @@ export function ClientPage() {
 
                 if (!body.httpOk || !body.ok) {
                     setState("error");
-                    setError(body.error ?? "验证失败，链接可能已失效。");
+                    setError(body.error ?? t("invalidLink"));
                     return;
                 }
 
@@ -126,14 +129,14 @@ export function ClientPage() {
             } catch {
                 if (cancelled) return;
                 setState("error");
-                setError("网络错误，请稍后重试。");
+                setError(t("networkError"));
             }
         })();
 
         return () => {
             cancelled = true;
         };
-    }, [searchParams]);
+    }, [searchParams, t]);
 
     useEffect(() => {
         if (state !== "success") return;
@@ -164,15 +167,15 @@ export function ClientPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-2xl">
-                            {state === "verifying" && "正在验证邮箱…"}
-                            {state === "success" && "邮箱已确认"}
-                            {state === "error" && "验证失败"}
+                            {state === "verifying" && t("verifyingTitle")}
+                            {state === "success" && t("successTitle")}
+                            {state === "error" && t("errorTitle")}
                         </CardTitle>
                         <CardDescription>
-                            {state === "verifying" && "请稍候，正在完成注册确认。"}
+                            {state === "verifying" && t("verifyingDescription")}
                             {state === "success" &&
-                                `${secondsLeft} 秒后自动进入首页，也可立即开始翻译。`}
-                            {state === "error" && "无法完成邮箱确认。"}
+                                t("successDescription", { seconds: secondsLeft })}
+                            {state === "error" && t("errorDescription")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4">
@@ -181,7 +184,7 @@ export function ClientPage() {
                         )}
                         {state === "success" && (
                             <Button type="button" onClick={goHome}>
-                                开始翻译
+                                {t("startTranslate")}
                             </Button>
                         )}
                         {state === "error" && (
@@ -190,7 +193,7 @@ export function ClientPage() {
                                 variant="outline"
                                 onClick={() => router.replace("/auth/login")}
                             >
-                                返回登录
+                                {t("backToLogin")}
                             </Button>
                         )}
                     </CardContent>

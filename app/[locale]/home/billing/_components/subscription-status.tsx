@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ManageSubscriptionDialog } from "@/app/[locale]/home/billing/_components/manage-subscription-dialog";
 import {
     CcButton,
@@ -11,6 +11,7 @@ import {
 } from "@/design/design-system/components";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
+import { useTranslations } from "next-intl";
 
 type Props = {
     subscription: UserSubscription | null;
@@ -22,44 +23,48 @@ function capitalize(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function formatPriceLabel(price: number | null, billingCycle: string) {
-    if (price == null) {
-        return billingCycle === "yearly" ? "/yr" : "/mo";
-    }
-    const amount = Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
-    const suffix = billingCycle === "yearly" ? "/yr" : "/mo";
-    return `${amount}${suffix}`;
-}
-
-function formatResetDate(iso: string) {
-    const date = new Date(iso);
-    if (Number.isNaN(date.getTime())) return iso.slice(0, 10);
-    return `${date.getMonth() + 1}月${date.getDate()}日`;
-}
-
-function daysUntil(iso: string) {
-    const end = new Date(iso);
-    if (Number.isNaN(end.getTime())) return null;
-    const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const startOfEnd = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-    return Math.max(
-        0,
-        Math.round(
-            (startOfEnd.getTime() - startOfToday.getTime()) / (1000 * 60 * 60 * 24),
-        ),
-    );
-}
-
 export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
     const [manageOpen, setManageOpen] = useState(false);
+    const t = useTranslations("billing");
+
+    function formatPriceLabel(price: number | null, billingCycle: string) {
+        const suffix = billingCycle === "yearly"
+            ? t("priceYearlySuffix")
+            : t("priceMonthlySuffix");
+        if (price == null) {
+            return suffix;
+        }
+        const amount = Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
+        return `${amount}${suffix}`;
+    }
+
+    function formatResetDate(iso: string) {
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return iso.slice(0, 10);
+        return t("monthDay", { month: date.getMonth() + 1, day: date.getDate() });
+    }
+
+    function daysUntil(iso: string) {
+        const end = new Date(iso);
+        if (Number.isNaN(end.getTime())) return null;
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const startOfEnd = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+        return Math.max(
+            0,
+            Math.round(
+                (startOfEnd.getTime() - startOfToday.getTime()) / (1000 * 60 * 60 * 24),
+            ),
+        );
+    }
 
     if (subscription) {
         const days = daysUntil(subscription.currentPeriodEndedAt);
+        const date = formatResetDate(subscription.currentPeriodEndedAt);
         const resetLabel =
             days == null
-                ? `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)}`
-                : `Resets on ${formatResetDate(subscription.currentPeriodEndedAt)} (${days} days)`;
+                ? t("resetsOn", { date })
+                : t("resetsOnWithDays", { date, days });
 
         return (
             <>
@@ -67,7 +72,7 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
                     <div className="flex flex-row items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
                             <p className="text-xs uppercase tracking-wide text-cc-text-muted">
-                                Current Plan
+                                {t("currentPlan")}
                             </p>
                             <div className="mt-1 flex flex-wrap items-baseline gap-x-2">
                                 <CcCardTitle className="text-lg">
@@ -91,7 +96,7 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
                                 variant="outline"
                                 onClick={() => setManageOpen(true)}
                             >
-                                Manage
+                                {t("manage")}
                             </CcButton>
                         </div>
                     </div>
@@ -111,16 +116,16 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
             <div className="flex flex-row items-center justify-between gap-4">
                 <div className="min-w-0 flex-1">
                     <p className="text-xs uppercase tracking-wide text-cc-text-muted">
-                        Current Plan
+                        {t("currentPlan")}
                     </p>
-                    <CcCardTitle className="mt-1 text-lg">未订阅</CcCardTitle>
+                    <CcCardTitle className="mt-1 text-lg">{t("unsubscribed")}</CcCardTitle>
                     <CcCardDescription className="mt-1 text-sm">
-                        订阅后可按周期获得 Credits，并解锁对应套餐权益
+                        {t("unsubscribedHint")}
                     </CcCardDescription>
                 </div>
                 <div className="shrink-0">
                     <CcButton size="sm" type="button" asChild>
-                        <Link href="/#pricing">订阅</Link>
+                        <Link href="/#pricing">{t("subscribe")}</Link>
                     </CcButton>
                 </div>
             </div>

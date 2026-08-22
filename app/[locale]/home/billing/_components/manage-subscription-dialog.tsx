@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { cancelSubscription } from "@/actions/cancel-subscription";
 import { restoreSubscription } from "@/actions/restore-subscription";
@@ -28,6 +28,7 @@ import {
 import { SUCCESS_CODE } from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
+import { useTranslations } from "next-intl";
 
 type Props = {
     open: boolean;
@@ -41,19 +42,23 @@ function capitalize(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function formatPriceLabel(price: number | null, billingCycle: string) {
+function formatPriceLabel(
+    price: number | null,
+    billingCycle: string,
+    t: ReturnType<typeof useTranslations<"billing">>,
+) {
+    const suffix = billingCycle === "yearly" ? t("priceYearlySuffix") : t("priceMonthlySuffix");
     if (price == null) {
-        return billingCycle === "yearly" ? "/yr" : "/mo";
+        return suffix;
     }
     const amount = Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
-    const suffix = billingCycle === "yearly" ? "/yr" : "/mo";
     return `${amount}${suffix}`;
 }
 
-function formatResetDate(iso: string) {
+function formatResetDate(iso: string, t: ReturnType<typeof useTranslations<"billing">>) {
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return iso.slice(0, 10);
-    return `${date.getMonth() + 1}月${date.getDate()}日`;
+    return t("monthDay", { month: date.getMonth() + 1, day: date.getDate() });
 }
 
 export function ManageSubscriptionDialog({
@@ -63,6 +68,9 @@ export function ManageSubscriptionDialog({
     currentSubscription,
 }: Props) {
     const router = useRouter();
+    const t = useTranslations("manageSubscription");
+    const tBilling = useTranslations("billing");
+    const tCommon = useTranslations("common");
     const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
     const [isRestoring, setIsRestoring] = useState(false);
@@ -87,16 +95,16 @@ export function ManageSubscriptionDialog({
         try {
             const result = await cancelSubscription();
             if (result.code !== SUCCESS_CODE) {
-                toast.error(result.message || "取消订阅失败");
+                toast.error(result.message || t("cancelFailed"));
                 return;
             }
-            toast.success(result.message || "已提交取消订阅");
+            toast.success(result.message || t("cancelSubmitted"));
             setCancelConfirmOpen(false);
             onOpenChange(false);
             router.refresh();
         } catch (error) {
             console.error("Cancel subscription error", error);
-            toast.error("取消订阅失败");
+            toast.error(t("cancelFailed"));
         } finally {
             setIsCancelling(false);
         }
@@ -108,15 +116,15 @@ export function ManageSubscriptionDialog({
         try {
             const result = await restoreSubscription();
             if (result.code !== SUCCESS_CODE) {
-                toast.error(result.message || "恢复订阅失败");
+                toast.error(result.message || t("restoreFailed"));
                 return;
             }
-            toast.success(result.message || "已恢复订阅");
+            toast.success(result.message || t("restored"));
             onOpenChange(false);
             router.refresh();
         } catch (error) {
             console.error("Restore subscription error", error);
-            toast.error("恢复订阅失败");
+            toast.error(t("restoreFailed"));
         } finally {
             setIsRestoring(false);
         }
@@ -133,17 +141,20 @@ export function ManageSubscriptionDialog({
             >
                 <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-cc-border bg-cc-surface-white text-cc-text-primary">
                     <DialogHeader>
-                        <DialogTitle>管理订阅</DialogTitle>
+                        <DialogTitle>{t("title")}</DialogTitle>
                         <DialogDescription>
-                            当前方案：{capitalize(currentSubscription.planTier)}{" "}
-                            {formatPriceLabel(
-                                currentSubscription.price,
-                                currentSubscription.billingCycle,
-                            )}
-                            ，周期至{" "}
-                            {formatResetDate(
-                                currentSubscription.currentPeriodEndedAt,
-                            )}
+                            {t("currentPlan", {
+                                plan: capitalize(currentSubscription.planTier),
+                                price: formatPriceLabel(
+                                    currentSubscription.price,
+                                    currentSubscription.billingCycle,
+                                    tBilling,
+                                ),
+                                date: formatResetDate(
+                                    currentSubscription.currentPeriodEndedAt,
+                                    tBilling,
+                                ),
+                            })}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -189,18 +200,19 @@ export function ManageSubscriptionDialog({
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>确认取消订阅？</AlertDialogTitle>
+                        <AlertDialogTitle>{t("cancelTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            订阅将于{" "}
-                            {formatResetDate(
-                                currentSubscription.currentPeriodEndedAt,
-                            )}{" "}
-                            结束后失效。期内仍可使用当前方案权益，现有积分将保留。
+                            {t("cancelDescription", {
+                                date: formatResetDate(
+                                    currentSubscription.currentPeriodEndedAt,
+                                    tBilling,
+                                ),
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel disabled={isCancelling}>
-                            再想想
+                            {t("thinkAgain")}
                         </AlertDialogCancel>
                         <AlertDialogAction
                             disabled={isCancelling}
@@ -210,7 +222,7 @@ export function ManageSubscriptionDialog({
                                 void handleConfirmCancel();
                             }}
                         >
-                            {isCancelling ? "处理中…" : "确认取消"}
+                            {isCancelling ? tCommon("processing") : t("confirmCancel")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
