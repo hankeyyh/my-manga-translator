@@ -73,7 +73,10 @@ export function ClientSiteHeader({ userInfo }: Props) {
             {/* fixed 避免触控板顶部弹性回弹把 sticky header 一起拽走 */}
             <header className="fixed inset-x-0 top-0 z-50 border-b border-cc-border/60 bg-cc-surface-white/90 backdrop-blur-xl">
                 <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-                    <Link href="/" className="shrink-0 font-headline text-sm font-bold text-cc-text-primary">
+                    <Link
+                        href="/"
+                        className="shrink-0 bg-gradient-to-r from-[#000821] via-[#0063FD] to-[#82C8FA] bg-clip-text font-headline text-base font-extrabold tracking-tight text-transparent"
+                    >
                         {tCommon("brand")}
                     </Link>
                     <nav className="ml-4 hidden items-center gap-1 md:flex">

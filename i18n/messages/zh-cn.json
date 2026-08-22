@@ -112,10 +112,10 @@
   "translate": {
     "languages": {
       "CHS": "简体中文",
-      "CHT": "繁體中文",
-      "ENG": "English",
-      "JPN": "日本語",
-      "KOR": "한국어"
+      "CHT": "繁体中文",
+      "ENG": "英语",
+      "JPN": "日语",
+      "KOR": "韩语"
     },
     "modes": {
       "fast": "快速翻译 (1 credit)",

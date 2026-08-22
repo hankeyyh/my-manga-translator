@@ -111,11 +111,11 @@
   },
   "translate": {
     "languages": {
-      "CHS": "简体中文",
-      "CHT": "繁體中文",
+      "CHS": "Simplified Chinese",
+      "CHT": "Traditional Chinese",
       "ENG": "English",
-      "JPN": "日本語",
-      "KOR": "한국어"
+      "JPN": "Japanese",
+      "KOR": "Korean"
     },
     "modes": {
       "fast": "Fast translation (1 credit)",
