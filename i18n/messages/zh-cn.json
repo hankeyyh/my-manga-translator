@@ -1,1 +1,420 @@
-{}
+{
+  "meta": {
+    "title": "Manga Translation",
+    "description": "AI 驱动的漫画翻译",
+    "blogTitle": "博客 | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "使用条款",
+      "privacy": "隐私政策",
+      "about": "关于",
+      "refund": "退款政策",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "加载中…",
+    "cancel": "取消",
+    "processing": "处理中…",
+    "unknownError": "未知错误",
+    "credits": "Credits",
+    "creditsCount": "Credits · {count}",
+    "pages": "{count} 页",
+    "email": "邮箱",
+    "password": "密码",
+    "pleaseWait": "请稍候…"
+  },
+  "status": {
+    "all": "全部",
+    "pending": "等待中",
+    "processing": "处理中",
+    "completed": "已完成",
+    "failed": "失败",
+    "partial": "部分完成",
+    "stalled": "已超时",
+    "success": "成功",
+    "canceled": "已取消"
+  },
+  "header": {
+    "mangaTranslate": "漫画翻译",
+    "pricing": "价格",
+    "faq": "常见问题",
+    "blog": "博客",
+    "joinDiscord": "加入 Discord",
+    "dashboard": "工作台",
+    "login": "登录",
+    "toggleTheme": "切换主题"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文"
+  },
+  "footer": {
+    "tagline": "上传漫画，获取 AI 驱动的精准翻译。智能 OCR、忠实翻译、无缝排版。",
+    "product": "产品",
+    "legal": "法律",
+    "contact": "联系我们",
+    "emailLabel": "邮箱：",
+    "followUs": "关注我们",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. 保留所有权利。",
+    "disclaimer": "Manga Sense 与任何漫画出版社无关。",
+    "links": {
+      "tool": "工具",
+      "blog": "博客",
+      "pricing": "价格",
+      "about": "关于",
+      "privacy": "隐私政策",
+      "terms": "使用条款",
+      "refund": "退款政策",
+      "faq": "常见问题",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "AI 漫画翻译，一键完成",
+    "subtitle": "自动识别气泡文字，翻译并重绘到原图。支持日漫、韩漫、中漫，保留原作版式与字体风格。",
+    "statPages": "页",
+    "statLanguages": "语言",
+    "statAccuracy": "准确率",
+    "tryFree": "免费试用",
+    "howItWorks": "使用流程"
+  },
+  "how": {
+    "title": "使用流程",
+    "demoFallback": "{title}演示",
+    "steps": {
+      "upload": {
+        "title": "上传漫画",
+        "desc": "拖放、粘贴或选择文件，支持 JPG、PNG、WebP、PDF、EPUB、CBZ，一次可上传单页或整卷。"
+      },
+      "language": {
+        "title": "选择语言",
+        "desc": "选择目标语言与字体风格，支持 20+ 语言高精度互译。"
+      },
+      "download": {
+        "title": "查看与下载",
+        "desc": "预览译后漫画，一键导出高清结果，保留原作排版。"
+      }
+    }
+  },
+  "showcase": {
+    "title": "翻译效果展示",
+    "description": "拖动滑块对比原图 / 翻译",
+    "beforeAlt": "翻译前原图",
+    "afterAlt": "翻译后效果",
+    "compareAria": "翻译前后对比",
+    "originalAlt": "原图",
+    "translatedAlt": "翻译后"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "简体中文",
+      "CHT": "繁體中文",
+      "ENG": "English",
+      "JPN": "日本語",
+      "KOR": "한국어"
+    },
+    "modes": {
+      "fast": "快速翻译 (1 credit)",
+      "precise": "精确翻译 (2 credits)"
+    },
+    "fontStyles": {
+      "comic": "漫画",
+      "handwritten": "手写",
+      "print": "印刷"
+    },
+    "draftLabel": "草稿 · {count} 页",
+    "taskLabel": "任务 {id}",
+    "closeTask": "关闭{label}",
+    "closeOthers": "关闭其他",
+    "settingsTitle": "操作设置",
+    "translateTo": "翻译为",
+    "translateMode": "翻译模式",
+    "fontStyle": "字体风格",
+    "downloadAll": "下载全部",
+    "submit": "提交翻译",
+    "previewTitle": "图片预览（共 {count} 张）",
+    "showTranslated": "查看翻译图",
+    "showOriginal": "查看原图",
+    "clearAll": "全部清除",
+    "addImage": "添加图片",
+    "hint": "✦ AI 自动识别日语、中文、英语、韩语等多种语言",
+    "timeout": "翻译超时，请重试",
+    "closeConfirmTitle": "确认关闭进行中的任务？",
+    "closeConfirmDescription": "翻译任务仍在进行中。关闭后仅会从当前工作区移除，后台翻译不会中止，已消耗的额度也不会退回。",
+    "confirmClose": "确认关闭"
+  },
+  "upload": {
+    "dropHint": "将漫画页拖放到此处，或",
+    "browse": "浏览文件",
+    "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大 50MB，文档最大 200MB",
+    "quota": "已上传 {uploaded}/{max} 页 · 剩余 {remaining} 页",
+    "addOrDrop": "添加图片 / 拖拽上传",
+    "compactQuota": "{uploaded} / {max} 页"
+  },
+  "thumbnail": {
+    "waiting": "等待中",
+    "processing": "处理中",
+    "preview": "预览 {name}",
+    "remove": "移除 {name}",
+    "continueWait": "继续等待",
+    "retry": "重试",
+    "download": "下载"
+  },
+  "imagePreview": {
+    "close": "关闭预览",
+    "prev": "上一张，或按左方向键",
+    "next": "下一张，或按右方向键"
+  },
+  "pricing": {
+    "title": "价格",
+    "payAsNeeded": "按需付费",
+    "subscription": "订阅",
+    "getStarted": "立即开始",
+    "restore": "恢复订阅",
+    "cancel": "取消订阅",
+    "subscribed": "已订阅",
+    "adjustPlan": "调整方案",
+    "planFallback": "方案",
+    "priceMonthly": "${price}/月",
+    "priceYearly": "${price}/年",
+    "creditsPayToUse": "{count} credits",
+    "creditsMonthly": "{count} credits / 月",
+    "creditsYearly": "{count} credits / 年"
+  },
+  "changePlan": {
+    "title": "确认调整订阅计划？",
+    "description": "将调整为 {planName}（{price}）。差价不会退回，现有积分将保留，确认后立即按新计划价格扣费。",
+    "confirm": "确认调整",
+    "failed": "调整计划失败",
+    "missingPaymentInfo": "缺少支付确认信息，请稍后重试",
+    "stripeLoadFailed": "支付组件加载失败，请稍后重试",
+    "needCardVerification": "需要完成银行卡验证后才会生效，请按提示完成验证",
+    "cardVerificationFailed": "银行卡验证失败",
+    "verified": "验证成功，计划调整已提交，积分将稍后到账",
+    "paymentStatus": "支付状态：{status}，请稍后刷新查看",
+    "submitted": "计划调整已提交，积分将稍后到账"
+  },
+  "faq": {
+    "title": "常见问题",
+    "items": {
+      "japanese": {
+        "question": "可以翻译日漫吗？",
+        "answer": "可以。支持日语漫画自动识别与翻译，保留气泡排版与画风。"
+      },
+      "korean": {
+        "question": "可以翻译韩漫吗？",
+        "answer": "可以。支持韩语竖向阅读漫画，并适配常见条漫版式。"
+      },
+      "chinese": {
+        "question": "可以翻译中漫吗？",
+        "answer": "可以。支持简体/繁体中文漫画的跨语言翻译。"
+      },
+      "ai": {
+        "question": "使用什么 AI？",
+        "answer": "采用面向漫画场景优化的多模型流水线，覆盖文字检测、翻译与重绘。"
+      },
+      "duration": {
+        "question": "翻译需要多久？",
+        "answer": "单页通常数秒到数十秒，具体取决于图片尺寸与队列负载。"
+      },
+      "formats": {
+        "question": "支持哪些格式？",
+        "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
+      },
+      "expiry": {
+        "question": "页数会过期吗？",
+        "answer": "按量购买的页数永不过期；订阅页数按账单周期刷新。"
+      },
+      "languages": {
+        "question": "支持哪些语言？",
+        "answer": "支持 20+ 语言，包括日、中、英、韩等常见漫画语言。"
+      },
+      "privacy": {
+        "question": "数据安全吗？",
+        "answer": "上传内容仅用于翻译处理，不会用于公开训练或对外分享。"
+      },
+      "refund": {
+        "question": "如何退款？",
+        "answer": "未使用的付费额度可按政策申请退款，详情见服务条款。"
+      },
+      "plugin": {
+        "question": "有浏览器插件吗？",
+        "answer": "浏览器插件即将推出，当前请使用网页版上传翻译。"
+      }
+    }
+  },
+  "blog": {
+    "title": "博客",
+    "latest": "最新博客",
+    "viewAll": "查看所有文章 →",
+    "readMore": "阅读更多 →",
+    "back": "← 返回博客",
+    "date": "{year}年{month}月{day}日"
+  },
+  "auth": {
+    "login": {
+      "title": "登录",
+      "description": "使用邮箱和密码登录你的账号",
+      "emailPlaceholder": "邮箱",
+      "passwordPlaceholder": "密码",
+      "forgotPassword": "忘记密码？",
+      "submit": "登录",
+      "noAccount": "还没有账号？",
+      "goSignUp": "去注册",
+      "orUse": "或使用",
+      "google": "使用 Google 登录",
+      "failed": "登录失败",
+      "genericError": "发生错误，请重试"
+    },
+    "signUp": {
+      "title": "注册",
+      "description": "创建新账号并开始使用",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "至少8个字符",
+      "confirmPassword": "确认密码",
+      "confirmPasswordPlaceholder": "再次输入密码",
+      "submit": "注册",
+      "hasAccount": "已有账号？",
+      "goLogin": "去登录",
+      "passwordMismatch": "密码不匹配",
+      "failed": "注册失败",
+      "genericError": "发生错误，请重试"
+    },
+    "signUpSuccess": {
+      "title": "感谢你的注册！",
+      "description": "请查收确认邮件",
+      "body": "你已成功注册。请先查收邮件并确认账号，然后再登录。"
+    },
+    "forgotPassword": {
+      "title": "重置密码",
+      "description": "输入你的邮箱，我们将发送重置链接",
+      "email": "邮箱",
+      "emailPlaceholder": "m@example.com",
+      "submit": "发送重置邮件",
+      "sending": "发送中…",
+      "hasAccount": "已有账号？",
+      "goLogin": "登录",
+      "successTitle": "请查收邮件",
+      "successDescription": "密码重置说明已发送",
+      "successBody": "如果你使用邮箱和密码注册，将会收到一封密码重置邮件。",
+      "genericError": "发生错误"
+    },
+    "updatePassword": {
+      "title": "重置密码",
+      "description": "请在下方输入新密码。",
+      "newPassword": "新密码",
+      "placeholder": "新密码",
+      "submit": "保存新密码",
+      "saving": "保存中…",
+      "genericError": "发生错误"
+    },
+    "confirm": {
+      "verifyingTitle": "正在验证邮箱…",
+      "verifyingDescription": "请稍候，正在完成注册确认。",
+      "successTitle": "邮箱已确认",
+      "successDescription": "{seconds} 秒后自动进入首页，也可立即开始翻译。",
+      "errorTitle": "验证失败",
+      "errorDescription": "无法完成邮箱确认。",
+      "missingParams": "缺少确认参数，请重新打开邮件中的链接。",
+      "invalidLink": "验证失败，链接可能已失效。",
+      "networkError": "网络错误，请稍后重试。",
+      "startTranslate": "开始翻译",
+      "backToLogin": "返回登录"
+    },
+    "error": {
+      "title": "抱歉，出了点问题。",
+      "codeError": "错误代码：{error}",
+      "unspecified": "发生了未知错误。"
+    }
+  },
+  "home": {
+    "navAria": "账户",
+    "history": "翻译历史",
+    "billing": "账单与订阅",
+    "signOut": "退出登录",
+    "email": "邮箱",
+    "creditBalance": "积分余额"
+  },
+  "history": {
+    "title": "翻译历史",
+    "empty": "暂无翻译历史 / 无匹配结果",
+    "clearFilters": "清除筛选",
+    "loadMore": "加载更多",
+    "loading": "加载中…",
+    "sourceAuto": "自动",
+    "dateRange": {
+      "1d": "最近1天",
+      "7d": "最近7天",
+      "1m": "最近1月",
+      "all": "全部"
+    }
+  },
+  "billing": {
+    "title": "账单与订阅",
+    "currentPlan": "当前方案",
+    "manage": "管理",
+    "unsubscribed": "未订阅",
+    "unsubscribedHint": "订阅后可按周期获得 Credits，并解锁对应套餐权益",
+    "subscribe": "订阅",
+    "resetsOn": "于 {date} 重置",
+    "resetsOnWithDays": "于 {date} 重置（{days} 天）",
+    "monthDay": "{month}月{day}日",
+    "priceMonthlySuffix": "/月",
+    "priceYearlySuffix": "/年",
+    "transactions": "交易记录",
+    "emptyTransactions": "暂无账单记录",
+    "columns": {
+      "createdAt": "创建时间",
+      "amount": "金额",
+      "credits": "Credits",
+      "type": "交易类型",
+      "status": "交易状态"
+    },
+    "transactionType": {
+      "pay-to-use": "按需付费",
+      "subscription": "订阅"
+    }
+  },
+  "manageSubscription": {
+    "title": "管理订阅",
+    "currentPlan": "当前方案：{plan} {price}，周期至 {date}",
+    "cancelTitle": "确认取消订阅？",
+    "cancelDescription": "订阅将于 {date} 结束后失效。期内仍可使用当前方案权益，现有积分将保留。",
+    "thinkAgain": "再想想",
+    "confirmCancel": "确认取消",
+    "cancelFailed": "取消订阅失败",
+    "cancelSubmitted": "已提交取消订阅",
+    "restoreFailed": "恢复订阅失败",
+    "restored": "已恢复订阅"
+  },
+  "payment": {
+    "loading": "加载中…",
+    "error": "错误：{message}",
+    "success": {
+      "title": "订阅成功",
+      "thanks": "感谢你的订阅！确认邮件将发送至 {email}。",
+      "redirecting": "{seconds} 秒后返回翻译页…",
+      "start": "开始翻译"
+    },
+    "pending": {
+      "title": "支付处理中",
+      "body": "正在确认你的付款。款项到账后，Credits 将自动充入账户。",
+      "notify": "完成后我们将通知 {email}。",
+      "hint": "根据支付方式不同，这可能需要几分钟或更久。你可以安全离开此页面。",
+      "backHome": "返回首页"
+    },
+    "incomplete": {
+      "title": "支付未完成",
+      "expired": "此结账会话已过期。若仍想继续，请重新发起购买。",
+      "noPaymentRequired": "此会话无需付款。若你预期会产生扣款，请联系客服。",
+      "generic": "无法确认你的付款。你未被扣款，或支付未成功完成。",
+      "hint": "若你认为这是误报，请重试，或携带支付信息联系客服。",
+      "tryAgain": "再试一次",
+      "backHome": "返回首页"
+    }
+  }
+}

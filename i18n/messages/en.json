@@ -1,1 +1,420 @@
-{}
+{
+  "meta": {
+    "title": "Manga Translation",
+    "description": "AI-powered manga translation",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "about": "About",
+      "refund": "Refund Policy",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "processing": "Processing…",
+    "unknownError": "Unknown error",
+    "credits": "Credits",
+    "creditsCount": "Credits · {count}",
+    "pages": "{count} pages",
+    "email": "Email",
+    "password": "Password",
+    "pleaseWait": "Please wait…"
+  },
+  "status": {
+    "all": "All",
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed",
+    "partial": "Partial",
+    "stalled": "Timed out",
+    "success": "Success",
+    "canceled": "Canceled"
+  },
+  "header": {
+    "mangaTranslate": "Manga Translate",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "joinDiscord": "Join Discord",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "toggleTheme": "Toggle theme"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文"
+  },
+  "footer": {
+    "tagline": "Upload manga and get precise AI-powered translations. Smart OCR, faithful translation, seamless typesetting.",
+    "product": "Product",
+    "legal": "Legal",
+    "contact": "Contact us",
+    "emailLabel": "Email: ",
+    "followUs": "Follow us",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. All rights reserved.",
+    "disclaimer": "Manga Sense is not affiliated with any manga publisher.",
+    "links": {
+      "tool": "Tool",
+      "blog": "Blog",
+      "pricing": "Pricing",
+      "about": "About",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use",
+      "refund": "Refund Policy",
+      "faq": "FAQ",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "AI manga translation, in one click",
+    "subtitle": "Automatically detect speech-bubble text, translate it, and redraw it onto the original page. Supports Japanese, Korean, and Chinese manga while preserving layout and font style.",
+    "statPages": "pages",
+    "statLanguages": "languages",
+    "statAccuracy": "accuracy",
+    "tryFree": "Try for free",
+    "howItWorks": "How it works"
+  },
+  "how": {
+    "title": "How it works",
+    "demoFallback": "{title} demo",
+    "steps": {
+      "upload": {
+        "title": "Upload manga",
+        "desc": "Drag and drop, paste, or choose files. Supports JPG, PNG, WebP, PDF, EPUB, and CBZ — a single page or a full volume."
+      },
+      "language": {
+        "title": "Choose a language",
+        "desc": "Pick a target language and font style. High-accuracy translation across 20+ languages."
+      },
+      "download": {
+        "title": "Preview and download",
+        "desc": "Preview the translated manga and export high-resolution results with the original layout intact."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Translation showcase",
+    "description": "Drag the slider to compare original / translated",
+    "beforeAlt": "Original image before translation",
+    "afterAlt": "Result after translation",
+    "compareAria": "Before and after translation comparison",
+    "originalAlt": "Original",
+    "translatedAlt": "Translated"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "简体中文",
+      "CHT": "繁體中文",
+      "ENG": "English",
+      "JPN": "日本語",
+      "KOR": "한국어"
+    },
+    "modes": {
+      "fast": "Fast translation (1 credit)",
+      "precise": "Precise translation (2 credits)"
+    },
+    "fontStyles": {
+      "comic": "Comic",
+      "handwritten": "Handwritten",
+      "print": "Print"
+    },
+    "draftLabel": "Draft · {count} pages",
+    "taskLabel": "Task {id}",
+    "closeTask": "Close {label}",
+    "closeOthers": "Close others",
+    "settingsTitle": "Settings",
+    "translateTo": "Translate to",
+    "translateMode": "Translation mode",
+    "fontStyle": "Font style",
+    "downloadAll": "Download all",
+    "submit": "Submit translation",
+    "previewTitle": "Image preview ({count} images)",
+    "showTranslated": "View translated image",
+    "showOriginal": "View original image",
+    "clearAll": "Clear all",
+    "addImage": "Add images",
+    "hint": "✦ AI automatically detects Japanese, Chinese, English, Korean, and more",
+    "timeout": "Translation timed out. Please try again.",
+    "closeConfirmTitle": "Close an in-progress task?",
+    "closeConfirmDescription": "This translation is still running. Closing it only removes it from the current workspace. Background processing will continue, and used credits will not be refunded.",
+    "confirmClose": "Close anyway"
+  },
+  "upload": {
+    "dropHint": "Drop manga pages here, or",
+    "browse": "browse files",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Images up to 50MB, documents up to 200MB",
+    "quota": "Uploaded {uploaded}/{max} pages · {remaining} remaining",
+    "addOrDrop": "Add images / drop to upload",
+    "compactQuota": "{uploaded} / {max} pages"
+  },
+  "thumbnail": {
+    "waiting": "Waiting",
+    "processing": "Processing",
+    "preview": "Preview {name}",
+    "remove": "Remove {name}",
+    "continueWait": "Keep waiting",
+    "retry": "Retry",
+    "download": "Download"
+  },
+  "imagePreview": {
+    "close": "Close preview",
+    "prev": "Previous image, or press the left arrow key",
+    "next": "Next image, or press the right arrow key"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "payAsNeeded": "Pay as needed",
+    "subscription": "Subscription",
+    "getStarted": "Get started",
+    "restore": "Restore subscription",
+    "cancel": "Cancel subscription",
+    "subscribed": "Subscribed",
+    "adjustPlan": "Change plan",
+    "planFallback": "Plan",
+    "priceMonthly": "${price}/mo",
+    "priceYearly": "${price}/yr",
+    "creditsPayToUse": "{count} credits",
+    "creditsMonthly": "{count} credits / month",
+    "creditsYearly": "{count} credits / year"
+  },
+  "changePlan": {
+    "title": "Change your subscription plan?",
+    "description": "You will switch to {planName} ({price}). The price difference will not be refunded. Existing credits will be kept, and you will be charged the new plan price immediately after confirming.",
+    "confirm": "Confirm change",
+    "failed": "Failed to change plan",
+    "missingPaymentInfo": "Missing payment confirmation details. Please try again later.",
+    "stripeLoadFailed": "Failed to load the payment component. Please try again later.",
+    "needCardVerification": "Card verification is required before this change takes effect. Please follow the prompts.",
+    "cardVerificationFailed": "Card verification failed",
+    "verified": "Verification succeeded. The plan change has been submitted, and credits will arrive shortly.",
+    "paymentStatus": "Payment status: {status}. Please refresh later to check.",
+    "submitted": "Plan change submitted. Credits will arrive shortly."
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": {
+      "japanese": {
+        "question": "Can you translate Japanese manga?",
+        "answer": "Yes. We support automatic recognition and translation of Japanese manga while preserving speech-bubble layout and art style."
+      },
+      "korean": {
+        "question": "Can you translate Korean manhwa?",
+        "answer": "Yes. We support vertically read Korean comics and common webtoon layouts."
+      },
+      "chinese": {
+        "question": "Can you translate Chinese manga?",
+        "answer": "Yes. We support cross-language translation of Simplified and Traditional Chinese comics."
+      },
+      "ai": {
+        "question": "What AI do you use?",
+        "answer": "We use a multi-model pipeline optimized for manga, covering text detection, translation, and inpainting."
+      },
+      "duration": {
+        "question": "How long does translation take?",
+        "answer": "A single page usually takes a few seconds to tens of seconds, depending on image size and queue load."
+      },
+      "formats": {
+        "question": "Which formats are supported?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, and ZIP."
+      },
+      "expiry": {
+        "question": "Do pages expire?",
+        "answer": "Pay-as-you-go pages never expire. Subscription pages refresh each billing cycle."
+      },
+      "languages": {
+        "question": "Which languages are supported?",
+        "answer": "We support 20+ languages, including Japanese, Chinese, English, Korean, and other common manga languages."
+      },
+      "privacy": {
+        "question": "Is my data safe?",
+        "answer": "Uploaded content is used only for translation. It is not used for public training or shared with others."
+      },
+      "refund": {
+        "question": "How do refunds work?",
+        "answer": "Unused paid credits can be refunded according to our policy. See the terms of service for details."
+      },
+      "plugin": {
+        "question": "Is there a browser extension?",
+        "answer": "A browser extension is coming soon. For now, please upload and translate on the web app."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Latest posts",
+    "viewAll": "View all posts →",
+    "readMore": "Read more →",
+    "back": "← Back to blog",
+    "date": "{month} {day}, {year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "description": "Sign in to your account with email and password",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "goSignUp": "Sign up",
+      "orUse": "Or continue with",
+      "google": "Continue with Google",
+      "failed": "Login failed",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "signUp": {
+      "title": "Sign up",
+      "description": "Create an account and get started",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Enter password again",
+      "submit": "Sign up",
+      "hasAccount": "Already have an account?",
+      "goLogin": "Log in",
+      "passwordMismatch": "Passwords do not match",
+      "failed": "Sign-up failed",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "signUpSuccess": {
+      "title": "Thank you for signing up!",
+      "description": "Check your email to confirm",
+      "body": "You've successfully signed up. Please check your email to confirm your account before signing in."
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "description": "Type in your email and we'll send you a link to reset your password",
+      "email": "Email",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Send reset email",
+      "sending": "Sending...",
+      "hasAccount": "Already have an account?",
+      "goLogin": "Log in",
+      "successTitle": "Check your email",
+      "successDescription": "Password reset instructions sent",
+      "successBody": "If you registered using your email and password, you will receive a password reset email.",
+      "genericError": "An error occurred"
+    },
+    "updatePassword": {
+      "title": "Reset your password",
+      "description": "Please enter your new password below.",
+      "newPassword": "New password",
+      "placeholder": "New password",
+      "submit": "Save new password",
+      "saving": "Saving...",
+      "genericError": "An error occurred"
+    },
+    "confirm": {
+      "verifyingTitle": "Verifying your email…",
+      "verifyingDescription": "Please wait while we finish confirming your sign-up.",
+      "successTitle": "Email confirmed",
+      "successDescription": "You will be taken to the home page in {seconds} seconds, or you can start translating now.",
+      "errorTitle": "Verification failed",
+      "errorDescription": "We couldn't confirm your email.",
+      "missingParams": "Missing confirmation parameters. Please open the link from your email again.",
+      "invalidLink": "Verification failed. The link may have expired.",
+      "networkError": "Network error. Please try again later.",
+      "startTranslate": "Start translating",
+      "backToLogin": "Back to login"
+    },
+    "error": {
+      "title": "Sorry, something went wrong.",
+      "codeError": "Error code: {error}",
+      "unspecified": "An unspecified error occurred."
+    }
+  },
+  "home": {
+    "navAria": "Account",
+    "history": "Translation history",
+    "billing": "Billing & subscription",
+    "signOut": "Sign out",
+    "email": "Email",
+    "creditBalance": "Credit balance"
+  },
+  "history": {
+    "title": "Translation history",
+    "empty": "No translation history / no matching results",
+    "clearFilters": "Clear filters",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "sourceAuto": "Auto",
+    "dateRange": {
+      "1d": "Last 1 day",
+      "7d": "Last 7 days",
+      "1m": "Last 1 month",
+      "all": "All"
+    }
+  },
+  "billing": {
+    "title": "Billing & subscription",
+    "currentPlan": "Current plan",
+    "manage": "Manage",
+    "unsubscribed": "No subscription",
+    "unsubscribedHint": "Subscribe to receive credits each billing cycle and unlock plan benefits",
+    "subscribe": "Subscribe",
+    "resetsOn": "Resets on {date}",
+    "resetsOnWithDays": "Resets on {date} ({days} days)",
+    "monthDay": "{month}/{day}",
+    "priceMonthlySuffix": "/mo",
+    "priceYearlySuffix": "/yr",
+    "transactions": "Transactions",
+    "emptyTransactions": "No billing records yet",
+    "columns": {
+      "createdAt": "Created at",
+      "amount": "Amount",
+      "credits": "Credits",
+      "type": "Type",
+      "status": "Status"
+    },
+    "transactionType": {
+      "pay-to-use": "Pay as needed",
+      "subscription": "Subscription"
+    }
+  },
+  "manageSubscription": {
+    "title": "Manage subscription",
+    "currentPlan": "Current plan: {plan} {price}, period until {date}",
+    "cancelTitle": "Cancel your subscription?",
+    "cancelDescription": "Your subscription will end after {date}. You can keep using the current plan until then, and existing credits will be retained.",
+    "thinkAgain": "Keep subscription",
+    "confirmCancel": "Confirm cancellation",
+    "cancelFailed": "Failed to cancel subscription",
+    "cancelSubmitted": "Cancellation submitted",
+    "restoreFailed": "Failed to restore subscription",
+    "restored": "Subscription restored"
+  },
+  "payment": {
+    "loading": "Loading…",
+    "error": "Error: {message}",
+    "success": {
+      "title": "Subscription success",
+      "thanks": "Thanks for your subscription! A confirmation email will be sent to {email}.",
+      "redirecting": "Redirecting to the translator in {seconds}s…",
+      "start": "Start translating"
+    },
+    "pending": {
+      "title": "Payment processing",
+      "body": "Your payment is being confirmed. Credits will be added to your account once the payment clears.",
+      "notify": "We will notify {email} when it is complete.",
+      "hint": "This may take a few minutes or longer depending on your payment method. You can leave this page safely.",
+      "backHome": "Back to home"
+    },
+    "incomplete": {
+      "title": "Payment incomplete",
+      "expired": "This checkout session has expired. Please start a new purchase if you still want to continue.",
+      "noPaymentRequired": "No payment was required for this session. If you expected a charge, please contact support.",
+      "generic": "We could not confirm your payment. You have not been charged, or the payment did not complete successfully.",
+      "hint": "If you believe this is a mistake, try again or contact support with your payment details.",
+      "tryAgain": "Try again",
+      "backHome": "Back to home"
+    }
+  }
+}

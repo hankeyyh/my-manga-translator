@@ -1,1 +1,420 @@
-{}
+{
+  "meta": {
+    "title": "Manga Translation",
+    "description": "AI 驅動的漫畫翻譯",
+    "blogTitle": "部落格 | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "使用條款",
+      "privacy": "隱私權政策",
+      "about": "關於",
+      "refund": "退款政策",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "載入中…",
+    "cancel": "取消",
+    "processing": "處理中…",
+    "unknownError": "未知錯誤",
+    "credits": "Credits",
+    "creditsCount": "Credits · {count}",
+    "pages": "{count} 頁",
+    "email": "電子郵件",
+    "password": "密碼",
+    "pleaseWait": "請稍候…"
+  },
+  "status": {
+    "all": "全部",
+    "pending": "等待中",
+    "processing": "處理中",
+    "completed": "已完成",
+    "failed": "失敗",
+    "partial": "部分完成",
+    "stalled": "已逾時",
+    "success": "成功",
+    "canceled": "已取消"
+  },
+  "header": {
+    "mangaTranslate": "漫畫翻譯",
+    "pricing": "價格",
+    "faq": "常見問題",
+    "blog": "部落格",
+    "joinDiscord": "加入 Discord",
+    "dashboard": "工作台",
+    "login": "登入",
+    "toggleTheme": "切換主題"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文"
+  },
+  "footer": {
+    "tagline": "上傳漫畫，取得 AI 驅動的精準翻譯。智慧 OCR、忠實翻譯、無縫排版。",
+    "product": "產品",
+    "legal": "法律",
+    "contact": "聯絡我們",
+    "emailLabel": "電子郵件：",
+    "followUs": "追蹤我們",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. 保留所有權利。",
+    "disclaimer": "Manga Sense 與任何漫畫出版社無關。",
+    "links": {
+      "tool": "工具",
+      "blog": "部落格",
+      "pricing": "價格",
+      "about": "關於",
+      "privacy": "隱私權政策",
+      "terms": "使用條款",
+      "refund": "退款政策",
+      "faq": "常見問題",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "AI 漫畫翻譯，一鍵完成",
+    "subtitle": "自動辨識氣泡文字，翻譯並重繪到原圖。支援日漫、韓漫、中漫，保留原作版式與字型風格。",
+    "statPages": "頁",
+    "statLanguages": "語言",
+    "statAccuracy": "準確率",
+    "tryFree": "免費試用",
+    "howItWorks": "使用流程"
+  },
+  "how": {
+    "title": "使用流程",
+    "demoFallback": "{title}示範",
+    "steps": {
+      "upload": {
+        "title": "上傳漫畫",
+        "desc": "拖放、貼上或選擇檔案，支援 JPG、PNG、WebP、PDF、EPUB、CBZ，一次可上傳單頁或整卷。"
+      },
+      "language": {
+        "title": "選擇語言",
+        "desc": "選擇目標語言與字型風格，支援 20+ 語言高精度互譯。"
+      },
+      "download": {
+        "title": "檢視與下載",
+        "desc": "預覽譯後漫畫，一鍵匯出高清結果，保留原作排版。"
+      }
+    }
+  },
+  "showcase": {
+    "title": "翻譯效果展示",
+    "description": "拖曳滑桿對比原圖 / 翻譯",
+    "beforeAlt": "翻譯前原圖",
+    "afterAlt": "翻譯後效果",
+    "compareAria": "翻譯前後對比",
+    "originalAlt": "原圖",
+    "translatedAlt": "翻譯後"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "简体中文",
+      "CHT": "繁體中文",
+      "ENG": "English",
+      "JPN": "日本語",
+      "KOR": "한국어"
+    },
+    "modes": {
+      "fast": "快速翻譯 (1 credit)",
+      "precise": "精確翻譯 (2 credits)"
+    },
+    "fontStyles": {
+      "comic": "漫畫",
+      "handwritten": "手寫",
+      "print": "印刷"
+    },
+    "draftLabel": "草稿 · {count} 頁",
+    "taskLabel": "任務 {id}",
+    "closeTask": "關閉{label}",
+    "closeOthers": "關閉其他",
+    "settingsTitle": "操作設定",
+    "translateTo": "翻譯為",
+    "translateMode": "翻譯模式",
+    "fontStyle": "字型風格",
+    "downloadAll": "下載全部",
+    "submit": "提交翻譯",
+    "previewTitle": "圖片預覽（共 {count} 張）",
+    "showTranslated": "檢視翻譯圖",
+    "showOriginal": "檢視原圖",
+    "clearAll": "全部清除",
+    "addImage": "新增圖片",
+    "hint": "✦ AI 自動辨識日語、中文、英語、韓語等多種語言",
+    "timeout": "翻譯逾時，請重試",
+    "closeConfirmTitle": "確認關閉進行中的任務？",
+    "closeConfirmDescription": "翻譯任務仍在進行中。關閉後僅會從目前工作區移除，背景翻譯不會中止，已消耗的額度也不會退回。",
+    "confirmClose": "確認關閉"
+  },
+  "upload": {
+    "dropHint": "將漫畫頁拖放到此處，或",
+    "browse": "瀏覽檔案",
+    "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 圖片最大 50MB，文件最大 200MB",
+    "quota": "已上傳 {uploaded}/{max} 頁 · 剩餘 {remaining} 頁",
+    "addOrDrop": "新增圖片 / 拖曳上傳",
+    "compactQuota": "{uploaded} / {max} 頁"
+  },
+  "thumbnail": {
+    "waiting": "等待中",
+    "processing": "處理中",
+    "preview": "預覽 {name}",
+    "remove": "移除 {name}",
+    "continueWait": "繼續等待",
+    "retry": "重試",
+    "download": "下載"
+  },
+  "imagePreview": {
+    "close": "關閉預覽",
+    "prev": "上一張，或按左方向鍵",
+    "next": "下一張，或按右方向鍵"
+  },
+  "pricing": {
+    "title": "價格",
+    "payAsNeeded": "按需付費",
+    "subscription": "訂閱",
+    "getStarted": "立即開始",
+    "restore": "恢復訂閱",
+    "cancel": "取消訂閱",
+    "subscribed": "已訂閱",
+    "adjustPlan": "調整方案",
+    "planFallback": "方案",
+    "priceMonthly": "${price}/月",
+    "priceYearly": "${price}/年",
+    "creditsPayToUse": "{count} credits",
+    "creditsMonthly": "{count} credits / 月",
+    "creditsYearly": "{count} credits / 年"
+  },
+  "changePlan": {
+    "title": "確認調整訂閱方案？",
+    "description": "將調整為 {planName}（{price}）。差價不會退回，現有點數將保留，確認後立即按新方案價格扣款。",
+    "confirm": "確認調整",
+    "failed": "調整方案失敗",
+    "missingPaymentInfo": "缺少付款確認資訊，請稍後重試",
+    "stripeLoadFailed": "付款元件載入失敗，請稍後重試",
+    "needCardVerification": "需完成銀行卡驗證後才會生效，請依提示完成驗證",
+    "cardVerificationFailed": "銀行卡驗證失敗",
+    "verified": "驗證成功，方案調整已提交，點數稍後到帳",
+    "paymentStatus": "付款狀態：{status}，請稍後重新整理查看",
+    "submitted": "方案調整已提交，點數稍後到帳"
+  },
+  "faq": {
+    "title": "常見問題",
+    "items": {
+      "japanese": {
+        "question": "可以翻譯日漫嗎？",
+        "answer": "可以。支援日語漫畫自動辨識與翻譯，保留氣泡排版與畫風。"
+      },
+      "korean": {
+        "question": "可以翻譯韓漫嗎？",
+        "answer": "可以。支援韓語直式閱讀漫畫，並適配常見條漫版式。"
+      },
+      "chinese": {
+        "question": "可以翻譯中漫嗎？",
+        "answer": "可以。支援簡體／繁體中文漫畫的跨語言翻譯。"
+      },
+      "ai": {
+        "question": "使用什麼 AI？",
+        "answer": "採用面向漫畫場景優化的多模型流水線，涵蓋文字偵測、翻譯與重繪。"
+      },
+      "duration": {
+        "question": "翻譯需要多久？",
+        "answer": "單頁通常數秒到數十秒，具體取決於圖片尺寸與佇列負載。"
+      },
+      "formats": {
+        "question": "支援哪些格式？",
+        "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
+      },
+      "expiry": {
+        "question": "頁數會過期嗎？",
+        "answer": "按量購買的頁數永不過期；訂閱頁數按帳單週期刷新。"
+      },
+      "languages": {
+        "question": "支援哪些語言？",
+        "answer": "支援 20+ 語言，包括日、中、英、韓等常見漫畫語言。"
+      },
+      "privacy": {
+        "question": "資料安全嗎？",
+        "answer": "上傳內容僅用於翻譯處理，不會用於公開訓練或對外分享。"
+      },
+      "refund": {
+        "question": "如何退款？",
+        "answer": "未使用的付費額度可依政策申請退款，詳情見服務條款。"
+      },
+      "plugin": {
+        "question": "有瀏覽器外掛嗎？",
+        "answer": "瀏覽器外掛即將推出，目前請使用網頁版上傳翻譯。"
+      }
+    }
+  },
+  "blog": {
+    "title": "部落格",
+    "latest": "最新文章",
+    "viewAll": "查看所有文章 →",
+    "readMore": "閱讀更多 →",
+    "back": "← 返回部落格",
+    "date": "{year}年{month}月{day}日"
+  },
+  "auth": {
+    "login": {
+      "title": "登入",
+      "description": "使用電子郵件和密碼登入你的帳號",
+      "emailPlaceholder": "電子郵件",
+      "passwordPlaceholder": "密碼",
+      "forgotPassword": "忘記密碼？",
+      "submit": "登入",
+      "noAccount": "還沒有帳號？",
+      "goSignUp": "去註冊",
+      "orUse": "或使用",
+      "google": "使用 Google 登入",
+      "failed": "登入失敗",
+      "genericError": "發生錯誤，請重試"
+    },
+    "signUp": {
+      "title": "註冊",
+      "description": "建立新帳號並開始使用",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "至少 8 個字元",
+      "confirmPassword": "確認密碼",
+      "confirmPasswordPlaceholder": "再次輸入密碼",
+      "submit": "註冊",
+      "hasAccount": "已有帳號？",
+      "goLogin": "去登入",
+      "passwordMismatch": "密碼不相符",
+      "failed": "註冊失敗",
+      "genericError": "發生錯誤，請重試"
+    },
+    "signUpSuccess": {
+      "title": "感謝你的註冊！",
+      "description": "請查收確認郵件",
+      "body": "你已成功註冊。請先查收郵件並確認帳號，然後再登入。"
+    },
+    "forgotPassword": {
+      "title": "重設密碼",
+      "description": "輸入你的電子郵件，我們將傳送重設連結",
+      "email": "電子郵件",
+      "emailPlaceholder": "m@example.com",
+      "submit": "傳送重設郵件",
+      "sending": "傳送中…",
+      "hasAccount": "已有帳號？",
+      "goLogin": "登入",
+      "successTitle": "請查收郵件",
+      "successDescription": "密碼重設說明已傳送",
+      "successBody": "如果你使用電子郵件和密碼註冊，將會收到一封密碼重設郵件。",
+      "genericError": "發生錯誤"
+    },
+    "updatePassword": {
+      "title": "重設密碼",
+      "description": "請在下方輸入新密碼。",
+      "newPassword": "新密碼",
+      "placeholder": "新密碼",
+      "submit": "儲存新密碼",
+      "saving": "儲存中…",
+      "genericError": "發生錯誤"
+    },
+    "confirm": {
+      "verifyingTitle": "正在驗證電子郵件…",
+      "verifyingDescription": "請稍候，正在完成註冊確認。",
+      "successTitle": "電子郵件已確認",
+      "successDescription": "{seconds} 秒後自動進入首頁，也可立即開始翻譯。",
+      "errorTitle": "驗證失敗",
+      "errorDescription": "無法完成電子郵件確認。",
+      "missingParams": "缺少確認參數，請重新開啟郵件中的連結。",
+      "invalidLink": "驗證失敗，連結可能已失效。",
+      "networkError": "網路錯誤，請稍後重試。",
+      "startTranslate": "開始翻譯",
+      "backToLogin": "返回登入"
+    },
+    "error": {
+      "title": "抱歉，出了點問題。",
+      "codeError": "錯誤代碼：{error}",
+      "unspecified": "發生了未知錯誤。"
+    }
+  },
+  "home": {
+    "navAria": "帳戶",
+    "history": "翻譯歷史",
+    "billing": "帳單與訂閱",
+    "signOut": "登出",
+    "email": "電子郵件",
+    "creditBalance": "點數餘額"
+  },
+  "history": {
+    "title": "翻譯歷史",
+    "empty": "暫無翻譯歷史 / 無符合結果",
+    "clearFilters": "清除篩選",
+    "loadMore": "載入更多",
+    "loading": "載入中…",
+    "sourceAuto": "自動",
+    "dateRange": {
+      "1d": "最近 1 天",
+      "7d": "最近 7 天",
+      "1m": "最近 1 月",
+      "all": "全部"
+    }
+  },
+  "billing": {
+    "title": "帳單與訂閱",
+    "currentPlan": "目前方案",
+    "manage": "管理",
+    "unsubscribed": "尚未訂閱",
+    "unsubscribedHint": "訂閱後可按週期獲得 Credits，並解鎖對應方案權益",
+    "subscribe": "訂閱",
+    "resetsOn": "於 {date} 重置",
+    "resetsOnWithDays": "於 {date} 重置（{days} 天）",
+    "monthDay": "{month}月{day}日",
+    "priceMonthlySuffix": "/月",
+    "priceYearlySuffix": "/年",
+    "transactions": "交易紀錄",
+    "emptyTransactions": "暫無帳單紀錄",
+    "columns": {
+      "createdAt": "建立時間",
+      "amount": "金額",
+      "credits": "Credits",
+      "type": "交易類型",
+      "status": "交易狀態"
+    },
+    "transactionType": {
+      "pay-to-use": "按需付費",
+      "subscription": "訂閱"
+    }
+  },
+  "manageSubscription": {
+    "title": "管理訂閱",
+    "currentPlan": "目前方案：{plan} {price}，週期至 {date}",
+    "cancelTitle": "確認取消訂閱？",
+    "cancelDescription": "訂閱將於 {date} 結束後失效。期間內仍可使用目前方案權益，現有點數將保留。",
+    "thinkAgain": "再想想",
+    "confirmCancel": "確認取消",
+    "cancelFailed": "取消訂閱失敗",
+    "cancelSubmitted": "已提交取消訂閱",
+    "restoreFailed": "恢復訂閱失敗",
+    "restored": "已恢復訂閱"
+  },
+  "payment": {
+    "loading": "載入中…",
+    "error": "錯誤：{message}",
+    "success": {
+      "title": "訂閱成功",
+      "thanks": "感謝你的訂閱！確認郵件將傳送至 {email}。",
+      "redirecting": "{seconds} 秒後返回翻譯頁…",
+      "start": "開始翻譯"
+    },
+    "pending": {
+      "title": "付款處理中",
+      "body": "正在確認你的付款。款項到帳後，Credits 將自動充入帳戶。",
+      "notify": "完成後我們將通知 {email}。",
+      "hint": "依付款方式不同，這可能需要幾分鐘或更久。你可以安全離開此頁面。",
+      "backHome": "返回首頁"
+    },
+    "incomplete": {
+      "title": "付款未完成",
+      "expired": "此結帳工作階段已過期。若仍想繼續，請重新發起購買。",
+      "noPaymentRequired": "此工作階段無需付款。若你預期會產生扣款，請聯絡客服。",
+      "generic": "無法確認你的付款。你未被扣款，或付款未成功完成。",
+      "hint": "若你認為這是誤報，請重試，或攜帶付款資訊聯絡客服。",
+      "tryAgain": "再試一次",
+      "backHome": "返回首頁"
+    }
+  }
+}
