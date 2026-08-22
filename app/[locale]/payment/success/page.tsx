@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { PaymentService } from "@/biz/services/payment/payment-service";
-import PaymentIncompleteDisplay from "@/app/(main)/payment/success/_components/payment-incomplete";
-import PendingPaymentDisplay from "@/app/(main)/payment/success/_components/payment-pending";
-import SuccessDisplay from "@/app/(main)/payment/success/_components/payment-success";
+import PaymentIncompleteDisplay from "@/app/[locale]/payment/success/_components/payment-incomplete";
+import PendingPaymentDisplay from "@/app/[locale]/payment/success/_components/payment-pending";
+import SuccessDisplay from "@/app/[locale]/payment/success/_components/payment-success";
 import { createStripeClient } from "@/biz/utils/stripe/server";
 
 export default function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ session_id: string; }>; }) {

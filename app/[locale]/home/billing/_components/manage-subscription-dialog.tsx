@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cancelSubscription } from "@/actions/cancel-subscription";
 import { restoreSubscription } from "@/actions/restore-subscription";
-import { ChangePlanConfirmDialog } from "@/app/(main)/_components/change-plan-confirm-dialog";
-import { SubscriptionPlanCards } from "@/app/(main)/_components/subscription-plan-cards";
-import { useChangeSubscription } from "@/app/(main)/_components/use-change-subscription";
+import { ChangePlanConfirmDialog } from "@/app/[locale]/_components/change-plan-confirm-dialog";
+import { SubscriptionPlanCards } from "@/app/[locale]/_components/subscription-plan-cards";
+import { useChangeSubscription } from "@/app/[locale]/_components/use-change-subscription";
 import {
     AlertDialog,
     AlertDialogAction,

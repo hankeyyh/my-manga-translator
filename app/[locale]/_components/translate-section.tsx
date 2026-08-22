@@ -39,7 +39,7 @@ import {
 } from "@/design/design-system/components";
 import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
-import { UploadZone } from "@/app/(main)/_components/upload-zone";
+import { UploadZone } from "@/app/[locale]/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
 import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import { toast } from "sonner";
@@ -829,97 +829,97 @@ export function TranslateSection() {
                             <CcCard className="gap-4 p-5 lg:p-6" variant="elevated">
                                 <CcCardTitle className="text-base">操作设置</CcCardTitle>
                                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                                        <div className="flex-1 space-y-1">
-                                            <CcLabel>翻译为</CcLabel>
-                                            {/* modal=false，当下拉框展开，仍然允许与页面其他部分交互 */}
-                                            <DropdownMenu modal={false}>
-                                                <DropdownMenuTrigger asChild>
-                                                    <CcSelectTrigger disabled={configLocked}>
-                                                        {activeTask.targetLang.label}
-                                                    </CcSelectTrigger>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    {SUPPORTED_LANGS.map((lang) => (
-                                                        <DropdownMenuItem
-                                                            key={lang.code}
-                                                            onSelect={() => updateTask(activeTask.localId, (task) => ({
-                                                                ...task,
-                                                                targetLang: lang,
-                                                            }))}
-                                                        >
-                                                            {lang.label}
-                                                        </DropdownMenuItem>
-                                                    ))}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
-                                        <div className="flex-1 space-y-1">
-                                            <CcLabel>翻译模式</CcLabel>
-                                            <DropdownMenu modal={false}>
-                                                <DropdownMenuTrigger asChild>
-                                                    <CcSelectTrigger disabled={configLocked}>
-                                                        {activeTask.translateMode}
-                                                    </CcSelectTrigger>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    {SUPPORTED_MODE.map((mode) => (
-                                                        <DropdownMenuItem
-                                                            key={mode}
-                                                            onSelect={() => updateTask(activeTask.localId, (task) => ({
-                                                                ...task,
-                                                                translateMode: mode,
-                                                            }))}
-                                                        >
-                                                            {mode}
-                                                        </DropdownMenuItem>
-                                                    ))}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
-                                        <div className="flex-1 space-y-1">
-                                            <CcLabel>字体风格</CcLabel>
-                                            <DropdownMenu modal={false}>
-                                                <DropdownMenuTrigger asChild>
-                                                    <CcSelectTrigger disabled={configLocked}>
-                                                        {activeTask.fontStyle}
-                                                    </CcSelectTrigger>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    {SUPPORTED_FONT_STYLE.map((style) => (
-                                                        <DropdownMenuItem
-                                                            key={style}
-                                                            onSelect={() => updateTask(activeTask.localId, (task) => ({
-                                                                ...task,
-                                                                fontStyle: style,
-                                                            }))}
-                                                        >
-                                                            {style}
-                                                        </DropdownMenuItem>
-                                                    ))}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
-                                        {activeKind !== "draft" && activeKind !== "processing" ? (
-                                            <CcButton
-                                                variant="outline"
-                                                className="w-full sm:w-40"
-                                                disabled={!hasCompletedResults(pages)}
-                                                onClick={() => onDownload(pages)}
-                                            >
-                                                <Download />
-                                                下载全部
-                                            </CcButton>
-                                        ) : (
-                                            <CcButton
-                                                className="w-full sm:w-40"
-                                                disabled={activeKind === "processing" || activeTask.submitLoading || pages.length === 0}
-                                                onClick={() => void submitTask(activeTask.localId)}
-                                            >
-                                                <Upload />
-                                                提交翻译
-                                            </CcButton>
-                                        )}
+                                    <div className="flex-1 space-y-1">
+                                        <CcLabel>翻译为</CcLabel>
+                                        {/* modal=false，当下拉框展开，仍然允许与页面其他部分交互 */}
+                                        <DropdownMenu modal={false}>
+                                            <DropdownMenuTrigger asChild>
+                                                <CcSelectTrigger disabled={configLocked}>
+                                                    {activeTask.targetLang.label}
+                                                </CcSelectTrigger>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                {SUPPORTED_LANGS.map((lang) => (
+                                                    <DropdownMenuItem
+                                                        key={lang.code}
+                                                        onSelect={() => updateTask(activeTask.localId, (task) => ({
+                                                            ...task,
+                                                            targetLang: lang,
+                                                        }))}
+                                                    >
+                                                        {lang.label}
+                                                    </DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </div>
+                                    <div className="flex-1 space-y-1">
+                                        <CcLabel>翻译模式</CcLabel>
+                                        <DropdownMenu modal={false}>
+                                            <DropdownMenuTrigger asChild>
+                                                <CcSelectTrigger disabled={configLocked}>
+                                                    {activeTask.translateMode}
+                                                </CcSelectTrigger>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                {SUPPORTED_MODE.map((mode) => (
+                                                    <DropdownMenuItem
+                                                        key={mode}
+                                                        onSelect={() => updateTask(activeTask.localId, (task) => ({
+                                                            ...task,
+                                                            translateMode: mode,
+                                                        }))}
+                                                    >
+                                                        {mode}
+                                                    </DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <CcLabel>字体风格</CcLabel>
+                                        <DropdownMenu modal={false}>
+                                            <DropdownMenuTrigger asChild>
+                                                <CcSelectTrigger disabled={configLocked}>
+                                                    {activeTask.fontStyle}
+                                                </CcSelectTrigger>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                {SUPPORTED_FONT_STYLE.map((style) => (
+                                                    <DropdownMenuItem
+                                                        key={style}
+                                                        onSelect={() => updateTask(activeTask.localId, (task) => ({
+                                                            ...task,
+                                                            fontStyle: style,
+                                                        }))}
+                                                    >
+                                                        {style}
+                                                    </DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                    {activeKind !== "draft" && activeKind !== "processing" ? (
+                                        <CcButton
+                                            variant="outline"
+                                            className="w-full sm:w-40"
+                                            disabled={!hasCompletedResults(pages)}
+                                            onClick={() => onDownload(pages)}
+                                        >
+                                            <Download />
+                                            下载全部
+                                        </CcButton>
+                                    ) : (
+                                        <CcButton
+                                            className="w-full sm:w-40"
+                                            disabled={activeKind === "processing" || activeTask.submitLoading || pages.length === 0}
+                                            onClick={() => void submitTask(activeTask.localId)}
+                                        >
+                                            <Upload />
+                                            提交翻译
+                                        </CcButton>
+                                    )}
+                                </div>
                             </CcCard>
 
                             {/* 预览区 */}
@@ -958,49 +958,49 @@ export function TranslateSection() {
                                         </CcButton>
                                     </div>
                                 </div>
-                                    <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4 lg:grid-cols-6">
-                                        {pages.map((page, index) => (
-                                            <ThumbNail
-                                                key={`${activeTask.localId}-${page.name}`}
-                                                {...page}
-                                                showTranslated={activeTask.showTranslated}
-                                                onRemove={activeKind === "draft" ? () => removePage(page.name) : undefined}
-                                                onPreview={() => setPreviewIndex(index)}
-                                                onRetry={page.imageId && page.taskId
-                                                    ? () => void retryTaskImages(page.taskId!, [page.imageId!])
-                                                    : undefined}
-                                                onContinueWait={() => continueWait(activeTask.localId)}
-                                                onDownload={page.status === "completed" ? () => onDownload([page]) : undefined}
-                                            />
-                                        ))}
-                                        {activeKind === "draft" && pages.length < MAX_PAGES && (
-                                            <button
-                                                type="button"
-                                                className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-cc-brand-primary/30 text-cc-text-muted hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
-                                                onClick={() => addInputRef.current?.click()}
-                                            >
-                                                <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
-                                                    <Plus className="size-4 text-cc-brand-primary" />
-                                                </span>
-                                                <span className="text-sm">添加图片</span>
-                                            </button>
-                                        )}
-                                    </div>
-                                    <input
-                                        ref={addInputRef}
-                                        type="file"
-                                        accept=".jpg,.jpeg,.png,.webp,.gif,.avif,.heic,image/*"
-                                        multiple
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            // e.target.files 是input实时视图，如果用户选择新一批文件，target.files会跟随改变，所以需要转为File[]快照
-                                            const files = Array.from(e.target.files ?? []);
-                                            e.target.value = ""; // 如果不清空，连续选择同一个文件，value不变不会触发onChange
-                                            if (files.length > 0 && activeTask) {
-                                                appendFilesToTask(activeTask.localId, files);
-                                            }
-                                        }}
-                                    />
+                                <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                                    {pages.map((page, index) => (
+                                        <ThumbNail
+                                            key={`${activeTask.localId}-${page.name}`}
+                                            {...page}
+                                            showTranslated={activeTask.showTranslated}
+                                            onRemove={activeKind === "draft" ? () => removePage(page.name) : undefined}
+                                            onPreview={() => setPreviewIndex(index)}
+                                            onRetry={page.imageId && page.taskId
+                                                ? () => void retryTaskImages(page.taskId!, [page.imageId!])
+                                                : undefined}
+                                            onContinueWait={() => continueWait(activeTask.localId)}
+                                            onDownload={page.status === "completed" ? () => onDownload([page]) : undefined}
+                                        />
+                                    ))}
+                                    {activeKind === "draft" && pages.length < MAX_PAGES && (
+                                        <button
+                                            type="button"
+                                            className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-cc-brand-primary/30 text-cc-text-muted hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
+                                            onClick={() => addInputRef.current?.click()}
+                                        >
+                                            <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
+                                                <Plus className="size-4 text-cc-brand-primary" />
+                                            </span>
+                                            <span className="text-sm">添加图片</span>
+                                        </button>
+                                    )}
+                                </div>
+                                <input
+                                    ref={addInputRef}
+                                    type="file"
+                                    accept=".jpg,.jpeg,.png,.webp,.gif,.avif,.heic,image/*"
+                                    multiple
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        // e.target.files 是input实时视图，如果用户选择新一批文件，target.files会跟随改变，所以需要转为File[]快照
+                                        const files = Array.from(e.target.files ?? []);
+                                        e.target.value = ""; // 如果不清空，连续选择同一个文件，value不变不会触发onChange
+                                        if (files.length > 0 && activeTask) {
+                                            appendFilesToTask(activeTask.localId, files);
+                                        }
+                                    }}
+                                />
                             </CcCard>
                         </div>
                     </div>

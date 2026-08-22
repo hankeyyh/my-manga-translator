@@ -7,9 +7,9 @@ import { CcButton } from "@/design/design-system/components";
 import {
     DateRangeFilter,
     type DateRangeValue,
-} from "@/app/(main)/home/_components/date-range-filter";
-import { TranslationHistoryEmpty } from "@/app/(main)/home/history/_components/translation-history-empty";
-import { TranslationHistoryTaskItem } from "@/app/(main)/home/history/_components/translation-history-task-item";
+} from "@/app/[locale]/home/_components/date-range-filter";
+import { TranslationHistoryEmpty } from "@/app/[locale]/home/history/_components/translation-history-empty";
+import { TranslationHistoryTaskItem } from "@/app/[locale]/home/history/_components/translation-history-task-item";
 import type { TaskStatus } from "@/types/do/translation-task";
 import { SUCCESS_CODE } from "@/types/dto/response";
 import { TranslationHistoryPage, TranslationTaskDetailView } from "@/types/dto/translation-task";

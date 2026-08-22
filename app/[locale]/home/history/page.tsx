@@ -1,5 +1,5 @@
 import { getUserTranslationHistory } from "@/actions/get-user-translation-history";
-import { TranslationHistory } from "@/app/(main)/home/history/_components/translation-history";
+import { TranslationHistory } from "@/app/[locale]/home/history/_components/translation-history";
 
 export default async function HistoryPage() {
     const result = await getUserTranslationHistory();
