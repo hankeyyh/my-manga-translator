@@ -761,7 +761,7 @@ export function TranslateSection() {
 
     return (
         // py-12
-        <section id="tool" className="scroll-mt-16 border-t border-cc-border/40 bg-cc-surface-page pt-12 pb-[700px] md:pb-[700px]">
+        <section id="tool" className="scroll-mt-16 border-t border-cc-border/40 bg-cc-surface-page py-12">
             <div className="mx-auto max-w-7xl space-y-4 px-4">
                 <UploadZone
                     uploaded={activeTask ? activeTask.pages.length : 0}

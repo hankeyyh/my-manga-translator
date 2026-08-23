@@ -10,35 +10,30 @@ const STEPS = [
     {
         key: "upload",
         step: "01",
-        videoSrc: "/how-to-use/01-upload.mp4",
-        posterSrc: "/how-to-use/01-upload.webp",
+        videoSrc: "/how-to-use/01-upload.min.mp4",
         icon: Upload,
     },
     {
         key: "language",
         step: "02",
-        videoSrc: "/how-to-use/02-language.mp4",
-        posterSrc: "/how-to-use/02-language.webp",
+        videoSrc: "/how-to-use/02-language.min.mp4",
         icon: Languages,
     },
     {
         key: "download",
         step: "03",
-        videoSrc: "/how-to-use/03-result.mp4",
-        posterSrc: "/how-to-use/03-result.webp",
+        videoSrc: "/how-to-use/03-result.min.mp4",
         icon: Download,
     },
 ] as const;
 
 function HowStepMedia({
     videoSrc,
-    posterSrc,
     title,
     fallback,
     icon: Icon,
 }: {
     videoSrc: string;
-    posterSrc: string;
     title: string;
     fallback: string;
     icon: typeof Upload;
@@ -58,7 +53,6 @@ function HowStepMedia({
                     muted
                     loop
                     playsInline
-                    poster={posterSrc}
                     className="aspect-[16/10] w-full object-cover"
                     onError={() => setFailed(true)}
                 >
@@ -100,7 +94,6 @@ export function HowSection() {
                                 </div>
                                 <HowStepMedia
                                     videoSrc={item.videoSrc}
-                                    posterSrc={item.posterSrc}
                                     title={title}
                                     fallback={t("demoFallback", { title })}
                                     icon={item.icon}
