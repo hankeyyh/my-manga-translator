@@ -7,6 +7,7 @@ function mapLegalDocRow(row: Tables<"legal_docs">): LegalDoc {
     return {
         id: row.id,
         slug: row.slug,
+        locale: row.locale,
         kind: row.kind,
         title: row.title,
         content: row.content,
@@ -20,11 +21,12 @@ function mapLegalDocRow(row: Tables<"legal_docs">): LegalDoc {
 export class LegalDocsRepository {
     constructor(private supabase: SupabaseClient) {}
 
-    async getPublishedBySlug(slug: string): Promise<Result<LegalDoc>> {
+    async getPublishedBySlug(slug: string, locale: string): Promise<Result<LegalDoc>> {
         const { data, error } = await this.supabase
             .from("legal_docs")
             .select("*")
             .eq("slug", slug)
+            .eq("locale", locale)
             .eq("status", "published")
             .maybeSingle();
 
@@ -32,7 +34,7 @@ export class LegalDocsRepository {
             return { data: null, error };
         }
         if (!data) {
-            return { data: null, error: new Error(`legal_docs not found: ${slug}`) };
+            return { data: null, error: new Error(`legal_docs not found: ${slug}, locale: ${locale}`) };
         }
         return { data: mapLegalDocRow(data as Tables<"legal_docs">), error: null };
     }

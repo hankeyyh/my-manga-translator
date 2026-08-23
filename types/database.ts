@@ -142,6 +142,7 @@ export type Database = {
           effective_at: string | null
           id: string
           kind: string
+          locale: string
           slug: string
           status: string
           title: string
@@ -153,6 +154,7 @@ export type Database = {
           effective_at?: string | null
           id?: string
           kind: string
+          locale?: string
           slug: string
           status?: string
           title: string
@@ -164,6 +166,7 @@ export type Database = {
           effective_at?: string | null
           id?: string
           kind?: string
+          locale?: string
           slug?: string
           status?: string
           title?: string

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getLocale } from "next-intl/server";
 import { MarkdownContent } from "@/components/markdown-content";
 import { LegalService } from "@/biz/services/legal/legal-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
@@ -9,8 +10,9 @@ export async function LegalDocumentPage({ slug }: { slug: string; }) {
         notFound();
     }
 
+    const locale = await getLocale();
     const supabase = await createServerClient();
-    const result = await LegalService.fromSupabase(supabase).getPublishedDocument(slug);
+    const result = await LegalService.fromSupabase(supabase).getPublishedDocument(slug, locale);
     if (result.error || !result.data) {
         notFound();
     }

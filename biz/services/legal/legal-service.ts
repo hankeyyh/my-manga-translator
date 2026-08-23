@@ -18,7 +18,7 @@ export class LegalService {
         return new LegalService(new LegalDocsRepository(supabase));
     }
 
-    async getPublishedDocument(slug: string): Promise<BizResult<LegalDoc>> {
+    async getPublishedDocument(slug: string, locale: string): Promise<BizResult<LegalDoc>> {
         if (!slug || !isLegalSlug(slug)) {
             return {
                 code: CHECK_PARAM_ERROR_CODE,
@@ -26,11 +26,18 @@ export class LegalService {
                 error: new Error(`invalid legal slug: ${slug}`),
             };
         }
+        if (!locale) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("locale is required"),
+            };
+        }
 
-        const { data, error } = await this.legalDocsRepo.getPublishedBySlug(slug);
+        const { data, error } = await this.legalDocsRepo.getPublishedBySlug(slug, locale);
         if (error) {
             console.error(
-                `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, error: ${error.message}`,
+                `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: ${locale}, error: ${error.message}`,
             );
             return { code: DB_ERROR_CODE, data: null, error };
         }

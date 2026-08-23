@@ -16,6 +16,7 @@ export function isLegalSlug(value: string): value is LegalSlug {
 export interface LegalDoc {
     id: string;
     slug: string;
+    locale: string;
     kind: string;
     title: string;
     content: string;
