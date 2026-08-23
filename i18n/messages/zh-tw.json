@@ -226,8 +226,8 @@
         "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
       },
       "expiry": {
-        "question": "頁數會過期嗎？",
-        "answer": "按量購買的頁數永不過期；訂閱頁數按帳單週期刷新。"
+        "question": "積分會過期嗎？",
+        "answer": "按量購買的積分永不過期；訂閱積分按帳單週期刷新。"
       },
       "languages": {
         "question": "支援哪些語言？",

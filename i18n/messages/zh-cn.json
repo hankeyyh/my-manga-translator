@@ -226,8 +226,8 @@
         "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
       },
       "expiry": {
-        "question": "页数会过期吗？",
-        "answer": "按量购买的页数永不过期；订阅页数按账单周期刷新。"
+        "question": "积分会过期吗？",
+        "answer": "按量购买的积分永不过期；订阅积分按账单周期刷新。"
       },
       "languages": {
         "question": "支持哪些语言？",

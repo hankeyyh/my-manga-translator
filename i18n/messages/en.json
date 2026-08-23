@@ -226,8 +226,8 @@
         "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, and ZIP."
       },
       "expiry": {
-        "question": "Do pages expire?",
-        "answer": "Pay-as-you-go pages never expire. Subscription pages refresh each billing cycle."
+        "question": "Do credits expire?",
+        "answer": "Pay-as-needed credits never expire. Subscription credits refresh each billing cycle."
       },
       "languages": {
         "question": "Which languages are supported?",
