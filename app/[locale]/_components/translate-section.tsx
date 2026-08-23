@@ -49,7 +49,7 @@ import { LangOption, WorkspaceTask } from "@/types/web/workspace-task";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-const SUPPORTED_LANG_CODES = ["CHS", "CHT", "ENG", "JPN", "KOR"] as const;
+const SUPPORTED_LANG_CODES = ["ENG", "CHS", "CHT", "JPN", "KOR"] as const;
 const MODE_FAST = "fast";
 const MODE_PRECISE = "precise";
 const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
@@ -760,7 +760,8 @@ export function TranslateSection() {
     }, [polling]);
 
     return (
-        <section id="tool" className="scroll-mt-16 border-t border-cc-border/40 bg-cc-surface-page py-12">
+        // py-12
+        <section id="tool" className="scroll-mt-16 border-t border-cc-border/40 bg-cc-surface-page pt-12 pb-[700px] md:pb-[700px]">
             <div className="mx-auto max-w-7xl space-y-4 px-4">
                 <UploadZone
                     uploaded={activeTask ? activeTask.pages.length : 0}
@@ -1000,13 +1001,20 @@ export function TranslateSection() {
                                     {activeKind === "draft" && pages.length < MAX_PAGES && (
                                         <button
                                             type="button"
-                                            className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-cc-brand-primary/30 text-cc-text-muted hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
+                                            className="relative flex w-full flex-col rounded-xl border border-dashed border-cc-brand-primary/30 p-2 text-cc-text-muted hover:border-cc-brand-primary hover:bg-[var(--cc-brand-tint)]"
                                             onClick={() => addInputRef.current?.click()}
                                         >
-                                            <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
-                                                <Plus className="size-4 text-cc-brand-primary" />
+                                            <span className="aspect-[3/4] w-full" aria-hidden />
+                                            <span className="mt-2" aria-hidden>
+                                                <p className="truncate text-xs font-medium">&nbsp;</p>
+                                                <p className="text-xs">&nbsp;</p>
                                             </span>
-                                            <span className="text-sm">{t("addImage")}</span>
+                                            <span className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                                                <span className="flex size-8 items-center justify-center rounded-full border border-cc-border">
+                                                    <Plus className="size-4 text-cc-brand-primary" />
+                                                </span>
+                                                <span className="text-sm">{t("addImage")}</span>
+                                            </span>
                                         </button>
                                     )}
                                 </div>
