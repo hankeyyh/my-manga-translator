@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Eye, Loader2, X } from "lucide-react";
+import { Clock, Download, Eye, Loader2, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/components/utils";
@@ -101,18 +101,39 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                             </span>
                         )}
                         {props.status === "stalled" && onContinueWait && (
-                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onContinueWait}>
-                                {t("continueWait")}
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="outline"
+                                aria-label={t("continueWait")}
+                                className="size-7"
+                                onClick={onContinueWait}
+                            >
+                                <Clock className="size-3.5" />
                             </Button>
                         )}
                         {props.status === "failed" && onRetry && (
-                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onRetry}>
-                                {t("retry")}
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="outline"
+                                aria-label={t("retry")}
+                                className="size-7"
+                                onClick={onRetry}
+                            >
+                                <RotateCcw className="size-3.5" />
                             </Button>
                         )}
                         {props.status === "completed" && onDownload && (
-                            <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={onDownload}>
-                                {t("download")}
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="outline"
+                                aria-label={t("download")}
+                                className="size-7"
+                                onClick={onDownload}
+                            >
+                                <Download className="size-3.5" />
                             </Button>
                         )}
                     </div>
