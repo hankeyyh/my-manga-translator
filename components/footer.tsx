@@ -83,10 +83,10 @@ export async function Footer() {
                         <p className="mt-4 text-sm text-cc-text-secondary">
                             {t("emailLabel")}
                             <Link
-                                href="#"
+                                href="mailto:support@mangasense.xyz"
                                 className="text-cc-brand-primary transition-colors hover:text-cc-brand-primary-hover"
                             >
-                                hello@mangasense.com
+                                support@mangasense.xyz
                             </Link>
                         </p>
                         <p className="mt-6 text-sm font-medium text-cc-text-primary">{t("followUs")}</p>
