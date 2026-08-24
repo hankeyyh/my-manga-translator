@@ -6,64 +6,69 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    /* Aligned with ComicCurator tokens.css (blue-white) */
+    --background: 210 40% 98%; /* --cc-surface-page #f8fafc */
+    --foreground: 221 45% 18%; /* --cc-text-primary #1a2744 */
+    --card: 0 0% 100%; /* --cc-surface-white */
+    --card-foreground: 221 45% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
+    --popover-foreground: 221 45% 18%;
+    --primary: 218 100% 43%; /* --cc-brand-primary #0053dd */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 33% 96%; /* --cc-surface-subtle #f1f4f8 */
+    --secondary-foreground: 221 45% 18%;
+    --muted: 216 45% 98%; /* --cc-surface-muted #f7f9fc */
+    --muted-foreground: 216 17% 50%; /* --cc-text-muted #6b7c96 */
+    --accent: 210 40% 98%; /* --cc-brand-tint */
+    --accent-foreground: 218 100% 43%;
+    --destructive: 0 72% 51%; /* --cc-status-error #dc2626 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 48% 89%; /* --cc-border-default #d4e0f0 */
+    --input: 214 48% 89%;
+    --ring: 218 100% 43%;
+    --chart-1: 218 100% 43%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    color-scheme: light;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
+    /* Navy-blue dark, matching tokens.css .dark --cc-* */
+    --background: 223 49% 8%; /* --cc-surface-page #0b1120 */
+    --foreground: 218 54% 94%; /* --cc-text-primary #e8eef8 */
+    --card: 222 39% 14%; /* --cc-surface-white #151d30 */
+    --card-foreground: 218 54% 94%;
+    --popover: 222 39% 14%;
+    --popover-foreground: 218 54% 94%;
+    --primary: 220 100% 62%; /* --cc-brand-primary #3d7eff */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 39% 13%; /* --cc-surface-subtle #141c2e */
+    --secondary-foreground: 218 54% 94%;
+    --muted: 223 44% 11%; /* --cc-surface-muted #0f1729 */
+    --muted-foreground: 218 21% 57%; /* --cc-text-muted #7a8ba8 */
+    --accent: 220 51% 15%; /* --cc-brand-tint #13203a */
+    --accent-foreground: 220 100% 62%;
+    --destructive: 0 72% 51%; /* --cc-status-error #dc2626 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 33% 25%; /* --cc-border-default #2a3a54 */
+    --input: 217 33% 25%;
+    --ring: 220 100% 62%;
+    --chart-1: 220 100% 62%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    color-scheme: dark;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    --tw-ring-offset-color: hsl(var(--background));
   }
   body {
     @apply bg-background text-foreground;

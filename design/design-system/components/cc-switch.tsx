@@ -37,7 +37,7 @@ export function CcSwitch({
         >
             <span
                 className={cn(
-                    "pointer-events-none block size-4 rounded-full bg-[var(--cc-surface-white)] shadow-[var(--cc-shadow-sm)] transition-transform",
+                    "pointer-events-none block size-4 rounded-full bg-[var(--cc-text-on-brand)] shadow-[var(--cc-shadow-sm)] transition-transform",
                     checked ? "ltr:translate-x-4 rtl:-translate-x-4" : "translate-x-0",
                 )}
             />

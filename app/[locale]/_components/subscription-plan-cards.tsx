@@ -68,10 +68,10 @@ export function SubscriptionPlanCards({
                     <CcCard
                         key={plan.id}
                         className={cn(
-                            "h-full cursor-pointer items-stretch bg-[#fbfcfe] p-6 text-center antialiased lg:p-8",
+                            "h-full cursor-pointer items-stretch p-6 text-center antialiased lg:p-8",
                             "transform-gpu backface-hidden will-change-transform",
                             "transition-[transform,box-shadow,background-color] duration-200 ease-out",
-                            "hover:-translate-y-1 hover:bg-[var(--cc-surface-white)] hover:shadow-[var(--cc-shadow-card)]",
+                            "hover:-translate-y-1 hover:shadow-[var(--cc-shadow-card)]",
                             featured
                                 ? undefined
                                 : "border-[var(--cc-border-light)] shadow-none",

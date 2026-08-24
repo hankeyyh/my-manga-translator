@@ -21,8 +21,16 @@ export function TokenSwatch({ name, value, cssVar, type = "color" }: TokenSwatch
                     isColor ? "h-16" : "h-12",
                 )}
                 style={{
-                    backgroundColor: isColor ? value : undefined,
-                    boxShadow: isShadow ? value : undefined,
+                    backgroundColor: isColor
+                        ? cssVar
+                            ? `var(${cssVar})`
+                            : value
+                        : undefined,
+                    boxShadow: isShadow
+                        ? cssVar
+                            ? `var(${cssVar})`
+                            : value
+                        : undefined,
                     borderRadius: isRadius ? value : isSpacing ? "0.25rem" : "0.5rem",
                     width: isSpacing ? value : undefined,
                 }}

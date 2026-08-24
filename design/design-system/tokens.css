@@ -1,6 +1,6 @@
 /**
  * ComicCurator design tokens as CSS custom properties.
- * Blue-white theme extracted from Manga Sense UI.
+ * Light: blue-white. Dark: navy-blue (`.dark` on html, via next-themes).
  * Import in globals.css; consumed by Tailwind and design-system components.
  */
 :root {
@@ -64,4 +64,61 @@
   --cc-spacing-page: 2rem;
   --cc-spacing-section: 6rem;
   --cc-spacing-section-lg: 8rem;
+
+  /* Overlays */
+  --cc-overlay-hero: color-mix(in srgb, var(--cc-surface-page) 20%, transparent);
+
+  /* Logo gradient */
+  --cc-brand-logo-from: #000821;
+  --cc-brand-logo-via: #0063fd;
+  --cc-brand-logo-to: #82c8fa;
+}
+
+/* next-themes puts .dark on <html>; override semantic color tokens only */
+.dark {
+  --cc-brand-primary: #3d7eff;
+  --cc-brand-primary-hover: #5c91ff;
+  --cc-brand-accent: #5c91ff;
+  --cc-brand-accent-secondary: #3d7eff;
+  --cc-brand-tint: #13203a;
+  --cc-brand-tint-strong: #1a2c4d;
+
+  --cc-surface-page: #0b1120;
+  --cc-surface-muted: #0f1729;
+  --cc-surface-subtle: #141c2e;
+  --cc-surface-panel: #1a243a;
+  --cc-surface-panel-dark: #080d18;
+  --cc-surface-white: #151d30;
+  --cc-surface-avatar: #1e2a42;
+
+  --cc-text-primary: #e8eef8;
+  --cc-text-secondary: #9aabc4;
+  --cc-text-muted: #7a8ba8;
+  --cc-text-tool-rail: #8a9bb4;
+  --cc-text-on-brand: #ffffff;
+
+  --cc-border-default: #2a3a54;
+  --cc-border-light: #243044;
+  --cc-border-subtle: #3d5270;
+
+  --cc-status-error: #dc2626;
+  --cc-status-error-bg: #3f1518;
+  --cc-status-success: #4ade80;
+  --cc-status-success-bg: #052e16;
+  --cc-status-warning: #fbbf24;
+  --cc-status-warning-bg: #3b2508;
+  --cc-status-info: #60a5fa;
+  --cc-status-info-bg: #0f1f3a;
+
+  --cc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+  --cc-shadow-card: 0px 8px 24px rgba(0, 0, 0, 0.4);
+  --cc-shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.45);
+  --cc-shadow-accent: 0 10px 15px -3px rgba(61, 126, 255, 0.35);
+  --cc-shadow-header: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+
+  --cc-overlay-hero: color-mix(in srgb, var(--cc-surface-page) 55%, transparent);
+
+  --cc-brand-logo-from: #9ecbff;
+  --cc-brand-logo-via: #4d8aff;
+  --cc-brand-logo-to: #e8f4ff;
 }

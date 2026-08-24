@@ -14,7 +14,7 @@ export async function HeroSection() {
                     aria-hidden
                     className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-[color-mix(in_srgb,var(--cc-surface-page)_20%,transparent)]" />
+                <div className="absolute inset-0 bg-[var(--cc-overlay-hero)]" />
             </div>
             <div className="relative z-10 mx-auto w-full max-w-5xl px-4 py-16 text-center">
                 <h1 className="font-headline text-3xl font-extrabold tracking-tight text-cc-text-primary sm:text-5xl">

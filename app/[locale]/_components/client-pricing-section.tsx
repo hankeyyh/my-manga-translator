@@ -135,7 +135,7 @@ export function ClientPricingSection({
     }
 
     return (
-        <section id="pricing" className="scroll-mt-16 bg-cc-surface-white py-16">
+        <section id="pricing" className="scroll-mt-16 bg-cc-surface-page py-16">
             <div className="mx-auto max-w-7xl px-4">
                 <CcSectionHeading className="mb-6" size="md" title={t("title")} />
                 <div className="mb-8 flex flex-col items-center gap-4">
