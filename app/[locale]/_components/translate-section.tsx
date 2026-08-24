@@ -46,10 +46,11 @@ import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
 import { cn } from "@/components/utils";
 import { LangOption, WorkspaceTask } from "@/types/web/workspace-task";
+import { SUPPORTED_LANGS, type SupportedLangCode } from "@/types/common";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-const SUPPORTED_LANG_CODES = ["ENG", "CHS", "CHT", "JPN", "KOR"] as const;
+const DEFAULT_LANG_CODE: SupportedLangCode = "ENG";
 const MODE_FAST = "fast";
 const MODE_PRECISE = "precise";
 const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
@@ -58,14 +59,13 @@ const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
-type LangCode = (typeof SUPPORTED_LANG_CODES)[number];
 type TranslateMode = (typeof SUPPORTED_MODES)[number];
 type FontStyle = (typeof SUPPORTED_FONT_STYLES)[number];
 
-function asLangCode(code: string): LangCode {
-    return (SUPPORTED_LANG_CODES as readonly string[]).includes(code)
-        ? (code as LangCode)
-        : SUPPORTED_LANG_CODES[0];
+function asLangCode(code: string): SupportedLangCode {
+    return SUPPORTED_LANGS.some((lang) => lang.code === code)
+        ? (code as SupportedLangCode)
+        : DEFAULT_LANG_CODE;
 }
 
 function asTranslateMode(mode: string): TranslateMode {
@@ -159,7 +159,7 @@ function createDraftTask(files: File[] = []): WorkspaceTask {
         localId: crypto.randomUUID(),
         serverTaskId: null,
         pages: filesToPages(files, new Set()),
-        targetLang: { code: SUPPORTED_LANG_CODES[0], label: SUPPORTED_LANG_CODES[0] },
+        targetLang: { code: DEFAULT_LANG_CODE, label: DEFAULT_LANG_CODE },
         translateMode: MODE_FAST,
         fontStyle: SUPPORTED_FONT_STYLES[0],
         submitLoading: false,
@@ -216,6 +216,7 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, _selFontSt
         render: {
             font_name: "Anime Ace 3.0",
             fit_to_box: true,
+            rtl: selLang.code === "ARA",
         },
         detector: {
             detector: "ctd",
@@ -863,8 +864,11 @@ export function TranslateSection() {
                                                     {t(`languages.${asLangCode(activeTask.targetLang.code)}`)}
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                {SUPPORTED_LANG_CODES.map((code) => (
+                                            <DropdownMenuContent
+                                                className="max-h-[min(24rem,calc(100vh-5rem))] overflow-y-auto overscroll-contain"
+                                                onWheel={(event) => event.stopPropagation()}
+                                            >
+                                                {SUPPORTED_LANGS.map(({ code }) => (
                                                     <DropdownMenuItem
                                                         key={code}
                                                         onSelect={() => updateTask(activeTask.localId, (task) => ({
