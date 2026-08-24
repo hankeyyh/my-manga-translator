@@ -12,6 +12,7 @@ type Props = {
     monthlyLabel: string;
     yearlyLabel: string;
     saveLabel?: string | null;
+    availableCycles: BillingCycle[];
 };
 
 export function BillingCycleTabs({
@@ -20,30 +21,39 @@ export function BillingCycleTabs({
     monthlyLabel,
     yearlyLabel,
     saveLabel,
+    availableCycles,
 }: Props) {
+    const showMonthly = availableCycles.includes("monthly");
+    const showYearly = availableCycles.includes("yearly");
+    if (!showMonthly && !showYearly) return null;
+
     return (
         <div className="relative inline-flex" role="tablist">
             <div className="absolute inset-x-0 bottom-0 h-px bg-[var(--cc-border-default)]" />
-            <CycleTab
-                active={value === "monthly"}
-                onClick={() => onChange("monthly")}
-            >
-                {monthlyLabel}
-            </CycleTab>
-            <CycleTab
-                active={value === "yearly"}
-                onClick={() => onChange("yearly")}
-            >
-                {yearlyLabel}
-                {saveLabel ? (
-                    <CcBadge
-                        className="rounded-full px-1.5 py-0 text-[9px] font-bold tracking-wide"
-                        variant="error"
-                    >
-                        {saveLabel}
-                    </CcBadge>
-                ) : null}
-            </CycleTab>
+            {showMonthly ? (
+                <CycleTab
+                    active={value === "monthly"}
+                    onClick={() => onChange("monthly")}
+                >
+                    {monthlyLabel}
+                </CycleTab>
+            ) : null}
+            {showYearly ? (
+                <CycleTab
+                    active={value === "yearly"}
+                    onClick={() => onChange("yearly")}
+                >
+                    {yearlyLabel}
+                    {saveLabel ? (
+                        <CcBadge
+                            className="rounded-full px-1.5 py-0 text-[9px] font-bold tracking-wide"
+                            variant="error"
+                        >
+                            {saveLabel}
+                        </CcBadge>
+                    ) : null}
+                </CycleTab>
+            ) : null}
         </div>
     );
 }

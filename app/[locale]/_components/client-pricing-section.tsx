@@ -33,9 +33,12 @@ export function ClientPricingSection({
     currentSubscription,
 }: Props) {
     const [pricingTab, setPricingTab] = useState<PricingTab>("subscription");
-    const [billingCycle, setBillingCycle] = useState<BillingCycle>(
-        currentSubscription?.billingCycle === "yearly" ? "yearly" : "monthly",
-    );
+    const [selectedBillingCycle, setSelectedBillingCycle] =
+        useState<BillingCycle>(
+            currentSubscription?.billingCycle === "yearly"
+                ? "yearly"
+                : "monthly",
+        );
     const [isRestoring, setIsRestoring] = useState(false);
     const router = useRouter();
     const t = useTranslations("pricing");
@@ -48,8 +51,19 @@ export function ClientPricingSection({
         confirmChange,
     } = useChangeSubscription();
 
-    const plans = topUpConfigs
-        .filter((config) => {
+    const availableBillingCycles = topUpConfigs.reduce<BillingCycle[]>(
+        (cycles, config) => {
+            if (config.transactionType !== "subscription") return cycles;
+            if ((config.billingCycle === "monthly" || config.billingCycle === "yearly") && !cycles.includes(config.billingCycle)) {
+                cycles.push(config.billingCycle);
+            }
+            return cycles;
+        },
+        [],
+    );
+    const billingCycle = availableBillingCycles.includes(selectedBillingCycle)
+        ? selectedBillingCycle : (availableBillingCycles[0] ?? "monthly");
+    const plans = topUpConfigs.filter((config) => {
             if (config.transactionType !== pricingTab) return false;
             if (pricingTab === "subscription") {
                 return config.billingCycle === billingCycle;
@@ -68,7 +82,7 @@ export function ClientPricingSection({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id }),
             });
-            const data = (await res.json()) as { url?: string; error?: string };
+            const data = (await res.json()) as { url?: string; error?: string; };
             if (res.status === 401) {
                 router.push("/auth/login");
                 return;
@@ -125,15 +139,17 @@ export function ClientPricingSection({
                         ]}
                         value={pricingTab}
                     />
-                    {pricingTab === "subscription" ? (
+                    {pricingTab === "subscription" &&
+                        availableBillingCycles.length > 1 ? (
                         <BillingCycleTabs
+                            availableCycles={availableBillingCycles}
                             monthlyLabel={t("monthly")}
-                            onChange={setBillingCycle}
+                            onChange={setSelectedBillingCycle}
                             saveLabel={
                                 yearlySavePercent != null
                                     ? t("savePercent", {
-                                          percent: yearlySavePercent,
-                                      })
+                                        percent: yearlySavePercent,
+                                    })
                                     : null
                             }
                             value={billingCycle}
@@ -162,8 +178,8 @@ export function ClientPricingSection({
                     onRestoreSubscription={
                         isCanceled && pricingTab === "subscription"
                             ? () => {
-                                  void handleRestore();
-                              }
+                                void handleRestore();
+                            }
                             : undefined
                     }
                 />
