@@ -12,9 +12,16 @@ import {
     CcSegmentedControl,
 } from "@/design/design-system/components";
 import { useTranslations } from "next-intl";
+import {
+    BillingCycleTabs,
+    type BillingCycle,
+} from "./billing-cycle-tabs";
 import { ChangePlanConfirmDialog } from "./change-plan-confirm-dialog";
+import { getYearlySavePercent } from "./plan-display";
 import { SubscriptionPlanCards } from "./subscription-plan-cards";
 import { useChangeSubscription } from "./use-change-subscription";
+
+type PricingTab = "pay-to-use" | "subscription";
 
 type Props = {
     topUpConfigs: TopUpConfig[];
@@ -25,8 +32,9 @@ export function ClientPricingSection({
     topUpConfigs,
     currentSubscription,
 }: Props) {
-    const [pricingTab, setPricingTab] = useState<"pay-to-use" | "subscription">(
-        "subscription",
+    const [pricingTab, setPricingTab] = useState<PricingTab>("subscription");
+    const [billingCycle, setBillingCycle] = useState<BillingCycle>(
+        currentSubscription?.billingCycle === "yearly" ? "yearly" : "monthly",
     );
     const [isRestoring, setIsRestoring] = useState(false);
     const router = useRouter();
@@ -41,8 +49,15 @@ export function ClientPricingSection({
     } = useChangeSubscription();
 
     const plans = topUpConfigs
-        .filter((config) => config.transactionType === pricingTab)
+        .filter((config) => {
+            if (config.transactionType !== pricingTab) return false;
+            if (pricingTab === "subscription") {
+                return config.billingCycle === billingCycle;
+            }
+            return true;
+        })
         .sort((a, b) => a.price - b.price);
+    const yearlySavePercent = getYearlySavePercent(topUpConfigs);
 
     const isCanceled = currentSubscription?.status === "canceled";
 
@@ -101,7 +116,7 @@ export function ClientPricingSection({
         <section id="pricing" className="scroll-mt-16 bg-cc-surface-white py-16">
             <div className="mx-auto max-w-7xl px-4">
                 <CcSectionHeading className="mb-6" size="md" title={t("title")} />
-                <div className="mb-8 flex justify-center">
+                <div className="mb-8 flex flex-col items-center gap-4">
                     <CcSegmentedControl
                         onChange={setPricingTab}
                         options={[
@@ -110,6 +125,21 @@ export function ClientPricingSection({
                         ]}
                         value={pricingTab}
                     />
+                    {pricingTab === "subscription" ? (
+                        <BillingCycleTabs
+                            monthlyLabel={t("monthly")}
+                            onChange={setBillingCycle}
+                            saveLabel={
+                                yearlySavePercent != null
+                                    ? t("savePercent", {
+                                          percent: yearlySavePercent,
+                                      })
+                                    : null
+                            }
+                            value={billingCycle}
+                            yearlyLabel={t("yearly")}
+                        />
+                    ) : null}
                 </div>
                 <SubscriptionPlanCards
                     plans={plans}

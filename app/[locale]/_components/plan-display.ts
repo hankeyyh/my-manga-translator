@@ -41,3 +41,32 @@ export function formatCredits(config: TopUpConfig, t: PricingT) {
     }
     return t("creditsPayToUse", { count: config.creditsIncluded });
 }
+
+/** 年付相对月付连买 12 个月的最低折扣百分比，无法计算时返回 null */
+export function getYearlySavePercent(configs: TopUpConfig[]): number | null {
+    const monthlyByTier = new Map<string, number>();
+    const yearlyByTier = new Map<string, number>();
+    for (const config of configs) {
+        if (config.transactionType !== "subscription" || !config.planTier) {
+            continue;
+        }
+        if (config.billingCycle === "monthly") {
+            monthlyByTier.set(config.planTier, config.price);
+        }
+        if (config.billingCycle === "yearly") {
+            yearlyByTier.set(config.planTier, config.price);
+        }
+    }
+    let minPercent: number | null = null;
+    for (const [tier, monthlyPrice] of monthlyByTier) {
+        const yearlyPrice = yearlyByTier.get(tier);
+        if (yearlyPrice == null || monthlyPrice <= 0) continue;
+        const billedYearly = monthlyPrice * 12;
+        if (billedYearly <= yearlyPrice) continue;
+        const percent = Math.floor(((billedYearly - yearlyPrice) / billedYearly) * 100);
+        if (percent <= 0) continue;
+        minPercent =
+            minPercent == null ? percent : Math.min(minPercent, percent);
+    }
+    return minPercent;
+}
