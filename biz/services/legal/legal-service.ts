@@ -34,13 +34,35 @@ export class LegalService {
             };
         }
 
-        const { data, error } = await this.legalDocsRepo.getPublishedBySlug(slug, locale);
-        if (error) {
+        const requested = await this.legalDocsRepo.getPublishedBySlug(slug, locale);
+        if (requested.error) {
             console.error(
-                `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: ${locale}, error: ${error.message}`,
+                `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: ${locale}, error: ${requested.error.message}`,
             );
-            return { code: DB_ERROR_CODE, data: null, error };
+            return { code: DB_ERROR_CODE, data: null, error: requested.error };
         }
-        return { code: SUCCESS_CODE, data, error: null };
+        if (requested.data) {
+            return { code: SUCCESS_CODE, data: requested.data, error: null };
+        }
+
+        // 回退到local=en
+        if (locale !== "en") {
+            const fallback = await this.legalDocsRepo.getPublishedBySlug(slug, "en");
+            if (fallback.error) {
+                console.error(
+                    `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: en, error: ${fallback.error.message}`,
+                );
+                return { code: DB_ERROR_CODE, data: null, error: fallback.error };
+            }
+            if (fallback.data) {
+                return { code: SUCCESS_CODE, data: fallback.data, error: null };
+            }
+        }
+
+        return {
+            code: DB_ERROR_CODE,
+            data: null,
+            error: new Error(`legal_docs not found: ${slug}, locale: ${locale}`),
+        };
     }
 }

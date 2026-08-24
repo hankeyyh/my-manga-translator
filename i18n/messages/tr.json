@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "Manga çevirisi",
+    "description": "Yapay zekâ destekli manga çevirisi",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Kullanım Koşulları",
+      "privacy": "Gizlilik Politikası",
+      "about": "Hakkında",
+      "refund": "İade Politikası",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Yükleniyor…",
+    "cancel": "İptal",
+    "processing": "İşleniyor…",
+    "unknownError": "Bilinmeyen hata",
+    "credits": "Kredi",
+    "creditsCount": "Kredi · {count}",
+    "pages": "{count} sayfa",
+    "email": "E-posta",
+    "password": "Şifre",
+    "pleaseWait": "Lütfen bekleyin…"
+  },
+  "status": {
+    "all": "Tümü",
+    "pending": "Bekliyor",
+    "processing": "İşleniyor",
+    "completed": "Tamamlandı",
+    "failed": "Başarısız",
+    "partial": "Kısmi",
+    "stalled": "Zaman aşımı",
+    "success": "Başarılı",
+    "canceled": "İptal edildi"
+  },
+  "header": {
+    "mangaTranslate": "Manga çevir",
+    "pricing": "Fiyatlandırma",
+    "faq": "SSS",
+    "blog": "Blog",
+    "joinDiscord": "Discord’a katıl",
+    "dashboard": "Panel",
+    "login": "Giriş",
+    "toggleTheme": "Temayı değiştir"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "Manga yükleyin, yapay zekâ destekli hassas çeviriler alın. Akıllı OCR, sadık çeviri, kusursuz dizgi.",
+    "product": "Ürün",
+    "legal": "Yasal",
+    "contact": "Bize ulaşın",
+    "emailLabel": "E-posta: ",
+    "followUs": "Bizi takip edin",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. Tüm hakları saklıdır.",
+    "disclaimer": "Manga Sense hiçbir manga yayıneviyle bağlı değildir.",
+    "links": {
+      "tool": "Araç",
+      "blog": "Blog",
+      "pricing": "Fiyatlandırma",
+      "about": "Hakkında",
+      "privacy": "Gizlilik Politikası",
+      "terms": "Kullanım Koşulları",
+      "refund": "İade Politikası",
+      "faq": "SSS",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "Yapay zekâ ile manga çevirisi, tek tıkla",
+    "subtitle": "Konuşma balonu metnini otomatik algılar, çevirir ve orijinal sayfaya yeniden çizer. Japon, Kore ve Çin mangalarını destekler; yerleşim ve yazı tipi stilini korur.",
+    "statPages": "sayfa",
+    "statLanguages": "dil",
+    "statAccuracy": "doğruluk",
+    "tryFree": "Ücretsiz dene",
+    "howItWorks": "Nasıl çalışır"
+  },
+  "how": {
+    "title": "Nasıl çalışır",
+    "demoFallback": "{title} demosu",
+    "steps": {
+      "upload": {
+        "title": "Manga yükle",
+        "desc": "Sürükleyip bırakın, yapıştırın veya dosya seçin. JPG, PNG, WebP, PDF, EPUB ve CBZ desteklenir — tek sayfa veya tam cilt."
+      },
+      "language": {
+        "title": "Dil seç",
+        "desc": "Hedef dil ve yazı tipi stilini seçin. 20’den fazla dilde yüksek doğrulukta çeviri."
+      },
+      "download": {
+        "title": "Önizle ve indir",
+        "desc": "Çevrilen mangayı önizleyin ve orijinal yerleşimi koruyan yüksek çözünürlüklü sonuçları dışa aktarın."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Çeviri örnekleri",
+    "description": "Orijinal / çeviriyi karşılaştırmak için kaydırıcıyı sürükleyin",
+    "beforeAlt": "Çeviriden önceki orijinal görsel",
+    "afterAlt": "Çeviriden sonraki sonuç",
+    "compareAria": "Çeviri öncesi ve sonrası karşılaştırma",
+    "originalAlt": "Orijinal",
+    "translatedAlt": "Çevrilmiş"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "Basitleştirilmiş Çince",
+      "CHT": "Geleneksel Çince",
+      "ENG": "İngilizce",
+      "JPN": "Japonca",
+      "KOR": "Korece"
+    },
+    "modes": {
+      "fast": "Hızlı çeviri (1 kredi)",
+      "precise": "Hassas çeviri (2 kredi)"
+    },
+    "fontStyles": {
+      "comic": "Çizgi roman",
+      "handwritten": "El yazısı",
+      "print": "Baskı"
+    },
+    "draftLabel": "Taslak · {count} sayfa",
+    "taskLabel": "Görev {id}",
+    "closeTask": "{label} kapat",
+    "closeOthers": "Diğerlerini kapat",
+    "settingsTitle": "Ayarlar",
+    "translateTo": "Şuna çevir",
+    "translateMode": "Çeviri modu",
+    "fontStyle": "Yazı tipi stili",
+    "downloadAll": "Tümünü indir",
+    "submit": "Çeviriyi gönder",
+    "previewTitle": "Görsel önizleme ({count} görsel)",
+    "showTranslated": "Çevrilmiş görseli gör",
+    "showOriginal": "Orijinal görseli gör",
+    "clearAll": "Tümünü temizle",
+    "addImage": "Görsel ekle",
+    "hint": "✦ Yapay zekâ Japonca, Çince, İngilizce, Korece ve daha fazlasını otomatik algılar",
+    "timeout": "Çeviri zaman aşımına uğradı. Lütfen tekrar deneyin.",
+    "closeConfirmTitle": "Devam eden görev kapatılsın mı?",
+    "closeConfirmDescription": "Bu çeviri hâlâ çalışıyor. Kapatmak onu yalnızca geçerli çalışma alanından kaldırır. Arka plan işlemi devam eder ve kullanılan krediler iade edilmez.",
+    "confirmClose": "Yine de kapat"
+  },
+  "upload": {
+    "dropHint": "Manga sayfalarını buraya bırakın veya",
+    "browse": "dosyalara göz atın",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Görseller 50MB’a, belgeler 200MB’a kadar",
+    "quota": "{uploaded}/{max} sayfa yüklendi · {remaining} kaldı",
+    "addOrDrop": "Görsel ekle / yüklemek için bırak",
+    "compactQuota": "{uploaded} / {max} sayfa"
+  },
+  "thumbnail": {
+    "waiting": "Bekliyor",
+    "processing": "İşleniyor",
+    "preview": "{name} önizle",
+    "remove": "{name} kaldır",
+    "continueWait": "Beklemeye devam et",
+    "retry": "Yeniden dene",
+    "download": "İndir"
+  },
+  "imagePreview": {
+    "close": "Önizlemeyi kapat",
+    "prev": "Önceki görsel veya sol ok tuşu",
+    "next": "Sonraki görsel veya sağ ok tuşu"
+  },
+  "pricing": {
+    "title": "Fiyatlandırma",
+    "payAsNeeded": "Kullandıkça öde",
+    "subscription": "Abonelik",
+    "getStarted": "Başla",
+    "restore": "Aboneliği geri yükle",
+    "cancel": "Aboneliği iptal et",
+    "subscribed": "Abone",
+    "adjustPlan": "Planı değiştir",
+    "planFallback": "Plan",
+    "priceMonthly": "${price}/ay",
+    "priceYearly": "${price}/yıl",
+    "creditsPayToUse": "{count} kredi",
+    "creditsMonthly": "{count} kredi / ay",
+    "creditsYearly": "{count} kredi / yıl"
+  },
+  "changePlan": {
+    "title": "Abonelik planınız değiştirilsin mi?",
+    "description": "{planName} ({price}) planına geçeceksiniz. Fiyat farkı iade edilmez. Mevcut krediler korunur ve onaydan hemen sonra yeni plan ücreti tahsil edilir.",
+    "confirm": "Değişikliği onayla",
+    "failed": "Plan değiştirilemedi",
+    "missingPaymentInfo": "Ödeme onay bilgileri eksik. Lütfen daha sonra tekrar deneyin.",
+    "stripeLoadFailed": "Ödeme bileşeni yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "needCardVerification": "Bu değişikliğin geçerli olması için kart doğrulaması gerekir. Lütfen yönergeleri izleyin.",
+    "cardVerificationFailed": "Kart doğrulaması başarısız",
+    "verified": "Doğrulama başarılı. Plan değişikliği gönderildi, krediler kısa süre içinde gelecek.",
+    "paymentStatus": "Ödeme durumu: {status}. Kontrol etmek için daha sonra yenileyin.",
+    "submitted": "Plan değişikliği gönderildi. Krediler kısa süre içinde gelecek."
+  },
+  "faq": {
+    "title": "SSS",
+    "items": {
+      "japanese": {
+        "question": "Japon mangasını çevirebiliyor musunuz?",
+        "answer": "Evet. Japon mangasını otomatik tanıyıp çeviriyor, konuşma balonu yerleşimini ve çizim stilini koruyoruz."
+      },
+      "korean": {
+        "question": "Kore manhwasını çevirebiliyor musunuz?",
+        "answer": "Evet. Dikey okunan Kore çizgi romanlarını ve yaygın webtoon yerleşimlerini destekliyoruz."
+      },
+      "chinese": {
+        "question": "Çin mangasını çevirebiliyor musunuz?",
+        "answer": "Evet. Basitleştirilmiş ve Geleneksel Çince çizgi romanların diller arası çevirisini destekliyoruz."
+      },
+      "ai": {
+        "question": "Hangi yapay zekâyı kullanıyorsunuz?",
+        "answer": "Manga için optimize edilmiş, metin algılama, çeviri ve inpainting kapsayan çok modellı bir hat kullanıyoruz."
+      },
+      "duration": {
+        "question": "Çeviri ne kadar sürer?",
+        "answer": "Tek bir sayfa genellikle birkaç saniye ile onlarca saniye arasında sürer; görsel boyutuna ve kuyruk yüküne bağlıdır."
+      },
+      "formats": {
+        "question": "Hangi biçimler desteklenir?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ ve ZIP."
+      },
+      "expiry": {
+        "question": "Kredilerin süresi doluyor mu?",
+        "answer": "Kullandıkça öde kredilerinin süresi dolmaz. Abonelik kredileri her fatura döneminde yenilenir."
+      },
+      "languages": {
+        "question": "Hangi diller desteklenir?",
+        "answer": "Japonca, Çince, İngilizce, Korece ve diğer yaygın manga dilleri dahil 20’den fazla dili destekliyoruz."
+      },
+      "privacy": {
+        "question": "Verilerim güvende mi?",
+        "answer": "Yüklenen içerik yalnızca çeviri için kullanılır. Herkese açık eğitimde kullanılmaz ve başkalarıyla paylaşılmaz."
+      },
+      "refund": {
+        "question": "İadeler nasıl işler?",
+        "answer": "Kullanılmayan ücretli krediler politikamıza göre iade edilebilir. Ayrıntılar için hizmet koşullarına bakın."
+      },
+      "plugin": {
+        "question": "Tarayıcı eklentisi var mı?",
+        "answer": "Tarayıcı eklentisi yakında geliyor. Şimdilik web uygulamasında yükleyip çevirin."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Son yazılar",
+    "viewAll": "Tüm yazıları gör →",
+    "readMore": "Devamını oku →",
+    "back": "← Bloga dön",
+    "date": "{day}.{month}.{year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş yap",
+      "description": "E-posta ve şifreyle hesabınıza giriş yapın",
+      "emailPlaceholder": "E-posta",
+      "passwordPlaceholder": "Şifre",
+      "forgotPassword": "Şifrenizi mi unuttunuz?",
+      "submit": "Giriş yap",
+      "noAccount": "Hesabınız yok mu?",
+      "goSignUp": "Kaydol",
+      "orUse": "Veya şununla devam et",
+      "google": "Google ile devam et",
+      "failed": "Giriş başarısız",
+      "genericError": "Bir sorun oluştu. Lütfen tekrar deneyin."
+    },
+    "signUp": {
+      "title": "Kaydol",
+      "description": "Bir hesap oluşturun ve başlayın",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "En az 8 karakter",
+      "confirmPassword": "Şifreyi doğrula",
+      "confirmPasswordPlaceholder": "Şifreyi yeniden girin",
+      "submit": "Kaydol",
+      "hasAccount": "Zaten hesabınız var mı?",
+      "goLogin": "Giriş yap",
+      "passwordMismatch": "Şifreler eşleşmiyor",
+      "failed": "Kayıt başarısız",
+      "genericError": "Bir sorun oluştu. Lütfen tekrar deneyin."
+    },
+    "signUpSuccess": {
+      "title": "Kayolduğunuz için teşekkürler!",
+      "description": "Onay için e-postanızı kontrol edin",
+      "body": "Başarıyla kaydoldunuz. Giriş yapmadan önce hesabınızı e-postadan onaylayın."
+    },
+    "forgotPassword": {
+      "title": "Şifrenizi sıfırlayın",
+      "description": "E-postanızı yazın, şifre sıfırlama bağlantısı gönderelim",
+      "email": "E-posta",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Sıfırlama e-postası gönder",
+      "sending": "Gönderiliyor...",
+      "hasAccount": "Zaten hesabınız var mı?",
+      "goLogin": "Giriş yap",
+      "successTitle": "E-postanızı kontrol edin",
+      "successDescription": "Şifre sıfırlama talimatları gönderildi",
+      "successBody": "E-posta ve şifreyle kaydolduysanız bir şifre sıfırlama e-postası alırsınız.",
+      "genericError": "Bir hata oluştu"
+    },
+    "updatePassword": {
+      "title": "Şifrenizi sıfırlayın",
+      "description": "Lütfen aşağıya yeni şifrenizi girin.",
+      "newPassword": "Yeni şifre",
+      "placeholder": "Yeni şifre",
+      "submit": "Yeni şifreyi kaydet",
+      "saving": "Kaydediliyor...",
+      "genericError": "Bir hata oluştu"
+    },
+    "confirm": {
+      "verifyingTitle": "E-postanız doğrulanıyor…",
+      "verifyingDescription": "Kayıt onayını tamamlarken lütfen bekleyin.",
+      "successTitle": "E-posta onaylandı",
+      "successDescription": "{seconds} saniye içinde ana sayfaya gideceksiniz veya hemen çevirmeye başlayabilirsiniz.",
+      "errorTitle": "Doğrulama başarısız",
+      "errorDescription": "E-postanızı onaylayamadık.",
+      "missingParams": "Onay parametreleri eksik. E-postadaki bağlantıyı yeniden açın.",
+      "invalidLink": "Doğrulama başarısız. Bağlantının süresi dolmuş olabilir.",
+      "networkError": "Ağ hatası. Lütfen daha sonra tekrar deneyin.",
+      "startTranslate": "Çevirmeye başla",
+      "backToLogin": "Girişe dön"
+    },
+    "error": {
+      "title": "Üzgünüz, bir sorun oluştu.",
+      "codeError": "Hata kodu: {error}",
+      "unspecified": "Belirtilmemiş bir hata oluştu."
+    }
+  },
+  "home": {
+    "navAria": "Hesap",
+    "history": "Çeviri geçmişi",
+    "billing": "Faturalama ve abonelik",
+    "signOut": "Çıkış yap",
+    "email": "E-posta",
+    "creditBalance": "Kredi bakiyesi"
+  },
+  "history": {
+    "title": "Çeviri geçmişi",
+    "empty": "Çeviri geçmişi yok / eşleşen sonuç yok",
+    "clearFilters": "Filtreleri temizle",
+    "loadMore": "Daha fazla yükle",
+    "loading": "Yükleniyor…",
+    "sourceAuto": "Otomatik",
+    "dateRange": {
+      "1d": "Son 1 gün",
+      "7d": "Son 7 gün",
+      "1m": "Son 1 ay",
+      "all": "Tümü"
+    }
+  },
+  "billing": {
+    "title": "Faturalama ve abonelik",
+    "currentPlan": "Mevcut plan",
+    "manage": "Yönet",
+    "unsubscribed": "Abonelik yok",
+    "unsubscribedHint": "Her fatura döneminde kredi almak ve plan avantajlarının kilidini açmak için abone olun",
+    "subscribe": "Abone ol",
+    "resetsOn": "{date} tarihinde sıfırlanır",
+    "resetsOnWithDays": "{date} tarihinde sıfırlanır ({days} gün)",
+    "monthDay": "{day}.{month}",
+    "priceMonthlySuffix": "/ay",
+    "priceYearlySuffix": "/yıl",
+    "transactions": "İşlemler",
+    "emptyTransactions": "Henüz fatura kaydı yok",
+    "columns": {
+      "createdAt": "Oluşturulma",
+      "amount": "Tutar",
+      "credits": "Kredi",
+      "type": "Tür",
+      "status": "Durum"
+    },
+    "transactionType": {
+      "pay-to-use": "Kullandıkça öde",
+      "subscription": "Abonelik"
+    }
+  },
+  "manageSubscription": {
+    "title": "Aboneliği yönet",
+    "currentPlan": "Mevcut plan: {plan} {price}, dönem {date} tarihine kadar",
+    "cancelTitle": "Aboneliğiniz iptal edilsin mi?",
+    "cancelDescription": "Aboneliğiniz {date} sonrasında sona erecek. O zamana kadar mevcut planı kullanmaya devam edebilirsiniz; mevcut krediler korunur.",
+    "thinkAgain": "Aboneliği koru",
+    "confirmCancel": "İptali onayla",
+    "cancelFailed": "Abonelik iptal edilemedi",
+    "cancelSubmitted": "İptal gönderildi",
+    "restoreFailed": "Abonelik geri yüklenemedi",
+    "restored": "Abonelik geri yüklendi"
+  },
+  "payment": {
+    "loading": "Yükleniyor…",
+    "error": "Hata: {message}",
+    "success": {
+      "title": "Abonelik başarılı",
+      "thanks": "Aboneliğiniz için teşekkürler! Onay e-postası {email} adresine gönderilecek.",
+      "redirecting": "{seconds} sn içinde çevirmene yönlendiriliyorsunuz…",
+      "start": "Çevirmeye başla"
+    },
+    "pending": {
+      "title": "Ödeme işleniyor",
+      "body": "Ödemeniz onaylanıyor. Ödeme tamamlandığında krediler hesabınıza eklenecek.",
+      "notify": "Tamamlandığında {email} adresini bilgilendireceğiz.",
+      "hint": "Ödeme yönteminize göre bu birkaç dakika veya daha uzun sürebilir. Bu sayfadan güvenle ayrılabilirsiniz.",
+      "backHome": "Ana sayfaya dön"
+    },
+    "incomplete": {
+      "title": "Ödeme tamamlanmadı",
+      "expired": "Bu ödeme oturumunun süresi doldu. Devam etmek istiyorsanız yeni bir satın alma başlatın.",
+      "noPaymentRequired": "Bu oturum için ödeme gerekmedi. Bir ücret bekliyorsanız destekle iletişime geçin.",
+      "generic": "Ödemenizi onaylayamadık. Ücret alınmadı veya ödeme başarıyla tamamlanmadı.",
+      "hint": "Bunun bir hata olduğunu düşünüyorsanız tekrar deneyin veya ödeme ayrıntılarıyla destekle iletişime geçin.",
+      "tryAgain": "Tekrar dene",
+      "backHome": "Ana sayfaya dön"
+    }
+  }
+}

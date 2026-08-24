@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "Traducción de manga",
+    "description": "Traducción de manga con IA",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Términos de uso",
+      "privacy": "Política de privacidad",
+      "about": "Acerca de",
+      "refund": "Política de reembolso",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Cargando…",
+    "cancel": "Cancelar",
+    "processing": "Procesando…",
+    "unknownError": "Error desconocido",
+    "credits": "Créditos",
+    "creditsCount": "Créditos · {count}",
+    "pages": "{count} páginas",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "pleaseWait": "Espera…"
+  },
+  "status": {
+    "all": "Todos",
+    "pending": "Pendiente",
+    "processing": "Procesando",
+    "completed": "Completado",
+    "failed": "Fallido",
+    "partial": "Parcial",
+    "stalled": "Tiempo agotado",
+    "success": "Correcto",
+    "canceled": "Cancelado"
+  },
+  "header": {
+    "mangaTranslate": "Traducir manga",
+    "pricing": "Precios",
+    "faq": "Preguntas frecuentes",
+    "blog": "Blog",
+    "joinDiscord": "Unirse a Discord",
+    "dashboard": "Panel",
+    "login": "Iniciar sesión",
+    "toggleTheme": "Cambiar tema"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "Sube manga y obtén traducciones precisas con IA. OCR inteligente, traducción fiel y maquetación impecable.",
+    "product": "Producto",
+    "legal": "Legal",
+    "contact": "Contáctanos",
+    "emailLabel": "Correo: ",
+    "followUs": "Síguenos",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. Todos los derechos reservados.",
+    "disclaimer": "Manga Sense no está afiliado a ninguna editorial de manga.",
+    "links": {
+      "tool": "Herramienta",
+      "blog": "Blog",
+      "pricing": "Precios",
+      "about": "Acerca de",
+      "privacy": "Política de privacidad",
+      "terms": "Términos de uso",
+      "refund": "Política de reembolso",
+      "faq": "Preguntas frecuentes",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "Traducción de manga con IA, en un clic",
+    "subtitle": "Detecta automáticamente el texto de los globos, lo traduce y lo redibuja en la página original. Compatible con manga japonés, coreano y chino, conservando el diseño y el estilo de la fuente.",
+    "statPages": "páginas",
+    "statLanguages": "idiomas",
+    "statAccuracy": "precisión",
+    "tryFree": "Prueba gratis",
+    "howItWorks": "Cómo funciona"
+  },
+  "how": {
+    "title": "Cómo funciona",
+    "demoFallback": "Demo de {title}",
+    "steps": {
+      "upload": {
+        "title": "Sube el manga",
+        "desc": "Arrastra y suelta, pega o elige archivos. Compatible con JPG, PNG, WebP, PDF, EPUB y CBZ: una página o un tomo completo."
+      },
+      "language": {
+        "title": "Elige un idioma",
+        "desc": "Selecciona el idioma de destino y el estilo de fuente. Traducción de alta precisión en más de 20 idiomas."
+      },
+      "download": {
+        "title": "Previsualiza y descarga",
+        "desc": "Previsualiza el manga traducido y exporta resultados en alta resolución conservando el diseño original."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Ejemplos de traducción",
+    "description": "Arrastra el control para comparar original / traducido",
+    "beforeAlt": "Imagen original antes de la traducción",
+    "afterAlt": "Resultado después de la traducción",
+    "compareAria": "Comparación antes y después de la traducción",
+    "originalAlt": "Original",
+    "translatedAlt": "Traducido"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "Chino simplificado",
+      "CHT": "Chino tradicional",
+      "ENG": "Inglés",
+      "JPN": "Japonés",
+      "KOR": "Coreano"
+    },
+    "modes": {
+      "fast": "Traducción rápida (1 crédito)",
+      "precise": "Traducción precisa (2 créditos)"
+    },
+    "fontStyles": {
+      "comic": "Cómico",
+      "handwritten": "Manuscrito",
+      "print": "Impreso"
+    },
+    "draftLabel": "Borrador · {count} páginas",
+    "taskLabel": "Tarea {id}",
+    "closeTask": "Cerrar {label}",
+    "closeOthers": "Cerrar las demás",
+    "settingsTitle": "Ajustes",
+    "translateTo": "Traducir a",
+    "translateMode": "Modo de traducción",
+    "fontStyle": "Estilo de fuente",
+    "downloadAll": "Descargar todo",
+    "submit": "Enviar traducción",
+    "previewTitle": "Vista previa de imágenes ({count} imágenes)",
+    "showTranslated": "Ver imagen traducida",
+    "showOriginal": "Ver imagen original",
+    "clearAll": "Borrar todo",
+    "addImage": "Añadir imágenes",
+    "hint": "✦ La IA detecta automáticamente japonés, chino, inglés, coreano y más",
+    "timeout": "La traducción ha agotado el tiempo. Inténtalo de nuevo.",
+    "closeConfirmTitle": "¿Cerrar una tarea en curso?",
+    "closeConfirmDescription": "Esta traducción sigue en ejecución. Cerrarla solo la quita del espacio de trabajo actual. El procesamiento en segundo plano continuará y los créditos usados no se reembolsarán.",
+    "confirmClose": "Cerrar de todos modos"
+  },
+  "upload": {
+    "dropHint": "Suelta aquí las páginas de manga, o",
+    "browse": "explora archivos",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Imágenes hasta 50 MB, documentos hasta 200 MB",
+    "quota": "Subidas {uploaded}/{max} páginas · {remaining} restantes",
+    "addOrDrop": "Añadir imágenes / soltar para subir",
+    "compactQuota": "{uploaded} / {max} páginas"
+  },
+  "thumbnail": {
+    "waiting": "En espera",
+    "processing": "Procesando",
+    "preview": "Previsualizar {name}",
+    "remove": "Quitar {name}",
+    "continueWait": "Seguir esperando",
+    "retry": "Reintentar",
+    "download": "Descargar"
+  },
+  "imagePreview": {
+    "close": "Cerrar vista previa",
+    "prev": "Imagen anterior, o pulsa la flecha izquierda",
+    "next": "Imagen siguiente, o pulsa la flecha derecha"
+  },
+  "pricing": {
+    "title": "Precios",
+    "payAsNeeded": "Pago según uso",
+    "subscription": "Suscripción",
+    "getStarted": "Empezar",
+    "restore": "Restaurar suscripción",
+    "cancel": "Cancelar suscripción",
+    "subscribed": "Suscrito",
+    "adjustPlan": "Cambiar plan",
+    "planFallback": "Plan",
+    "priceMonthly": "${price}/mes",
+    "priceYearly": "${price}/año",
+    "creditsPayToUse": "{count} créditos",
+    "creditsMonthly": "{count} créditos / mes",
+    "creditsYearly": "{count} créditos / año"
+  },
+  "changePlan": {
+    "title": "¿Cambiar tu plan de suscripción?",
+    "description": "Pasarás a {planName} ({price}). La diferencia de precio no se reembolsará. Se conservarán los créditos existentes y, al confirmar, se cobrará de inmediato el precio del nuevo plan.",
+    "confirm": "Confirmar cambio",
+    "failed": "No se pudo cambiar el plan",
+    "missingPaymentInfo": "Faltan datos de confirmación del pago. Inténtalo más tarde.",
+    "stripeLoadFailed": "No se pudo cargar el componente de pago. Inténtalo más tarde.",
+    "needCardVerification": "Es necesario verificar la tarjeta para que el cambio surta efecto. Sigue las indicaciones.",
+    "cardVerificationFailed": "La verificación de la tarjeta ha fallado",
+    "verified": "Verificación correcta. El cambio de plan se ha enviado y los créditos llegarán en breve.",
+    "paymentStatus": "Estado del pago: {status}. Actualiza más tarde para comprobarlo.",
+    "submitted": "Cambio de plan enviado. Los créditos llegarán en breve."
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "items": {
+      "japanese": {
+        "question": "¿Pueden traducir manga japonés?",
+        "answer": "Sí. Reconocemos y traducimos automáticamente manga japonés conservando el diseño de los globos y el estilo artístico."
+      },
+      "korean": {
+        "question": "¿Pueden traducir manhwa coreano?",
+        "answer": "Sí. Admitimos cómics coreanos de lectura vertical y maquetaciones habituales de webtoon."
+      },
+      "chinese": {
+        "question": "¿Pueden traducir manga chino?",
+        "answer": "Sí. Admitimos traducción entre idiomas de cómics en chino simplificado y tradicional."
+      },
+      "ai": {
+        "question": "¿Qué IA usáis?",
+        "answer": "Usamos un pipeline de varios modelos optimizado para manga, que cubre detección de texto, traducción y relleno."
+      },
+      "duration": {
+        "question": "¿Cuánto tarda la traducción?",
+        "answer": "Una página suele tardar de unos segundos a decenas de segundos, según el tamaño de la imagen y la carga de la cola."
+      },
+      "formats": {
+        "question": "¿Qué formatos se admiten?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ y ZIP."
+      },
+      "expiry": {
+        "question": "¿Caducan los créditos?",
+        "answer": "Los créditos de pago según uso no caducan. Los créditos de suscripción se renuevan en cada ciclo de facturación."
+      },
+      "languages": {
+        "question": "¿Qué idiomas se admiten?",
+        "answer": "Admitimos más de 20 idiomas, incluidos japonés, chino, inglés, coreano y otros idiomas habituales del manga."
+      },
+      "privacy": {
+        "question": "¿Están seguros mis datos?",
+        "answer": "El contenido subido solo se usa para traducir. No se usa para entrenamiento público ni se comparte con terceros."
+      },
+      "refund": {
+        "question": "¿Cómo funcionan los reembolsos?",
+        "answer": "Los créditos de pago no usados se pueden reembolsar según nuestra política. Consulta los términos del servicio para más detalles."
+      },
+      "plugin": {
+        "question": "¿Hay una extensión de navegador?",
+        "answer": "Una extensión de navegador llegará pronto. Por ahora, sube y traduce en la aplicación web."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Últimas publicaciones",
+    "viewAll": "Ver todas las publicaciones →",
+    "readMore": "Leer más →",
+    "back": "← Volver al blog",
+    "date": "{day} {month} {year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "description": "Accede a tu cuenta con correo y contraseña",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "forgotPassword": "¿Has olvidado la contraseña?",
+      "submit": "Iniciar sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "goSignUp": "Regístrate",
+      "orUse": "O continúa con",
+      "google": "Continuar con Google",
+      "failed": "Error al iniciar sesión",
+      "genericError": "Algo ha salido mal. Inténtalo de nuevo."
+    },
+    "signUp": {
+      "title": "Registrarse",
+      "description": "Crea una cuenta y empieza",
+      "emailPlaceholder": "tu@email.com",
+      "passwordPlaceholder": "Al menos 8 caracteres",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Introduce la contraseña de nuevo",
+      "submit": "Registrarse",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "goLogin": "Iniciar sesión",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "failed": "Error al registrarse",
+      "genericError": "Algo ha salido mal. Inténtalo de nuevo."
+    },
+    "signUpSuccess": {
+      "title": "¡Gracias por registrarte!",
+      "description": "Revisa tu correo para confirmar",
+      "body": "Te has registrado correctamente. Revisa tu correo para confirmar la cuenta antes de iniciar sesión."
+    },
+    "forgotPassword": {
+      "title": "Restablece tu contraseña",
+      "description": "Escribe tu correo y te enviaremos un enlace para restablecer la contraseña",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Enviar correo de restablecimiento",
+      "sending": "Enviando...",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "goLogin": "Iniciar sesión",
+      "successTitle": "Revisa tu correo",
+      "successDescription": "Instrucciones de restablecimiento enviadas",
+      "successBody": "Si te registraste con correo y contraseña, recibirás un correo para restablecerla.",
+      "genericError": "Ha ocurrido un error"
+    },
+    "updatePassword": {
+      "title": "Restablece tu contraseña",
+      "description": "Introduce tu nueva contraseña a continuación.",
+      "newPassword": "Nueva contraseña",
+      "placeholder": "Nueva contraseña",
+      "submit": "Guardar nueva contraseña",
+      "saving": "Guardando...",
+      "genericError": "Ha ocurrido un error"
+    },
+    "confirm": {
+      "verifyingTitle": "Verificando tu correo…",
+      "verifyingDescription": "Espera mientras terminamos de confirmar tu registro.",
+      "successTitle": "Correo confirmado",
+      "successDescription": "Irás a la página de inicio en {seconds} segundos, o puedes empezar a traducir ahora.",
+      "errorTitle": "Error de verificación",
+      "errorDescription": "No hemos podido confirmar tu correo.",
+      "missingParams": "Faltan parámetros de confirmación. Abre de nuevo el enlace de tu correo.",
+      "invalidLink": "La verificación ha fallado. Es posible que el enlace haya caducado.",
+      "networkError": "Error de red. Inténtalo más tarde.",
+      "startTranslate": "Empezar a traducir",
+      "backToLogin": "Volver al inicio de sesión"
+    },
+    "error": {
+      "title": "Lo sentimos, algo ha salido mal.",
+      "codeError": "Código de error: {error}",
+      "unspecified": "Ha ocurrido un error no especificado."
+    }
+  },
+  "home": {
+    "navAria": "Cuenta",
+    "history": "Historial de traducción",
+    "billing": "Facturación y suscripción",
+    "signOut": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "creditBalance": "Saldo de créditos"
+  },
+  "history": {
+    "title": "Historial de traducción",
+    "empty": "Sin historial de traducción / sin resultados coincidentes",
+    "clearFilters": "Borrar filtros",
+    "loadMore": "Cargar más",
+    "loading": "Cargando…",
+    "sourceAuto": "Auto",
+    "dateRange": {
+      "1d": "Último 1 día",
+      "7d": "Últimos 7 días",
+      "1m": "Último 1 mes",
+      "all": "Todos"
+    }
+  },
+  "billing": {
+    "title": "Facturación y suscripción",
+    "currentPlan": "Plan actual",
+    "manage": "Gestionar",
+    "unsubscribed": "Sin suscripción",
+    "unsubscribedHint": "Suscríbete para recibir créditos en cada ciclo de facturación y desbloquear las ventajas del plan",
+    "subscribe": "Suscribirse",
+    "resetsOn": "Se restablece el {date}",
+    "resetsOnWithDays": "Se restablece el {date} ({days} días)",
+    "monthDay": "{day}/{month}",
+    "priceMonthlySuffix": "/mes",
+    "priceYearlySuffix": "/año",
+    "transactions": "Transacciones",
+    "emptyTransactions": "Aún no hay registros de facturación",
+    "columns": {
+      "createdAt": "Creado el",
+      "amount": "Importe",
+      "credits": "Créditos",
+      "type": "Tipo",
+      "status": "Estado"
+    },
+    "transactionType": {
+      "pay-to-use": "Pago según uso",
+      "subscription": "Suscripción"
+    }
+  },
+  "manageSubscription": {
+    "title": "Gestionar suscripción",
+    "currentPlan": "Plan actual: {plan} {price}, periodo hasta {date}",
+    "cancelTitle": "¿Cancelar tu suscripción?",
+    "cancelDescription": "Tu suscripción terminará después del {date}. Podrás seguir usando el plan actual hasta entonces y se conservarán los créditos existentes.",
+    "thinkAgain": "Mantener suscripción",
+    "confirmCancel": "Confirmar cancelación",
+    "cancelFailed": "No se pudo cancelar la suscripción",
+    "cancelSubmitted": "Cancelación enviada",
+    "restoreFailed": "No se pudo restaurar la suscripción",
+    "restored": "Suscripción restaurada"
+  },
+  "payment": {
+    "loading": "Cargando…",
+    "error": "Error: {message}",
+    "success": {
+      "title": "Suscripción correcta",
+      "thanks": "¡Gracias por tu suscripción! Se enviará un correo de confirmación a {email}.",
+      "redirecting": "Redirigiendo al traductor en {seconds} s…",
+      "start": "Empezar a traducir"
+    },
+    "pending": {
+      "title": "Procesando el pago",
+      "body": "Estamos confirmando tu pago. Los créditos se añadirán a tu cuenta cuando se complete.",
+      "notify": "Avisaremos a {email} cuando esté listo.",
+      "hint": "Esto puede tardar unos minutos o más según el método de pago. Puedes salir de esta página con seguridad.",
+      "backHome": "Volver al inicio"
+    },
+    "incomplete": {
+      "title": "Pago incompleto",
+      "expired": "Esta sesión de pago ha caducado. Inicia una nueva compra si aún quieres continuar.",
+      "noPaymentRequired": "Esta sesión no requería pago. Si esperabas un cargo, contacta con soporte.",
+      "generic": "No hemos podido confirmar tu pago. No se te ha cobrado, o el pago no se ha completado correctamente.",
+      "hint": "Si crees que se trata de un error, inténtalo de nuevo o contacta con soporte con los datos del pago.",
+      "tryAgain": "Intentar de nuevo",
+      "backHome": "Volver al inicio"
+    }
+  }
+}

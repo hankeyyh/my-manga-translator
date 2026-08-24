@@ -6,10 +6,12 @@ import {
 } from "@/design/design-system/components";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
+    Check,
     ChevronDown,
     Moon,
     Sun,
 } from "lucide-react";
+import { cn } from "@/components/utils";
 import { UserInfo } from "@/types/api/user-info";
 import { getPathname, Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
@@ -105,12 +107,28 @@ export function ClientSiteHeader({ userInfo }: Props) {
                                     <ChevronDown className="size-3" />
                                 </CcButton>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                {routing.locales.map((item) => (
-                                    <DropdownMenuItem key={item} onSelect={() => onSelectLocale(item)}>
-                                        {tLocale(item)}
-                                    </DropdownMenuItem>
-                                ))}
+                            <DropdownMenuContent
+                                align="end"
+                                className="max-h-[min(24rem,calc(100vh-5rem))] overflow-y-auto overscroll-contain"
+                                onWheel={(event) => event.stopPropagation()}
+                            >
+                                {routing.locales.map((item) => {
+                                    const isCurrent = item === locale;
+                                    return (
+                                        <DropdownMenuItem
+                                            key={item}
+                                            aria-current={isCurrent ? "true" : undefined}
+                                            className={cn(
+                                                isCurrent &&
+                                                    "bg-[var(--cc-brand-tint)] font-medium text-[var(--cc-brand-primary)] focus:bg-[var(--cc-brand-tint)] focus:text-[var(--cc-brand-primary)]",
+                                            )}
+                                            onSelect={() => onSelectLocale(item)}
+                                        >
+                                            {tLocale(item)}
+                                            {isCurrent ? <Check className="ml-auto size-3.5" strokeWidth={3} /> : null}
+                                        </DropdownMenuItem>
+                                    );
+                                })}
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <CcButton

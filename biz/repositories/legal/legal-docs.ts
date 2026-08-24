@@ -34,7 +34,7 @@ export class LegalDocsRepository {
             return { data: null, error };
         }
         if (!data) {
-            return { data: null, error: new Error(`legal_docs not found: ${slug}, locale: ${locale}`) };
+            return { data: null, error: null };
         }
         return { data: mapLegalDocRow(data as Tables<"legal_docs">), error: null };
     }

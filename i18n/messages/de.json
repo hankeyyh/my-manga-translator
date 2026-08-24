@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "Manga-Übersetzung",
+    "description": "KI-gestützte Manga-Übersetzung",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Nutzungsbedingungen",
+      "privacy": "Datenschutzrichtlinie",
+      "about": "Über uns",
+      "refund": "Rückerstattungsrichtlinie",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Wird geladen…",
+    "cancel": "Abbrechen",
+    "processing": "Wird verarbeitet…",
+    "unknownError": "Unbekannter Fehler",
+    "credits": "Credits",
+    "creditsCount": "Credits · {count}",
+    "pages": "{count} Seiten",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "pleaseWait": "Bitte warten…"
+  },
+  "status": {
+    "all": "Alle",
+    "pending": "Ausstehend",
+    "processing": "In Bearbeitung",
+    "completed": "Abgeschlossen",
+    "failed": "Fehlgeschlagen",
+    "partial": "Teilweise",
+    "stalled": "Zeitüberschreitung",
+    "success": "Erfolgreich",
+    "canceled": "Abgebrochen"
+  },
+  "header": {
+    "mangaTranslate": "Manga übersetzen",
+    "pricing": "Preise",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "joinDiscord": "Discord beitreten",
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "toggleTheme": "Design wechseln"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "Lade Manga hoch und erhalte präzise KI-Übersetzungen. Intelligente OCR, treue Übersetzung, nahtloses Lettering.",
+    "product": "Produkt",
+    "legal": "Rechtliches",
+    "contact": "Kontakt",
+    "emailLabel": "E-Mail: ",
+    "followUs": "Folge uns",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. Alle Rechte vorbehalten.",
+    "disclaimer": "Manga Sense ist nicht mit einem Manga-Verlag verbunden.",
+    "links": {
+      "tool": "Tool",
+      "blog": "Blog",
+      "pricing": "Preise",
+      "about": "Über uns",
+      "privacy": "Datenschutzrichtlinie",
+      "terms": "Nutzungsbedingungen",
+      "refund": "Rückerstattungsrichtlinie",
+      "faq": "FAQ",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "KI-Manga-Übersetzung mit einem Klick",
+    "subtitle": "Erkennt automatisch Sprechblasentext, übersetzt ihn und zeichnet ihn auf die Originalseite. Unterstützt japanische, koreanische und chinesische Manga und bewahrt Layout sowie Schriftstil.",
+    "statPages": "Seiten",
+    "statLanguages": "Sprachen",
+    "statAccuracy": "Genauigkeit",
+    "tryFree": "Kostenlos testen",
+    "howItWorks": "So funktioniert’s"
+  },
+  "how": {
+    "title": "So funktioniert’s",
+    "demoFallback": "{title}-Demo",
+    "steps": {
+      "upload": {
+        "title": "Manga hochladen",
+        "desc": "Ziehen und ablegen, einfügen oder Dateien wählen. Unterstützt JPG, PNG, WebP, PDF, EPUB und CBZ — eine einzelne Seite oder einen ganzen Band."
+      },
+      "language": {
+        "title": "Sprache wählen",
+        "desc": "Wähle Zielsprache und Schriftstil. Hochgenaue Übersetzung in über 20 Sprachen."
+      },
+      "download": {
+        "title": "Vorschau und Download",
+        "desc": "Sieh dir den übersetzten Manga an und exportiere hochauflösende Ergebnisse bei erhaltenem Original-Layout."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Übersetzungsbeispiele",
+    "description": "Ziehe den Schieberegler, um Original / Übersetzung zu vergleichen",
+    "beforeAlt": "Originalbild vor der Übersetzung",
+    "afterAlt": "Ergebnis nach der Übersetzung",
+    "compareAria": "Vergleich vor und nach der Übersetzung",
+    "originalAlt": "Original",
+    "translatedAlt": "Übersetzt"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "Vereinfachtes Chinesisch",
+      "CHT": "Traditionelles Chinesisch",
+      "ENG": "Englisch",
+      "JPN": "Japanisch",
+      "KOR": "Koreanisch"
+    },
+    "modes": {
+      "fast": "Schnelle Übersetzung (1 Credit)",
+      "precise": "Präzise Übersetzung (2 Credits)"
+    },
+    "fontStyles": {
+      "comic": "Comic",
+      "handwritten": "Handschrift",
+      "print": "Druck"
+    },
+    "draftLabel": "Entwurf · {count} Seiten",
+    "taskLabel": "Aufgabe {id}",
+    "closeTask": "{label} schließen",
+    "closeOthers": "Andere schließen",
+    "settingsTitle": "Einstellungen",
+    "translateTo": "Übersetzen nach",
+    "translateMode": "Übersetzungsmodus",
+    "fontStyle": "Schriftstil",
+    "downloadAll": "Alle herunterladen",
+    "submit": "Übersetzung starten",
+    "previewTitle": "Bildvorschau ({count} Bilder)",
+    "showTranslated": "Übersetztes Bild anzeigen",
+    "showOriginal": "Originalbild anzeigen",
+    "clearAll": "Alle löschen",
+    "addImage": "Bilder hinzufügen",
+    "hint": "✦ KI erkennt automatisch Japanisch, Chinesisch, Englisch, Koreanisch und mehr",
+    "timeout": "Zeitüberschreitung bei der Übersetzung. Bitte erneut versuchen.",
+    "closeConfirmTitle": "Laufende Aufgabe schließen?",
+    "closeConfirmDescription": "Diese Übersetzung läuft noch. Schließen entfernt sie nur aus dem aktuellen Arbeitsbereich. Die Verarbeitung im Hintergrund läuft weiter, und verwendete Credits werden nicht erstattet.",
+    "confirmClose": "Trotzdem schließen"
+  },
+  "upload": {
+    "dropHint": "Manga-Seiten hier ablegen oder",
+    "browse": "Dateien durchsuchen",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Bilder bis 50 MB, Dokumente bis 200 MB",
+    "quota": "{uploaded}/{max} Seiten hochgeladen · {remaining} übrig",
+    "addOrDrop": "Bilder hinzufügen / zum Hochladen ablegen",
+    "compactQuota": "{uploaded} / {max} Seiten"
+  },
+  "thumbnail": {
+    "waiting": "Wartend",
+    "processing": "In Bearbeitung",
+    "preview": "{name} in der Vorschau",
+    "remove": "{name} entfernen",
+    "continueWait": "Weiter warten",
+    "retry": "Erneut versuchen",
+    "download": "Herunterladen"
+  },
+  "imagePreview": {
+    "close": "Vorschau schließen",
+    "prev": "Vorheriges Bild oder Pfeil nach links",
+    "next": "Nächstes Bild oder Pfeil nach rechts"
+  },
+  "pricing": {
+    "title": "Preise",
+    "payAsNeeded": "Nutzungsbasiert",
+    "subscription": "Abo",
+    "getStarted": "Loslegen",
+    "restore": "Abo wiederherstellen",
+    "cancel": "Abo kündigen",
+    "subscribed": "Abonniert",
+    "adjustPlan": "Plan ändern",
+    "planFallback": "Plan",
+    "priceMonthly": "${price}/Monat",
+    "priceYearly": "${price}/Jahr",
+    "creditsPayToUse": "{count} Credits",
+    "creditsMonthly": "{count} Credits / Monat",
+    "creditsYearly": "{count} Credits / Jahr"
+  },
+  "changePlan": {
+    "title": "Abo-Plan ändern?",
+    "description": "Du wechselst zu {planName} ({price}). Die Preisdifferenz wird nicht erstattet. Vorhandene Credits bleiben erhalten, und nach der Bestätigung wird der neue Planpreis sofort abgebucht.",
+    "confirm": "Änderung bestätigen",
+    "failed": "Planänderung fehlgeschlagen",
+    "missingPaymentInfo": "Bestätigungsdaten zur Zahlung fehlen. Bitte später erneut versuchen.",
+    "stripeLoadFailed": "Zahlungskomponente konnte nicht geladen werden. Bitte später erneut versuchen.",
+    "needCardVerification": "Eine Kartenverifizierung ist erforderlich, damit die Änderung wirksam wird. Bitte den Anweisungen folgen.",
+    "cardVerificationFailed": "Kartenverifizierung fehlgeschlagen",
+    "verified": "Verifizierung erfolgreich. Die Planänderung wurde übermittelt, Credits treffen in Kürze ein.",
+    "paymentStatus": "Zahlungsstatus: {status}. Bitte später aktualisieren.",
+    "submitted": "Planänderung übermittelt. Credits treffen in Kürze ein."
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": {
+      "japanese": {
+        "question": "Könnt ihr japanische Manga übersetzen?",
+        "answer": "Ja. Wir erkennen und übersetzen japanische Manga automatisch und bewahren Sprechblasen-Layout und Zeichenstil."
+      },
+      "korean": {
+        "question": "Könnt ihr koreanische Manhwa übersetzen?",
+        "answer": "Ja. Wir unterstützen vertikal gelesene koreanische Comics und gängige Webtoon-Layouts."
+      },
+      "chinese": {
+        "question": "Könnt ihr chinesische Manga übersetzen?",
+        "answer": "Ja. Wir unterstützen sprachübergreifende Übersetzung von Comics in vereinfachtem und traditionellem Chinesisch."
+      },
+      "ai": {
+        "question": "Welche KI verwendet ihr?",
+        "answer": "Wir nutzen eine für Manga optimierte Multi-Modell-Pipeline für Texterkennung, Übersetzung und Inpainting."
+      },
+      "duration": {
+        "question": "Wie lange dauert die Übersetzung?",
+        "answer": "Eine Seite dauert in der Regel wenige bis einige Dutzend Sekunden, abhängig von Bildgröße und Warteschlange."
+      },
+      "formats": {
+        "question": "Welche Formate werden unterstützt?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ und ZIP."
+      },
+      "expiry": {
+        "question": "Verfallen Credits?",
+        "answer": "Nutzungsbasiert gekaufte Credits verfallen nie. Abo-Credits werden in jedem Abrechnungszyklus erneuert."
+      },
+      "languages": {
+        "question": "Welche Sprachen werden unterstützt?",
+        "answer": "Wir unterstützen über 20 Sprachen, darunter Japanisch, Chinesisch, Englisch, Koreanisch und andere gängige Manga-Sprachen."
+      },
+      "privacy": {
+        "question": "Sind meine Daten sicher?",
+        "answer": "Hochgeladene Inhalte werden nur zur Übersetzung verwendet. Sie werden nicht für öffentliches Training genutzt oder an Dritte weitergegeben."
+      },
+      "refund": {
+        "question": "Wie funktionieren Rückerstattungen?",
+        "answer": "Unverbrauchte bezahlte Credits können gemäß unserer Richtlinie erstattet werden. Details findest du in den Nutzungsbedingungen."
+      },
+      "plugin": {
+        "question": "Gibt es eine Browser-Erweiterung?",
+        "answer": "Eine Browser-Erweiterung kommt bald. Bitte lade vorerst in der Web-App hoch und übersetze dort."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Neueste Beiträge",
+    "viewAll": "Alle Beiträge anzeigen →",
+    "readMore": "Weiterlesen →",
+    "back": "← Zurück zum Blog",
+    "date": "{day}.{month}.{year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "description": "Melde dich mit E-Mail und Passwort bei deinem Konto an",
+      "emailPlaceholder": "E-Mail",
+      "passwordPlaceholder": "Passwort",
+      "forgotPassword": "Passwort vergessen?",
+      "submit": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "goSignUp": "Registrieren",
+      "orUse": "Oder fortfahren mit",
+      "google": "Mit Google fortfahren",
+      "failed": "Anmeldung fehlgeschlagen",
+      "genericError": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+    },
+    "signUp": {
+      "title": "Registrieren",
+      "description": "Erstelle ein Konto und starte durch",
+      "emailPlaceholder": "deine@email.com",
+      "passwordPlaceholder": "Mindestens 8 Zeichen",
+      "confirmPassword": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Passwort erneut eingeben",
+      "submit": "Registrieren",
+      "hasAccount": "Bereits ein Konto?",
+      "goLogin": "Anmelden",
+      "passwordMismatch": "Passwörter stimmen nicht überein",
+      "failed": "Registrierung fehlgeschlagen",
+      "genericError": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+    },
+    "signUpSuccess": {
+      "title": "Danke für deine Registrierung!",
+      "description": "Prüfe deine E-Mail zur Bestätigung",
+      "body": "Du hast dich erfolgreich registriert. Bitte bestätige dein Konto per E-Mail, bevor du dich anmeldest."
+    },
+    "forgotPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Gib deine E-Mail ein, und wir senden dir einen Link zum Zurücksetzen des Passworts",
+      "email": "E-Mail",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Reset-E-Mail senden",
+      "sending": "Wird gesendet...",
+      "hasAccount": "Bereits ein Konto?",
+      "goLogin": "Anmelden",
+      "successTitle": "Prüfe deine E-Mail",
+      "successDescription": "Anleitung zum Zurücksetzen gesendet",
+      "successBody": "Wenn du dich mit E-Mail und Passwort registriert hast, erhältst du eine E-Mail zum Zurücksetzen des Passworts.",
+      "genericError": "Ein Fehler ist aufgetreten"
+    },
+    "updatePassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Bitte gib unten dein neues Passwort ein.",
+      "newPassword": "Neues Passwort",
+      "placeholder": "Neues Passwort",
+      "submit": "Neues Passwort speichern",
+      "saving": "Wird gespeichert...",
+      "genericError": "Ein Fehler ist aufgetreten"
+    },
+    "confirm": {
+      "verifyingTitle": "E-Mail wird bestätigt…",
+      "verifyingDescription": "Bitte warten, während wir deine Registrierung abschließen.",
+      "successTitle": "E-Mail bestätigt",
+      "successDescription": "Du wirst in {seconds} Sekunden zur Startseite weitergeleitet oder kannst jetzt mit dem Übersetzen beginnen.",
+      "errorTitle": "Bestätigung fehlgeschlagen",
+      "errorDescription": "Wir konnten deine E-Mail nicht bestätigen.",
+      "missingParams": "Bestätigungsparameter fehlen. Bitte öffne den Link aus deiner E-Mail erneut.",
+      "invalidLink": "Bestätigung fehlgeschlagen. Der Link ist möglicherweise abgelaufen.",
+      "networkError": "Netzwerkfehler. Bitte später erneut versuchen.",
+      "startTranslate": "Mit dem Übersetzen beginnen",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "error": {
+      "title": "Entschuldigung, etwas ist schiefgelaufen.",
+      "codeError": "Fehlercode: {error}",
+      "unspecified": "Ein nicht spezifizierter Fehler ist aufgetreten."
+    }
+  },
+  "home": {
+    "navAria": "Konto",
+    "history": "Übersetzungsverlauf",
+    "billing": "Abrechnung & Abo",
+    "signOut": "Abmelden",
+    "email": "E-Mail",
+    "creditBalance": "Credit-Guthaben"
+  },
+  "history": {
+    "title": "Übersetzungsverlauf",
+    "empty": "Kein Übersetzungsverlauf / keine treffenden Ergebnisse",
+    "clearFilters": "Filter zurücksetzen",
+    "loadMore": "Mehr laden",
+    "loading": "Wird geladen…",
+    "sourceAuto": "Auto",
+    "dateRange": {
+      "1d": "Letzter 1 Tag",
+      "7d": "Letzte 7 Tage",
+      "1m": "Letzter 1 Monat",
+      "all": "Alle"
+    }
+  },
+  "billing": {
+    "title": "Abrechnung & Abo",
+    "currentPlan": "Aktueller Plan",
+    "manage": "Verwalten",
+    "unsubscribed": "Kein Abo",
+    "unsubscribedHint": "Abonniere, um in jedem Abrechnungszyklus Credits zu erhalten und Planvorteile freizuschalten",
+    "subscribe": "Abonnieren",
+    "resetsOn": "Wird am {date} zurückgesetzt",
+    "resetsOnWithDays": "Wird am {date} zurückgesetzt ({days} Tage)",
+    "monthDay": "{day}.{month}.",
+    "priceMonthlySuffix": "/Monat",
+    "priceYearlySuffix": "/Jahr",
+    "transactions": "Transaktionen",
+    "emptyTransactions": "Noch keine Abrechnungsdatensätze",
+    "columns": {
+      "createdAt": "Erstellt am",
+      "amount": "Betrag",
+      "credits": "Credits",
+      "type": "Typ",
+      "status": "Status"
+    },
+    "transactionType": {
+      "pay-to-use": "Nutzungsbasiert",
+      "subscription": "Abo"
+    }
+  },
+  "manageSubscription": {
+    "title": "Abo verwalten",
+    "currentPlan": "Aktueller Plan: {plan} {price}, Zeitraum bis {date}",
+    "cancelTitle": "Abo kündigen?",
+    "cancelDescription": "Dein Abo endet nach dem {date}. Bis dahin kannst du den aktuellen Plan weiter nutzen, und vorhandene Credits bleiben erhalten.",
+    "thinkAgain": "Abo behalten",
+    "confirmCancel": "Kündigung bestätigen",
+    "cancelFailed": "Kündigung des Abos fehlgeschlagen",
+    "cancelSubmitted": "Kündigung übermittelt",
+    "restoreFailed": "Wiederherstellen des Abos fehlgeschlagen",
+    "restored": "Abo wiederhergestellt"
+  },
+  "payment": {
+    "loading": "Wird geladen…",
+    "error": "Fehler: {message}",
+    "success": {
+      "title": "Abo erfolgreich",
+      "thanks": "Danke für dein Abo! Eine Bestätigungs-E-Mail wird an {email} gesendet.",
+      "redirecting": "Weiterleitung zum Übersetzer in {seconds} s…",
+      "start": "Mit dem Übersetzen beginnen"
+    },
+    "pending": {
+      "title": "Zahlung wird verarbeitet",
+      "body": "Deine Zahlung wird bestätigt. Credits werden deinem Konto gutgeschrieben, sobald die Zahlung eingeht.",
+      "notify": "Wir benachrichtigen {email}, wenn es abgeschlossen ist.",
+      "hint": "Das kann je nach Zahlungsmethode einige Minuten oder länger dauern. Du kannst diese Seite sicher verlassen.",
+      "backHome": "Zurück zur Startseite"
+    },
+    "incomplete": {
+      "title": "Zahlung unvollständig",
+      "expired": "Diese Checkout-Sitzung ist abgelaufen. Starte einen neuen Kauf, wenn du fortfahren möchtest.",
+      "noPaymentRequired": "Für diese Sitzung war keine Zahlung erforderlich. Falls du eine Abbuchung erwartet hast, kontaktiere den Support.",
+      "generic": "Wir konnten deine Zahlung nicht bestätigen. Dir wurde nichts berechnet, oder die Zahlung wurde nicht erfolgreich abgeschlossen.",
+      "hint": "Falls du glaubst, dass das ein Fehler ist, versuche es erneut oder kontaktiere den Support mit deinen Zahlungsdaten.",
+      "tryAgain": "Erneut versuchen",
+      "backHome": "Zurück zur Startseite"
+    }
+  }
+}

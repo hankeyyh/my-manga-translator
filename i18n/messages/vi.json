@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "Dịch manga",
+    "description": "Dịch manga bằng AI",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Điều khoản sử dụng",
+      "privacy": "Chính sách quyền riêng tư",
+      "about": "Giới thiệu",
+      "refund": "Chính sách hoàn tiền",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Đang tải…",
+    "cancel": "Hủy",
+    "processing": "Đang xử lý…",
+    "unknownError": "Lỗi không xác định",
+    "credits": "Tín dụng",
+    "creditsCount": "Tín dụng · {count}",
+    "pages": "{count} trang",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "pleaseWait": "Vui lòng đợi…"
+  },
+  "status": {
+    "all": "Tất cả",
+    "pending": "Đang chờ",
+    "processing": "Đang xử lý",
+    "completed": "Hoàn tất",
+    "failed": "Thất bại",
+    "partial": "Một phần",
+    "stalled": "Hết thời gian",
+    "success": "Thành công",
+    "canceled": "Đã hủy"
+  },
+  "header": {
+    "mangaTranslate": "Dịch manga",
+    "pricing": "Bảng giá",
+    "faq": "Câu hỏi thường gặp",
+    "blog": "Blog",
+    "joinDiscord": "Tham gia Discord",
+    "dashboard": "Bảng điều khiển",
+    "login": "Đăng nhập",
+    "toggleTheme": "Đổi giao diện"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "Tải manga lên và nhận bản dịch chính xác nhờ AI. OCR thông minh, dịch sát nghĩa, sắp chữ liền mạch.",
+    "product": "Sản phẩm",
+    "legal": "Pháp lý",
+    "contact": "Liên hệ",
+    "emailLabel": "Email: ",
+    "followUs": "Theo dõi chúng tôi",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. Bảo lưu mọi quyền.",
+    "disclaimer": "Manga Sense không liên kết với bất kỳ nhà xuất bản manga nào.",
+    "links": {
+      "tool": "Công cụ",
+      "blog": "Blog",
+      "pricing": "Bảng giá",
+      "about": "Giới thiệu",
+      "privacy": "Chính sách quyền riêng tư",
+      "terms": "Điều khoản sử dụng",
+      "refund": "Chính sách hoàn tiền",
+      "faq": "Câu hỏi thường gặp",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "Dịch manga bằng AI, một lần nhấn",
+    "subtitle": "Tự động nhận diện chữ trong bong bóng thoại, dịch và vẽ lại lên trang gốc. Hỗ trợ manga Nhật, Hàn, Trung, giữ nguyên bố cục và kiểu chữ.",
+    "statPages": "trang",
+    "statLanguages": "ngôn ngữ",
+    "statAccuracy": "độ chính xác",
+    "tryFree": "Dùng thử miễn phí",
+    "howItWorks": "Cách hoạt động"
+  },
+  "how": {
+    "title": "Cách hoạt động",
+    "demoFallback": "Demo {title}",
+    "steps": {
+      "upload": {
+        "title": "Tải manga lên",
+        "desc": "Kéo thả, dán hoặc chọn tệp. Hỗ trợ JPG, PNG, WebP, PDF, EPUB và CBZ — một trang hoặc cả tập."
+      },
+      "language": {
+        "title": "Chọn ngôn ngữ",
+        "desc": "Chọn ngôn ngữ đích và kiểu chữ. Dịch độ chính xác cao trên hơn 20 ngôn ngữ."
+      },
+      "download": {
+        "title": "Xem trước và tải xuống",
+        "desc": "Xem trước manga đã dịch và xuất kết quả độ phân giải cao, giữ nguyên bố cục gốc."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Minh họa bản dịch",
+    "description": "Kéo thanh trượt để so sánh gốc / bản dịch",
+    "beforeAlt": "Ảnh gốc trước khi dịch",
+    "afterAlt": "Kết quả sau khi dịch",
+    "compareAria": "So sánh trước và sau khi dịch",
+    "originalAlt": "Gốc",
+    "translatedAlt": "Đã dịch"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "Tiếng Trung giản thể",
+      "CHT": "Tiếng Trung phồn thể",
+      "ENG": "Tiếng Anh",
+      "JPN": "Tiếng Nhật",
+      "KOR": "Tiếng Hàn"
+    },
+    "modes": {
+      "fast": "Dịch nhanh (1 tín dụng)",
+      "precise": "Dịch chính xác (2 tín dụng)"
+    },
+    "fontStyles": {
+      "comic": "Truyện tranh",
+      "handwritten": "Viết tay",
+      "print": "In"
+    },
+    "draftLabel": "Nháp · {count} trang",
+    "taskLabel": "Tác vụ {id}",
+    "closeTask": "Đóng {label}",
+    "closeOthers": "Đóng các tác vụ khác",
+    "settingsTitle": "Cài đặt",
+    "translateTo": "Dịch sang",
+    "translateMode": "Chế độ dịch",
+    "fontStyle": "Kiểu chữ",
+    "downloadAll": "Tải tất cả",
+    "submit": "Gửi dịch",
+    "previewTitle": "Xem trước ảnh ({count} ảnh)",
+    "showTranslated": "Xem ảnh đã dịch",
+    "showOriginal": "Xem ảnh gốc",
+    "clearAll": "Xóa tất cả",
+    "addImage": "Thêm ảnh",
+    "hint": "✦ AI tự động nhận diện tiếng Nhật, Trung, Anh, Hàn và nhiều ngôn ngữ khác",
+    "timeout": "Dịch hết thời gian. Vui lòng thử lại.",
+    "closeConfirmTitle": "Đóng tác vụ đang chạy?",
+    "closeConfirmDescription": "Bản dịch này vẫn đang chạy. Đóng chỉ gỡ nó khỏi không gian làm việc hiện tại. Xử lý nền vẫn tiếp tục và tín dụng đã dùng sẽ không được hoàn.",
+    "confirmClose": "Vẫn đóng"
+  },
+  "upload": {
+    "dropHint": "Thả trang manga vào đây, hoặc",
+    "browse": "duyệt tệp",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Ảnh tối đa 50MB, tài liệu tối đa 200MB",
+    "quota": "Đã tải {uploaded}/{max} trang · còn {remaining}",
+    "addOrDrop": "Thêm ảnh / thả để tải lên",
+    "compactQuota": "{uploaded} / {max} trang"
+  },
+  "thumbnail": {
+    "waiting": "Đang chờ",
+    "processing": "Đang xử lý",
+    "preview": "Xem trước {name}",
+    "remove": "Xóa {name}",
+    "continueWait": "Tiếp tục chờ",
+    "retry": "Thử lại",
+    "download": "Tải xuống"
+  },
+  "imagePreview": {
+    "close": "Đóng xem trước",
+    "prev": "Ảnh trước, hoặc nhấn mũi tên trái",
+    "next": "Ảnh sau, hoặc nhấn mũi tên phải"
+  },
+  "pricing": {
+    "title": "Bảng giá",
+    "payAsNeeded": "Trả theo nhu cầu",
+    "subscription": "Đăng ký",
+    "getStarted": "Bắt đầu",
+    "restore": "Khôi phục đăng ký",
+    "cancel": "Hủy đăng ký",
+    "subscribed": "Đã đăng ký",
+    "adjustPlan": "Đổi gói",
+    "planFallback": "Gói",
+    "priceMonthly": "${price}/tháng",
+    "priceYearly": "${price}/năm",
+    "creditsPayToUse": "{count} tín dụng",
+    "creditsMonthly": "{count} tín dụng / tháng",
+    "creditsYearly": "{count} tín dụng / năm"
+  },
+  "changePlan": {
+    "title": "Đổi gói đăng ký?",
+    "description": "Bạn sẽ chuyển sang {planName} ({price}). Phần chênh lệch sẽ không được hoàn. Tín dụng hiện có được giữ lại, và bạn sẽ bị tính phí gói mới ngay sau khi xác nhận.",
+    "confirm": "Xác nhận thay đổi",
+    "failed": "Không đổi được gói",
+    "missingPaymentInfo": "Thiếu thông tin xác nhận thanh toán. Vui lòng thử lại sau.",
+    "stripeLoadFailed": "Không tải được thành phần thanh toán. Vui lòng thử lại sau.",
+    "needCardVerification": "Cần xác minh thẻ trước khi thay đổi có hiệu lực. Hãy làm theo hướng dẫn.",
+    "cardVerificationFailed": "Xác minh thẻ thất bại",
+    "verified": "Xác minh thành công. Thay đổi gói đã được gửi, tín dụng sẽ sớm được cộng.",
+    "paymentStatus": "Trạng thái thanh toán: {status}. Hãy làm mới sau để kiểm tra.",
+    "submitted": "Đã gửi thay đổi gói. Tín dụng sẽ sớm được cộng."
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "items": {
+      "japanese": {
+        "question": "Có dịch được manga Nhật không?",
+        "answer": "Có. Chúng tôi hỗ trợ nhận diện và dịch tự động manga tiếng Nhật, giữ bố cục bong bóng thoại và phong cách vẽ."
+      },
+      "korean": {
+        "question": "Có dịch được manhwa Hàn không?",
+        "answer": "Có. Chúng tôi hỗ trợ truyện tranh Hàn đọc dọc và bố cục webtoon phổ biến."
+      },
+      "chinese": {
+        "question": "Có dịch được manga Trung không?",
+        "answer": "Có. Chúng tôi hỗ trợ dịch xuyên ngôn ngữ cho truyện tranh tiếng Trung giản thể và phồn thể."
+      },
+      "ai": {
+        "question": "Bạn dùng AI nào?",
+        "answer": "Chúng tôi dùng pipeline nhiều mô hình tối ưu cho manga, gồm phát hiện chữ, dịch và vẽ lại nền."
+      },
+      "duration": {
+        "question": "Dịch mất bao lâu?",
+        "answer": "Một trang thường mất vài giây đến vài chục giây, tùy kích thước ảnh và tải hàng đợi."
+      },
+      "formats": {
+        "question": "Hỗ trợ định dạng nào?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ và ZIP."
+      },
+      "expiry": {
+        "question": "Tín dụng có hết hạn không?",
+        "answer": "Tín dụng trả theo nhu cầu không hết hạn. Tín dụng đăng ký được làm mới mỗi chu kỳ thanh toán."
+      },
+      "languages": {
+        "question": "Hỗ trợ ngôn ngữ nào?",
+        "answer": "Chúng tôi hỗ trợ hơn 20 ngôn ngữ, gồm tiếng Nhật, Trung, Anh, Hàn và các ngôn ngữ manga phổ biến khác."
+      },
+      "privacy": {
+        "question": "Dữ liệu của tôi có an toàn không?",
+        "answer": "Nội dung tải lên chỉ dùng để dịch. Không dùng để huấn luyện công khai hay chia sẻ với người khác."
+      },
+      "refund": {
+        "question": "Hoàn tiền hoạt động thế nào?",
+        "answer": "Tín dụng trả phí chưa dùng có thể được hoàn theo chính sách. Xem điều khoản dịch vụ để biết chi tiết."
+      },
+      "plugin": {
+        "question": "Có tiện ích trình duyệt không?",
+        "answer": "Tiện ích trình duyệt sắp ra mắt. Hiện hãy tải lên và dịch trên ứng dụng web."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Bài mới nhất",
+    "viewAll": "Xem tất cả bài viết →",
+    "readMore": "Đọc thêm →",
+    "back": "← Quay lại blog",
+    "date": "{day}/{month}/{year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Đăng nhập",
+      "description": "Đăng nhập tài khoản bằng email và mật khẩu",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Mật khẩu",
+      "forgotPassword": "Quên mật khẩu?",
+      "submit": "Đăng nhập",
+      "noAccount": "Chưa có tài khoản?",
+      "goSignUp": "Đăng ký",
+      "orUse": "Hoặc tiếp tục với",
+      "google": "Tiếp tục với Google",
+      "failed": "Đăng nhập thất bại",
+      "genericError": "Đã xảy ra sự cố. Vui lòng thử lại."
+    },
+    "signUp": {
+      "title": "Đăng ký",
+      "description": "Tạo tài khoản và bắt đầu",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "Ít nhất 8 ký tự",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "submit": "Đăng ký",
+      "hasAccount": "Đã có tài khoản?",
+      "goLogin": "Đăng nhập",
+      "passwordMismatch": "Mật khẩu không khớp",
+      "failed": "Đăng ký thất bại",
+      "genericError": "Đã xảy ra sự cố. Vui lòng thử lại."
+    },
+    "signUpSuccess": {
+      "title": "Cảm ơn bạn đã đăng ký!",
+      "description": "Kiểm tra email để xác nhận",
+      "body": "Bạn đã đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản trước khi đăng nhập."
+    },
+    "forgotPassword": {
+      "title": "Đặt lại mật khẩu",
+      "description": "Nhập email và chúng tôi sẽ gửi liên kết đặt lại mật khẩu",
+      "email": "Email",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Gửi email đặt lại",
+      "sending": "Đang gửi...",
+      "hasAccount": "Đã có tài khoản?",
+      "goLogin": "Đăng nhập",
+      "successTitle": "Kiểm tra email",
+      "successDescription": "Đã gửi hướng dẫn đặt lại mật khẩu",
+      "successBody": "Nếu bạn đăng ký bằng email và mật khẩu, bạn sẽ nhận email đặt lại mật khẩu.",
+      "genericError": "Đã xảy ra lỗi"
+    },
+    "updatePassword": {
+      "title": "Đặt lại mật khẩu",
+      "description": "Vui lòng nhập mật khẩu mới bên dưới.",
+      "newPassword": "Mật khẩu mới",
+      "placeholder": "Mật khẩu mới",
+      "submit": "Lưu mật khẩu mới",
+      "saving": "Đang lưu...",
+      "genericError": "Đã xảy ra lỗi"
+    },
+    "confirm": {
+      "verifyingTitle": "Đang xác minh email…",
+      "verifyingDescription": "Vui lòng đợi trong khi chúng tôi hoàn tất xác nhận đăng ký.",
+      "successTitle": "Đã xác nhận email",
+      "successDescription": "Bạn sẽ được đưa về trang chủ sau {seconds} giây, hoặc có thể bắt đầu dịch ngay.",
+      "errorTitle": "Xác minh thất bại",
+      "errorDescription": "Chúng tôi không thể xác nhận email của bạn.",
+      "missingParams": "Thiếu tham số xác nhận. Hãy mở lại liên kết từ email.",
+      "invalidLink": "Xác minh thất bại. Liên kết có thể đã hết hạn.",
+      "networkError": "Lỗi mạng. Vui lòng thử lại sau.",
+      "startTranslate": "Bắt đầu dịch",
+      "backToLogin": "Quay lại đăng nhập"
+    },
+    "error": {
+      "title": "Xin lỗi, đã xảy ra sự cố.",
+      "codeError": "Mã lỗi: {error}",
+      "unspecified": "Đã xảy ra lỗi không xác định."
+    }
+  },
+  "home": {
+    "navAria": "Tài khoản",
+    "history": "Lịch sử dịch",
+    "billing": "Thanh toán & đăng ký",
+    "signOut": "Đăng xuất",
+    "email": "Email",
+    "creditBalance": "Số dư tín dụng"
+  },
+  "history": {
+    "title": "Lịch sử dịch",
+    "empty": "Không có lịch sử dịch / không có kết quả phù hợp",
+    "clearFilters": "Xóa bộ lọc",
+    "loadMore": "Tải thêm",
+    "loading": "Đang tải…",
+    "sourceAuto": "Tự động",
+    "dateRange": {
+      "1d": "1 ngày qua",
+      "7d": "7 ngày qua",
+      "1m": "1 tháng qua",
+      "all": "Tất cả"
+    }
+  },
+  "billing": {
+    "title": "Thanh toán & đăng ký",
+    "currentPlan": "Gói hiện tại",
+    "manage": "Quản lý",
+    "unsubscribed": "Chưa đăng ký",
+    "unsubscribedHint": "Đăng ký để nhận tín dụng mỗi chu kỳ thanh toán và mở khóa quyền lợi gói",
+    "subscribe": "Đăng ký",
+    "resetsOn": "Đặt lại vào {date}",
+    "resetsOnWithDays": "Đặt lại vào {date} ({days} ngày)",
+    "monthDay": "{day}/{month}",
+    "priceMonthlySuffix": "/tháng",
+    "priceYearlySuffix": "/năm",
+    "transactions": "Giao dịch",
+    "emptyTransactions": "Chưa có bản ghi thanh toán",
+    "columns": {
+      "createdAt": "Thời gian tạo",
+      "amount": "Số tiền",
+      "credits": "Tín dụng",
+      "type": "Loại",
+      "status": "Trạng thái"
+    },
+    "transactionType": {
+      "pay-to-use": "Trả theo nhu cầu",
+      "subscription": "Đăng ký"
+    }
+  },
+  "manageSubscription": {
+    "title": "Quản lý đăng ký",
+    "currentPlan": "Gói hiện tại: {plan} {price}, kỳ hạn đến {date}",
+    "cancelTitle": "Hủy đăng ký?",
+    "cancelDescription": "Đăng ký sẽ kết thúc sau {date}. Bạn vẫn dùng được gói hiện tại đến lúc đó, và tín dụng hiện có được giữ lại.",
+    "thinkAgain": "Giữ đăng ký",
+    "confirmCancel": "Xác nhận hủy",
+    "cancelFailed": "Hủy đăng ký thất bại",
+    "cancelSubmitted": "Đã gửi yêu cầu hủy",
+    "restoreFailed": "Khôi phục đăng ký thất bại",
+    "restored": "Đã khôi phục đăng ký"
+  },
+  "payment": {
+    "loading": "Đang tải…",
+    "error": "Lỗi: {message}",
+    "success": {
+      "title": "Đăng ký thành công",
+      "thanks": "Cảm ơn bạn đã đăng ký! Email xác nhận sẽ được gửi tới {email}.",
+      "redirecting": "Chuyển tới trình dịch sau {seconds} giây…",
+      "start": "Bắt đầu dịch"
+    },
+    "pending": {
+      "title": "Đang xử lý thanh toán",
+      "body": "Thanh toán của bạn đang được xác nhận. Tín dụng sẽ được cộng vào tài khoản khi thanh toán hoàn tất.",
+      "notify": "Chúng tôi sẽ thông báo {email} khi hoàn tất.",
+      "hint": "Quá trình này có thể mất vài phút hoặc lâu hơn tùy phương thức thanh toán. Bạn có thể rời trang này an toàn.",
+      "backHome": "Về trang chủ"
+    },
+    "incomplete": {
+      "title": "Thanh toán chưa hoàn tất",
+      "expired": "Phiên thanh toán này đã hết hạn. Hãy bắt đầu mua mới nếu bạn vẫn muốn tiếp tục.",
+      "noPaymentRequired": "Phiên này không yêu cầu thanh toán. Nếu bạn mong đợi bị trừ tiền, hãy liên hệ hỗ trợ.",
+      "generic": "Chúng tôi không thể xác nhận thanh toán. Bạn chưa bị trừ tiền, hoặc thanh toán chưa hoàn tất thành công.",
+      "hint": "Nếu bạn cho rằng đây là nhầm lẫn, hãy thử lại hoặc liên hệ hỗ trợ kèm thông tin thanh toán.",
+      "tryAgain": "Thử lại",
+      "backHome": "Về trang chủ"
+    }
+  }
+}

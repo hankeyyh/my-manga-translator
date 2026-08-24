@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "マンガ翻訳",
+    "description": "AI によるマンガ翻訳",
+    "blogTitle": "ブログ | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "利用規約",
+      "privacy": "プライバシーポリシー",
+      "about": "私たちについて",
+      "refund": "返金ポリシー",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "読み込み中…",
+    "cancel": "キャンセル",
+    "processing": "処理中…",
+    "unknownError": "不明なエラー",
+    "credits": "クレジット",
+    "creditsCount": "クレジット · {count}",
+    "pages": "{count} ページ",
+    "email": "メール",
+    "password": "パスワード",
+    "pleaseWait": "お待ちください…"
+  },
+  "status": {
+    "all": "すべて",
+    "pending": "待機中",
+    "processing": "処理中",
+    "completed": "完了",
+    "failed": "失敗",
+    "partial": "一部完了",
+    "stalled": "タイムアウト",
+    "success": "成功",
+    "canceled": "キャンセル済み"
+  },
+  "header": {
+    "mangaTranslate": "マンガ翻訳",
+    "pricing": "料金",
+    "faq": "よくある質問",
+    "blog": "ブログ",
+    "joinDiscord": "Discord に参加",
+    "dashboard": "ダッシュボード",
+    "login": "ログイン",
+    "toggleTheme": "テーマを切り替え"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "マンガをアップロードして、AI による高精度な翻訳を。スマート OCR、忠実な翻訳、自然な組版。",
+    "product": "プロダクト",
+    "legal": "法務",
+    "contact": "お問い合わせ",
+    "emailLabel": "メール：",
+    "followUs": "フォローする",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. All rights reserved.",
+    "disclaimer": "Manga Sense は、いかなるマンガ出版社とも提携していません。",
+    "links": {
+      "tool": "ツール",
+      "blog": "ブログ",
+      "pricing": "料金",
+      "about": "私たちについて",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約",
+      "refund": "返金ポリシー",
+      "faq": "よくある質問",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "AI マンガ翻訳、ワンクリックで",
+    "subtitle": "吹き出しの文字を自動検出して翻訳し、元のページに描き直します。日・韓・中のマンガに対応し、レイアウトとフォントの雰囲気を保ちます。",
+    "statPages": "ページ",
+    "statLanguages": "言語",
+    "statAccuracy": "精度",
+    "tryFree": "無料で試す",
+    "howItWorks": "使い方"
+  },
+  "how": {
+    "title": "使い方",
+    "demoFallback": "{title} のデモ",
+    "steps": {
+      "upload": {
+        "title": "マンガをアップロード",
+        "desc": "ドラッグ＆ドロップ、貼り付け、またはファイル選択。JPG、PNG、WebP、PDF、EPUB、CBZ に対応。1ページでも巻全体でも。"
+      },
+      "language": {
+        "title": "言語を選ぶ",
+        "desc": "翻訳先の言語とフォントスタイルを選択。20以上の言語で高精度に翻訳します。"
+      },
+      "download": {
+        "title": "プレビューしてダウンロード",
+        "desc": "翻訳後のマンガをプレビューし、元のレイアウトを保った高解像度結果を書き出せます。"
+      }
+    }
+  },
+  "showcase": {
+    "title": "翻訳サンプル",
+    "description": "スライダーを動かして原作 / 翻訳を比較",
+    "beforeAlt": "翻訳前の原画像",
+    "afterAlt": "翻訳後の結果",
+    "compareAria": "翻訳前後の比較",
+    "originalAlt": "原作",
+    "translatedAlt": "翻訳後"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "簡体字中国語",
+      "CHT": "繁体字中国語",
+      "ENG": "英語",
+      "JPN": "日本語",
+      "KOR": "韓国語"
+    },
+    "modes": {
+      "fast": "高速翻訳（1 クレジット）",
+      "precise": "高精度翻訳（2 クレジット）"
+    },
+    "fontStyles": {
+      "comic": "コミック",
+      "handwritten": "手書き",
+      "print": "活字"
+    },
+    "draftLabel": "下書き · {count} ページ",
+    "taskLabel": "タスク {id}",
+    "closeTask": "{label} を閉じる",
+    "closeOthers": "ほかを閉じる",
+    "settingsTitle": "設定",
+    "translateTo": "翻訳先",
+    "translateMode": "翻訳モード",
+    "fontStyle": "フォントスタイル",
+    "downloadAll": "すべてダウンロード",
+    "submit": "翻訳を開始",
+    "previewTitle": "画像プレビュー（{count} 枚）",
+    "showTranslated": "翻訳画像を表示",
+    "showOriginal": "原画像を表示",
+    "clearAll": "すべてクリア",
+    "addImage": "画像を追加",
+    "hint": "✦ AI が日本語、中国語、英語、韓国語などを自動検出",
+    "timeout": "翻訳がタイムアウトしました。もう一度お試しください。",
+    "closeConfirmTitle": "進行中のタスクを閉じますか？",
+    "closeConfirmDescription": "この翻訳はまだ実行中です。閉じても現在のワークスペースから外れるだけで、バックグラウンド処理は続き、使用済みクレジットは返金されません。",
+    "confirmClose": "それでも閉じる"
+  },
+  "upload": {
+    "dropHint": "マンガのページをここにドロップ、または",
+    "browse": "ファイルを参照",
+    "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 画像は最大 50MB、文書は最大 200MB",
+    "quota": "アップロード済み {uploaded}/{max} ページ · 残り {remaining}",
+    "addOrDrop": "画像を追加 / ドロップしてアップロード",
+    "compactQuota": "{uploaded} / {max} ページ"
+  },
+  "thumbnail": {
+    "waiting": "待機中",
+    "processing": "処理中",
+    "preview": "{name} をプレビュー",
+    "remove": "{name} を削除",
+    "continueWait": "待ち続ける",
+    "retry": "再試行",
+    "download": "ダウンロード"
+  },
+  "imagePreview": {
+    "close": "プレビューを閉じる",
+    "prev": "前の画像、または左矢印キー",
+    "next": "次の画像、または右矢印キー"
+  },
+  "pricing": {
+    "title": "料金",
+    "payAsNeeded": "従量課金",
+    "subscription": "サブスクリプション",
+    "getStarted": "始める",
+    "restore": "サブスクを再開",
+    "cancel": "サブスクを解約",
+    "subscribed": "契約中",
+    "adjustPlan": "プランを変更",
+    "planFallback": "プラン",
+    "priceMonthly": "${price}/月",
+    "priceYearly": "${price}/年",
+    "creditsPayToUse": "{count} クレジット",
+    "creditsMonthly": "{count} クレジット / 月",
+    "creditsYearly": "{count} クレジット / 年"
+  },
+  "changePlan": {
+    "title": "サブスクリプションプランを変更しますか？",
+    "description": "{planName}（{price}）に切り替えます。差額は返金されません。既存のクレジットは保持され、確認後すぐに新プランの料金が請求されます。",
+    "confirm": "変更を確認",
+    "failed": "プランの変更に失敗しました",
+    "missingPaymentInfo": "支払い確認情報が不足しています。しばらくしてからお試しください。",
+    "stripeLoadFailed": "支払いコンポーネントの読み込みに失敗しました。しばらくしてからお試しください。",
+    "needCardVerification": "この変更を有効にするにはカード認証が必要です。案内に従ってください。",
+    "cardVerificationFailed": "カード認証に失敗しました",
+    "verified": "認証に成功しました。プラン変更を送信済みで、クレジットはまもなく反映されます。",
+    "paymentStatus": "支払いステータス：{status}。後ほど更新してご確認ください。",
+    "submitted": "プラン変更を送信しました。クレジットはまもなく反映されます。"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "items": {
+      "japanese": {
+        "question": "日本語のマンガは翻訳できますか？",
+        "answer": "はい。日本語マンガの自動認識と翻訳に対応し、吹き出しのレイアウトと画風を保ちます。"
+      },
+      "korean": {
+        "question": "韓国のウェブトゥーンは翻訳できますか？",
+        "answer": "はい。縦読みの韓国漫画や一般的なウェブトゥーンのレイアウトに対応しています。"
+      },
+      "chinese": {
+        "question": "中国語のマンガは翻訳できますか？",
+        "answer": "はい。簡体字・繁体字の中国語漫画の言語間翻訳に対応しています。"
+      },
+      "ai": {
+        "question": "どのような AI を使っていますか？",
+        "answer": "マンガ向けに最適化した複数モデルのパイプラインで、文字検出、翻訳、描き直しを行います。"
+      },
+      "duration": {
+        "question": "翻訳にはどれくらい時間がかかりますか？",
+        "answer": "1ページあたり数秒から数十秒が目安で、画像サイズとキューの混み具合によって変わります。"
+      },
+      "formats": {
+        "question": "対応フォーマットは？",
+        "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP です。"
+      },
+      "expiry": {
+        "question": "クレジットに有効期限はありますか？",
+        "answer": "従量購入のクレジットに期限はありません。サブスクのクレジットは請求サイクルごとに更新されます。"
+      },
+      "languages": {
+        "question": "対応言語は？",
+        "answer": "日本語、中国語、英語、韓国語など、マンガでよく使われる言語を含む 20 以上の言語に対応しています。"
+      },
+      "privacy": {
+        "question": "データは安全ですか？",
+        "answer": "アップロードされた内容は翻訳処理にのみ使用します。公開トレーニングや第三者への共有は行いません。"
+      },
+      "refund": {
+        "question": "返金はどうなりますか？",
+        "answer": "未使用の有料クレジットはポリシーに従って返金できます。詳細は利用規約をご確認ください。"
+      },
+      "plugin": {
+        "question": "ブラウザ拡張機能はありますか？",
+        "answer": "ブラウザ拡張機能は近日公開予定です。現在はウェブアプリでアップロードして翻訳してください。"
+      }
+    }
+  },
+  "blog": {
+    "title": "ブログ",
+    "latest": "最新の投稿",
+    "viewAll": "すべての投稿を見る →",
+    "readMore": "続きを読む →",
+    "back": "← ブログに戻る",
+    "date": "{year}年{month}月{day}日"
+  },
+  "auth": {
+    "login": {
+      "title": "ログイン",
+      "description": "メールとパスワードでアカウントにサインイン",
+      "emailPlaceholder": "メール",
+      "passwordPlaceholder": "パスワード",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "submit": "ログイン",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "goSignUp": "登録する",
+      "orUse": "または次で続ける",
+      "google": "Google で続ける",
+      "failed": "ログインに失敗しました",
+      "genericError": "問題が発生しました。もう一度お試しください。"
+    },
+    "signUp": {
+      "title": "新規登録",
+      "description": "アカウントを作成して始めましょう",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "8文字以上",
+      "confirmPassword": "パスワードの確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "submit": "登録する",
+      "hasAccount": "すでにアカウントをお持ちですか？",
+      "goLogin": "ログイン",
+      "passwordMismatch": "パスワードが一致しません",
+      "failed": "登録に失敗しました",
+      "genericError": "問題が発生しました。もう一度お試しください。"
+    },
+    "signUpSuccess": {
+      "title": "ご登録ありがとうございます！",
+      "description": "確認メールをご確認ください",
+      "body": "登録が完了しました。ログインする前に、メールでアカウントを確認してください。"
+    },
+    "forgotPassword": {
+      "title": "パスワードをリセット",
+      "description": "メールアドレスを入力すると、パスワードリセット用のリンクをお送りします",
+      "email": "メール",
+      "emailPlaceholder": "m@example.com",
+      "submit": "リセットメールを送信",
+      "sending": "送信中...",
+      "hasAccount": "すでにアカウントをお持ちですか？",
+      "goLogin": "ログイン",
+      "successTitle": "メールをご確認ください",
+      "successDescription": "パスワードリセットの案内を送信しました",
+      "successBody": "メールとパスワードで登録している場合、パスワードリセット用のメールが届きます。",
+      "genericError": "エラーが発生しました"
+    },
+    "updatePassword": {
+      "title": "パスワードをリセット",
+      "description": "下に新しいパスワードを入力してください。",
+      "newPassword": "新しいパスワード",
+      "placeholder": "新しいパスワード",
+      "submit": "新しいパスワードを保存",
+      "saving": "保存中...",
+      "genericError": "エラーが発生しました"
+    },
+    "confirm": {
+      "verifyingTitle": "メールを確認しています…",
+      "verifyingDescription": "登録確認が完了するまでお待ちください。",
+      "successTitle": "メールを確認しました",
+      "successDescription": "{seconds} 秒後にホームページへ移動します。今すぐ翻訳を始めることもできます。",
+      "errorTitle": "確認に失敗しました",
+      "errorDescription": "メールを確認できませんでした。",
+      "missingParams": "確認用のパラメータがありません。メール内のリンクをもう一度開いてください。",
+      "invalidLink": "確認に失敗しました。リンクの有効期限が切れている可能性があります。",
+      "networkError": "ネットワークエラーです。しばらくしてからお試しください。",
+      "startTranslate": "翻訳を始める",
+      "backToLogin": "ログインに戻る"
+    },
+    "error": {
+      "title": "申し訳ありません。問題が発生しました。",
+      "codeError": "エラーコード：{error}",
+      "unspecified": "不明なエラーが発生しました。"
+    }
+  },
+  "home": {
+    "navAria": "アカウント",
+    "history": "翻訳履歴",
+    "billing": "請求とサブスク",
+    "signOut": "ログアウト",
+    "email": "メール",
+    "creditBalance": "クレジット残高"
+  },
+  "history": {
+    "title": "翻訳履歴",
+    "empty": "翻訳履歴がありません / 一致する結果がありません",
+    "clearFilters": "フィルターをクリア",
+    "loadMore": "さらに読み込む",
+    "loading": "読み込み中…",
+    "sourceAuto": "自動",
+    "dateRange": {
+      "1d": "過去 1 日",
+      "7d": "過去 7 日",
+      "1m": "過去 1 か月",
+      "all": "すべて"
+    }
+  },
+  "billing": {
+    "title": "請求とサブスク",
+    "currentPlan": "現在のプラン",
+    "manage": "管理",
+    "unsubscribed": "未契約",
+    "unsubscribedHint": "サブスクすると請求サイクルごとにクレジットが付与され、プラン特典が利用できます",
+    "subscribe": "契約する",
+    "resetsOn": "{date} にリセット",
+    "resetsOnWithDays": "{date} にリセット（{days} 日）",
+    "monthDay": "{month}/{day}",
+    "priceMonthlySuffix": "/月",
+    "priceYearlySuffix": "/年",
+    "transactions": "取引",
+    "emptyTransactions": "まだ請求記録がありません",
+    "columns": {
+      "createdAt": "作成日時",
+      "amount": "金額",
+      "credits": "クレジット",
+      "type": "種類",
+      "status": "ステータス"
+    },
+    "transactionType": {
+      "pay-to-use": "従量課金",
+      "subscription": "サブスクリプション"
+    }
+  },
+  "manageSubscription": {
+    "title": "サブスクを管理",
+    "currentPlan": "現在のプラン：{plan} {price}、期間は {date} まで",
+    "cancelTitle": "サブスクを解約しますか？",
+    "cancelDescription": "サブスクは {date} 以降に終了します。それまでは現在のプランを使い続けられ、既存のクレジットは保持されます。",
+    "thinkAgain": "サブスクを続ける",
+    "confirmCancel": "解約を確認",
+    "cancelFailed": "サブスクの解約に失敗しました",
+    "cancelSubmitted": "解約を送信しました",
+    "restoreFailed": "サブスクの再開に失敗しました",
+    "restored": "サブスクを再開しました"
+  },
+  "payment": {
+    "loading": "読み込み中…",
+    "error": "エラー：{message}",
+    "success": {
+      "title": "サブスク完了",
+      "thanks": "ご契約ありがとうございます。確認メールを {email} に送信します。",
+      "redirecting": "{seconds} 秒後に翻訳画面へ移動します…",
+      "start": "翻訳を始める"
+    },
+    "pending": {
+      "title": "支払いを処理中",
+      "body": "支払いを確認しています。決済が完了すると、クレジットがアカウントに追加されます。",
+      "notify": "完了時に {email} へ通知します。",
+      "hint": "支払い方法によっては数分以上かかることがあります。このページを離れても問題ありません。",
+      "backHome": "ホームに戻る"
+    },
+    "incomplete": {
+      "title": "支払いが完了していません",
+      "expired": "この決済セッションは期限切れです。続ける場合は、新たに購入を開始してください。",
+      "noPaymentRequired": "このセッションでは支払い不要でした。請求を想定していた場合はサポートまでご連絡ください。",
+      "generic": "支払いを確認できませんでした。課金されていないか、支払いが正常に完了していません。",
+      "hint": "誤りだと思われる場合は再試行するか、支払い情報を添えてサポートにご連絡ください。",
+      "tryAgain": "再試行",
+      "backHome": "ホームに戻る"
+    }
+  }
+}

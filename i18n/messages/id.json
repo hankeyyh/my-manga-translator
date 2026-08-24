@@ -1,0 +1,443 @@
+{
+  "meta": {
+    "title": "Terjemahan manga",
+    "description": "Terjemahan manga bertenaga AI",
+    "blogTitle": "Blog | Manga Sense",
+    "blogTitleWithName": "{title} | Manga Sense",
+    "legalFallback": {
+      "terms": "Ketentuan Penggunaan",
+      "privacy": "Kebijakan Privasi",
+      "about": "Tentang",
+      "refund": "Kebijakan Pengembalian Dana",
+      "dmca": "DMCA"
+    }
+  },
+  "common": {
+    "brand": "Manga Sense",
+    "loading": "Memuat…",
+    "cancel": "Batal",
+    "processing": "Memproses…",
+    "unknownError": "Kesalahan tidak diketahui",
+    "credits": "Kredit",
+    "creditsCount": "Kredit · {count}",
+    "pages": "{count} halaman",
+    "email": "Email",
+    "password": "Kata sandi",
+    "pleaseWait": "Harap tunggu…"
+  },
+  "status": {
+    "all": "Semua",
+    "pending": "Menunggu",
+    "processing": "Memproses",
+    "completed": "Selesai",
+    "failed": "Gagal",
+    "partial": "Sebagian",
+    "stalled": "Waktu habis",
+    "success": "Berhasil",
+    "canceled": "Dibatalkan"
+  },
+  "header": {
+    "mangaTranslate": "Terjemahkan manga",
+    "pricing": "Harga",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "joinDiscord": "Gabung Discord",
+    "dashboard": "Dasbor",
+    "login": "Masuk",
+    "toggleTheme": "Ganti tema"
+  },
+  "locales": {
+    "en": "English",
+    "zh-cn": "简体中文",
+    "zh-tw": "繁體中文",
+    "cs": "Čeština",
+    "nl": "Nederlands",
+    "fr": "Français",
+    "de": "Deutsch",
+    "hu": "Magyar",
+    "it": "Italiano",
+    "ja": "日本語",
+    "ko": "한국어",
+    "pl": "Polski",
+    "pt-br": "Português (Brasil)",
+    "ro": "Română",
+    "ru": "Русский",
+    "es": "Español",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "vi": "Tiếng Việt",
+    "ar": "العربية",
+    "cnr": "Crnogorski",
+    "sr": "Српски",
+    "hr": "Hrvatski",
+    "th": "ไทย",
+    "id": "Bahasa Indonesia",
+    "fil": "Filipino"
+  },
+  "footer": {
+    "tagline": "Unggah manga dan dapatkan terjemahan akurat bertenaga AI. OCR cerdas, terjemahan setia, penataan huruf yang mulus.",
+    "product": "Produk",
+    "legal": "Legal",
+    "contact": "Hubungi kami",
+    "emailLabel": "Email: ",
+    "followUs": "Ikuti kami",
+    "followX": "X",
+    "copyright": "© {year} Manga Sense. Hak cipta dilindungi.",
+    "disclaimer": "Manga Sense tidak terafiliasi dengan penerbit manga mana pun.",
+    "links": {
+      "tool": "Alat",
+      "blog": "Blog",
+      "pricing": "Harga",
+      "about": "Tentang",
+      "privacy": "Kebijakan Privasi",
+      "terms": "Ketentuan Penggunaan",
+      "refund": "Kebijakan Pengembalian Dana",
+      "faq": "FAQ",
+      "dmca": "DMCA"
+    }
+  },
+  "hero": {
+    "title": "Terjemahan manga AI, sekali klik",
+    "subtitle": "Otomatis mendeteksi teks di balon percakapan, menerjemahkannya, lalu menggambar ulang ke halaman asli. Mendukung manga Jepang, Korea, dan Tiongkok sambil menjaga tata letak dan gaya font.",
+    "statPages": "halaman",
+    "statLanguages": "bahasa",
+    "statAccuracy": "akurasi",
+    "tryFree": "Coba gratis",
+    "howItWorks": "Cara kerja"
+  },
+  "how": {
+    "title": "Cara kerja",
+    "demoFallback": "Demo {title}",
+    "steps": {
+      "upload": {
+        "title": "Unggah manga",
+        "desc": "Seret dan lepas, tempel, atau pilih file. Mendukung JPG, PNG, WebP, PDF, EPUB, dan CBZ — satu halaman atau satu volume penuh."
+      },
+      "language": {
+        "title": "Pilih bahasa",
+        "desc": "Pilih bahasa tujuan dan gaya font. Terjemahan akurat di 20+ bahasa."
+      },
+      "download": {
+        "title": "Pratinjau dan unduh",
+        "desc": "Pratinjau manga yang sudah diterjemahkan dan ekspor hasil beresolusi tinggi dengan tata letak asli tetap utuh."
+      }
+    }
+  },
+  "showcase": {
+    "title": "Contoh terjemahan",
+    "description": "Geser penggeser untuk membandingkan asli / terjemahan",
+    "beforeAlt": "Gambar asli sebelum terjemahan",
+    "afterAlt": "Hasil setelah terjemahan",
+    "compareAria": "Perbandingan sebelum dan sesudah terjemahan",
+    "originalAlt": "Asli",
+    "translatedAlt": "Diterjemahkan"
+  },
+  "translate": {
+    "languages": {
+      "CHS": "Tionghoa Sederhana",
+      "CHT": "Tionghoa Tradisional",
+      "ENG": "Inggris",
+      "JPN": "Jepang",
+      "KOR": "Korea"
+    },
+    "modes": {
+      "fast": "Terjemahan cepat (1 kredit)",
+      "precise": "Terjemahan presisi (2 kredit)"
+    },
+    "fontStyles": {
+      "comic": "Komik",
+      "handwritten": "Tulisan tangan",
+      "print": "Cetak"
+    },
+    "draftLabel": "Draf · {count} halaman",
+    "taskLabel": "Tugas {id}",
+    "closeTask": "Tutup {label}",
+    "closeOthers": "Tutup yang lain",
+    "settingsTitle": "Pengaturan",
+    "translateTo": "Terjemahkan ke",
+    "translateMode": "Mode terjemahan",
+    "fontStyle": "Gaya font",
+    "downloadAll": "Unduh semua",
+    "submit": "Kirim terjemahan",
+    "previewTitle": "Pratinjau gambar ({count} gambar)",
+    "showTranslated": "Lihat gambar terjemahan",
+    "showOriginal": "Lihat gambar asli",
+    "clearAll": "Hapus semua",
+    "addImage": "Tambah gambar",
+    "hint": "✦ AI secara otomatis mendeteksi Jepang, Tionghoa, Inggris, Korea, dan lainnya",
+    "timeout": "Terjemahan kehabisan waktu. Silakan coba lagi.",
+    "closeConfirmTitle": "Tutup tugas yang sedang berjalan?",
+    "closeConfirmDescription": "Terjemahan ini masih berjalan. Menutupnya hanya menghapusnya dari ruang kerja saat ini. Pemrosesan di latar belakang akan berlanjut, dan kredit yang sudah digunakan tidak akan dikembalikan.",
+    "confirmClose": "Tetap tutup"
+  },
+  "upload": {
+    "dropHint": "Lepaskan halaman manga di sini, atau",
+    "browse": "telusuri file",
+    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Gambar hingga 50MB, dokumen hingga 200MB",
+    "quota": "Terunggah {uploaded}/{max} halaman · sisa {remaining}",
+    "addOrDrop": "Tambah gambar / lepas untuk mengunggah",
+    "compactQuota": "{uploaded} / {max} halaman"
+  },
+  "thumbnail": {
+    "waiting": "Menunggu",
+    "processing": "Memproses",
+    "preview": "Pratinjau {name}",
+    "remove": "Hapus {name}",
+    "continueWait": "Terus menunggu",
+    "retry": "Coba lagi",
+    "download": "Unduh"
+  },
+  "imagePreview": {
+    "close": "Tutup pratinjau",
+    "prev": "Gambar sebelumnya, atau tekan panah kiri",
+    "next": "Gambar berikutnya, atau tekan panah kanan"
+  },
+  "pricing": {
+    "title": "Harga",
+    "payAsNeeded": "Bayar sesuai pemakaian",
+    "subscription": "Langganan",
+    "getStarted": "Mulai",
+    "restore": "Pulihkan langganan",
+    "cancel": "Batalkan langganan",
+    "subscribed": "Berlangganan",
+    "adjustPlan": "Ubah paket",
+    "planFallback": "Paket",
+    "priceMonthly": "${price}/bln",
+    "priceYearly": "${price}/thn",
+    "creditsPayToUse": "{count} kredit",
+    "creditsMonthly": "{count} kredit / bulan",
+    "creditsYearly": "{count} kredit / tahun"
+  },
+  "changePlan": {
+    "title": "Ubah paket langganan Anda?",
+    "description": "Anda akan beralih ke {planName} ({price}). Selisih harga tidak akan dikembalikan. Kredit yang ada akan tetap disimpan, dan harga paket baru akan ditagih segera setelah dikonfirmasi.",
+    "confirm": "Konfirmasi perubahan",
+    "failed": "Gagal mengubah paket",
+    "missingPaymentInfo": "Detail konfirmasi pembayaran tidak ada. Silakan coba lagi nanti.",
+    "stripeLoadFailed": "Gagal memuat komponen pembayaran. Silakan coba lagi nanti.",
+    "needCardVerification": "Verifikasi kartu diperlukan agar perubahan ini berlaku. Ikuti petunjuknya.",
+    "cardVerificationFailed": "Verifikasi kartu gagal",
+    "verified": "Verifikasi berhasil. Perubahan paket telah dikirim, dan kredit akan segera masuk.",
+    "paymentStatus": "Status pembayaran: {status}. Segarkan nanti untuk memeriksa.",
+    "submitted": "Perubahan paket dikirim. Kredit akan segera masuk."
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": {
+      "japanese": {
+        "question": "Bisakah Anda menerjemahkan manga Jepang?",
+        "answer": "Ya. Kami mendukung pengenalan dan terjemahan otomatis manga Jepang sambil menjaga tata letak balon percakapan dan gaya gambar."
+      },
+      "korean": {
+        "question": "Bisakah Anda menerjemahkan manhwa Korea?",
+        "answer": "Ya. Kami mendukung komik Korea yang dibaca vertikal dan tata letak webtoon yang umum."
+      },
+      "chinese": {
+        "question": "Bisakah Anda menerjemahkan manga Tiongkok?",
+        "answer": "Ya. Kami mendukung terjemahan lintas bahasa untuk komik Tionghoa Sederhana dan Tradisional."
+      },
+      "ai": {
+        "question": "AI apa yang Anda gunakan?",
+        "answer": "Kami menggunakan pipeline multi-model yang dioptimalkan untuk manga, mencakup deteksi teks, terjemahan, dan inpainting."
+      },
+      "duration": {
+        "question": "Berapa lama terjemahan berlangsung?",
+        "answer": "Satu halaman biasanya memakan waktu beberapa detik hingga puluhan detik, tergantung ukuran gambar dan beban antrean."
+      },
+      "formats": {
+        "question": "Format apa yang didukung?",
+        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, dan ZIP."
+      },
+      "expiry": {
+        "question": "Apakah kredit kedaluwarsa?",
+        "answer": "Kredit bayar sesuai pemakaian tidak pernah kedaluwarsa. Kredit langganan diperbarui setiap siklus penagihan."
+      },
+      "languages": {
+        "question": "Bahasa apa yang didukung?",
+        "answer": "Kami mendukung 20+ bahasa, termasuk Jepang, Tionghoa, Inggris, Korea, dan bahasa manga umum lainnya."
+      },
+      "privacy": {
+        "question": "Apakah data saya aman?",
+        "answer": "Konten yang diunggah hanya digunakan untuk terjemahan. Tidak digunakan untuk pelatihan publik atau dibagikan kepada orang lain."
+      },
+      "refund": {
+        "question": "Bagaimana pengembalian dana bekerja?",
+        "answer": "Kredit berbayar yang belum digunakan dapat dikembalikan sesuai kebijakan kami. Lihat ketentuan layanan untuk detailnya."
+      },
+      "plugin": {
+        "question": "Apakah ada ekstensi browser?",
+        "answer": "Ekstensi browser akan segera hadir. Untuk saat ini, unggah dan terjemahkan di aplikasi web."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "latest": "Postingan terbaru",
+    "viewAll": "Lihat semua postingan →",
+    "readMore": "Baca selengkapnya →",
+    "back": "← Kembali ke blog",
+    "date": "{day} {month} {year}"
+  },
+  "auth": {
+    "login": {
+      "title": "Masuk",
+      "description": "Masuk ke akun Anda dengan email dan kata sandi",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Kata sandi",
+      "forgotPassword": "Lupa kata sandi?",
+      "submit": "Masuk",
+      "noAccount": "Belum punya akun?",
+      "goSignUp": "Daftar",
+      "orUse": "Atau lanjutkan dengan",
+      "google": "Lanjutkan dengan Google",
+      "failed": "Gagal masuk",
+      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "signUp": {
+      "title": "Daftar",
+      "description": "Buat akun dan mulai",
+      "emailPlaceholder": "your@email.com",
+      "passwordPlaceholder": "Minimal 8 karakter",
+      "confirmPassword": "Konfirmasi kata sandi",
+      "confirmPasswordPlaceholder": "Masukkan kata sandi lagi",
+      "submit": "Daftar",
+      "hasAccount": "Sudah punya akun?",
+      "goLogin": "Masuk",
+      "passwordMismatch": "Kata sandi tidak cocok",
+      "failed": "Gagal mendaftar",
+      "genericError": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "signUpSuccess": {
+      "title": "Terima kasih telah mendaftar!",
+      "description": "Periksa email Anda untuk konfirmasi",
+      "body": "Anda berhasil mendaftar. Silakan periksa email untuk mengonfirmasi akun sebelum masuk."
+    },
+    "forgotPassword": {
+      "title": "Atur ulang kata sandi",
+      "description": "Ketik email Anda dan kami akan mengirim tautan untuk mengatur ulang kata sandi",
+      "email": "Email",
+      "emailPlaceholder": "m@example.com",
+      "submit": "Kirim email reset",
+      "sending": "Mengirim...",
+      "hasAccount": "Sudah punya akun?",
+      "goLogin": "Masuk",
+      "successTitle": "Periksa email Anda",
+      "successDescription": "Instruksi reset kata sandi telah dikirim",
+      "successBody": "Jika Anda mendaftar menggunakan email dan kata sandi, Anda akan menerima email reset kata sandi.",
+      "genericError": "Terjadi kesalahan"
+    },
+    "updatePassword": {
+      "title": "Atur ulang kata sandi",
+      "description": "Masukkan kata sandi baru Anda di bawah.",
+      "newPassword": "Kata sandi baru",
+      "placeholder": "Kata sandi baru",
+      "submit": "Simpan kata sandi baru",
+      "saving": "Menyimpan...",
+      "genericError": "Terjadi kesalahan"
+    },
+    "confirm": {
+      "verifyingTitle": "Memverifikasi email Anda…",
+      "verifyingDescription": "Harap tunggu sementara kami menyelesaikan konfirmasi pendaftaran.",
+      "successTitle": "Email dikonfirmasi",
+      "successDescription": "Anda akan dibawa ke beranda dalam {seconds} detik, atau Anda dapat mulai menerjemahkan sekarang.",
+      "errorTitle": "Verifikasi gagal",
+      "errorDescription": "Kami tidak dapat mengonfirmasi email Anda.",
+      "missingParams": "Parameter konfirmasi tidak ada. Buka kembali tautan dari email Anda.",
+      "invalidLink": "Verifikasi gagal. Tautan mungkin sudah kedaluwarsa.",
+      "networkError": "Kesalahan jaringan. Silakan coba lagi nanti.",
+      "startTranslate": "Mulai menerjemahkan",
+      "backToLogin": "Kembali ke masuk"
+    },
+    "error": {
+      "title": "Maaf, terjadi kesalahan.",
+      "codeError": "Kode kesalahan: {error}",
+      "unspecified": "Terjadi kesalahan yang tidak ditentukan."
+    }
+  },
+  "home": {
+    "navAria": "Akun",
+    "history": "Riwayat terjemahan",
+    "billing": "Tagihan & langganan",
+    "signOut": "Keluar",
+    "email": "Email",
+    "creditBalance": "Saldo kredit"
+  },
+  "history": {
+    "title": "Riwayat terjemahan",
+    "empty": "Tidak ada riwayat terjemahan / tidak ada hasil yang cocok",
+    "clearFilters": "Hapus filter",
+    "loadMore": "Muat lebih banyak",
+    "loading": "Memuat…",
+    "sourceAuto": "Otomatis",
+    "dateRange": {
+      "1d": "1 hari terakhir",
+      "7d": "7 hari terakhir",
+      "1m": "1 bulan terakhir",
+      "all": "Semua"
+    }
+  },
+  "billing": {
+    "title": "Tagihan & langganan",
+    "currentPlan": "Paket saat ini",
+    "manage": "Kelola",
+    "unsubscribed": "Tidak berlangganan",
+    "unsubscribedHint": "Berlangganan untuk menerima kredit setiap siklus penagihan dan membuka manfaat paket",
+    "subscribe": "Berlangganan",
+    "resetsOn": "Direset pada {date}",
+    "resetsOnWithDays": "Direset pada {date} ({days} hari)",
+    "monthDay": "{day}/{month}",
+    "priceMonthlySuffix": "/bln",
+    "priceYearlySuffix": "/thn",
+    "transactions": "Transaksi",
+    "emptyTransactions": "Belum ada catatan tagihan",
+    "columns": {
+      "createdAt": "Dibuat pada",
+      "amount": "Jumlah",
+      "credits": "Kredit",
+      "type": "Jenis",
+      "status": "Status"
+    },
+    "transactionType": {
+      "pay-to-use": "Bayar sesuai pemakaian",
+      "subscription": "Langganan"
+    }
+  },
+  "manageSubscription": {
+    "title": "Kelola langganan",
+    "currentPlan": "Paket saat ini: {plan} {price}, periode hingga {date}",
+    "cancelTitle": "Batalkan langganan Anda?",
+    "cancelDescription": "Langganan Anda akan berakhir setelah {date}. Anda dapat terus menggunakan paket saat ini hingga saat itu, dan kredit yang ada akan tetap disimpan.",
+    "thinkAgain": "Pertahankan langganan",
+    "confirmCancel": "Konfirmasi pembatalan",
+    "cancelFailed": "Gagal membatalkan langganan",
+    "cancelSubmitted": "Pembatalan dikirim",
+    "restoreFailed": "Gagal memulihkan langganan",
+    "restored": "Langganan dipulihkan"
+  },
+  "payment": {
+    "loading": "Memuat…",
+    "error": "Kesalahan: {message}",
+    "success": {
+      "title": "Langganan berhasil",
+      "thanks": "Terima kasih atas langganan Anda! Email konfirmasi akan dikirim ke {email}.",
+      "redirecting": "Mengalihkan ke penerjemah dalam {seconds} dtk…",
+      "start": "Mulai menerjemahkan"
+    },
+    "pending": {
+      "title": "Pembayaran diproses",
+      "body": "Pembayaran Anda sedang dikonfirmasi. Kredit akan ditambahkan ke akun setelah pembayaran selesai.",
+      "notify": "Kami akan memberi tahu {email} saat selesai.",
+      "hint": "Ini mungkin memakan waktu beberapa menit atau lebih tergantung metode pembayaran. Anda dapat meninggalkan halaman ini dengan aman.",
+      "backHome": "Kembali ke beranda"
+    },
+    "incomplete": {
+      "title": "Pembayaran belum selesai",
+      "expired": "Sesi checkout ini telah kedaluwarsa. Mulai pembelian baru jika Anda masih ingin melanjutkan.",
+      "noPaymentRequired": "Tidak ada pembayaran yang diperlukan untuk sesi ini. Jika Anda mengharapkan penagihan, hubungi dukungan.",
+      "generic": "Kami tidak dapat mengonfirmasi pembayaran Anda. Anda tidak ditagih, atau pembayaran tidak selesai dengan sukses.",
+      "hint": "Jika Anda yakin ini kesalahan, coba lagi atau hubungi dukungan beserta detail pembayaran.",
+      "tryAgain": "Coba lagi",
+      "backHome": "Kembali ke beranda"
+    }
+  }
+}
