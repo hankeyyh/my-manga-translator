@@ -24,7 +24,7 @@ export function CcAccordionItem({
         <div className={cn("border-b border-[var(--cc-border-light)]", className)}>
             <button
                 type="button"
-                className="flex h-auto w-full items-center justify-between gap-4 px-4 py-4 text-left font-body text-sm font-medium text-[var(--cc-text-primary)] transition-colors hover:bg-[var(--cc-brand-tint)]"
+                className="flex h-auto w-full items-center justify-between gap-4 px-4 py-4 text-start font-body text-sm font-medium text-[var(--cc-text-primary)] transition-colors hover:bg-[var(--cc-brand-tint)]"
                 onClick={onToggle}
                 aria-expanded={open}
             >

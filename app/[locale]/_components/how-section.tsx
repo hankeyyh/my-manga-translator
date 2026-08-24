@@ -81,7 +81,7 @@ export function HowSection() {
                                     index % 2 === 1 && "md:flex-row-reverse",
                                 )}
                             >
-                                <div className="flex w-full flex-col items-center text-center md:w-[38%] md:items-start md:text-left">
+                                <div className="flex w-full flex-col items-center text-center md:w-[38%] md:items-start md:text-start">
                                     <div className="mb-4 flex size-12 items-center justify-center rounded-full border border-cc-brand-primary/20 bg-[color-mix(in_srgb,var(--cc-brand-primary)_8%,white)] font-headline text-sm font-bold text-cc-brand-primary">
                                         {item.step}
                                     </div>

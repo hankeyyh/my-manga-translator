@@ -38,7 +38,7 @@ export function CcSwitch({
             <span
                 className={cn(
                     "pointer-events-none block size-4 rounded-full bg-[var(--cc-surface-white)] shadow-[var(--cc-shadow-sm)] transition-transform",
-                    checked ? "translate-x-4" : "translate-x-0",
+                    checked ? "ltr:translate-x-4 rtl:-translate-x-4" : "translate-x-0",
                 )}
             />
         </button>

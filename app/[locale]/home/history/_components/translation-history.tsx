@@ -103,7 +103,7 @@ export function TranslationHistory({ initialPage }: Props) {
                     </div>
                 </div>
 
-                <div className="shrink-0 text-right">
+                <div className="shrink-0 text-end">
                     <DateRangeFilter value={dateRange} onValueChange={setDateRange} />
                 </div>
             </div>

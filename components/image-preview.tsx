@@ -69,7 +69,7 @@ export function ImagePreview({
                 size="icon"
                 variant="ghost"
                 aria-label={t("close")}
-                className="absolute top-4 right-4 z-10 size-9 rounded-full text-white hover:bg-white/10 hover:text-white"
+                className="absolute end-4 top-4 z-10 size-9 rounded-full text-white hover:bg-white/10 hover:text-white"
                 onClick={(e) => {
                     e.stopPropagation();
                     onClose();

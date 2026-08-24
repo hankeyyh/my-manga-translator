@@ -48,7 +48,7 @@ export function CcDialog({
             )}
             <button
                 type="button"
-                className="absolute right-4 top-4 rounded-sm text-[var(--cc-text-muted)] transition-colors hover:text-[var(--cc-brand-primary)]"
+                className="absolute end-4 top-4 rounded-sm text-[var(--cc-text-muted)] transition-colors hover:text-[var(--cc-brand-primary)]"
                 aria-label="Close"
             >
                 <X className="size-4" />

@@ -64,7 +64,7 @@ export function MarkdownContent({
                     ul: ({ children }) => (
                         <ul
                             className={cn(
-                                "mb-4 list-disc space-y-2 pl-5",
+                                "mb-4 list-disc space-y-2 ps-5",
                                 isCc ? "text-cc-text-secondary" : "text-muted-foreground",
                             )}
                         >
@@ -74,7 +74,7 @@ export function MarkdownContent({
                     ol: ({ children }) => (
                         <ol
                             className={cn(
-                                "mb-4 list-decimal space-y-2 pl-5",
+                                "mb-4 list-decimal space-y-2 ps-5",
                                 isCc ? "text-cc-text-secondary" : "text-muted-foreground",
                             )}
                         >
@@ -164,7 +164,7 @@ export function MarkdownContent({
                     th: ({ children }) => (
                         <th
                             className={cn(
-                                "px-3 py-2 text-left font-semibold",
+                                "px-3 py-2 text-start font-semibold",
                                 isCc && "text-cc-text-primary",
                             )}
                         >

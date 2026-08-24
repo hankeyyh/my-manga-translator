@@ -22,6 +22,7 @@ export function CcSectionHeading({
         <div
             className={cn(
                 align === "center" && "text-center",
+                align === "left" && "text-start",
                 className,
             )}
             {...props}

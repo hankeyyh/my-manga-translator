@@ -120,7 +120,7 @@ export function LoginForm({
                                 <Label htmlFor="login-password" className="text-gray-700">
                                     {tCommon("password")}
                                 </Label>
-                                <Link href="/auth/forgot-password" className={cn("ml-auto text-sm", linkClass)}>
+                                <Link href="/auth/forgot-password" className={cn("ms-auto text-sm", linkClass)}>
                                     {t("forgotPassword")}
                                 </Link>
                             </div>

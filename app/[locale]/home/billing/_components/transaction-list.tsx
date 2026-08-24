@@ -79,16 +79,16 @@ export function TransactionList({ initialPage }: Props) {
             ) : (
                 <>
                     <div className="overflow-x-auto rounded-[var(--cc-radius-lg)] border border-cc-border/40 bg-cc-surface-white">
-                        <table className="w-full min-w-[560px] text-left text-xs">
+                        <table className="w-full min-w-[560px] text-start text-xs">
                             <thead className="bg-cc-surface-page text-[10px] uppercase tracking-wide text-cc-text-muted">
                                 <tr>
                                     <th className="px-3 py-2 font-medium">
                                         {t("columns.createdAt")}
                                     </th>
-                                    <th className="px-3 py-2 text-right font-medium">
+                                    <th className="px-3 py-2 text-end font-medium">
                                         {t("columns.amount")}
                                     </th>
-                                    <th className="px-3 py-2 text-right font-medium">
+                                    <th className="px-3 py-2 text-end font-medium">
                                         {t("columns.credits")}
                                     </th>
                                     <th className="px-3 py-2 font-medium">
@@ -105,10 +105,10 @@ export function TransactionList({ initialPage }: Props) {
                                         <td className="px-3 py-2 whitespace-nowrap">
                                             {formatDateTime(tx.createdAt)}
                                         </td>
-                                        <td className="px-3 py-2 text-right tabular-nums">
+                                        <td className="px-3 py-2 text-end tabular-nums" dir="ltr">
                                             {formatAmount(tx.rechargeAmount)}
                                         </td>
-                                        <td className="px-3 py-2 text-right tabular-nums">
+                                        <td className="px-3 py-2 text-end tabular-nums" dir="ltr">
                                             {formatCredits(tx.credits)}
                                         </td>
                                         <td className="px-3 py-2">

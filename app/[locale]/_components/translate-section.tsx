@@ -81,10 +81,10 @@ function asFontStyle(style: string): FontStyle {
 }
 
 const WORKSPACE_BG = "bg-[var(--cc-surface-page)]";
-const EAR_LEFT =
-    "pointer-events-none absolute bottom-0 -left-3 size-3 rounded-br-xl shadow-[6px_6px_0_6px_var(--cc-surface-page)]";
-const EAR_RIGHT =
-    "pointer-events-none absolute bottom-0 -right-3 size-3 rounded-bl-xl shadow-[-6px_6px_0_6px_var(--cc-surface-page)]";
+const EAR_START =
+    "pointer-events-none absolute bottom-0 -start-3 size-3 rounded-ee-xl shadow-[6px_6px_0_6px_var(--cc-surface-page)] rtl:shadow-[-6px_6px_0_6px_var(--cc-surface-page)]";
+const EAR_END =
+    "pointer-events-none absolute bottom-0 -end-3 size-3 rounded-es-xl shadow-[-6px_6px_0_6px_var(--cc-surface-page)] rtl:shadow-[6px_6px_0_6px_var(--cc-surface-page)]";
 
 type TaskKind = "draft" | "processing" | "completed" | "failed" | "stalled";
 type CloseConfirm =
@@ -789,8 +789,8 @@ export function TranslateSection() {
                                                     : "mb-px rounded-t-lg text-cc-text-muted hover:bg-[var(--cc-brand-tint-strong)]",
                                             )}
                                         >
-                                            {active && !firstActive && <span aria-hidden className={EAR_LEFT} />}
-                                            {active && <span aria-hidden className={EAR_RIGHT} />}
+                                            {active && !firstActive && <span aria-hidden className={EAR_START} />}
+                                            {active && <span aria-hidden className={EAR_END} />}
                                             <button
                                                 type="button"
                                                 className="inline-flex h-full items-center gap-1.5 px-3"
@@ -801,7 +801,7 @@ export function TranslateSection() {
                                             </button>
                                             <button
                                                 type="button"
-                                                className="mr-1.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md text-cc-text-muted transition-colors hover:bg-[var(--cc-brand-tint-strong)] hover:text-cc-brand-primary"
+                                                className="me-1.5 inline-flex size-5 shrink-0 items-center justify-center rounded-md text-cc-text-muted transition-colors hover:bg-[var(--cc-brand-tint-strong)] hover:text-cc-brand-primary"
                                                 aria-label={t("closeTask", { label: shortTaskLabel(item, t) })}
                                                 onClick={() => closeTask(item.localId)}
                                             >
@@ -845,9 +845,9 @@ export function TranslateSection() {
 
                         <div
                             className={cn(
-                                "-mt-px space-y-4 rounded-b-xl rounded-tr-xl p-4",
+                                "-mt-px space-y-4 rounded-b-xl rounded-se-xl p-4",
                                 WORKSPACE_BG,
-                                activeIndex !== 0 && "rounded-tl-xl",
+                                activeIndex !== 0 && "rounded-ss-xl",
                             )}
                         >
                             {/* 操作区 */}

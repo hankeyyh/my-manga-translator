@@ -49,7 +49,7 @@ export default async function Page() {
                                 aria-hidden
                                 className="aspect-square w-28 shrink-0 rounded-lg object-cover sm:w-36"
                             />
-                            <div className="min-w-0 flex-1 space-y-1 py-1 pl-4 sm:pl-5">
+                            <div className="min-w-0 flex-1 space-y-1 py-1 ps-4 sm:ps-5">
                                 {post.publishedAt ? (
                                     <p className="text-sm text-cc-text-muted">
                                         {formatBlogDate(post.publishedAt, t)}

@@ -81,7 +81,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
                     >
                         {tCommon("brand")}
                     </Link>
-                    <nav className="ml-4 hidden items-center gap-1 md:flex">
+                    <nav className="ms-4 hidden items-center gap-1 md:flex">
                         <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/#tool">{tHeader("mangaTranslate")}</Link>
                         </CcButton>
@@ -98,7 +98,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
                             {tHeader("joinDiscord")}
                         </CcButton>
                     </nav>
-                    <div className="ml-auto flex items-center gap-2">
+                    <div className="ms-auto flex items-center gap-2">
                         <CcBadge variant="accent">{tCommon("creditsCount", { count: totalCredits })}</CcBadge>
                         <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
@@ -125,7 +125,7 @@ export function ClientSiteHeader({ userInfo }: Props) {
                                             onSelect={() => onSelectLocale(item)}
                                         >
                                             {tLocale(item)}
-                                            {isCurrent ? <Check className="ml-auto size-3.5" strokeWidth={3} /> : null}
+                                            {isCurrent ? <Check className="ms-auto size-3.5" strokeWidth={3} /> : null}
                                         </DropdownMenuItem>
                                     );
                                 })}
