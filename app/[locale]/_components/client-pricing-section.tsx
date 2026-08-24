@@ -23,6 +23,15 @@ import { useChangeSubscription } from "./use-change-subscription";
 
 type PricingTab = "pay-to-use" | "subscription";
 
+function getInitialBillingCycle(configs: TopUpConfig[]): BillingCycle {
+    const hasYearly = configs.some(
+        (config) =>
+            config.transactionType === "subscription" &&
+            config.billingCycle === "yearly",
+    );
+    return hasYearly ? "yearly" : "monthly";
+}
+
 type Props = {
     topUpConfigs: TopUpConfig[];
     currentSubscription: UserSubscription | null;
@@ -34,11 +43,7 @@ export function ClientPricingSection({
 }: Props) {
     const [pricingTab, setPricingTab] = useState<PricingTab>("subscription");
     const [selectedBillingCycle, setSelectedBillingCycle] =
-        useState<BillingCycle>(
-            currentSubscription?.billingCycle === "yearly"
-                ? "yearly"
-                : "monthly",
-        );
+        useState<BillingCycle>(() => getInitialBillingCycle(topUpConfigs));
     const [isRestoring, setIsRestoring] = useState(false);
     const router = useRouter();
     const t = useTranslations("pricing");
@@ -62,7 +67,10 @@ export function ClientPricingSection({
         [],
     );
     const billingCycle = availableBillingCycles.includes(selectedBillingCycle)
-        ? selectedBillingCycle : (availableBillingCycles[0] ?? "monthly");
+        ? selectedBillingCycle
+        : availableBillingCycles.includes("yearly")
+            ? "yearly"
+            : (availableBillingCycles[0] ?? "monthly");
     const plans = topUpConfigs.filter((config) => {
             if (config.transactionType !== pricingTab) return false;
             if (pricingTab === "subscription") {
