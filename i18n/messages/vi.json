@@ -230,7 +230,28 @@
     "priceYearly": "${price}/năm",
     "creditsPayToUse": "{count} tín dụng",
     "creditsMonthly": "{count} tín dụng / tháng",
-    "creditsYearly": "{count} tín dụng / năm"
+    "creditsYearly": "{count} tín dụng / năm",
+    "promoPayToUse": "Mua một lần, dùng bất cứ lúc nào. Tín dụng không hết hạn.",
+    "promoMonthly": "Tín dụng được làm mới mỗi tháng. Hủy bất cứ lúc nào.",
+    "promoYearly": "Gói năm tiết kiệm hơn. Tín dụng được làm mới mỗi năm.",
+    "featuresPayToUse": [
+      "OCR thông minh, dịch và sắp chữ trên trang gốc",
+      "Hơn 20 ngôn ngữ, gồm tiếng Nhật, Hàn và Trung",
+      "JPG, PNG, PDF, EPUB, CBZ và nhiều định dạng khác",
+      "Tín dụng không hết hạn"
+    ],
+    "featuresMonthly": [
+      "Tự động nạp lại mỗi chu kỳ thanh toán",
+      "OCR thông minh, dịch và sắp chữ trên trang gốc",
+      "Hơn 20 ngôn ngữ, gồm tiếng Nhật, Hàn và Trung",
+      "Hủy bất cứ lúc nào"
+    ],
+    "featuresYearly": [
+      "Tiết kiệm hơn so với trả theo tháng",
+      "Tự động nạp lại mỗi năm",
+      "OCR thông minh, dịch và sắp chữ trên trang gốc",
+      "Hủy bất cứ lúc nào"
+    ]
   },
   "changePlan": {
     "title": "Đổi gói đăng ký?",

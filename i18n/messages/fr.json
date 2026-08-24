@@ -230,7 +230,28 @@
     "priceYearly": "${price}/an",
     "creditsPayToUse": "{count} crédits",
     "creditsMonthly": "{count} crédits / mois",
-    "creditsYearly": "{count} crédits / an"
+    "creditsYearly": "{count} crédits / an",
+    "promoPayToUse": "Payez une fois, utilisez à tout moment. Les crédits n’expirent pas.",
+    "promoMonthly": "Les crédits se renouvellent chaque mois. Résiliez à tout moment.",
+    "promoYearly": "Plus avantageux à l’année. Les crédits se renouvellent chaque année.",
+    "featuresPayToUse": [
+      "OCR intelligent, traduction et remise en page",
+      "Plus de 20 langues, dont le japonais, le coréen et le chinois",
+      "JPG, PNG, PDF, EPUB, CBZ et plus",
+      "Crédits sans date d’expiration"
+    ],
+    "featuresMonthly": [
+      "Recharge automatique à chaque cycle",
+      "OCR intelligent, traduction et remise en page",
+      "Plus de 20 langues, dont le japonais, le coréen et le chinois",
+      "Résiliation à tout moment"
+    ],
+    "featuresYearly": [
+      "Plus avantageux que le paiement mensuel",
+      "Recharge automatique chaque année",
+      "OCR intelligent, traduction et remise en page",
+      "Résiliation à tout moment"
+    ]
   },
   "changePlan": {
     "title": "Changer de forfait d’abonnement ?",

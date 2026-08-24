@@ -230,7 +230,28 @@
     "priceYearly": "${price}/Jahr",
     "creditsPayToUse": "{count} Credits",
     "creditsMonthly": "{count} Credits / Monat",
-    "creditsYearly": "{count} Credits / Jahr"
+    "creditsYearly": "{count} Credits / Jahr",
+    "promoPayToUse": "Einmal kaufen, jederzeit nutzen. Credits verfallen nicht.",
+    "promoMonthly": "Credits werden jeden Monat erneuert. Jederzeit kündbar.",
+    "promoYearly": "Günstiger im Jahresabo. Credits werden jedes Jahr erneuert.",
+    "featuresPayToUse": [
+      "Intelligentes OCR, Übersetzung und Satzspiegel",
+      "Über 20 Sprachen, inkl. Japanisch, Koreanisch und Chinesisch",
+      "JPG, PNG, PDF, EPUB, CBZ und mehr",
+      "Credits verfallen nicht"
+    ],
+    "featuresMonthly": [
+      "Automatische Aufladung in jedem Abrechnungszeitraum",
+      "Intelligentes OCR, Übersetzung und Satzspiegel",
+      "Über 20 Sprachen, inkl. Japanisch, Koreanisch und Chinesisch",
+      "Jederzeit kündbar"
+    ],
+    "featuresYearly": [
+      "Günstiger als die monatliche Zahlung",
+      "Jährliche automatische Aufladung",
+      "Intelligentes OCR, Übersetzung und Satzspiegel",
+      "Jederzeit kündbar"
+    ]
   },
   "changePlan": {
     "title": "Abo-Plan ändern?",

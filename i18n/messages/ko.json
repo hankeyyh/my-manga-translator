@@ -230,7 +230,28 @@
     "priceYearly": "${price}/년",
     "creditsPayToUse": "{count} 크레딧",
     "creditsMonthly": "{count} 크레딧 / 월",
-    "creditsYearly": "{count} 크레딧 / 년"
+    "creditsYearly": "{count} 크레딧 / 년",
+    "promoPayToUse": "한 번 구매하면 언제든 사용. 크레딧은 만료되지 않습니다.",
+    "promoMonthly": "크레딧이 매월 갱신되며, 언제든 해지할 수 있습니다.",
+    "promoYearly": "연간이 더 유리합니다. 크레딧은 매년 갱신됩니다.",
+    "featuresPayToUse": [
+      "스마트 OCR, 번역, 원본 말풍선 조판",
+      "일본어·한국어·중국어 포함 20개 이상 언어",
+      "JPG, PNG, PDF, EPUB, CBZ 등 지원",
+      "크레딧 만료 없음"
+    ],
+    "featuresMonthly": [
+      "결제 주기마다 크레딧 자동 충전",
+      "스마트 OCR, 번역, 원본 말풍선 조판",
+      "일본어·한국어·중국어 포함 20개 이상 언어",
+      "언제든 해지 가능"
+    ],
+    "featuresYearly": [
+      "월간보다 더 경제적",
+      "매년 크레딧 자동 충전",
+      "스마트 OCR, 번역, 원본 말풍선 조판",
+      "언제든 해지 가능"
+    ]
   },
   "changePlan": {
     "title": "구독 플랜을 변경할까요?",

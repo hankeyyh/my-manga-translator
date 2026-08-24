@@ -230,7 +230,28 @@
     "priceYearly": "${price}/thn",
     "creditsPayToUse": "{count} kredit",
     "creditsMonthly": "{count} kredit / bulan",
-    "creditsYearly": "{count} kredit / tahun"
+    "creditsYearly": "{count} kredit / tahun",
+    "promoPayToUse": "Bayar sekali, pakai kapan saja. Kredit tidak kedaluwarsa.",
+    "promoMonthly": "Kredit diperbarui setiap bulan. Batalkan kapan saja.",
+    "promoYearly": "Lebih hemat tahunan. Kredit diperbarui setiap tahun.",
+    "featuresPayToUse": [
+      "OCR cerdas, terjemahan, dan penataan di halaman asli",
+      "20+ bahasa, termasuk Jepang, Korea, dan Tionghoa",
+      "JPG, PNG, PDF, EPUB, CBZ, dan lainnya",
+      "Kredit tidak kedaluwarsa"
+    ],
+    "featuresMonthly": [
+      "Isi ulang otomatis setiap siklus penagihan",
+      "OCR cerdas, terjemahan, dan penataan di halaman asli",
+      "20+ bahasa, termasuk Jepang, Korea, dan Tionghoa",
+      "Batalkan kapan saja"
+    ],
+    "featuresYearly": [
+      "Lebih hemat daripada pembayaran bulanan",
+      "Isi ulang otomatis setiap tahun",
+      "OCR cerdas, terjemahan, dan penataan di halaman asli",
+      "Batalkan kapan saja"
+    ]
   },
   "changePlan": {
     "title": "Ubah paket langganan Anda?",

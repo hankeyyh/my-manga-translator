@@ -230,7 +230,28 @@
     "priceYearly": "${price}/año",
     "creditsPayToUse": "{count} créditos",
     "creditsMonthly": "{count} créditos / mes",
-    "creditsYearly": "{count} créditos / año"
+    "creditsYearly": "{count} créditos / año",
+    "promoPayToUse": "Paga una vez y úsalo cuando quieras. Los créditos no caducan.",
+    "promoMonthly": "Los créditos se renuevan cada mes. Cancela cuando quieras.",
+    "promoYearly": "Mejor valor anual. Los créditos se renuevan cada año.",
+    "featuresPayToUse": [
+      "OCR inteligente, traducción y maquetación original",
+      "Más de 20 idiomas, incluidos japonés, coreano y chino",
+      "JPG, PNG, PDF, EPUB, CBZ y más",
+      "Los créditos no caducan"
+    ],
+    "featuresMonthly": [
+      "Recarga automática en cada ciclo de facturación",
+      "OCR inteligente, traducción y maquetación original",
+      "Más de 20 idiomas, incluidos japonés, coreano y chino",
+      "Cancela cuando quieras"
+    ],
+    "featuresYearly": [
+      "Más económico que el pago mensual",
+      "Recarga automática cada año",
+      "OCR inteligente, traducción y maquetación original",
+      "Cancela cuando quieras"
+    ]
   },
   "changePlan": {
     "title": "¿Cambiar tu plan de suscripción?",

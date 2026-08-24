@@ -230,7 +230,28 @@
     "priceYearly": "${price}/年",
     "creditsPayToUse": "{count} クレジット",
     "creditsMonthly": "{count} クレジット / 月",
-    "creditsYearly": "{count} クレジット / 年"
+    "creditsYearly": "{count} クレジット / 年",
+    "promoPayToUse": "一度きりの購入でいつでも利用。クレジットは無期限です。",
+    "promoMonthly": "クレジットは毎月更新。いつでも解約できます。",
+    "promoYearly": "年額のほうがお得。クレジットは毎年更新されます。",
+    "featuresPayToUse": [
+      "スマート OCR、翻訳、吹き出しへの組み込み",
+      "日・韓・中を含む 20 以上の言語",
+      "JPG、PNG、PDF、EPUB、CBZ などに対応",
+      "クレジットは無期限"
+    ],
+    "featuresMonthly": [
+      "請求サイクルごとに自動でチャージ",
+      "スマート OCR、翻訳、吹き出しへの組み込み",
+      "日・韓・中を含む 20 以上の言語",
+      "いつでも解約可能"
+    ],
+    "featuresYearly": [
+      "月額払いよりお得",
+      "毎年自動でチャージ",
+      "スマート OCR、翻訳、吹き出しへの組み込み",
+      "いつでも解約可能"
+    ]
   },
   "changePlan": {
     "title": "サブスクリプションプランを変更しますか？",

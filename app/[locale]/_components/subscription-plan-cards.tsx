@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import {
     CcBadge,
     CcButton,
@@ -7,11 +8,15 @@ import {
     CcCardDescription,
     CcCardTitle,
 } from "@/design/design-system/components";
+import { cn } from "@/components/utils";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import {
     formatCredits,
     formatPrice,
+    getPlanFeatures,
     getPlanName,
+    getPromoKind,
+    getPromoText,
     isFeatured,
 } from "./plan-display";
 import { useTranslations } from "next-intl";
@@ -47,6 +52,8 @@ export function SubscriptionPlanCards({
             {plans.map((plan) => {
                 const name = getPlanName(plan, t);
                 const featured = isFeatured(plan);
+                const promoKind = getPromoKind(plan);
+                const features = getPlanFeatures(plan, t);
                 const isCurrentPlan = currentTopupConfigId === plan.id;
                 const canRestoreCurrent =
                     isCurrentPlan &&
@@ -59,7 +66,15 @@ export function SubscriptionPlanCards({
                 return (
                     <CcCard
                         key={plan.id}
-                        className="items-center p-6 text-center lg:p-8"
+                        className={cn(
+                            "h-full cursor-pointer items-stretch bg-[#fbfcfe] p-6 text-center antialiased lg:p-8",
+                            "transform-gpu backface-hidden will-change-transform",
+                            "transition-[transform,box-shadow,background-color] duration-200 ease-out",
+                            "hover:-translate-y-1 hover:bg-[var(--cc-surface-white)] hover:shadow-[var(--cc-shadow-card)]",
+                            featured
+                                ? undefined
+                                : "border-[var(--cc-border-light)] shadow-none",
+                        )}
                         variant={featured ? "featured" : "outlined"}
                     >
                         <CcCardTitle className="flex items-center justify-center gap-2">
@@ -72,8 +87,39 @@ export function SubscriptionPlanCards({
                         <CcCardDescription className="mt-1">
                             {formatCredits(plan, t)}
                         </CcCardDescription>
+                        <p
+                            className={cn(
+                                "mt-4 w-full rounded-xl px-3 py-2.5 text-left text-xs leading-relaxed",
+                                promoKind === "payToUse"
+                                    ? "border border-[var(--cc-border-default)] bg-[var(--cc-surface-muted)] text-[var(--cc-text-secondary)]"
+                                    : "border border-[var(--cc-status-success)]/15 bg-[var(--cc-status-success-bg)] text-[var(--cc-status-success)]",
+                            )}
+                        >
+                            {getPromoText(plan, t)}
+                        </p>
+                        <ul className="mt-4 w-full flex-1 space-y-2 text-left">
+                            {features.map((feature) => (
+                                <li
+                                    key={feature}
+                                    className="flex items-start gap-2 font-body text-sm text-[var(--cc-text-secondary)]"
+                                >
+                                    <Check
+                                        className="mt-0.5 size-4 shrink-0 text-[var(--cc-brand-primary)]"
+                                        strokeWidth={2.5}
+                                    />
+                                    <span>{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
                         <CcButton
-                            className="mt-6 w-full"
+                            className={cn(
+                                "mt-6 w-full",
+                                !featured &&
+                                    !isCurrentPlan &&
+                                    !canCancelCurrent &&
+                                    !canRestoreCurrent &&
+                                    "hover:bg-[var(--cc-brand-primary)] hover:text-[var(--cc-text-on-brand)]",
+                            )}
                             variant={
                                 canCancelCurrent
                                     ? "destructive"

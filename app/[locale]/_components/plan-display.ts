@@ -42,6 +42,38 @@ export function formatCredits(config: TopUpConfig, t: PricingT) {
     return t("creditsPayToUse", { count: config.creditsIncluded });
 }
 
+export type PlanPromoKind = "payToUse" | "monthly" | "yearly";
+
+export function getPromoKind(config: TopUpConfig): PlanPromoKind {
+    if (config.transactionType === "subscription" && config.billingCycle === "yearly") {
+        return "yearly";
+    }
+    if (config.transactionType === "subscription") {
+        return "monthly";
+    }
+    return "payToUse";
+}
+
+export function getPromoText(config: TopUpConfig, t: PricingT) {
+    const kind = getPromoKind(config);
+    if (kind === "yearly") return t("promoYearly");
+    if (kind === "monthly") return t("promoMonthly");
+    return t("promoPayToUse");
+}
+
+export function getPlanFeatures(config: TopUpConfig, t: PricingT): string[] {
+    const kind = getPromoKind(config);
+    const key =
+        kind === "yearly"
+            ? "featuresYearly"
+            : kind === "monthly"
+                ? "featuresMonthly"
+                : "featuresPayToUse";
+    const raw = t.raw(key);
+    if (!Array.isArray(raw)) return [];
+    return raw.filter((item): item is string => typeof item === "string");
+}
+
 /** 年付相对月付连买 12 个月的最低折扣百分比，无法计算时返回 null */
 export function getYearlySavePercent(configs: TopUpConfig[]): number | null {
     const monthlyByTier = new Map<string, number>();

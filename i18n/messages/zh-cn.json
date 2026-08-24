@@ -230,7 +230,28 @@
     "priceYearly": "${price}/年",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / 月",
-    "creditsYearly": "{count} credits / 年"
+    "creditsYearly": "{count} credits / 年",
+    "promoPayToUse": "一次购买，随时使用。积分永不过期。",
+    "promoMonthly": "积分按月刷新，可随时取消。",
+    "promoYearly": "年付更划算，积分按年刷新。",
+    "featuresPayToUse": [
+      "智能 OCR、翻译与原图重绘排版",
+      "支持 20+ 语言，覆盖日漫、韩漫、中漫",
+      "支持 JPG、PNG、PDF、EPUB、CBZ 等格式",
+      "积分永不过期"
+    ],
+    "featuresMonthly": [
+      "每个账单周期自动补充积分",
+      "智能 OCR、翻译与原图重绘排版",
+      "支持 20+ 语言，覆盖日漫、韩漫、中漫",
+      "可随时取消"
+    ],
+    "featuresYearly": [
+      "比按月订阅更划算",
+      "每年自动补充积分",
+      "智能 OCR、翻译与原图重绘排版",
+      "可随时取消"
+    ]
   },
   "changePlan": {
     "title": "确认调整订阅计划？",

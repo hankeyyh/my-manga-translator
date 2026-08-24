@@ -230,7 +230,28 @@
     "priceYearly": "${price}/yr",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / month",
-    "creditsYearly": "{count} credits / year"
+    "creditsYearly": "{count} credits / year",
+    "promoPayToUse": "Pay once, use anytime. Credits never expire.",
+    "promoMonthly": "Credits refresh every month. Cancel anytime.",
+    "promoYearly": "Better yearly value. Credits refresh each year.",
+    "featuresPayToUse": [
+      "Smart OCR, translation, and in-place typesetting",
+      "20+ languages, including Japanese, Korean, and Chinese",
+      "JPG, PNG, PDF, EPUB, CBZ, and more",
+      "Credits never expire"
+    ],
+    "featuresMonthly": [
+      "Auto refill every billing cycle",
+      "Smart OCR, translation, and in-place typesetting",
+      "20+ languages, including Japanese, Korean, and Chinese",
+      "Cancel anytime"
+    ],
+    "featuresYearly": [
+      "Save compared with paying monthly",
+      "Auto refill every year",
+      "Smart OCR, translation, and in-place typesetting",
+      "Cancel anytime"
+    ]
   },
   "changePlan": {
     "title": "Change your subscription plan?",

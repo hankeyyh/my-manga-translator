@@ -230,7 +230,28 @@
     "priceYearly": "${price}/taon",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / buwan",
-    "creditsYearly": "{count} credits / taon"
+    "creditsYearly": "{count} credits / taon",
+    "promoPayToUse": "Magbayad nang minsan, gamitin anytime. Hindi mag-e-expire ang credits.",
+    "promoMonthly": "Nire-refresh ang credits bawat buwan. Kanselahin anytime.",
+    "promoYearly": "Mas sulit ang yearly. Nire-refresh ang credits bawat taon.",
+    "featuresPayToUse": [
+      "Smart OCR, translation, at typesetting sa orihinal na page",
+      "20+ wika, kasama ang Japanese, Korean, at Chinese",
+      "JPG, PNG, PDF, EPUB, CBZ, at iba pa",
+      "Hindi mag-e-expire ang credits"
+    ],
+    "featuresMonthly": [
+      "Auto refill sa bawat billing cycle",
+      "Smart OCR, translation, at typesetting sa orihinal na page",
+      "20+ wika, kasama ang Japanese, Korean, at Chinese",
+      "Kanselahin anytime"
+    ],
+    "featuresYearly": [
+      "Mas mura kaysa buwanang bayad",
+      "Auto refill bawat taon",
+      "Smart OCR, translation, at typesetting sa orihinal na page",
+      "Kanselahin anytime"
+    ]
   },
   "changePlan": {
     "title": "Palitan ang subscription plan?",

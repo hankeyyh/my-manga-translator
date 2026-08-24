@@ -230,7 +230,28 @@
     "priceYearly": "${price}/yıl",
     "creditsPayToUse": "{count} kredi",
     "creditsMonthly": "{count} kredi / ay",
-    "creditsYearly": "{count} kredi / yıl"
+    "creditsYearly": "{count} kredi / yıl",
+    "promoPayToUse": "Bir kez ödeyin, istediğiniz zaman kullanın. Krediler süresi dolmaz.",
+    "promoMonthly": "Krediler her ay yenilenir. İstediğiniz zaman iptal edin.",
+    "promoYearly": "Yıllık daha avantajlı. Krediler her yıl yenilenir.",
+    "featuresPayToUse": [
+      "Akıllı OCR, çeviri ve orijinal sayfa dizgisi",
+      "Japonca, Korece ve Çince dahil 20+ dil",
+      "JPG, PNG, PDF, EPUB, CBZ ve daha fazlası",
+      "Krediler süresi dolmaz"
+    ],
+    "featuresMonthly": [
+      "Her fatura döneminde otomatik yükleme",
+      "Akıllı OCR, çeviri ve orijinal sayfa dizgisi",
+      "Japonca, Korece ve Çince dahil 20+ dil",
+      "İstediğiniz zaman iptal"
+    ],
+    "featuresYearly": [
+      "Aylık ödemeden daha avantajlı",
+      "Her yıl otomatik yükleme",
+      "Akıllı OCR, çeviri ve orijinal sayfa dizgisi",
+      "İstediğiniz zaman iptal"
+    ]
   },
   "changePlan": {
     "title": "Abonelik planınız değiştirilsin mi?",

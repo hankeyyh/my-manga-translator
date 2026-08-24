@@ -139,8 +139,7 @@ export function ClientPricingSection({
                         ]}
                         value={pricingTab}
                     />
-                    {pricingTab === "subscription" &&
-                        availableBillingCycles.length > 1 ? (
+                    {pricingTab === "subscription" && availableBillingCycles.length > 1 ? (
                         <BillingCycleTabs
                             availableCycles={availableBillingCycles}
                             monthlyLabel={t("monthly")}

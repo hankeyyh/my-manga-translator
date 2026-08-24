@@ -230,7 +230,28 @@
     "priceYearly": "${price}/年",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / 月",
-    "creditsYearly": "{count} credits / 年"
+    "creditsYearly": "{count} credits / 年",
+    "promoPayToUse": "一次購買，隨時使用。點數永不過期。",
+    "promoMonthly": "點數按月刷新，可隨時取消。",
+    "promoYearly": "年付更划算，點數按年刷新。",
+    "featuresPayToUse": [
+      "智慧 OCR、翻譯與原圖重繪排版",
+      "支援 20+ 語言，涵蓋日漫、韓漫、中漫",
+      "支援 JPG、PNG、PDF、EPUB、CBZ 等格式",
+      "點數永不過期"
+    ],
+    "featuresMonthly": [
+      "每個帳單週期自動補充點數",
+      "智慧 OCR、翻譯與原圖重繪排版",
+      "支援 20+ 語言，涵蓋日漫、韓漫、中漫",
+      "可隨時取消"
+    ],
+    "featuresYearly": [
+      "比按月訂閱更划算",
+      "每年自動補充點數",
+      "智慧 OCR、翻譯與原圖重繪排版",
+      "可隨時取消"
+    ]
   },
   "changePlan": {
     "title": "確認調整訂閱方案？",
