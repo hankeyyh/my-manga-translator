@@ -442,7 +442,7 @@ export default function DesignSystemPage() {
                                 <CcSegmentedControl
                                     onChange={setPlan}
                                     options={[
-                                        { value: "pay", label: "Pay As Needed" },
+                                        { value: "pay", label: "Pay Per Use" },
                                         { value: "subscription", label: "Subscription" },
                                     ]}
                                     value={plan}

@@ -215,7 +215,7 @@
   },
   "pricing": {
     "title": "Bảng giá",
-    "payAsNeeded": "Trả theo nhu cầu",
+    "payAsNeeded": "Trả theo mức sử dụng",
     "subscription": "Đăng ký",
     "monthly": "Hàng tháng",
     "yearly": "Hàng năm",
@@ -226,8 +226,8 @@
     "subscribed": "Đã đăng ký",
     "adjustPlan": "Đổi gói",
     "planFallback": "Gói",
-    "priceMonthly": "${price}/tháng",
-    "priceYearly": "${price}/năm",
+    "priceMonthlySuffix": "/ tháng",
+    "priceYearlySuffix": "/ năm",
     "creditsPayToUse": "{count} tín dụng",
     "creditsMonthly": "{count} tín dụng / tháng",
     "creditsYearly": "{count} tín dụng / năm",
@@ -295,7 +295,7 @@
       },
       "expiry": {
         "question": "Tín dụng có hết hạn không?",
-        "answer": "Tín dụng trả theo nhu cầu không hết hạn. Tín dụng đăng ký được làm mới mỗi chu kỳ thanh toán."
+        "answer": "Tín dụng trả theo mức sử dụng không hết hạn. Tín dụng đăng ký được làm mới mỗi chu kỳ thanh toán."
       },
       "languages": {
         "question": "Hỗ trợ ngôn ngữ nào?",
@@ -431,8 +431,8 @@
     "resetsOn": "Đặt lại vào {date}",
     "resetsOnWithDays": "Đặt lại vào {date} ({days} ngày)",
     "monthDay": "{day}/{month}",
-    "priceMonthlySuffix": "/tháng",
-    "priceYearlySuffix": "/năm",
+    "priceMonthlySuffix": "/ tháng",
+    "priceYearlySuffix": "/ năm",
     "transactions": "Giao dịch",
     "emptyTransactions": "Chưa có bản ghi thanh toán",
     "columns": {
@@ -443,7 +443,7 @@
       "status": "Trạng thái"
     },
     "transactionType": {
-      "pay-to-use": "Trả theo nhu cầu",
+      "pay-to-use": "Trả theo mức sử dụng",
       "subscription": "Đăng ký"
     }
   },

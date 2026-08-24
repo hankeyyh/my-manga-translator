@@ -215,7 +215,7 @@
   },
   "pricing": {
     "title": "价格",
-    "payAsNeeded": "按需付费",
+    "payAsNeeded": "按量付费",
     "subscription": "订阅",
     "monthly": "按月订阅",
     "yearly": "按年订阅",
@@ -226,8 +226,8 @@
     "subscribed": "已订阅",
     "adjustPlan": "调整方案",
     "planFallback": "方案",
-    "priceMonthly": "${price}/月",
-    "priceYearly": "${price}/年",
+    "priceMonthlySuffix": "/ 月",
+    "priceYearlySuffix": "/ 年",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / 月",
     "creditsYearly": "{count} credits / 年",
@@ -431,8 +431,8 @@
     "resetsOn": "于 {date} 重置",
     "resetsOnWithDays": "于 {date} 重置（{days} 天）",
     "monthDay": "{month}月{day}日",
-    "priceMonthlySuffix": "/月",
-    "priceYearlySuffix": "/年",
+    "priceMonthlySuffix": "/ 月",
+    "priceYearlySuffix": "/ 年",
     "transactions": "交易记录",
     "emptyTransactions": "暂无账单记录",
     "columns": {
@@ -443,7 +443,7 @@
       "status": "交易状态"
     },
     "transactionType": {
-      "pay-to-use": "按需付费",
+      "pay-to-use": "按量付费",
       "subscription": "订阅"
     }
   },

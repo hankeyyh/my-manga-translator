@@ -22,11 +22,17 @@ export function isFeatured(config: TopUpConfig) {
     return tier === "pro";
 }
 
+export function getPriceSuffix(config: TopUpConfig, t: PricingT): string | null {
+    if (config.transactionType !== "subscription") return null;
+    if (config.billingCycle === "yearly") return t("priceYearlySuffix");
+    if (config.billingCycle === "monthly") return t("priceMonthlySuffix");
+    return null;
+}
+
 export function formatPrice(config: TopUpConfig, t: PricingT) {
-    if (config.transactionType !== "subscription") return `$${config.price}`;
-    if (config.billingCycle === "monthly") return t("priceMonthly", { price: config.price });
-    if (config.billingCycle === "yearly") return t("priceYearly", { price: config.price });
-    return `$${config.price}`;
+    const amount = `$${config.price}`;
+    const suffix = getPriceSuffix(config, t);
+    return suffix ? `${amount} ${suffix}` : amount;
 }
 
 export function formatCredits(config: TopUpConfig, t: PricingT) {

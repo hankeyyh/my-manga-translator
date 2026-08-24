@@ -52,7 +52,7 @@ function formatPriceLabel(
         return suffix;
     }
     const amount = Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
-    return `${amount}${suffix}`;
+    return `${amount} ${suffix}`;
 }
 
 function formatResetDate(iso: string, t: ReturnType<typeof useTranslations<"billing">>) {

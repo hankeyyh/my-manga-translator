@@ -215,7 +215,7 @@
   },
   "pricing": {
     "title": "價格",
-    "payAsNeeded": "按需付費",
+    "payAsNeeded": "按量付費",
     "subscription": "訂閱",
     "monthly": "按月訂閱",
     "yearly": "按年訂閱",
@@ -226,8 +226,8 @@
     "subscribed": "已訂閱",
     "adjustPlan": "調整方案",
     "planFallback": "方案",
-    "priceMonthly": "${price}/月",
-    "priceYearly": "${price}/年",
+    "priceMonthlySuffix": "/ 月",
+    "priceYearlySuffix": "/ 年",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / 月",
     "creditsYearly": "{count} credits / 年",
@@ -431,8 +431,8 @@
     "resetsOn": "於 {date} 重置",
     "resetsOnWithDays": "於 {date} 重置（{days} 天）",
     "monthDay": "{month}月{day}日",
-    "priceMonthlySuffix": "/月",
-    "priceYearlySuffix": "/年",
+    "priceMonthlySuffix": "/ 月",
+    "priceYearlySuffix": "/ 年",
     "transactions": "交易紀錄",
     "emptyTransactions": "暫無帳單紀錄",
     "columns": {
@@ -443,7 +443,7 @@
       "status": "交易狀態"
     },
     "transactionType": {
-      "pay-to-use": "按需付費",
+      "pay-to-use": "按量付費",
       "subscription": "訂閱"
     }
   },

@@ -226,8 +226,8 @@
     "subscribed": "Naka-subscribe",
     "adjustPlan": "Palitan ang plan",
     "planFallback": "Plan",
-    "priceMonthly": "${price}/buwan",
-    "priceYearly": "${price}/taon",
+    "priceMonthlySuffix": "/ buwan",
+    "priceYearlySuffix": "/ taon",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / buwan",
     "creditsYearly": "{count} credits / taon",
@@ -295,7 +295,7 @@
       },
       "expiry": {
         "question": "May expiration ba ang credits?",
-        "answer": "Hindi mag-e-expire ang pay-as-needed credits. Nire-refresh ang subscription credits sa bawat billing cycle."
+        "answer": "Hindi mag-e-expire ang Pay Per Use credits. Nire-refresh ang subscription credits sa bawat billing cycle."
       },
       "languages": {
         "question": "Anong mga wika ang sinusuportahan?",
@@ -431,8 +431,8 @@
     "resetsOn": "Nire-reset sa {date}",
     "resetsOnWithDays": "Nire-reset sa {date} ({days} araw)",
     "monthDay": "{month}/{day}",
-    "priceMonthlySuffix": "/buwan",
-    "priceYearlySuffix": "/taon",
+    "priceMonthlySuffix": "/ buwan",
+    "priceYearlySuffix": "/ taon",
     "transactions": "Mga transaksyon",
     "emptyTransactions": "Wala pang billing record",
     "columns": {

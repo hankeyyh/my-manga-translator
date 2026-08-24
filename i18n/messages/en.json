@@ -215,7 +215,7 @@
   },
   "pricing": {
     "title": "Pricing",
-    "payAsNeeded": "Pay as needed",
+    "payAsNeeded": "Pay Per Use",
     "subscription": "Subscription",
     "monthly": "Monthly",
     "yearly": "Yearly",
@@ -226,8 +226,8 @@
     "subscribed": "Subscribed",
     "adjustPlan": "Change plan",
     "planFallback": "Plan",
-    "priceMonthly": "${price}/mo",
-    "priceYearly": "${price}/yr",
+    "priceMonthlySuffix": "/ month",
+    "priceYearlySuffix": "/ year",
     "creditsPayToUse": "{count} credits",
     "creditsMonthly": "{count} credits / month",
     "creditsYearly": "{count} credits / year",
@@ -295,7 +295,7 @@
       },
       "expiry": {
         "question": "Do credits expire?",
-        "answer": "Pay-as-needed credits never expire. Subscription credits refresh each billing cycle."
+        "answer": "Pay Per Use credits never expire. Subscription credits refresh each billing cycle."
       },
       "languages": {
         "question": "Which languages are supported?",
@@ -431,8 +431,8 @@
     "resetsOn": "Resets on {date}",
     "resetsOnWithDays": "Resets on {date} ({days} days)",
     "monthDay": "{month}/{day}",
-    "priceMonthlySuffix": "/mo",
-    "priceYearlySuffix": "/yr",
+    "priceMonthlySuffix": "/ month",
+    "priceYearlySuffix": "/ year",
     "transactions": "Transactions",
     "emptyTransactions": "No billing records yet",
     "columns": {
@@ -443,7 +443,7 @@
       "status": "Status"
     },
     "transactionType": {
-      "pay-to-use": "Pay as needed",
+      "pay-to-use": "Pay Per Use",
       "subscription": "Subscription"
     }
   },

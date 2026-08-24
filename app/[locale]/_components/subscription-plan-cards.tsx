@@ -12,9 +12,9 @@ import { cn } from "@/components/utils";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import {
     formatCredits,
-    formatPrice,
     getPlanFeatures,
     getPlanName,
+    getPriceSuffix,
     getPromoKind,
     getPromoText,
     isFeatured,
@@ -54,6 +54,7 @@ export function SubscriptionPlanCards({
                 const featured = isFeatured(plan);
                 const promoKind = getPromoKind(plan);
                 const features = getPlanFeatures(plan, t);
+                const priceSuffix = getPriceSuffix(plan, t);
                 const isCurrentPlan = currentTopupConfigId === plan.id;
                 const canRestoreCurrent =
                     isCurrentPlan &&
@@ -81,8 +82,13 @@ export function SubscriptionPlanCards({
                             {name}
                             {featured && <CcBadge>★</CcBadge>}
                         </CcCardTitle>
-                        <p className="mt-3 font-headline text-3xl font-extrabold text-cc-text-primary">
-                            {formatPrice(plan, t)}
+                        <p className="mt-3 flex items-baseline justify-center font-headline text-3xl font-extrabold text-cc-text-primary">
+                            <span>${plan.price}</span>
+                            {priceSuffix ? (
+                                <span className="ms-1 text-base font-medium text-[var(--cc-text-muted)]">
+                                    {priceSuffix}
+                                </span>
+                            ) : null}
                         </p>
                         <CcCardDescription className="mt-1">
                             {formatCredits(plan, t)}
