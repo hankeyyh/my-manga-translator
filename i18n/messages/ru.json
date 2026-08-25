@@ -165,11 +165,6 @@
       "fast": "Быстрый перевод (1 кредит)",
       "precise": "Точный перевод (2 кредита)"
     },
-    "fontStyles": {
-      "comic": "Комикс",
-      "handwritten": "Рукописный",
-      "print": "Печатный"
-    },
     "draftLabel": "Черновик · {count} стр.",
     "taskLabel": "Задача {id}",
     "closeTask": "Закрыть {label}",
@@ -178,6 +173,7 @@
     "translateTo": "Перевести на",
     "translateMode": "Режим перевода",
     "fontStyle": "Стиль шрифта",
+    "fontPreview": "Предпросмотр",
     "downloadAll": "Скачать всё",
     "submit": "Отправить на перевод",
     "previewTitle": "Предпросмотр изображений ({count})",

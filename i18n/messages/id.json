@@ -165,11 +165,6 @@
       "fast": "Terjemahan cepat (1 kredit)",
       "precise": "Terjemahan presisi (2 kredit)"
     },
-    "fontStyles": {
-      "comic": "Komik",
-      "handwritten": "Tulisan tangan",
-      "print": "Cetak"
-    },
     "draftLabel": "Draf · {count} halaman",
     "taskLabel": "Tugas {id}",
     "closeTask": "Tutup {label}",
@@ -178,6 +173,7 @@
     "translateTo": "Terjemahkan ke",
     "translateMode": "Mode terjemahan",
     "fontStyle": "Gaya font",
+    "fontPreview": "Pratinjau",
     "downloadAll": "Unduh semua",
     "submit": "Kirim terjemahan",
     "previewTitle": "Pratinjau gambar ({count} gambar)",

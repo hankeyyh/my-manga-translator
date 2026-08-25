@@ -165,11 +165,6 @@
       "fast": "Dịch nhanh (1 tín dụng)",
       "precise": "Dịch chính xác (2 tín dụng)"
     },
-    "fontStyles": {
-      "comic": "Truyện tranh",
-      "handwritten": "Viết tay",
-      "print": "In"
-    },
     "draftLabel": "Nháp · {count} trang",
     "taskLabel": "Tác vụ {id}",
     "closeTask": "Đóng {label}",
@@ -178,6 +173,7 @@
     "translateTo": "Dịch sang",
     "translateMode": "Chế độ dịch",
     "fontStyle": "Kiểu chữ",
+    "fontPreview": "Xem trước",
     "downloadAll": "Tải tất cả",
     "submit": "Gửi dịch",
     "previewTitle": "Xem trước ảnh ({count} ảnh)",

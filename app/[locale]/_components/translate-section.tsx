@@ -40,7 +40,8 @@ import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/[locale]/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
-import { TranslationConfig, Translator } from "@/types/do/translation-config";
+import { FONT_NAME_OPTIONS, TranslationConfig, Translator, type FontName } from "@/types/do/translation-config";
+import { FONT_PREVIEW_SAMPLE, PREVIEW_FONT_FAMILY, PREVIEW_FONT_VARIABLE_CLASS } from "@/app/fonts/preview-fonts";
 import { toast } from "sonner";
 import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
@@ -54,13 +55,12 @@ const DEFAULT_LANG_CODE: SupportedLangCode = "ENG";
 const MODE_FAST = "fast";
 const MODE_PRECISE = "precise";
 const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
-const SUPPORTED_FONT_STYLES = ["comic", "handwritten", "print"] as const;
+const DEFAULT_FONT_STYLE: FontName = "Anime Ace 3.0";
 const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
 type TranslateMode = (typeof SUPPORTED_MODES)[number];
-type FontStyle = (typeof SUPPORTED_FONT_STYLES)[number];
 
 function asLangCode(code: string): SupportedLangCode {
     return SUPPORTED_LANGS.some((lang) => lang.code === code)
@@ -74,10 +74,10 @@ function asTranslateMode(mode: string): TranslateMode {
         : SUPPORTED_MODES[0];
 }
 
-function asFontStyle(style: string): FontStyle {
-    return (SUPPORTED_FONT_STYLES as readonly string[]).includes(style)
-        ? (style as FontStyle)
-        : SUPPORTED_FONT_STYLES[0];
+function asFontStyle(style: string): FontName {
+    return (FONT_NAME_OPTIONS as readonly string[]).includes(style)
+        ? (style as FontName)
+        : DEFAULT_FONT_STYLE;
 }
 
 const WORKSPACE_BG = "bg-[var(--cc-surface-page)]";
@@ -161,7 +161,7 @@ function createDraftTask(files: File[] = []): WorkspaceTask {
         pages: filesToPages(files, new Set()),
         targetLang: { code: DEFAULT_LANG_CODE, label: DEFAULT_LANG_CODE },
         translateMode: MODE_FAST,
-        fontStyle: SUPPORTED_FONT_STYLES[0],
+        fontStyle: DEFAULT_FONT_STYLE,
         submitLoading: false,
         retryLoading: false,
         showTranslated: true,
@@ -191,11 +191,8 @@ function hasCompletedResults(pages: MangaPage[]): boolean {
     return pages.some((page) => page.status === "completed");
 }
 
-/**
- * TODO fontstyle 没有使用.
- * TODO 根据srclang, tarlang 决定翻译方向
- */
-function buildTranslationConfig(selLang: LangOption, selMode: string, _selFontStyle: string): TranslationConfig {
+
+function buildTranslationConfig(selLang: LangOption, selMode: string, selFontStyle: string): TranslationConfig {
     let company: Translator;
     let modelName: string;
 
@@ -214,7 +211,7 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, _selFontSt
             target_lang: selLang.code,
         },
         render: {
-            font_name: "Anime Ace 3.0",
+            font_name: asFontStyle(selFontStyle),
             fit_to_box: true,
             rtl: selLang.code === "ARA",
         },
@@ -910,21 +907,52 @@ export function TranslateSection() {
                                         <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger asChild>
                                                 <CcSelectTrigger disabled={configLocked}>
-                                                    {t(`fontStyles.${asFontStyle(activeTask.fontStyle)}`)}
+                                                    {asFontStyle(activeTask.fontStyle)}
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                {SUPPORTED_FONT_STYLES.map((style) => (
-                                                    <DropdownMenuItem
-                                                        key={style}
-                                                        onSelect={() => updateTask(activeTask.localId, (task) => ({
-                                                            ...task,
-                                                            fontStyle: style,
-                                                        }))}
-                                                    >
-                                                        {t(`fontStyles.${style}`)}
-                                                    </DropdownMenuItem>
-                                                ))}
+                                            <DropdownMenuContent
+                                                className={cn(PREVIEW_FONT_VARIABLE_CLASS, "w-max min-w-0 overflow-hidden p-0")}
+                                                align="start"
+                                            >
+                                                <div className="grid grid-cols-[max-content_max-content] divide-y divide-[var(--cc-border-light)]">
+                                                    <div className="col-span-2 grid grid-cols-subgrid bg-[var(--cc-surface-subtle)] text-xs font-medium text-[var(--cc-text-muted)]">
+                                                        <span className="border-e border-[var(--cc-border-light)] px-3 py-2">
+                                                            {t("fontStyle")}
+                                                        </span>
+                                                        <span className="px-3 py-2">{t("fontPreview")}</span>
+                                                    </div>
+                                                    {FONT_NAME_OPTIONS.map((style) => {
+                                                        const isCurrent = asFontStyle(activeTask.fontStyle) === style;
+                                                        return (
+                                                            <DropdownMenuItem
+                                                                key={style}
+                                                                aria-current={isCurrent ? "true" : undefined}
+                                                                className={cn(
+                                                                    "col-span-2 grid grid-cols-subgrid gap-0 rounded-none p-0 text-[var(--cc-text-primary)] focus:bg-[var(--cc-brand-tint)] focus:text-[var(--cc-text-primary)]",
+                                                                    isCurrent &&
+                                                                        "bg-[var(--cc-brand-tint)] focus:bg-[var(--cc-brand-tint)] before:absolute before:inset-y-0 before:start-0 before:w-0.5 before:bg-[var(--cc-brand-primary)]",
+                                                                )}
+                                                                onSelect={() => updateTask(activeTask.localId, (task) => ({
+                                                                    ...task,
+                                                                    fontStyle: style,
+                                                                }))}
+                                                            >
+                                                                <span className="flex items-center gap-1.5 border-e border-[var(--cc-border-light)] px-3 py-2.5">
+                                                                    <span>{style}</span>
+                                                                    {isCurrent ? (
+                                                                        <Check className="size-3.5 text-[var(--cc-brand-primary)]" strokeWidth={3} />
+                                                                    ) : null}
+                                                                </span>
+                                                                <span
+                                                                    className="px-3 py-2.5 text-base tracking-wide"
+                                                                    style={{ fontFamily: PREVIEW_FONT_FAMILY[style] }}
+                                                                >
+                                                                    {FONT_PREVIEW_SAMPLE}
+                                                                </span>
+                                                            </DropdownMenuItem>
+                                                        );
+                                                    })}
+                                                </div>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>

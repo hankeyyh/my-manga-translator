@@ -165,11 +165,6 @@
       "fast": "빠른 번역 (1 크레딧)",
       "precise": "정밀 번역 (2 크레딧)"
     },
-    "fontStyles": {
-      "comic": "만화체",
-      "handwritten": "손글씨",
-      "print": "인쇄체"
-    },
     "draftLabel": "초안 · {count}페이지",
     "taskLabel": "작업 {id}",
     "closeTask": "{label} 닫기",
@@ -178,6 +173,7 @@
     "translateTo": "번역 대상",
     "translateMode": "번역 모드",
     "fontStyle": "글꼴 스타일",
+    "fontPreview": "미리보기",
     "downloadAll": "모두 다운로드",
     "submit": "번역 제출",
     "previewTitle": "이미지 미리보기 ({count}장)",

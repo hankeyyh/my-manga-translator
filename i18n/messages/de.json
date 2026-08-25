@@ -165,11 +165,6 @@
       "fast": "Schnelle Übersetzung (1 Credit)",
       "precise": "Präzise Übersetzung (2 Credits)"
     },
-    "fontStyles": {
-      "comic": "Comic",
-      "handwritten": "Handschrift",
-      "print": "Druck"
-    },
     "draftLabel": "Entwurf · {count} Seiten",
     "taskLabel": "Aufgabe {id}",
     "closeTask": "{label} schließen",
@@ -178,6 +173,7 @@
     "translateTo": "Übersetzen nach",
     "translateMode": "Übersetzungsmodus",
     "fontStyle": "Schriftstil",
+    "fontPreview": "Vorschau",
     "downloadAll": "Alle herunterladen",
     "submit": "Übersetzung starten",
     "previewTitle": "Bildvorschau ({count} Bilder)",

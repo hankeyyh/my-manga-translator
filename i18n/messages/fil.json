@@ -165,11 +165,6 @@
       "fast": "Mabilis na pagsasalin (1 credit)",
       "precise": "Tumpak na pagsasalin (2 credits)"
     },
-    "fontStyles": {
-      "comic": "Comic",
-      "handwritten": "Sulit-kamay",
-      "print": "Print"
-    },
     "draftLabel": "Draft · {count} na pahina",
     "taskLabel": "Gawain {id}",
     "closeTask": "Isara ang {label}",
@@ -178,6 +173,7 @@
     "translateTo": "Isalin sa",
     "translateMode": "Mode ng pagsasalin",
     "fontStyle": "Istilo ng font",
+    "fontPreview": "Preview",
     "downloadAll": "I-download lahat",
     "submit": "Isumite ang pagsasalin",
     "previewTitle": "Preview ng larawan ({count} na larawan)",

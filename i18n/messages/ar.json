@@ -165,11 +165,6 @@
       "fast": "ترجمة سريعة (رصيد واحد)",
       "precise": "ترجمة دقيقة (رصيدان)"
     },
-    "fontStyles": {
-      "comic": "كوميك",
-      "handwritten": "بخط اليد",
-      "print": "مطبوع"
-    },
     "draftLabel": "مسودة · {count} صفحات",
     "taskLabel": "مهمة {id}",
     "closeTask": "إغلاق {label}",
@@ -178,6 +173,7 @@
     "translateTo": "الترجمة إلى",
     "translateMode": "وضع الترجمة",
     "fontStyle": "نمط الخط",
+    "fontPreview": "معاينة",
     "downloadAll": "تحميل الكل",
     "submit": "إرسال الترجمة",
     "previewTitle": "معاينة الصور ({count} صور)",

@@ -165,11 +165,6 @@
       "fast": "แปลเร็ว (1 เครดิต)",
       "precise": "แปลแม่นยำ (2 เครดิต)"
     },
-    "fontStyles": {
-      "comic": "การ์ตูน",
-      "handwritten": "ลายมือ",
-      "print": "ตัวพิมพ์"
-    },
     "draftLabel": "ฉบับร่าง · {count} หน้า",
     "taskLabel": "งาน {id}",
     "closeTask": "ปิด {label}",
@@ -178,6 +173,7 @@
     "translateTo": "แปลเป็น",
     "translateMode": "โหมดการแปล",
     "fontStyle": "สไตล์ฟอนต์",
+    "fontPreview": "ตัวอย่าง",
     "downloadAll": "ดาวน์โหลดทั้งหมด",
     "submit": "ส่งงานแปล",
     "previewTitle": "ดูตัวอย่างรูป ({count} รูป)",

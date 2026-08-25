@@ -15,7 +15,6 @@ type Direction = 'auto' | 'horizontal' | 'vertical';
  * JSON 中 `render.font_name` 须使用下列字符串之一。
  */
 export const FONT_NAME_OPTIONS = [
-    'Auto',
     'Anime Ace',
     'Anime Ace 3.0',
     'Arial Unicode Regular',

@@ -165,11 +165,6 @@
       "fast": "Hızlı çeviri (1 kredi)",
       "precise": "Hassas çeviri (2 kredi)"
     },
-    "fontStyles": {
-      "comic": "Çizgi roman",
-      "handwritten": "El yazısı",
-      "print": "Baskı"
-    },
     "draftLabel": "Taslak · {count} sayfa",
     "taskLabel": "Görev {id}",
     "closeTask": "{label} kapat",
@@ -178,6 +173,7 @@
     "translateTo": "Şuna çevir",
     "translateMode": "Çeviri modu",
     "fontStyle": "Yazı tipi stili",
+    "fontPreview": "Önizleme",
     "downloadAll": "Tümünü indir",
     "submit": "Çeviriyi gönder",
     "previewTitle": "Görsel önizleme ({count} görsel)",

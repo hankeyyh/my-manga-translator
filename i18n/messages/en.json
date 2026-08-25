@@ -165,11 +165,6 @@
       "fast": "Fast translation (1 credit)",
       "precise": "Precise translation (2 credits)"
     },
-    "fontStyles": {
-      "comic": "Comic",
-      "handwritten": "Handwritten",
-      "print": "Print"
-    },
     "draftLabel": "Draft · {count} pages",
     "taskLabel": "Task {id}",
     "closeTask": "Close {label}",
@@ -178,6 +173,7 @@
     "translateTo": "Translate to",
     "translateMode": "Translation mode",
     "fontStyle": "Font style",
+    "fontPreview": "Preview",
     "downloadAll": "Download all",
     "submit": "Submit translation",
     "previewTitle": "Image preview ({count} images)",

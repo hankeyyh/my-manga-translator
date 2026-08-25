@@ -165,11 +165,6 @@
       "fast": "快速翻译 (1 credit)",
       "precise": "精确翻译 (2 credits)"
     },
-    "fontStyles": {
-      "comic": "漫画",
-      "handwritten": "手写",
-      "print": "印刷"
-    },
     "draftLabel": "草稿 · {count} 页",
     "taskLabel": "任务 {id}",
     "closeTask": "关闭{label}",
@@ -178,6 +173,7 @@
     "translateTo": "翻译为",
     "translateMode": "翻译模式",
     "fontStyle": "字体风格",
+    "fontPreview": "预览",
     "downloadAll": "下载全部",
     "submit": "提交翻译",
     "previewTitle": "图片预览（共 {count} 张）",

@@ -165,11 +165,6 @@
       "fast": "高速翻訳（1 クレジット）",
       "precise": "高精度翻訳（2 クレジット）"
     },
-    "fontStyles": {
-      "comic": "コミック",
-      "handwritten": "手書き",
-      "print": "活字"
-    },
     "draftLabel": "下書き · {count} ページ",
     "taskLabel": "タスク {id}",
     "closeTask": "{label} を閉じる",
@@ -178,6 +173,7 @@
     "translateTo": "翻訳先",
     "translateMode": "翻訳モード",
     "fontStyle": "フォントスタイル",
+    "fontPreview": "プレビュー",
     "downloadAll": "すべてダウンロード",
     "submit": "翻訳を開始",
     "previewTitle": "画像プレビュー（{count} 枚）",
