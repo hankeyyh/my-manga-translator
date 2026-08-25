@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Mabilis na pagsasalin (1 credit)",
-      "precise": "Tumpak na pagsasalin (2 credits)"
+      "precise": "Tumpak na pagsasalin (3 credits)"
     },
     "draftLabel": "Draft · {count} na pahina",
     "taskLabel": "Gawain {id}",

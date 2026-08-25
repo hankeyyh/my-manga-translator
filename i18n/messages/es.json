@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Traducción rápida (1 crédito)",
-      "precise": "Traducción precisa (2 créditos)"
+      "precise": "Traducción precisa (3 créditos)"
     },
     "draftLabel": "Borrador · {count} páginas",
     "taskLabel": "Tarea {id}",

@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "빠른 번역 (1 크레딧)",
-      "precise": "정밀 번역 (2 크레딧)"
+      "precise": "정밀 번역 (3 크레딧)"
     },
     "draftLabel": "초안 · {count}페이지",
     "taskLabel": "작업 {id}",

@@ -189,7 +189,7 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 
-    // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=2credits
+    // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=3credits
     async estimateCreditCost(imageLength: number, config: TranslationConfig): Promise<BizResult<number>> {
         const modelName = config.translator?.model_name;
         if (!modelName) {

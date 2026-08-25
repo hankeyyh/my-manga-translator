@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Fast translation (1 credit)",
-      "precise": "Precise translation (2 credits)"
+      "precise": "Precise translation (3 credits)"
     },
     "draftLabel": "Draft · {count} pages",
     "taskLabel": "Task {id}",

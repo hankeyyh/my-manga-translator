@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "快速翻譯 (1 credit)",
-      "precise": "精確翻譯 (2 credits)"
+      "precise": "精確翻譯 (3 credits)"
     },
     "draftLabel": "草稿 · {count} 頁",
     "taskLabel": "任務 {id}",

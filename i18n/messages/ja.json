@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "高速翻訳（1 クレジット）",
-      "precise": "高精度翻訳（2 クレジット）"
+      "precise": "高精度翻訳（3 クレジット）"
     },
     "draftLabel": "下書き · {count} ページ",
     "taskLabel": "タスク {id}",

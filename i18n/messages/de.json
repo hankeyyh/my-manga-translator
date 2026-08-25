@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Schnelle Übersetzung (1 Credit)",
-      "precise": "Präzise Übersetzung (2 Credits)"
+      "precise": "Präzise Übersetzung (3 Credits)"
     },
     "draftLabel": "Entwurf · {count} Seiten",
     "taskLabel": "Aufgabe {id}",

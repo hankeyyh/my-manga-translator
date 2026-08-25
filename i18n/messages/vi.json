@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Dịch nhanh (1 tín dụng)",
-      "precise": "Dịch chính xác (2 tín dụng)"
+      "precise": "Dịch chính xác (3 tín dụng)"
     },
     "draftLabel": "Nháp · {count} trang",
     "taskLabel": "Tác vụ {id}",

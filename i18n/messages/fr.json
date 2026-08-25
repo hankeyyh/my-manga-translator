@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "Traduction rapide (1 crédit)",
-      "precise": "Traduction précise (2 crédits)"
+      "precise": "Traduction précise (3 crédits)"
     },
     "draftLabel": "Brouillon · {count} pages",
     "taskLabel": "Tâche {id}",

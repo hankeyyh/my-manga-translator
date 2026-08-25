@@ -163,7 +163,7 @@
     },
     "modes": {
       "fast": "快速翻译 (1 credit)",
-      "precise": "精确翻译 (2 credits)"
+      "precise": "精确翻译 (3 credits)"
     },
     "draftLabel": "草稿 · {count} 页",
     "taskLabel": "任务 {id}",
