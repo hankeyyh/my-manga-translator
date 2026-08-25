@@ -94,8 +94,16 @@ export function ClientSiteHeader({ userInfo }: Props) {
                         <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/blogs">{tHeader("blog")}</Link>
                         </CcButton>
-                        <CcButton variant="ghost" size="sm">
-                            {tHeader("joinDiscord")}
+                        <CcButton variant="ghost" size="sm" asChild>
+                            <Link href="https://discord.gg/qwX9Ygrrg" target="_blank" rel="noopener noreferrer">
+                                <img
+                                    src="/discord.png"
+                                    alt=""
+                                    aria-hidden
+                                    className="size-3.5 dark:invert"
+                                />
+                                {tHeader("joinDiscord")}
+                            </Link>
                         </CcButton>
                     </nav>
                     <div className="ms-auto flex items-center gap-2">
