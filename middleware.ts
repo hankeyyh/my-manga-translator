@@ -122,6 +122,8 @@ export async function updateSession(request: NextRequest) {
         path.startsWith("/login") ||
         path.startsWith("/auth") ||
         path.startsWith("/api") ||
+        path.startsWith("/legal") ||
+        path.startsWith("/blogs") ||
         path.startsWith("/design");
 
     if (!user && !isPublicPath && !isI18nRedirect) {
