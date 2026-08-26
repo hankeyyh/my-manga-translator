@@ -224,11 +224,11 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
         ocr: {
             ocr: "48px",
         },
-        upscale: {
-            upscaler: "esrgan",
-            upscale_ratio: 2,
-            revert_upscaling: true,
-        },
+        // upscale: {
+        //     upscaler: "esrgan",
+        //     upscale_ratio: 2,
+        //     revert_upscaling: true,
+        // },
     };
 }
 
