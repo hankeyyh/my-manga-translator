@@ -200,8 +200,8 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
         company = "deepseek";
         modelName = "deepseek-v4-flash";
     } else {
-        company = "chatgpt";
-        modelName = "gpt-5.5";
+        company = "deepl";
+        modelName = "deepl";
     }
 
     return {
