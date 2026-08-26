@@ -48,10 +48,6 @@ export function replaceFileExtension(filename: string, ext: string): string {
 
 const WEBP_QUALITY = 0.9;
 
-function isWebpFile(file: File): boolean {
-    return file.type === "image/webp" || getFileExtension(file) === "webp";
-}
-
 async function encodeBitmapToWebp(bitmap: ImageBitmap, quality: number): Promise<Blob> {
     if (typeof OffscreenCanvas !== "undefined") {
         const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
@@ -79,11 +75,8 @@ async function encodeBitmapToWebp(bitmap: ImageBitmap, quality: number): Promise
     });
 }
 
-/** 将图片转为 WebP File；已是 webp 则原样返回 */
+/** 将图片转为 WebP File，按 quality 重新编码（含原始已是 webp 的文件） */
 export async function toWebpFile(file: File, quality = WEBP_QUALITY): Promise<File> {
-    if (isWebpFile(file)) {
-        return file;
-    }
     let bitmap: ImageBitmap;
     try {
         bitmap = await createImageBitmap(file);
