@@ -46,6 +46,63 @@ export function replaceFileExtension(filename: string, ext: string): string {
     return `${base}.${normalized}`;
 }
 
+const WEBP_QUALITY = 0.9;
+
+function isWebpFile(file: File): boolean {
+    return file.type === "image/webp" || getFileExtension(file) === "webp";
+}
+
+async function encodeBitmapToWebp(bitmap: ImageBitmap, quality: number): Promise<Blob> {
+    if (typeof OffscreenCanvas !== "undefined") {
+        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+            throw new Error("Failed to get canvas context");
+        }
+        ctx.drawImage(bitmap, 0, 0);
+        return canvas.convertToBlob({ type: "image/webp", quality });
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+        throw new Error("Failed to get canvas context");
+    }
+    ctx.drawImage(bitmap, 0, 0);
+    return new Promise((resolve, reject) => {
+        canvas.toBlob(
+            (blob) => (blob ? resolve(blob) : reject(new Error("Failed to encode webp"))),
+            "image/webp",
+            quality,
+        );
+    });
+}
+
+/** 将图片转为 WebP File；已是 webp 则原样返回 */
+export async function toWebpFile(file: File, quality = WEBP_QUALITY): Promise<File> {
+    if (isWebpFile(file)) {
+        return file;
+    }
+    let bitmap: ImageBitmap;
+    try {
+        bitmap = await createImageBitmap(file);
+    } catch {
+        throw new Error(`Failed to convert ${file.name} to webp`);
+    }
+    try {
+        const blob = await encodeBitmapToWebp(bitmap, quality);
+        return new File([blob], replaceFileExtension(file.name, "webp"), {
+            type: "image/webp",
+            lastModified: file.lastModified,
+        });
+    } catch {
+        throw new Error(`Failed to convert ${file.name} to webp`);
+    } finally {
+        bitmap.close();
+    }
+}
+
 /** 对 File 原始字节计算 SHA-256 hex 字符串 */
 export async function computeFileHash(file: File): Promise<string> {
     const buffer = await file.arrayBuffer();

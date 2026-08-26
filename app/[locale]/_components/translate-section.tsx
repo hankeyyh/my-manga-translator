@@ -50,6 +50,7 @@ import { LangOption, WorkspaceTask } from "@/types/web/workspace-task";
 import { SUPPORTED_LANGS, type SupportedLangCode } from "@/types/common";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { toWebpFile } from "@/biz/utils/file";
 
 const DEFAULT_LANG_CODE: SupportedLangCode = "ENG";
 const MODE_FAST = "fast";
@@ -544,10 +545,11 @@ export function TranslateSection() {
         try {
             const conf = buildTranslationConfig(task.targetLang, task.translateMode, task.fontStyle);
             const formData = new FormData();
-            for (const page of task.pages) {
-                if (page.originalFile) {
-                    formData.append("images", page.originalFile);
-                }
+            const webpFiles = await Promise.all(
+                task.pages.filter((page) => page.originalFile).map((page) => toWebpFile(page.originalFile!)),
+            );
+            for (const webpFile of webpFiles) {
+                formData.append("images", webpFile);
             }
             formData.set("config", JSON.stringify(conf));
             const response = await fetch("/api/translate/submit", {
