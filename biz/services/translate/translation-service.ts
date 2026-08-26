@@ -13,6 +13,7 @@ import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-conf
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
 import { packZip } from "@/biz/utils/pack";
+import { extensionFromMime, extensionFromPath, replaceFileExtension } from "@/biz/utils/file";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export type TranslationHistoryRange = "1d" | "7d" | "1m" | "all";
@@ -607,7 +608,10 @@ export class TranslationService {
                 console.error(`downloadResultZip, storage.downloadFile fail, error: ${downloadResult.error.message}`);
                 continue;
             }
-            zippable.push({ fileName: image.filename, blob: downloadResult.data! });
+            const blob = downloadResult.data!;
+            // 下载文件=原始文件名.翻译文件后缀
+            const ext = extensionFromPath(image.resultImagePath) || extensionFromMime(blob.type) || "png";
+            zippable.push({fileName: replaceFileExtension(image.filename, ext), blob});
         }
         // 打包zip
         const result = await packZip(zippable);
