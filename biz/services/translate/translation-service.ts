@@ -610,7 +610,7 @@ export class TranslationService {
             }
             const blob = downloadResult.data!;
             // 下载文件=原始文件名.翻译文件后缀
-            const ext = extensionFromPath(image.resultImagePath) || extensionFromMime(blob.type) || "png";
+            const ext = extensionFromPath(image.resultImagePath) || extensionFromMime(blob.type) || "webp";
             zippable.push({fileName: replaceFileExtension(image.filename, ext), blob});
         }
         // 打包zip
@@ -659,7 +659,7 @@ export class TranslationService {
         };
         const today = new Date().toISOString().slice(0, 10);
         for (const image of validImages) {
-            const finalFilePath = `${task.userId}/${today}/output/${task.id}_${image.imageIndex}.png`;
+            const finalFilePath = `${task.userId}/${today}/output/${task.id}_${image.imageIndex}.webp`;
             config.save.supabase_storage_paths?.push(finalFilePath);
         }
         config.image_identifiers = validImageIds;

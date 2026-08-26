@@ -177,7 +177,7 @@ export interface SaveConfig {
     save_to?: SavePlace;
     /** save_to 为 supabase_storage 时指定 bucket */
     supabase_storage_bucket?: string | null;
-    /** save_to 为 supabase_storage 时指定路径: folder/subfolder/filename.png */
+    /** save_to 为 supabase_storage 时指定路径: folder/subfolder/filename.webp */
     supabase_storage_path?: string | null;
     /** save_to 为 supabase_storage 时, 批量翻译指定路径 */
     supabase_storage_paths?: string[] | null;

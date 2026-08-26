@@ -166,7 +166,7 @@ export class TranslationCacheService {
                 imageHash,
                 configHash,
                 resultBlob,
-                mimeType: resultBlob.type || "image/png",
+                mimeType: resultBlob.type || "image/webp",
                 byteSize: resultBlob.size,
                 createdAt: Date.now(),
                 lastAccessedAt: Date.now(),

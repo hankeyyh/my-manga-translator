@@ -42,14 +42,14 @@ export class TranslationStorageRepository {
    */
     async uploadResultImage(userId: string, taskId: string, imageIdx: number, resultBlob: Blob): Promise<Result<string>> {
         const today = new Date().toISOString().slice(0, 10);
-        const fileName = `${userId}/${today}/output/${taskId}_${imageIdx}.png`;
+        const fileName = `${userId}/${today}/output/${taskId}_${imageIdx}.webp`;
 
         const { data, error } = await this.supabase.storage
             .from(this.bucketName)
             .upload(fileName, resultBlob, {
                 cacheControl: '3600',
                 upsert: false,
-                contentType: 'image/png',
+                contentType: 'image/webp',
             });
 
         if (error) {
