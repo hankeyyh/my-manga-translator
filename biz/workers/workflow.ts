@@ -1,4 +1,4 @@
-import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from 'cloudflare:workers';
+import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent, WorkflowStepConfig } from 'cloudflare:workers';
 import { TranslationService } from '../services/translate/translation-service';
 import { createServiceRoleClient } from '../utils/supabase/admin';
 import { UserRepository } from '../repositories/auth/user-repository';
@@ -35,6 +35,13 @@ interface RetryWorkflowBody {
     imageIds: string[];
 }
 
+const NO_RETRY: WorkflowStepConfig = {
+    retries: {
+        limit: 0,
+        delay: 0,
+    },
+};
+
 export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
     async run(event: WorkflowEvent<WorkflowParams>, step: WorkflowStep) {
         const { userId, taskId, imageIds } = event.payload;
@@ -54,7 +61,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
         );
 
         // step1: 获取图片
-        const images = await step.do("get_pending_images_for_processing", async () => {
+        const images = await step.do("get_pending_images_for_processing", NO_RETRY, async () => {
             const result = await translationService.batchGetPendingImageForProcessing(imageIds);
             if (result.error) {
                 throw result.error;
@@ -69,7 +76,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
         // step2: 获取task
         let task;
         try {
-            task = await step.do("get_task", async () => {
+            task = await step.do("get_task", NO_RETRY, async () => {
                 const result = await translationService.getTask(taskId);
                 if (result.error) {
                     throw result.error;
@@ -78,7 +85,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
             });
         } catch (error) {
             const errMessage = error instanceof Error ? error.message : String(error);
-            await step.do("handle_get_task_failed", async () => {
+            await step.do("handle_get_task_failed", NO_RETRY, async () => {
                 // 标记image status=failed
                 const result = await translationService.markImagesFailed(
                     claimedImageIds,
@@ -100,7 +107,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
         }
 
         // step3: download + submit + listen
-        const { successImageIds, failedImageIds } = await step.do("translate_batch_pipeline", async () => {
+        const { successImageIds, failedImageIds } = await step.do("translate_batch_pipeline", NO_RETRY, async () => {
             return await translationService.batchTranslatePipeline(task, images);
         });
         console.debug(`successImageIds: ${successImageIds}`);
@@ -108,7 +115,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
 
         // step4: capture or refund credits
         if (successImageIds.length) {
-            await step.do("capture_credits", async () => {
+            await step.do("capture_credits", NO_RETRY, async () => {
                 const result = await creditService.batchCaptureImageCredits(userId, successImageIds);
                 if (result.error) {
                     console.error("capture_credits failed: ", result.error);
@@ -118,7 +125,7 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
             });
         }
         if (failedImageIds.length) {
-            await step.do("refund_credits", async () => {
+            await step.do("refund_credits", NO_RETRY, async () => {
                 const result = await creditService.batchRefundImageCredits(userId, failedImageIds);
                 if (result.error) {
                     console.error("refund_credits failed: ", result.error);
@@ -144,10 +151,6 @@ function chunkImageIds(imageIds: string[], size: number): string[][] {
     }
     return chunks;
 }
-
-/**
- * TODO chatgpt ratelimit 无法中止重试
- */
 
 export default {
     async fetch(req: Request, env: Env): Promise<Response> {

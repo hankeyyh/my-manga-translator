@@ -675,32 +675,44 @@ export class TranslationService {
         const reader = submitResult.data!;
 
         // 3. 监听事件
-        for await (const event of this.parseTranslationStream(reader)) {
-            switch (event.type) {
-                case 'image_completed':
-                    const successResult = await this.markImageSuccess(event.imageId, event.outputPath);
-                    if (!successResult.error) {
-                        successImageIds.push(event.imageId);
+        try {
+            for await (const event of this.parseTranslationStream(reader)) {
+                switch (event.type) {
+                    case 'image_completed':
+                        const successResult = await this.markImageSuccess(event.imageId, event.outputPath);
+                        if (!successResult.error) {
+                            successImageIds.push(event.imageId);
+                        }
+                        break;
+                    case 'image_failed':
+                        const failResult = await this.markImagesFailed([event.imageId], event.error);
+                        if (failResult.data) {
+                            failedImageIds.push(...failResult.data);
+                        }
+                        break;
+                    case 'batch_error': {
+                        // 函数仅会将 processing 的图片标记为失败
+                        console.error("event:batch_error: ", event.error);
+                        const batchErrResult = await this.markImagesFailed(validImageIds, event.error);
+                        if (batchErrResult.data) {
+                            failedImageIds.push(...batchErrResult.data);
+                        }
+                        break;
                     }
-                    break;
-                case 'image_failed':
-                    const failResult = await this.markImagesFailed([event.imageId], event.error);
-                    if (failResult.data) {
-                        failedImageIds.push(...failResult.data);
-                    }
-                    break;
-                case 'batch_error': {
-                    // 函数仅会将 processing 的图片标记为失败
-                    console.error("event:batch_error: ", event.error);
-                    const batchErrResult = await this.markImagesFailed(validImageIds, event.error);
-                    if (batchErrResult.data) {
-                        failedImageIds.push(...batchErrResult.data);
-                    }
-                    break;
+                    case 'batch_completed':
+                        console.debug("event:batch_completed!");
+                        break;
                 }
-                case 'batch_completed':
-                    console.debug("event:batch_completed!");
-                    break;
+            }
+        } catch (error) {
+            const errMessage = error instanceof Error ? error.message : String(error);
+            console.error("batchTranslatePipeline stream interrupted: ", errMessage);
+            const remainingIds = validImageIds.filter(
+                (id) => !successImageIds.includes(id) && !failedImageIds.includes(id),
+            );
+            const remainingResult = await this.markImagesFailed(remainingIds, errMessage);
+            if (remainingResult.data) {
+                failedImageIds.push(...remainingResult.data);
             }
         }
         return { successImageIds, failedImageIds };
