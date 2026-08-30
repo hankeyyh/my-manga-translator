@@ -169,11 +169,11 @@ export interface OcrConfig {
 }
 /** 与 manga-image-translator `SavePlace` 对齐的保存目标 */
 
-type SavePlace = 'local' | 'supabase_storage';
+type SavePlace = 'local' | 'supabase_storage' | 'none';
 /** 与 manga-image-translator `SaveConfig` 对齐的保存选项 */
 
 export interface SaveConfig {
-    /** 保存到本地或其它存储；默认 local */
+    /** 保存到本地 / supabase / none（不落盘，压测用）；默认 local */
     save_to?: SavePlace;
     /** save_to 为 supabase_storage 时指定 bucket */
     supabase_storage_bucket?: string | null;
