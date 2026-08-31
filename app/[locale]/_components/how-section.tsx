@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Languages, Upload } from "lucide-react";
 import { CcSectionHeading } from "@/design/design-system/components";
 import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
@@ -11,48 +10,48 @@ const STEPS = [
         key: "upload",
         step: "01",
         videoSrc: "/how-to-use/01-upload.min.mp4",
-        icon: Upload,
+        coverSrc: "/how-to-use/01-upload-cover.jpg",
     },
     {
         key: "language",
         step: "02",
         videoSrc: "/how-to-use/02-language.min.mp4",
-        icon: Languages,
+        coverSrc: "/how-to-use/02-language-cover.jpg",
     },
     {
         key: "download",
         step: "03",
         videoSrc: "/how-to-use/03-result.min.mp4",
-        icon: Download,
+        coverSrc: "/how-to-use/03-result-cover.jpg",
     },
 ] as const;
 
 function HowStepMedia({
     videoSrc,
-    title,
+    coverSrc,
     fallback,
-    icon: Icon,
 }: {
     videoSrc: string;
-    title: string;
+    coverSrc: string;
     fallback: string;
-    icon: typeof Upload;
 }) {
     const [failed, setFailed] = useState(false);
 
     return (
         <div className="w-full overflow-hidden rounded-2xl border border-cc-border/50 bg-cc-surface-white shadow-[var(--cc-shadow-card)] md:w-[58%]">
             {failed ? (
-                <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 bg-cc-surface-subtle">
-                    <Icon className="size-8 text-cc-brand-primary" aria-hidden />
-                    <p className="text-sm text-cc-text-muted">{fallback}</p>
-                </div>
+                <img
+                    src={coverSrc}
+                    alt={fallback}
+                    className="aspect-[16/10] w-full object-cover"
+                />
             ) : (
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
+                    poster={coverSrc}
                     className="aspect-[16/10] w-full object-cover"
                     onError={() => setFailed(true)}
                 >
@@ -94,9 +93,8 @@ export function HowSection() {
                                 </div>
                                 <HowStepMedia
                                     videoSrc={item.videoSrc}
-                                    title={title}
+                                    coverSrc={item.coverSrc}
                                     fallback={t("demoFallback", { title })}
-                                    icon={item.icon}
                                 />
                             </div>
                         );
