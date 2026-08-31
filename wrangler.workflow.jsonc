@@ -14,7 +14,7 @@
             "vars": {
                 "NEXT_PUBLIC_SUPABASE_URL": "http://127.0.0.1:64321",
                 "MANGA_IMAGE_TRANSLATOR_BASE_URL": "http://127.0.0.1:8000",
-                "CONCURRENT_IMAGES": 2,
+                "TRANSLATE_BATCH_SIZE": 4,
                 "FORCE_TRANSLATE_FAIL": 0
             },
             "workflows": [
@@ -29,7 +29,7 @@
             "vars": {
                 "NEXT_PUBLIC_SUPABASE_URL": "https://hdgbsqylotetyjfhaykl.supabase.co",
                 "MANGA_IMAGE_TRANSLATOR_BASE_URL": "https://hankeyyh--manga-translator-web.modal.run",
-                "CONCURRENT_IMAGES": 2
+                "TRANSLATE_BATCH_SIZE": 4
             },
             "workflows": [
                 {

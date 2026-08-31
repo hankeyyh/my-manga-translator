@@ -14,7 +14,7 @@ import { CreditService } from '../services/credit/credit-service';
 // Environment bindings
 export interface Env {
     MY_WORKFLOW: Workflow<WorkflowParams>;
-    CONCURRENT_IMAGES: string;
+    TRANSLATE_BATCH_SIZE: string;
 }
 
 // Workflow related types
@@ -181,7 +181,7 @@ export default {
                 return Response.json({ success: false, message: "No images found" }, { status: 400 });
             }
 
-            const batchSize = Math.max(1, parseInt(env.CONCURRENT_IMAGES, 10) || 1);
+            const batchSize = Math.max(1, parseInt(env.TRANSLATE_BATCH_SIZE, 10) || 1);
             const imageIdBatches = chunkImageIds(
                 images.map((image) => image.id),
                 batchSize,
@@ -229,7 +229,7 @@ export default {
                 }, { status: 200 });
             }
             // 发起workflow
-            const batchSize = Math.max(1, parseInt(env.CONCURRENT_IMAGES, 10) || 1);
+            const batchSize = Math.max(1, parseInt(env.TRANSLATE_BATCH_SIZE, 10) || 1);
             const imageIdBatches = chunkImageIds(prepareData.newly_prepared, batchSize);
             const instances = await env.MY_WORKFLOW.createBatch(
                 imageIdBatches.map((imageIds, index) => ({
