@@ -40,8 +40,15 @@ import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/[locale]/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
-import { FONT_NAME_OPTIONS, TranslationConfig, Translator, type FontName } from "@/types/do/translation-config";
-import { FONT_PREVIEW_SAMPLE, PREVIEW_FONT_FAMILY, PREVIEW_FONT_VARIABLE_CLASS } from "@/app/fonts/preview-fonts";
+import { TranslationConfig, Translator } from "@/types/do/translation-config";
+import {
+    FONT_CONFIG,
+    getScriptFonts,
+    getScriptForLocale,
+    resolveFontId,
+    type FontId,
+} from "@/app/fonts/config";
+import { PREVIEW_FONT_FAMILY, PREVIEW_FONT_VARIABLE } from "@/app/fonts/preview-fonts";
 import { toast } from "sonner";
 import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
@@ -56,7 +63,7 @@ const DEFAULT_LANG_CODE: SupportedLangCode = "ENG";
 const MODE_FAST = "fast";
 const MODE_PRECISE = "precise";
 const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
-const DEFAULT_FONT_STYLE: FontName = "Anime Ace 3.0";
+const DEFAULT_FONT_STYLE: FontId = resolveFontId(DEFAULT_LANG_CODE);
 const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
@@ -75,10 +82,8 @@ function asTranslateMode(mode: string): TranslateMode {
         : SUPPORTED_MODES[0];
 }
 
-function asFontStyle(style: string): FontName {
-    return (FONT_NAME_OPTIONS as readonly string[]).includes(style)
-        ? (style as FontName)
-        : DEFAULT_FONT_STYLE;
+function asFontStyle(style: string, langCode: string): FontId {
+    return resolveFontId(langCode, style);
 }
 
 const WORKSPACE_BG = "bg-[var(--cc-surface-page)]";
@@ -205,6 +210,9 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
         modelName = "deepl";
     }
 
+    const script = getScriptForLocale(selLang.code);
+    const fontId = asFontStyle(selFontStyle, selLang.code);
+
     return {
         translator: {
             translator: company,
@@ -212,9 +220,10 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
             target_lang: selLang.code,
         },
         render: {
-            font_name: asFontStyle(selFontStyle),
+            font_name: FONT_CONFIG.fonts[fontId].renderName,
             fit_to_box: true,
-            rtl: selLang.code === "ARA",
+            rtl: script.writing.rtl,
+            no_hyphenation: !script.writing.hyphenation,
         },
         detector: {
             detector: "ctd",
@@ -317,6 +326,12 @@ export function TranslateSection() {
     const pages = activeTask?.pages ?? [];
     const configLocked = activeKind !== "draft";
     const activeIndex = activeTask ? tasks.findIndex((task) => task.localId === activeTask.localId) : -1;
+    const activeLangCode = activeTask ? asLangCode(activeTask.targetLang.code) : DEFAULT_LANG_CODE;
+    const activeScript = getScriptForLocale(activeLangCode);
+    const activeFonts = getScriptFonts(activeScript);
+    const activeFontId = activeTask
+        ? asFontStyle(activeTask.fontStyle, activeLangCode)
+        : DEFAULT_FONT_STYLE;
 
     useEffect(() => {
         tasksRef.current = tasks;
@@ -873,6 +888,7 @@ export function TranslateSection() {
                                                         onSelect={() => updateTask(activeTask.localId, (task) => ({
                                                             ...task,
                                                             targetLang: { code, label: code },
+                                                            fontStyle: resolveFontId(code, task.fontStyle),
                                                         }))}
                                                     >
                                                         {t(`languages.${code}`)}
@@ -908,26 +924,41 @@ export function TranslateSection() {
                                         <CcLabel>{t("fontStyle")}</CcLabel>
                                         <DropdownMenu modal={false}>
                                             <DropdownMenuTrigger asChild>
-                                                <CcSelectTrigger disabled={configLocked}>
-                                                    {asFontStyle(activeTask.fontStyle)}
+                                                <CcSelectTrigger
+                                                    disabled={configLocked}
+                                                    className={PREVIEW_FONT_VARIABLE[activeFontId]}
+                                                >
+                                                    <span className="truncate">
+                                                        {FONT_CONFIG.fonts[activeFontId].name}
+                                                    </span>
+                                                    <span
+                                                        className="shrink-0 rounded-md border border-[var(--cc-border-light)] bg-[var(--cc-surface-white)] px-2.5 py-1 text-lg font-normal leading-none"
+                                                        dir={activeScript.writing.rtl ? "rtl" : "ltr"}
+                                                        style={{ fontFamily: PREVIEW_FONT_FAMILY[activeFontId] }}
+                                                    >
+                                                        {activeScript.previewSample}
+                                                    </span>
                                                 </CcSelectTrigger>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
-                                                className={cn(PREVIEW_FONT_VARIABLE_CLASS, "w-max min-w-0 overflow-hidden p-0")}
+                                                className={cn(
+                                                    activeFonts.map((font) => PREVIEW_FONT_VARIABLE[font.id]).join(" "),
+                                                    "w-max min-w-0 overflow-hidden p-0",
+                                                )}
                                                 align="start"
                                             >
-                                                <div className="grid grid-cols-[max-content_max-content] divide-y divide-[var(--cc-border-light)]">
-                                                    <div className="col-span-2 grid grid-cols-subgrid bg-[var(--cc-surface-subtle)] text-xs font-medium text-[var(--cc-text-muted)]">
-                                                        <span className="border-e border-[var(--cc-border-light)] px-3 py-2">
+                                                <div className="grid grid-cols-[max-content_minmax(10rem,max-content)] divide-y divide-[var(--cc-border-light)]">
+                                                    <div className="col-span-2 grid grid-cols-subgrid bg-[var(--cc-surface-subtle)] text-sm font-medium text-[var(--cc-text-muted)]">
+                                                        <span className="border-e border-[var(--cc-border-light)] px-4 py-2.5">
                                                             {t("fontStyle")}
                                                         </span>
-                                                        <span className="px-3 py-2">{t("fontPreview")}</span>
+                                                        <span className="px-4 py-2.5">{t("fontPreview")}</span>
                                                     </div>
-                                                    {FONT_NAME_OPTIONS.map((style) => {
-                                                        const isCurrent = asFontStyle(activeTask.fontStyle) === style;
+                                                    {activeFonts.map((font) => {
+                                                        const isCurrent = activeFontId === font.id;
                                                         return (
                                                             <DropdownMenuItem
-                                                                key={style}
+                                                                key={font.id}
                                                                 aria-current={isCurrent ? "true" : undefined}
                                                                 className={cn(
                                                                     "col-span-2 grid grid-cols-subgrid gap-0 rounded-none p-0 text-[var(--cc-text-primary)] focus:bg-[var(--cc-brand-tint)] focus:text-[var(--cc-text-primary)]",
@@ -936,20 +967,21 @@ export function TranslateSection() {
                                                                 )}
                                                                 onSelect={() => updateTask(activeTask.localId, (task) => ({
                                                                     ...task,
-                                                                    fontStyle: style,
+                                                                    fontStyle: font.id,
                                                                 }))}
                                                             >
-                                                                <span className="flex items-center gap-1.5 border-e border-[var(--cc-border-light)] px-3 py-2.5">
-                                                                    <span>{style}</span>
+                                                                <span className="flex items-center gap-2 border-e border-[var(--cc-border-light)] px-4 py-3.5 text-sm">
+                                                                    <span>{font.name}</span>
                                                                     {isCurrent ? (
-                                                                        <Check className="size-3.5 text-[var(--cc-brand-primary)]" strokeWidth={3} />
+                                                                        <Check className="size-4 text-[var(--cc-brand-primary)]" strokeWidth={3} />
                                                                     ) : null}
                                                                 </span>
                                                                 <span
-                                                                    className="px-3 py-2.5 text-base tracking-wide"
-                                                                    style={{ fontFamily: PREVIEW_FONT_FAMILY[style] }}
+                                                                    className="px-5 py-3.5 text-2xl leading-none tracking-wide"
+                                                                    dir={activeScript.writing.rtl ? "rtl" : "ltr"}
+                                                                    style={{ fontFamily: PREVIEW_FONT_FAMILY[font.id] }}
                                                                 >
-                                                                    {FONT_PREVIEW_SAMPLE}
+                                                                    {activeScript.previewSample}
                                                                 </span>
                                                             </DropdownMenuItem>
                                                         );

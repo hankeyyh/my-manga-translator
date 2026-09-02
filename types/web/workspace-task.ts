@@ -1,4 +1,4 @@
-import { FontName } from "../do/translation-config";
+import type { FontId } from "@/app/fonts/config";
 import { MangaPage } from "./manga-page";
 
 export type LangOption = { code: string; label: string; };
@@ -9,7 +9,7 @@ export type WorkspaceTask = {
     pages: MangaPage[];
     targetLang: LangOption;
     translateMode: string;
-    fontStyle: FontName;
+    fontStyle: FontId;
     submitLoading: boolean;
     retryLoading: boolean;
     showTranslated: boolean;

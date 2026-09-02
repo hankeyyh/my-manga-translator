@@ -13,15 +13,15 @@ export const CcSelectTrigger = React.forwardRef<HTMLButtonElement, CcSelectTrigg
             <button
                 ref={ref}
                 className={cn(
-                    "flex h-auto w-full items-center justify-between rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] px-4 py-3 font-body font-medium text-[var(--cc-text-primary)] transition-colors hover:border-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)] disabled:cursor-not-allowed disabled:opacity-50",
+                    "flex h-auto w-full items-center justify-between gap-2 rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] px-4 py-3 font-body font-medium text-[var(--cc-text-primary)] transition-colors hover:border-[var(--cc-brand-primary)] hover:bg-[var(--cc-brand-tint)] disabled:cursor-not-allowed disabled:opacity-50",
                     className,
                 )}
                 type="button"
                 aria-label={label}
                 {...props}
             >
-                <span>{children}</span>
-                <ChevronDown className="size-5 text-[var(--cc-text-muted)]" />
+                <span className="flex min-w-0 flex-1 items-center justify-between gap-2">{children}</span>
+                <ChevronDown className="size-5 shrink-0 text-[var(--cc-text-muted)]" />
             </button>
         );
     },

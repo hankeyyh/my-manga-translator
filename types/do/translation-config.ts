@@ -11,17 +11,9 @@ type Alignment = 'auto' | 'left' | 'center' | 'right';
 type Direction = 'auto' | 'horizontal' | 'vertical';
 
 /**
- * 与 manga-image-translator `FONT_NAME_PATH_MAP` / `RenderConfig.font_name` 对齐的预设字体名。
- * JSON 中 `render.font_name` 须使用下列字符串之一。
+ * 与 `FONT_CONFIG.fonts[].renderName` / 后端 `FONT_NAME_PATH_MAP` 对齐的字体名。
  */
-export const FONT_NAME_OPTIONS = [
-    'Anime Ace',
-    'Anime Ace 3.0',
-    'Arial Unicode Regular',
-    'Comic Shanns 2',
-] as const;
-
-export type FontName = (typeof FONT_NAME_OPTIONS)[number];
+export type FontName = string;
 
 /** 与 manga-image-translator `UpscaleConfig` 对齐的放大选项 */
 
