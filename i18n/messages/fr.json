@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Fermer l’aperçu",
     "prev": "Image précédente, ou appuyez sur la flèche gauche",
-    "next": "Image suivante, ou appuyez sur la flèche droite"
+    "next": "Image suivante, ou appuyez sur la flèche droite",
+    "zoomIn": "Agrandir",
+    "zoomOut": "Réduire"
   },
   "pricing": {
     "title": "Tarifs",

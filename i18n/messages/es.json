@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Cerrar vista previa",
     "prev": "Imagen anterior, o pulsa la flecha izquierda",
-    "next": "Imagen siguiente, o pulsa la flecha derecha"
+    "next": "Imagen siguiente, o pulsa la flecha derecha",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar"
   },
   "pricing": {
     "title": "Precios",

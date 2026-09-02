@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "關閉預覽",
     "prev": "上一張，或按左方向鍵",
-    "next": "下一張，或按右方向鍵"
+    "next": "下一張，或按右方向鍵",
+    "zoomIn": "放大",
+    "zoomOut": "縮小"
   },
   "pricing": {
     "title": "價格",

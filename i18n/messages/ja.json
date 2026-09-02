@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "プレビューを閉じる",
     "prev": "前の画像、または左矢印キー",
-    "next": "次の画像、または右矢印キー"
+    "next": "次の画像、または右矢印キー",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小"
   },
   "pricing": {
     "title": "料金",

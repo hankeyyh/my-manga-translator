@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Isara ang preview",
     "prev": "Nakaraang larawan, o pindutin ang left arrow",
-    "next": "Susunod na larawan, o pindutin ang right arrow"
+    "next": "Susunod na larawan, o pindutin ang right arrow",
+    "zoomIn": "Palakihin",
+    "zoomOut": "Paliitin"
   },
   "pricing": {
     "title": "Presyo",

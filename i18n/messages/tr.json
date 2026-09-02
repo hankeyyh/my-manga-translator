@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Önizlemeyi kapat",
     "prev": "Önceki görsel veya sol ok tuşu",
-    "next": "Sonraki görsel veya sağ ok tuşu"
+    "next": "Sonraki görsel veya sağ ok tuşu",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır"
   },
   "pricing": {
     "title": "Fiyatlandırma",

@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Vorschau schließen",
     "prev": "Vorheriges Bild oder Pfeil nach links",
-    "next": "Nächstes Bild oder Pfeil nach rechts"
+    "next": "Nächstes Bild oder Pfeil nach rechts",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern"
   },
   "pricing": {
     "title": "Preise",

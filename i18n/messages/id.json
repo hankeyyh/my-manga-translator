@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Tutup pratinjau",
     "prev": "Gambar sebelumnya, atau tekan panah kiri",
-    "next": "Gambar berikutnya, atau tekan panah kanan"
+    "next": "Gambar berikutnya, atau tekan panah kanan",
+    "zoomIn": "Perbesar",
+    "zoomOut": "Perkecil"
   },
   "pricing": {
     "title": "Harga",

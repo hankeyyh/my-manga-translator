@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Đóng xem trước",
     "prev": "Ảnh trước, hoặc nhấn mũi tên trái",
-    "next": "Ảnh sau, hoặc nhấn mũi tên phải"
+    "next": "Ảnh sau, hoặc nhấn mũi tên phải",
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ"
   },
   "pricing": {
     "title": "Bảng giá",

@@ -207,7 +207,9 @@
   "imagePreview": {
     "close": "Close preview",
     "prev": "Previous image, or press the left arrow key",
-    "next": "Next image, or press the right arrow key"
+    "next": "Next image, or press the right arrow key",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out"
   },
   "pricing": {
     "title": "Pricing",
