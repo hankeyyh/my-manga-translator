@@ -142,6 +142,10 @@ export const FONT_CONFIG = {
             name: "QTS Manga",
             renderName: "QTS Manga",
         },
+        "msyh": {
+            name: "Microsoft YaHei",
+            renderName: "Microsoft YaHei",
+        },
     },
     scripts: [
         {
@@ -174,6 +178,7 @@ export const FONT_CONFIG = {
                 "bangers",
                 "komika-slim",
                 "caveat",
+                "msyh",
             ],
             previewSample: "MANGA",
             writing: {
@@ -192,6 +197,7 @@ export const FONT_CONFIG = {
             fonts: [
                 "noto-sans",
                 "inter",
+                "msyh",
             ],
             previewSample: "Манга",
             writing: {
@@ -211,6 +217,7 @@ export const FONT_CONFIG = {
                 "long-cang",
                 "ma-shan-zheng",
                 "genei-late-go-n",
+                "msyh",
             ],
             previewSample: "漫画",
             writing: {
@@ -228,6 +235,7 @@ export const FONT_CONFIG = {
                 "noto-sans-tc",
                 "genei-late-go-n",
                 "lxgw-wenkai-tc",
+                "msyh",
             ],
             previewSample: "漫畫",
             writing: {
@@ -247,6 +255,7 @@ export const FONT_CONFIG = {
                 "genei-antique",
                 "mplus-rounded-1c",
                 "zen-kurenaido",
+                "msyh",
             ],
             previewSample: "マンガ",
             writing: {

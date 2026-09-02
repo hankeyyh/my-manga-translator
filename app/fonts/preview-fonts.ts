@@ -211,6 +211,13 @@ const qtsManga = localFont({
     preload: false,
 });
 
+const msyh = localFont({
+    src: "./woff2/msyh.woff2",
+    variable: "--font-preview-msyh",
+    display: "swap",
+    preload: false,
+});
+
 const PREVIEW_FONTS = {
     "anime-ace-3": animeAce3,
     "comic-shanns-2": comicShanns2,
@@ -242,6 +249,7 @@ const PREVIEW_FONTS = {
     "playpen-sans-thai": playpenSansThai,
     "noto-sans-arabic": notoSansArabic,
     "qts-manga": qtsManga,
+    "msyh": msyh,
 } as const satisfies Record<FontId, typeof animeAce3>;
 
 export const PREVIEW_FONT_VARIABLE = Object.fromEntries(
