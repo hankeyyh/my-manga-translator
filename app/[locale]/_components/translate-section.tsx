@@ -320,8 +320,10 @@ export function TranslateSection() {
     const [closeConfirm, setCloseConfirm] = useState<CloseConfirm | null>(null);
     const pollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const addInputRef = useRef<HTMLInputElement>(null);
+    const taskTabsRef = useRef<HTMLDivElement>(null);
 
     const activeTask = tasks.find((task) => task.localId === activeId) ?? tasks[0] ?? null;
+    const hasTaskBar = Boolean(activeTask);
     const activeKind = activeTask ? deriveTaskKind(activeTask) : null;
     const pages = activeTask?.pages ?? [];
     const configLocked = activeKind !== "draft";
@@ -352,6 +354,27 @@ export function TranslateSection() {
             clearPollTimeout();
         };
     }, []);
+
+    // 任务栏 hover 时，把垂直滚轮转成左右滚动（需 native listener，React onWheel 是 passive，preventDefault 无效）
+    useEffect(() => {
+        const el = taskTabsRef.current;
+        if (!el || !hasTaskBar) {
+            return;
+        }
+        const onWheel = (event: WheelEvent) => {
+            if (el.scrollWidth <= el.clientWidth) {
+                return;
+            }
+            // 触控板已给出横向位移时交给浏览器，避免叠加上垂直 delta
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+                return;
+            }
+            event.preventDefault();
+            el.scrollLeft += event.deltaY;
+        };
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, [hasTaskBar]);
 
     const updateTask = (localId: string, updater: (task: WorkspaceTask) => WorkspaceTask) => {
         setTasks((prev) => {
@@ -789,7 +812,10 @@ export function TranslateSection() {
                     <div>
                         {/* 任务栏 */}
                         <div className="flex items-end gap-2">
-                            <div className="flex min-w-0 flex-1 items-end gap-1 overflow-x-auto">
+                            <div
+                                ref={taskTabsRef}
+                                className="flex min-w-0 flex-1 items-end gap-1 overflow-x-auto overscroll-x-contain"
+                            >
                                 {tasks.map((item, index) => {
                                     const kind = deriveTaskKind(item);
                                     const active = item.localId === activeTask.localId;
