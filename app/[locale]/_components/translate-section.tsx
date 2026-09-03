@@ -220,6 +220,7 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
             target_lang: selLang.code,
         },
         render: {
+            renderer: "manga2eng",
             font_name: FONT_CONFIG.fonts[fontId].renderName,
             fit_to_box: true,
             rtl: script.writing.rtl,
