@@ -134,26 +134,25 @@ export class TranslationService {
         }
         const task = taskResult.data!;
 
-        // 4. 上传图片
-        const createImageParams: CreateImageParams[] = [];
-        for (let i = 0; i < images.length; i++) {
-            const uploadResult = await this.imageStorage.uploadOriginalImage(user.id, task.id, i, images[i]);
-            if (uploadResult.error) {
-                console.error("submitTranslationTask, uploadOriginalImage failed, error: ", uploadResult.error.message);
-                return { code: DB_ERROR_CODE, data: null, error: uploadResult.error };
-            }
-            const originalPath = uploadResult.data!;
-            createImageParams.push({
-                taskId: task.id,
-                filename: images[i].name,
-                imageIndex: i,
-                originalImagePath: originalPath,
-                originalImageSize: images[i].size,
-                originalImageWidth: 0,
-                originalImageHeight: 0,
-                credits: pricingResult.data?.creditPerImage!,
-            });
+        // 4. 并发上传图片
+        const uploadResults = await Promise.all(
+            images.map((image, i) => this.imageStorage.uploadOriginalImage(user.id, task.id, i, image))
+        );
+        const failedUpload = uploadResults.find((result) => result.error);
+        if (failedUpload?.error) {
+            console.error("submitTranslationTask, uploadOriginalImage failed, error: ", failedUpload.error.message);
+            return { code: DB_ERROR_CODE, data: null, error: failedUpload.error };
         }
+        const createImageParams: CreateImageParams[] = uploadResults.map((uploadResult, i) => ({
+            taskId: task.id,
+            filename: images[i].name,
+            imageIndex: i,
+            originalImagePath: uploadResult.data!,
+            originalImageSize: images[i].size,
+            originalImageWidth: 0,
+            originalImageHeight: 0,
+            credits: pricingResult.data?.creditPerImage!,
+        }));
 
         // 4. 保存图片
         const imageResult = await this.imageRepo.createImages(createImageParams);
@@ -575,15 +574,18 @@ export class TranslationService {
     }
 
     async downloadOriginalImages(images: TranslationImage[]): Promise<{ validImages: TranslationImage[], blobs: Blob[]; }> {
+        const downloadResults = await Promise.all(
+            images.map((image) => this.imageStorage.downloadFile(image.originalImagePath))
+        );
         const originalImages: Blob[] = [];
         const validImages: TranslationImage[] = [];
-        for (const image of images) {
-            const downloadOriginalImageResult = await this.imageStorage.downloadFile(image.originalImagePath);
+        for (let i = 0; i < images.length; i++) {
+            const downloadOriginalImageResult = downloadResults[i];
             if (downloadOriginalImageResult.error) {
-                console.error(`Failed to download original image, imageId: ${image.id}, err: ${downloadOriginalImageResult.error.message}`);
+                console.error(`Failed to download original image, imageId: ${images[i].id}, err: ${downloadOriginalImageResult.error.message}`);
                 continue;
             }
-            validImages.push(image);
+            validImages.push(images[i]);
             originalImages.push(downloadOriginalImageResult.data!);
         }
         return { validImages, blobs: originalImages };
@@ -597,20 +599,22 @@ export class TranslationService {
             return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
         }
         const images = imageResult.data!;
-        // 下载翻译后的图
+        // 并发下载翻译后的图
+        const imagesWithResult = images.filter((image) => image.resultImagePath);
+        const downloadResults = await Promise.all(
+            imagesWithResult.map((image) => this.imageStorage.downloadFile(image.resultImagePath!))
+        );
         const zippable: { fileName: string, blob: Blob; }[] = [];
-        for (const image of images) {
-            if (!image.resultImagePath) {
-                continue;
-            }
-            const downloadResult = await this.imageStorage.downloadFile(image.resultImagePath);
+        for (let i = 0; i < imagesWithResult.length; i++) {
+            const image = imagesWithResult[i];
+            const downloadResult = downloadResults[i];
             if (downloadResult.error) {
                 console.error(`downloadResultZip, storage.downloadFile fail, error: ${downloadResult.error.message}`);
                 continue;
             }
             const blob = downloadResult.data!;
             // 下载文件=原始文件名.翻译文件后缀
-            const ext = extensionFromPath(image.resultImagePath) || extensionFromMime(blob.type) || "webp";
+            const ext = extensionFromPath(image.resultImagePath!) || extensionFromMime(blob.type) || "webp";
             zippable.push({fileName: replaceFileExtension(image.filename, ext), blob});
         }
         // 打包zip
