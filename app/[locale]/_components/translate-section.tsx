@@ -235,6 +235,7 @@ function buildTranslationConfig(selLang: LangOption, selMode: string, selFontSty
         ocr: {
             ocr: "48px",
         },
+        mask_dilation_offset: 30,
         // upscale: {
         //     upscaler: "esrgan",
         //     upscale_ratio: 2,
