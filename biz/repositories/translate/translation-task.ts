@@ -4,7 +4,8 @@ import type { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import type { Json, Tables, TablesInsert, TablesUpdate } from '@/types/database';
 import { Result } from "@/types/do/response";
 import { mapTranslationImageRowToTranslationImage } from "./translation-image";
-import { TranslationConfig } from '@/types/do/translation-config';
+import { TranslationIntent } from '@/types/do/translation-intent';
+import { parseTranslationIntent, toTranslationIntentJson } from './translation-intent-json';
 
 export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation_tasks'>): TranslationTask {
     return {
@@ -17,7 +18,7 @@ export function mapTranslationTaskRowToTranslationTask(data: Tables<'translation
         failedImages: data.failed_images,
         progress: data.progress ?? 0,
 
-        config: data.config as TranslationTask['config'],
+        intent: parseTranslationIntent(data.config),
 
         createdAt: data.created_at ?? new Date().toISOString(),
         startedAt: data.started_at ?? undefined,
@@ -37,7 +38,7 @@ export interface CreateTaskParams {
     userId: string;
     totalImages: number;
     creditPerImage: number;
-    config: TranslationConfig;
+    intent: TranslationIntent;
 }
 
 // 更新任务参数 (很少使用,因为有触发器自动更新)
@@ -67,7 +68,7 @@ export class TranslationTaskRepository {
             completed_images: 0,
             failed_images: 0,
             progress: 0,
-            config: params.config as Json,
+            config: toTranslationIntentJson(params.intent),
             credit_per_image: params.creditPerImage,
             total_credits: params.creditPerImage * params.totalImages,
         };
@@ -140,20 +141,20 @@ export class TranslationTaskRepository {
             .in('id', taskIds);
         if (error) {
             return {
-                data: null, 
+                data: null,
                 error: new Error(`批量获取任务详情失败：${error.message}`),
             };
         }
         if (!data || data.length === 0) {
             return {
-                data: null, 
+                data: null,
                 error: null,
-            }
+            };
         }
         return {
             data: data.map(mapTranslationTaskRowToTranslationTask),
             error: null,
-        }
+        };
     }
 
     /**
@@ -336,7 +337,7 @@ export class TranslationTaskRepository {
             status?: TaskStatus;
             createdAfter?: string;
             limit: number;
-            cursor?: { createdAt: string, id: string }
+            cursor?: { createdAt: string, id: string; };
         },
     ): Promise<Result<TranslationTaskDetail[]>> {
         let query = this.supabase
@@ -344,7 +345,7 @@ export class TranslationTaskRepository {
             .select('*, translation_images(*)')
             .eq('user_id', userId)
             .order('created_at', { ascending: false })
-            .order('id', {ascending: false})
+            .order('id', { ascending: false })
             .order('image_index', { ascending: true, referencedTable: 'translation_images' })
             .limit(options.limit);
 

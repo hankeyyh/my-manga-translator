@@ -13,6 +13,8 @@ const getTranslationTaskDetailMock = jest.fn<
     }>
 >();
 
+const defaultIntent = { targetLang: "ENG", mode: "quality" as const, fontName: "Anime Ace 3.0" };
+
 async function loadGet() {
     return loadRouteMethod<
         (
@@ -21,37 +23,43 @@ async function loadGet() {
         ) => Promise<Response>
     >("@/app/api/translate/task/[taskId]/route", "GET", [
         {
-            moduleName: "@/lib/utils/supabase/server",
+            moduleName: "@/biz/utils/supabase/server",
             factory: () => ({
                 createServerClient: createClientMock,
             }),
         },
         {
-            moduleName: "@/lib/repositories/user-repository",
+            moduleName: "@/biz/repositories/auth/user-repository",
             factory: () => ({
                 UserRepository: jest.fn(),
             }),
         },
         {
-            moduleName: "@/lib/repositories/translation-task",
+            moduleName: "@/biz/repositories/translate/translation-task",
             factory: () => ({
                 TranslationTaskRepository: jest.fn(),
             }),
         },
         {
-            moduleName: "@/lib/repositories/translation-image",
+            moduleName: "@/biz/repositories/translate/translation-image",
             factory: () => ({
                 TranslationImageRepository: jest.fn(),
             }),
         },
         {
-            moduleName: "@/lib/repositories/translation-storage",
+            moduleName: "@/biz/repositories/translate/translation-storage",
             factory: () => ({
                 TranslationStorageRepository: jest.fn(),
             }),
         },
         {
-            moduleName: "@/lib/services/translate/translation-service",
+            moduleName: "@/biz/repositories/pricing/pricing-config",
+            factory: () => ({
+                PricingConfigRepository: jest.fn(),
+            }),
+        },
+        {
+            moduleName: "@/biz/services/translate/translation-service",
             factory: () => ({
                 TranslationService: jest.fn().mockImplementation(() => ({
                     getTranslationTaskDetail: getTranslationTaskDetailMock,
@@ -74,7 +82,7 @@ function buildTaskDetailView(overrides: Partial<TranslationTaskDetailView> = {})
         completedImages: 1,
         failedImages: 0,
         progress: 100,
-        config: {},
+        intent: defaultIntent,
         createdAt: "2026-01-01T00:00:00.000Z",
         completedAt: "2026-01-01T00:10:00.000Z",
         updatedAt: "2026-01-01T00:10:00.000Z",
@@ -125,10 +133,10 @@ describe("translate task route", () => {
         const body = await response.json();
 
         expect(response.status).toBe(401);
-        expect(body).toEqual({ error: "获取当前用户失败" });
+        expect(body).toEqual({ error: "UnAuthorized" });
     });
 
-    test("should return 401 Forbidden when task is not owned by current user", async () => {
+    test("should return 401 when task is not owned by current user", async () => {
         const GET = await loadGet();
         getTranslationTaskDetailMock.mockResolvedValue({
             code: UNAUTHORIZED_ERROR_CODE,
@@ -140,7 +148,7 @@ describe("translate task route", () => {
         const body = await response.json();
 
         expect(response.status).toBe(401);
-        expect(body).toEqual({ error: "Forbidden" });
+        expect(body).toEqual({ error: "UnAuthorized" });
     });
 
     test("should return 500 when service returns db error", async () => {
@@ -174,11 +182,12 @@ describe("translate task route", () => {
             progress: 100,
             created_at: "2026-01-01T00:00:00.000Z",
             completed_at: "2026-01-01T00:10:00.000Z",
-            config: {},
+            intent: defaultIntent,
             images: [
                 {
                     id: "img-1",
                     status: "completed",
+                    filename: "",
                     taskId: "task-1",
                     imageIndex: 0,
                     originalImageUrl: "https://signed/orig.png",

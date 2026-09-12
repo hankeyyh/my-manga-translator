@@ -1,35 +1,48 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
-import type { CreateImageParams } from "@/biz/repositories/translate/translation-image";
 import { loadRouteMethod } from "../../helper.test";
+import {
+    CHECK_PARAM_ERROR_CODE,
+    CREDIT_BALANCE_NOT_ENOUGH,
+    DB_ERROR_CODE,
+    SUCCESS_CODE,
+    UNAUTHORIZED_ERROR_CODE,
+} from "@/types/dto/response";
+import type { TranslationIntent } from "@/types/do/translation-intent";
+import type { SubmitTaskData } from "@/types/dto/translation-task";
 
 type CurrentUserResult = {
     data: { id: string; email?: string; } | null;
     error: Error | null;
 };
-type TaskResult = { data: { id: string; } | null; error: Error | null; };
-type UploadResult = { data: string | null; error: Error | null; };
-type CreateImagesResult = { data: { id: string; }[] | null; error: Error | null; };
 
-const getCurrentUserFromRepoMock = jest.fn<() => Promise<CurrentUserResult>>();
+const defaultIntent: TranslationIntent = {
+    targetLang: "ENG",
+    mode: "quality",
+    fontName: "Anime Ace 3.0",
+};
+
+const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
 const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();
-const createTaskMock = jest.fn<
-    (params: {
-        userId: string;
-        totalImages: number;
-        config: Record<string, unknown>;
-    }) => Promise<TaskResult>
+const createServiceRoleClientMock = jest.fn<() => Record<string, unknown>>();
+const freezeTaskCreditsMock = jest.fn<
+    (userId: string, taskId: string, credits: number) => Promise<{
+        code: number;
+        data: null;
+        error: Error | null;
+    }>
 >();
-const uploadOriginalImageMock = jest.fn<
-    (
-        userId: string,
-        taskId: string,
-        imageIdx: number,
-        image: File
-    ) => Promise<UploadResult>
+const batchRefundImageCreditsMock = jest.fn();
+const submitTranslationTaskMock = jest.fn<
+    (taskId: string, images: File[], intent: TranslationIntent) => Promise<{
+        code: number;
+        data: SubmitTaskData | null;
+        error: Error | null;
+    }>
 >();
-const createImagesMock = jest.fn<
-    (params: CreateImageParams[]) => Promise<CreateImagesResult>
+const markImagesFailedMock = jest.fn();
+const startTranslationWorkflowMock = jest.fn<
+    (input: { userId: string; taskId: string; }) => Promise<Response>
 >();
 
 async function loadPost() {
@@ -38,41 +51,47 @@ async function loadPost() {
         "POST",
         [
             {
-                moduleName: "@/lib/utils/supabase/server",
+                moduleName: "@/biz/utils/supabase/server",
                 factory: () => ({
                     createServerClient: createClientMock,
                 }),
             },
             {
-                moduleName: "@/lib/repositories/auth/user-repository",
+                moduleName: "@/biz/utils/supabase/admin",
                 factory: () => ({
-                    UserRepository: jest.fn().mockImplementation(() => ({
-                        getCurrentUser: getCurrentUserFromRepoMock,
+                    createServiceRoleClient: createServiceRoleClientMock,
+                }),
+            },
+            {
+                moduleName: "@/biz/services/auth/auth-service",
+                factory: () => ({
+                    AuthService: jest.fn().mockImplementation(() => ({
+                        getCurrentUser: getCurrentUserMock,
                     })),
                 }),
             },
             {
-                moduleName: "@/lib/repositories/translation-task",
+                moduleName: "@/biz/services/credit/credit-service",
                 factory: () => ({
-                    TranslationTaskRepository: jest.fn().mockImplementation(() => ({
-                        createTask: createTaskMock,
+                    CreditService: jest.fn().mockImplementation(() => ({
+                        freezeTaskCredits: freezeTaskCreditsMock,
+                        batchRefundImageCredits: batchRefundImageCreditsMock,
                     })),
                 }),
             },
             {
-                moduleName: "@/lib/repositories/translation-storage",
+                moduleName: "@/biz/services/translate/translation-service",
                 factory: () => ({
-                    TranslationStorageRepository: jest.fn().mockImplementation(() => ({
-                        uploadOriginalImage: uploadOriginalImageMock,
+                    TranslationService: jest.fn().mockImplementation(() => ({
+                        submitTranslationTask: submitTranslationTaskMock,
+                        markImagesFailed: markImagesFailedMock,
                     })),
                 }),
             },
             {
-                moduleName: "@/lib/repositories/translation-image",
+                moduleName: "@/biz/utils/cloudflare",
                 factory: () => ({
-                    TranslationImageRepository: jest.fn().mockImplementation(() => ({
-                        createImages: createImagesMock,
-                    })),
+                    startTranslationWorkflow: startTranslationWorkflowMock,
                 }),
             },
         ]
@@ -81,16 +100,20 @@ async function loadPost() {
 
 function buildRequest({
     images = [],
-    config = { translator: "chatgpt" },
+    intent = defaultIntent,
+    omitIntent = false,
 }: {
     images?: File[];
-    config?: Record<string, unknown>;
+    intent?: TranslationIntent | Record<string, unknown>;
+    omitIntent?: boolean;
 } = {}) {
     const formData = new FormData();
     for (const image of images) {
         formData.append("images", image);
     }
-    formData.append("config", JSON.stringify(config));
+    if (!omitIntent) {
+        formData.append("intent", JSON.stringify(intent));
+    }
     return new NextRequest("http://localhost/api/translate/submit", {
         method: "POST",
         body: formData,
@@ -100,28 +123,30 @@ function buildRequest({
 describe("translate submit route", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        getCurrentUserFromRepoMock.mockResolvedValue({
+        getCurrentUserMock.mockResolvedValue({
             data: { id: "user-1", email: "user-1@example.com" },
             error: null,
         });
         createClientMock.mockResolvedValue({});
-        createTaskMock.mockResolvedValue({
-            data: { id: "task-1" },
+        createServiceRoleClientMock.mockReturnValue({});
+        freezeTaskCreditsMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: null,
             error: null,
         });
-        uploadOriginalImageMock.mockResolvedValue({
-            data: "user-1/task-1/0-original.jpg",
+        submitTranslationTaskMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: { taskId: "task-1", imageIds: ["img-1"] },
             error: null,
         });
-        createImagesMock.mockResolvedValue({
-            data: [{ id: "img-1" }],
-            error: null,
-        });
+        startTranslationWorkflowMock.mockResolvedValue(
+            new Response(JSON.stringify({ success: true }), { status: 200 }),
+        );
     });
 
     test("should return 401 when auth service returns error", async () => {
         const POST = await loadPost();
-        getCurrentUserFromRepoMock.mockResolvedValue({
+        getCurrentUserMock.mockResolvedValue({
             data: null,
             error: new Error("auth failed"),
         });
@@ -130,12 +155,12 @@ describe("translate submit route", () => {
         const body = await response.json();
 
         expect(response.status).toBe(401);
-        expect(body).toEqual({ error: "auth failed" });
+        expect(body).toEqual({ error: "Unauthorized" });
     });
 
     test("should return 401 when user is null", async () => {
         const POST = await loadPost();
-        getCurrentUserFromRepoMock.mockResolvedValue({
+        getCurrentUserMock.mockResolvedValue({
             data: null,
             error: null,
         });
@@ -153,16 +178,34 @@ describe("translate submit route", () => {
         const body = await response.json();
 
         expect(response.status).toBe(400);
-        expect(body).toEqual({ error: "No images provided" });
+        expect(body).toEqual({ error: "no images" });
     });
 
-    test("should return 400 when any image is too large", async () => {
+    test("should return 400 when intent is missing or invalid", async () => {
+        const POST = await loadPost();
+        const image = new File(["image"], "a.jpg", { type: "image/jpeg" });
+        const response = await POST(buildRequest({
+            images: [image],
+            intent: { translator: "chatgpt" },
+        }));
+        const body = await response.json();
+
+        expect(response.status).toBe(400);
+        expect(body).toEqual({ error: "intent invalid" });
+    });
+
+    test("should return 400 when image is too large", async () => {
         const POST = await loadPost();
         const oversizedImage = new File(
             [new Uint8Array(10 * 1024 * 1024 + 1)],
             "too-large.jpg",
             { type: "image/jpeg" }
         );
+        submitTranslationTaskMock.mockResolvedValue({
+            code: CHECK_PARAM_ERROR_CODE,
+            data: null,
+            error: new Error("Image size too large, max size is 10MB"),
+        });
 
         const response = await POST(buildRequest({ images: [oversizedImage] }));
         const body = await response.json();
@@ -171,10 +214,27 @@ describe("translate submit route", () => {
         expect(body).toEqual({ error: "Image size too large, max size is 10MB" });
     });
 
-    test("should return 500 when creating task fails", async () => {
+    test("should return 402 when credits are not enough", async () => {
         const POST = await loadPost();
         const image = new File(["image"], "a.jpg", { type: "image/jpeg" });
-        createTaskMock.mockResolvedValue({
+        freezeTaskCreditsMock.mockResolvedValue({
+            code: CREDIT_BALANCE_NOT_ENOUGH,
+            data: null,
+            error: new Error("not enough credit"),
+        });
+
+        const response = await POST(buildRequest({ images: [image] }));
+        const body = await response.json();
+
+        expect(response.status).toBe(402);
+        expect(body).toEqual({ error: "Not Enough Credits" });
+    });
+
+    test("should return 500 when submit translation task fails", async () => {
+        const POST = await loadPost();
+        const image = new File(["image"], "a.jpg", { type: "image/jpeg" });
+        submitTranslationTaskMock.mockResolvedValue({
+            code: DB_ERROR_CODE,
             data: null,
             error: new Error("create task failed"),
         });
@@ -186,91 +246,45 @@ describe("translate submit route", () => {
         expect(body).toEqual({ error: "create task failed" });
     });
 
-    test("should return 500 when uploading original image fails", async () => {
+    test("should return 401 when submit translation task is unauthorized", async () => {
         const POST = await loadPost();
         const image = new File(["image"], "a.jpg", { type: "image/jpeg" });
-        uploadOriginalImageMock.mockResolvedValue({
+        submitTranslationTaskMock.mockResolvedValue({
+            code: UNAUTHORIZED_ERROR_CODE,
             data: null,
-            error: new Error("upload failed"),
+            error: new Error("User Not Login"),
         });
 
         const response = await POST(buildRequest({ images: [image] }));
         const body = await response.json();
 
-        expect(response.status).toBe(500);
-        expect(body).toEqual({ error: "upload failed" });
+        expect(response.status).toBe(401);
+        expect(body).toEqual({ error: "UnAuthorized" });
     });
 
-    test("should return 500 when creating image records fails", async () => {
-        const POST = await loadPost();
-        const image = new File(["image"], "a.jpg", { type: "image/jpeg" });
-        createImagesMock.mockResolvedValue({
-            data: null,
-            error: new Error("create images failed"),
-        });
-
-        const response = await POST(buildRequest({ images: [image] }));
-        const body = await response.json();
-
-        expect(response.status).toBe(500);
-        expect(body).toEqual({ error: "create images failed" });
-    });
-
-    test("should return task id when submit succeeds", async () => {
+    test("should return task id and image ids when submit succeeds", async () => {
         const POST = await loadPost();
         const image1 = new File(["img1"], "1.jpg", { type: "image/jpeg" });
         const image2 = new File(["img2"], "2.jpg", { type: "image/jpeg" });
-        uploadOriginalImageMock
-            .mockResolvedValueOnce({
-                data: "user-1/task-1/0-original.jpg",
-                error: null,
-            })
-            .mockResolvedValueOnce({
-                data: "user-1/task-1/1-original.jpg",
-                error: null,
-            });
+        submitTranslationTaskMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: { taskId: "task-1", imageIds: ["img-1", "img-2"] },
+            error: null,
+        });
 
         const response = await POST(buildRequest({ images: [image1, image2] }));
         const body = await response.json();
 
         expect(response.status).toBe(200);
-        expect(body).toEqual({ taskId: "task-1" });
-        expect(createTaskMock).toHaveBeenCalledWith({
+        expect(body).toEqual({ taskId: "task-1", imageIds: ["img-1", "img-2"] });
+        expect(submitTranslationTaskMock).toHaveBeenCalledWith(
+            expect.any(String),
+            [image1, image2],
+            defaultIntent,
+        );
+        expect(startTranslationWorkflowMock).toHaveBeenCalledWith({
             userId: "user-1",
-            totalImages: 2,
-            config: { translator: "chatgpt" },
+            taskId: "task-1",
         });
-        expect(uploadOriginalImageMock).toHaveBeenNthCalledWith(
-            1,
-            "user-1",
-            "task-1",
-            0,
-            image1
-        );
-        expect(uploadOriginalImageMock).toHaveBeenNthCalledWith(
-            2,
-            "user-1",
-            "task-1",
-            1,
-            image2
-        );
-        expect(createImagesMock).toHaveBeenCalledWith([
-            {
-                taskId: "task-1",
-                imageIndex: 0,
-                originalImagePath: "user-1/task-1/0-original.jpg",
-                originalImageSize: image1.size,
-                filename: "",
-                credits: 0,
-            },
-            {
-                taskId: "task-1",
-                imageIndex: 1,
-                originalImagePath: "user-1/task-1/1-original.jpg",
-                originalImageSize: image2.size,
-                filename: "",
-                credits: 0,
-            },
-        ]);
     });
 });

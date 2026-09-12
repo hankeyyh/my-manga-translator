@@ -3,7 +3,6 @@ import { TranslationStorageRepository } from "@/biz/repositories/translate/trans
 import { TranslationTaskRepository } from "@/biz/repositories/translate/translation-task";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { TranslationService } from "@/biz/services/translate/translation-service";
-import { TranslationConfig } from "@/types/do/translation-config";
 import { CHECK_PARAM_ERROR_CODE, CREDIT_BALANCE_NOT_ENOUGH, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,6 +17,8 @@ import { randomUUID } from "crypto";
 import { startTranslationWorkflow } from "@/biz/utils/cloudflare";
 import { SubmitTaskData } from "@/types/dto/translation-task";
 import { ApiSubmitTaskResponse } from "@/types/api/translation-task";
+import { parseTranslationIntent } from "@/biz/repositories/translate/translation-intent-json";
+import { estimateCreditCost } from "@/biz/utils/credits";
 
 function mapSubmitTaskDataToSubmitTaskResponse(data: SubmitTaskData): ApiSubmitTaskResponse {
     return {
@@ -37,15 +38,15 @@ export async function POST(request: NextRequest) {
     // 1. 解析请求 (支持多图片)
     const formData = await request.formData();
     const images = formData.getAll("images") as File[];
-    const configStr = formData.get("config") as string;
+    const intentStr = formData.get("intent") as string;
     if (images.length === 0) {
         return NextResponse.json({ error: "no images" }, { status: 400 });
     }
-    let config: TranslationConfig;
+    let intent;
     try {
-        config = JSON.parse(configStr) as TranslationConfig;
-    } catch (err) {
-        return NextResponse.json({ error: 'config invalid' }, { status: 400 });
+        intent = parseTranslationIntent(JSON.parse(intentStr));
+    } catch {
+        return NextResponse.json({ error: 'intent invalid' }, { status: 400 });
     }
 
     // 2. 计算&冻结积分
@@ -57,13 +58,11 @@ export async function POST(request: NextRequest) {
         new UserCreditsRepository(serviceRoleClient),
     );
     // 计算积分
-    const creditResult = await creditService.estimateCreditCost(images.length, config);
-    if (creditResult.error) {
-        return NextResponse.json({ error: "Failed to Calculate Credits" }, { status: 500 });
-    }
+    const creditCost = estimateCreditCost(images.length, intent);
+   
     // 冻结积分
     const taskId = randomUUID();
-    const frozenResult = await creditService.freezeTaskCredits(userResult.data.id, taskId, creditResult.data!);
+    const frozenResult = await creditService.freezeTaskCredits(userResult.data.id, taskId, creditCost);
     if (frozenResult.code === CREDIT_BALANCE_NOT_ENOUGH) {
         return NextResponse.json({ error: "Not Enough Credits" }, { status: 402 });
     }
@@ -79,7 +78,7 @@ export async function POST(request: NextRequest) {
         new TranslationStorageRepository(supabase),
         new PricingConfigRepository(supabase),
     );
-    const submitResult = await translationService.submitTranslationTask(taskId, images, config);
+    const submitResult = await translationService.submitTranslationTask(taskId, images, intent);
     if (submitResult.code === UNAUTHORIZED_ERROR_CODE) {
         // TODO 如果失败，需要refundcredits，但此时没有imageId
         return NextResponse.json({ error: "UnAuthorized" }, { status: 401 });

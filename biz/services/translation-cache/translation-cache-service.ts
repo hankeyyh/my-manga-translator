@@ -1,42 +1,27 @@
 import { TranslationCacheStore } from "@/biz/repositories/translation-cache/translation-cache-store";
 import { bytesToHex, computeFileHash } from "@/biz/utils/file";
 import { MangaPage } from "@/types/web/manga-page";
-import { TranslationConfig } from "@/types/do/translation-config";
 import { PartitionResult } from "@/types/dto/cache";
 import { LocalPage } from "@/types/dto/local-page";
+import { TranslationIntent } from "@/types/do/translation-intent";
 
 /**
  * 提取影响翻译结果的配置字段，排序后稳定序列化。
  * 与 page.tsx submitTask 里实际提交的 config 保持一致。
  */
-function extractRelevantConfig(config: TranslationConfig): object {
+function extractRelevantConfig(intent: TranslationIntent): object {
     return {
-        translator: {
-            translator: config.translator?.translator,
-            model_name: config.translator?.model_name,
-            target_lang: config.translator?.target_lang,
-        },
-        render: {
-            font_name: config.render?.font_name,
-            fit_to_box: config.render?.fit_to_box,
-        },
-        detector: { detector: config.detector?.detector },
-        inpainter: { inpainter: config.inpainter?.inpainter },
-        ocr: {
-            ocr: config.ocr?.ocr,
-            use_mocr_merge: config.ocr?.use_mocr_merge,
-        },
-        upscale: {
-            upscaler: config.upscale?.upscaler,
-            upscale_ratio: config.upscale?.upscale_ratio,
-            revert_upscaling: config.upscale?.revert_upscaling,
-        },
+        targetLang: intent.targetLang,
+        mode: intent.mode,
+        fontName: intent.fontName,
+        rtl: intent.rtl,
+        hyphenation: intent.hyphenation,
     };
 }
 
 /** 配置 → 短 hash，作为 cache key 的一部分 */
-async function computeConfigHash(config: TranslationConfig): Promise<string> {
-    const relevant = extractRelevantConfig(config);
+async function computeConfigHash(intent: TranslationIntent): Promise<string> {
+    const relevant = extractRelevantConfig(intent);
     const json = JSON.stringify(relevant);
     const buffer = new TextEncoder().encode(json);
     const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
@@ -66,7 +51,7 @@ export class TranslationCacheService {
      */
     async partitionPagesByCache(
         pages: LocalPage[],
-        config: TranslationConfig,
+        intent: TranslationIntent,
     ): Promise<PartitionResult> {
         const allUncached = (): PartitionResult => ({
             cached: [],
@@ -75,7 +60,7 @@ export class TranslationCacheService {
 
         let configHash: string;
         try {
-            configHash = await computeConfigHash(config);
+            configHash = await computeConfigHash(intent);
         } catch {
             // 配置 hash 失败时整批降级为未命中，不阻断翻译提交
             return allUncached();
@@ -113,10 +98,10 @@ export class TranslationCacheService {
         return { cached, uncached };
     }
 
-    async partitionPagesByCacheV2(pages: MangaPage[], config: TranslationConfig): Promise<PartitionResultV2> {
+    async partitionPagesByCacheV2(pages: MangaPage[], intent: TranslationIntent): Promise<PartitionResultV2> {
         let configHash: string;
         try {
-            configHash = await computeConfigHash(config);
+            configHash = await computeConfigHash(intent);
         } catch {
             return { cached: [], uncached: pages.map((value) => { return { mangaPage: value }; }) };
         }
@@ -148,7 +133,7 @@ export class TranslationCacheService {
      */
     async saveFromResultUrl(
         file: File,
-        config: TranslationConfig,
+        intent: TranslationIntent,
         resultImageUrl: string,
     ): Promise<void> {
         try {
@@ -159,7 +144,7 @@ export class TranslationCacheService {
 
             const resultBlob = await response.blob();
             const imageHash = await computeFileHash(file);
-            const configHash = await computeConfigHash(config);
+            const configHash = await computeConfigHash(intent);
 
             await this.cacheStore.put({
                 key: buildCacheKey(imageHash, configHash),

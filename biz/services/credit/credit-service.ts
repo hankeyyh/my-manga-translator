@@ -3,12 +3,11 @@ import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAM
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
-import { CHECK_PARAM_ERROR_CODE, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE, UNSUPPORTED_TRANSACTION_TYPE } from "@/types/dto/response";
+import { CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE, UNSUPPORTED_TRANSACTION_TYPE } from "@/types/dto/response";
 import { Result } from "@/types/do/response";
 import { BizResult } from "@/types/dto/response";
 import { PricingConfig } from "@/types/do/pricing-config";
 import { TopUpConfig } from "@/types/do/topup-config";
-import { TranslationConfig } from "@/types/do/translation-config";
 import { UserTransaction } from "@/types/do/user-transaction";
 import { UserCredit } from "@/types/do/user-credit";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -187,21 +186,6 @@ export class CreditService {
             return { code: DB_ERROR_CODE, data: null, error: result.error };
         }
         return { code: SUCCESS_CODE, data: result.data, error: null };
-    }
-
-    // 预估消费, 简单模型 1image=1credits, 复杂模型 1image=3credits
-    async estimateCreditCost(imageLength: number, config: TranslationConfig): Promise<BizResult<number>> {
-        const modelName = config.translator?.model_name;
-        if (!modelName) {
-            return { code: CHECK_PARAM_ERROR_CODE, data: null, error: new Error("translator not set") };
-        }
-        const pricingResult = await this.pricingConfigRepo.getPricingConfigByModel(modelName);
-        if (pricingResult.error) {
-            console.error(`estimateCreditCost, pricingRepo.getPricingConfigByModel fail, error: ${pricingResult.error.message}`);
-            return { code: DB_ERROR_CODE, data: null, error: pricingResult.error };
-        }
-        const totalCost = pricingResult.data!.creditPerImage * imageLength;
-        return { code: SUCCESS_CODE, data: totalCost, error: null };
     }
 
     // 冻结积分

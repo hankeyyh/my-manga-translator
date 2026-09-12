@@ -1,8 +1,6 @@
-import type { Translator } from "./translation-config";
-
 export interface PricingConfig {
     id: string;
-    translator: Translator;
+    translator: string;
     modelName: string;
     creditPerImage: number;
 }

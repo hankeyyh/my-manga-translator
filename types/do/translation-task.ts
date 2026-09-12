@@ -1,5 +1,5 @@
-import { TranslationConfig } from "./translation-config";
 import { TranslationImage } from "./translation-image";
+import { TranslationIntent } from "./translation-intent";
 
 
 // 任务状态 (主表)
@@ -20,7 +20,7 @@ export interface TranslationTask {
     failedImages: number;
     progress: number;
 
-    config: TranslationConfig;
+    intent: TranslationIntent;
 
     createdAt: string;
     startedAt?: string;

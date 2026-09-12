@@ -35,7 +35,7 @@ function toApiGetTranslationTaskResponse(view: TranslationTaskDetailView): ApiGe
         progress: view.progress,
         created_at: view.createdAt,
         completed_at: view.completedAt,
-        config: view.config,
+        intent: view.intent,
         images: view.images.map(toApiTranslationTaskImage),
     };
 }

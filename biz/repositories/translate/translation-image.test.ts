@@ -34,7 +34,7 @@ describe("markImagesFailed", () => {
             userId,
             totalImages: 2,
             creditPerImage: 1,
-            config: { translator: { translator: "chatgpt" } },
+            intent: { targetLang: "ENG", mode: "quality", fontName: "Anime Ace 3.0" },
         });
         expect(taskResult.error).toBeNull();
 
@@ -125,7 +125,7 @@ describe("markImageSuccess", () => {
             userId,
             totalImages: 2,
             creditPerImage: 1,
-            config: { translator: { translator: "chatgpt" } },
+            intent: { targetLang: "ENG", mode: "quality", fontName: "Anime Ace 3.0" },
         });
         expect(taskResult.error).toBeNull();
 

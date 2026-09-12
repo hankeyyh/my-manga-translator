@@ -68,7 +68,7 @@ export function TranslationHistoryTaskItem({ task }: Props) {
     const tStatus = useTranslations("status");
     const tCommon = useTranslations("common");
     const downloadable = canDownload(task.status);
-    const targetCode = task.config.translator?.target_lang ?? "—";
+    const targetCode = task.intent.targetLang ?? "—";
     const [isShowDetail, setIsShowDetail] = useState(false);
     const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 

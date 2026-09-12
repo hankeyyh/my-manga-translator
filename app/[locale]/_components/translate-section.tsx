@@ -40,7 +40,6 @@ import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/[locale]/_components/upload-zone";
 import { MangaPage } from "@/types/web/manga-page";
-import { TranslationConfig, Translator } from "@/types/do/translation-config";
 import {
     FONT_CONFIG,
     getScriptFonts,
@@ -58,17 +57,13 @@ import { SUPPORTED_LANGS, type SupportedLangCode } from "@/types/common";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { toWebpFile } from "@/biz/utils/file";
+import { SUPPORTED_MODES, TranslationIntent, TranslationMode } from "@/types/do/translation-intent";
 
 const DEFAULT_LANG_CODE: SupportedLangCode = "ENG";
-const MODE_FAST = "fast";
-const MODE_PRECISE = "precise";
-const SUPPORTED_MODES = [MODE_FAST, MODE_PRECISE] as const;
 const DEFAULT_FONT_STYLE: FontId = resolveFontId(DEFAULT_LANG_CODE);
 const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
-
-type TranslateMode = (typeof SUPPORTED_MODES)[number];
 
 function asLangCode(code: string): SupportedLangCode {
     return SUPPORTED_LANGS.some((lang) => lang.code === code)
@@ -76,9 +71,9 @@ function asLangCode(code: string): SupportedLangCode {
         : DEFAULT_LANG_CODE;
 }
 
-function asTranslateMode(mode: string): TranslateMode {
+function asTranslateMode(mode: string): TranslationMode {
     return (SUPPORTED_MODES as readonly string[]).includes(mode)
-        ? (mode as TranslateMode)
+        ? (mode as TranslationMode)
         : SUPPORTED_MODES[0];
 }
 
@@ -166,7 +161,7 @@ function createDraftTask(files: File[] = []): WorkspaceTask {
         serverTaskId: null,
         pages: filesToPages(files, new Set()),
         targetLang: { code: DEFAULT_LANG_CODE, label: DEFAULT_LANG_CODE },
-        translateMode: MODE_FAST,
+        translateMode: SUPPORTED_MODES[0],
         fontStyle: DEFAULT_FONT_STYLE,
         submitLoading: false,
         retryLoading: false,
@@ -198,49 +193,16 @@ function hasCompletedResults(pages: MangaPage[]): boolean {
 }
 
 
-function buildTranslationConfig(selLang: LangOption, selMode: string, selFontStyle: string): TranslationConfig {
-    let company: Translator;
-    let modelName: string;
-
-    if (selMode === MODE_FAST) {
-        company = "deepseek";
-        modelName = "deepseek-v4-flash";
-    } else {
-        company = "deepl";
-        modelName = "deepl";
-    }
-
+function buildTranslationIntent(selLang: LangOption, selMode: TranslationMode, selFontStyle: string): TranslationIntent {
     const script = getScriptForLocale(selLang.code);
     const fontId = asFontStyle(selFontStyle, selLang.code);
 
     return {
-        translator: {
-            translator: company,
-            model_name: modelName,
-            target_lang: selLang.code,
-        },
-        render: {
-            renderer: "manga2eng",
-            font_name: FONT_CONFIG.fonts[fontId].renderName,
-            fit_to_box: true,
-            rtl: script.writing.rtl,
-            no_hyphenation: !script.writing.hyphenation,
-        },
-        detector: {
-            detector: "ctd",
-        },
-        inpainter: {
-            inpainter: "lama_large",
-        },
-        ocr: {
-            ocr: "48px",
-        },
-        mask_dilation_offset: 30,
-        // upscale: {
-        //     upscaler: "esrgan",
-        //     upscale_ratio: 2,
-        //     revert_upscaling: true,
-        // },
+        targetLang: selLang.code,
+        mode: selMode,
+        fontName: FONT_CONFIG.fonts[fontId].renderName,
+        rtl: script.writing.rtl,
+        hyphenation: script.writing.hyphenation
     };
 }
 
@@ -583,7 +545,7 @@ export function TranslateSection() {
             pages: current.pages.map((page) => ({ ...page, status: "pending" as const })),
         }));
         try {
-            const conf = buildTranslationConfig(task.targetLang, task.translateMode, task.fontStyle);
+            const intent = buildTranslationIntent(task.targetLang, task.translateMode, task.fontStyle);
             const formData = new FormData();
             const webpFiles = await Promise.all(
                 task.pages.filter((page) => page.originalFile).map((page) => toWebpFile(page.originalFile!)),
@@ -591,7 +553,7 @@ export function TranslateSection() {
             for (const webpFile of webpFiles) {
                 formData.append("images", webpFile);
             }
-            formData.set("config", JSON.stringify(conf));
+            formData.set("intent", JSON.stringify(intent));
             const response = await fetch("/api/translate/submit", {
                 method: "POST",
                 body: formData,
