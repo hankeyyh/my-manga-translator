@@ -666,7 +666,7 @@ export class TranslationService {
                 outputPath: finalFilePath,
             });
         }
-        const backend = createTranslationBackend("manga-image-translator");
+        const backend = createTranslationBackend("manga-translator");
         const submitResult = await backend.streamTranslation(inputs, intent);
         if (submitResult.error) {
             const invalidResult = await this.markImagesFailed(validImageIds, `Failed to submit translation to backend`);

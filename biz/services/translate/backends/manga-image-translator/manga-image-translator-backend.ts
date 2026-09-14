@@ -2,7 +2,7 @@ import { TranslationIntent } from "@/types/do/translation-intent";
 import { TranslationStreamEvent } from "@/types/do/translation-stream-event";
 import { BizResult, NETWORK_ERROR_CODE, SUCCESS_CODE } from "@/types/dto/response";
 import { TranslationBackend, TranslationImageInput } from "../translation-backend";
-import { getAlgoBaseUrl } from "@/biz/utils/url";
+import { getMangaImageTranslatorBaseUrl } from "@/biz/utils/url";
 import { TranslationConfig } from "./translation-config";
 
 export class MangaImageTranslatorBackend implements TranslationBackend {
@@ -56,7 +56,7 @@ export class MangaImageTranslatorBackend implements TranslationBackend {
     }
 
     private async submitBatchTranslation(imageBlobs: Blob[], config: TranslationConfig): Promise<BizResult<ReadableStreamDefaultReader>> {
-        const algoBaseUrl = getAlgoBaseUrl();
+        const algoBaseUrl = getMangaImageTranslatorBaseUrl();
         try {
             const bodyData = new FormData();
             for (const imageBlob of imageBlobs) {
