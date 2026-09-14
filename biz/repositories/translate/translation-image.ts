@@ -372,11 +372,12 @@ export class TranslationImageRepository {
         return { data: result.data.map((value) => value.id), error: null };
     }
 
-    async markImageSuccess(imageId: string, outputPath: string): Promise<Result<string>> {
+    async markImageSuccess(imageId: string, outputPath?: string): Promise<Result<string>> {
+        // MT 测试环境，可以不设置不保存，没有outputPath
         const result = await this.supabase.from("translation_images")
             .update({
                 status: "completed",
-                result_image_path: outputPath,
+                ...(outputPath ? { result_image_path: outputPath } : {}),
                 completed_at: new Date().toISOString(),
             })
             .eq("id", imageId)

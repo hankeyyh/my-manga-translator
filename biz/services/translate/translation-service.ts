@@ -733,7 +733,7 @@ export class TranslationService {
     }
 
     // 标记成功图片
-    async markImageSuccess(imageId: string, finalFilePath: string): Promise<BizResult<string>> {
+    async markImageSuccess(imageId: string, finalFilePath?: string): Promise<BizResult<string>> {
         const result = await this.imageRepo.markImageSuccess(imageId, finalFilePath);
         if (result.error) {
             return { code: DB_ERROR_CODE, data: null, error: result.error };
