@@ -13,6 +13,7 @@ function mapTopUpConfigRowToTopUpConfig(row: Tables<'topup_config'>): TopUpConfi
         price: row.price,
         creditsIncluded: row.credits_included,
         stripePriceId: row.stripe_price_id,
+        isActive: row.is_active,
     };
 }
 
@@ -23,13 +24,9 @@ export class TopUpConfigRepository {
         const { data, error } = await this.supabase.from("topup_config")
             .select("*")
             .eq("id", id)
-            .eq("is_active", true)
             .single();
         if (error) {
             return { data: null, error: error };
-        }
-        if (!data) {
-            return { data: null, error: new Error("topup_config not found") };
         }
         return { data: mapTopUpConfigRowToTopUpConfig(data), error: null };
     }

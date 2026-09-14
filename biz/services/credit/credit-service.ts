@@ -3,7 +3,7 @@ import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAM
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
-import { CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE, UNSUPPORTED_TRANSACTION_TYPE } from "@/types/dto/response";
+import { CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND, CREDIT_BALANCE_NOT_ENOUGH, DB_ERROR_CODE, SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE, UNSUPPORTED_TRANSACTION_TYPE, INACTIVE_TOPUP_CONFIG } from "@/types/dto/response";
 import { Result } from "@/types/do/response";
 import { BizResult } from "@/types/dto/response";
 import { PricingConfig } from "@/types/do/pricing-config";
@@ -86,6 +86,10 @@ export class CreditService {
         if (error) {
             console.error("getTopUpConfig, topupConfigRepo.getTopUpConfig fail, error: ", error);
             return { code: DB_ERROR_CODE, data: null, error: error };
+        }
+        if (data!.isActive === false) {
+            console.warn("getTopUpConfig, topUpConfig is inactive, id: ", id);
+            return { code: INACTIVE_TOPUP_CONFIG, data: null, error: new Error("Inactive Topup Config") };
         }
         return { code: SUCCESS_CODE, data: data, error: null };
     }

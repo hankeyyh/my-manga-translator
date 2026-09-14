@@ -11,6 +11,7 @@ import { UserTransactionsRepository } from '@/biz/repositories/topup/user-transa
 import { PricingConfigRepository } from '@/biz/repositories/pricing/pricing-config';
 import { UserCreditsRepository } from '@/biz/repositories/credit/user-credits';
 import { createStripeClient } from '@/biz/utils/stripe/server';
+import { INACTIVE_TOPUP_CONFIG } from '@/types/dto/response';
 
 const checkoutSessionSchema = z.object({
     id: z.uuid()
@@ -48,6 +49,9 @@ export async function POST(request: NextRequest) {
             new UserCreditsRepository(supabase),
         );
         const topupConfigResult = await creditService.getTopUpConfig(id);
+        if (topupConfigResult.code === INACTIVE_TOPUP_CONFIG) {
+            return NextResponse.json({ error: "Inactive Plan" }, { status: 400 });
+        }
         if (topupConfigResult.error) {
             return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
         }

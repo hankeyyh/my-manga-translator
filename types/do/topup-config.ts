@@ -13,4 +13,5 @@ export interface TopUpConfig {
     packTier: string | null,
     // stripe
     stripePriceId: string,
+    isActive: boolean,
 }

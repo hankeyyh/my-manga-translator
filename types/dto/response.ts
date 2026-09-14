@@ -42,3 +42,4 @@ export const CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND = 5003; // 冻结积分不足以
 // 6xxx 计费 / 充值 / 定价域
 export const UNSUPPORTED_TRANSACTION_TYPE = 6001; // 不支持的充值类型
 export const PRICING_CONFIG_NOT_FOUND = 6002; // 没找到价格信息
+export const INACTIVE_TOPUP_CONFIG = 6003; // 没找到套餐信息
