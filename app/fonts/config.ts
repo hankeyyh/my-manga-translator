@@ -24,127 +24,127 @@ export const FONT_CONFIG = {
     fonts: {
         "anime-ace-3": {
             name: "Anime Ace 3.0",
-            renderName: "Anime Ace 3.0",
+            renderName: "anime-ace-3",
         },
         "comic-shanns-2": {
             name: "Comic Shanns 2",
-            renderName: "Comic Shanns 2",
+            renderName: "comic-shanns-2",
         },
         "comic-marker-deluxe": {
             name: "Comic Marker Deluxe",
-            renderName: "Comic Marker Deluxe",
+            renderName: "comic-marker-deluxe",
         },
         "bangers": {
             name: "Bangers",
-            renderName: "Bangers",
+            renderName: "bangers",
         },
         "komika-slim": {
             name: "Komika Slim",
-            renderName: "Komika Slim",
+            renderName: "komika-slim",
         },
         "caveat": {
             name: "Caveat",
-            renderName: "Caveat",
+            renderName: "caveat",
         },
         "noto-sans": {
             name: "Noto Sans",
-            renderName: "Noto Sans",
+            renderName: "noto-sans",
         },
         "inter": {
             name: "Inter",
-            renderName: "Inter",
+            renderName: "inter",
         },
         "noto-sans-sc": {
             name: "Noto Sans SC",
-            renderName: "Noto Sans SC",
+            renderName: "noto-sans-sc",
         },
         "zcool-kuai-le": {
             name: "ZCOOL KuaiLe",
-            renderName: "ZCOOL KuaiLe",
+            renderName: "zcool-kuai-le",
         },
         "long-cang": {
             name: "Long Cang",
-            renderName: "Long Cang",
+            renderName: "long-cang",
         },
         "ma-shan-zheng": {
             name: "Ma Shan Zheng",
-            renderName: "Ma Shan Zheng",
+            renderName: "ma-shan-zheng",
         },
         "noto-sans-jp": {
             name: "Noto Sans JP",
-            renderName: "Noto Sans JP",
+            renderName: "noto-sans-jp",
         },
         "genei-late-go-n": {
             name: "GenEi LateGo N",
-            renderName: "GenEi LateGo N",
+            renderName: "genei-late-go-n",
         },
         "genei-antique": {
             name: "GenEi Antique",
-            renderName: "GenEi Antique",
+            renderName: "genei-antique",
         },
         "mplus-rounded-1c": {
             name: "M PLUS Rounded 1c",
-            renderName: "M PLUS Rounded 1c",
+            renderName: "mplus-rounded-1c",
         },
         "zen-kurenaido": {
             name: "Zen Kurenaido",
-            renderName: "Zen Kurenaido",
+            renderName: "zen-kurenaido",
         },
         "noto-sans-kr": {
             name: "Noto Sans KR",
-            renderName: "Noto Sans KR",
+            renderName: "noto-sans-kr",
         },
         "komacon": {
             name: "KOMACON",
-            renderName: "KOMACON",
+            renderName: "komacon",
         },
         "gowun-dodum": {
             name: "Gowun Dodum",
-            renderName: "Gowun Dodum",
+            renderName: "gowun-dodum",
         },
         "nanum-pen-script": {
             name: "Nanum Pen Script",
-            renderName: "Nanum Pen Script",
+            renderName: "nanum-pen-script",
         },
         "noto-sans-tc": {
             name: "Noto Sans TC",
-            renderName: "Noto Sans TC",
+            renderName: "noto-sans-tc",
         },
         "lxgw-wenkai-tc": {
             name: "LXGW WenKai TC",
-            renderName: "LXGW WenKai TC",
+            renderName: "lxgw-wenkai-tc",
         },
         "noto-sans-thai": {
             name: "Noto Sans Thai",
-            renderName: "Noto Sans Thai",
+            renderName: "noto-sans-thai",
         },
         "charmonman": {
             name: "Charmonman",
-            renderName: "Charmonman",
+            renderName: "charmonman",
         },
         "itim": {
             name: "Itim",
-            renderName: "Itim",
+            renderName: "itim",
         },
         "krub": {
             name: "Krub",
-            renderName: "Krub",
+            renderName: "krub",
         },
         "playpen-sans-thai": {
             name: "Playpen Sans Thai",
-            renderName: "Playpen Sans Thai",
+            renderName: "playpen-sans-thai",
         },
         "noto-sans-arabic": {
             name: "Noto Sans Arabic",
-            renderName: "Noto Sans Arabic",
+            renderName: "noto-sans-arabic",
         },
         "qts-manga": {
             name: "QTS Manga",
-            renderName: "QTS Manga",
+            renderName: "qts-manga",
         },
         "msyh": {
             name: "Microsoft YaHei",
-            renderName: "Microsoft YaHei",
+            renderName: "msyh",
         },
     },
     scripts: [

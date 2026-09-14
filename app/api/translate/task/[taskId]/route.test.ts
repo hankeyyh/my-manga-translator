@@ -13,7 +13,7 @@ const getTranslationTaskDetailMock = jest.fn<
     }>
 >();
 
-const defaultIntent = { targetLang: "ENG", mode: "quality" as const, fontName: "Anime Ace 3.0" };
+const defaultIntent = { targetLang: "ENG", mode: "quality" as const, fontName: "anime-ace-3" };
 
 async function loadGet() {
     return loadRouteMethod<

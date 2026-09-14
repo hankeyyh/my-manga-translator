@@ -34,7 +34,7 @@ describe("markImagesFailed", () => {
             userId,
             totalImages: 2,
             creditPerImage: 1,
-            intent: { targetLang: "ENG", mode: "quality", fontName: "Anime Ace 3.0" },
+            intent: { targetLang: "ENG", mode: "quality", fontName: "anime-ace-3" },
         });
         expect(taskResult.error).toBeNull();
 
@@ -125,7 +125,7 @@ describe("markImageSuccess", () => {
             userId,
             totalImages: 2,
             creditPerImage: 1,
-            intent: { targetLang: "ENG", mode: "quality", fontName: "Anime Ace 3.0" },
+            intent: { targetLang: "ENG", mode: "quality", fontName: "anime-ace-3" },
         });
         expect(taskResult.error).toBeNull();
 
