@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { cancelSubscription } from "@/actions/cancel-subscription";
 import { restoreSubscription } from "@/actions/restore-subscription";
+import {
+    BillingCycleTabs,
+    type BillingCycle,
+} from "@/app/[locale]/_components/billing-cycle-tabs";
 import { ChangePlanConfirmDialog } from "@/app/[locale]/_components/change-plan-confirm-dialog";
+import { getYearlySavePercent } from "@/app/[locale]/_components/plan-display";
 import { SubscriptionPlanCards } from "@/app/[locale]/_components/subscription-plan-cards";
 import { useChangeSubscription } from "@/app/[locale]/_components/use-change-subscription";
 import {
@@ -61,6 +66,10 @@ function formatResetDate(iso: string, t: ReturnType<typeof useTranslations<"bill
     return t("monthDay", { month: date.getMonth() + 1, day: date.getDate() });
 }
 
+function toBillingCycle(value: string): BillingCycle {
+    return value === "yearly" ? "yearly" : "monthly";
+}
+
 export function ManageSubscriptionDialog({
     open,
     onOpenChange,
@@ -70,10 +79,14 @@ export function ManageSubscriptionDialog({
     const router = useRouter();
     const t = useTranslations("manageSubscription");
     const tBilling = useTranslations("billing");
+    const tPricing = useTranslations("pricing");
     const tCommon = useTranslations("common");
     const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
     const [isRestoring, setIsRestoring] = useState(false);
+    const [selectedBillingCycle, setSelectedBillingCycle] = useState<BillingCycle>(
+        () => toBillingCycle(currentSubscription.billingCycle),
+    );
     const {
         pendingPlan,
         isChanging,
@@ -82,12 +95,39 @@ export function ManageSubscriptionDialog({
         confirmChange,
     } = useChangeSubscription();
 
-    const plans = topUpConfigs
-        .filter((config) => config.transactionType === "subscription")
+    const subscriptionConfigs = topUpConfigs.filter(
+        (config) => config.transactionType === "subscription",
+    );
+    const availableBillingCycles = subscriptionConfigs.reduce<BillingCycle[]>(
+        (cycles, config) => {
+            if (
+                (config.billingCycle === "monthly" ||
+                    config.billingCycle === "yearly") &&
+                !cycles.includes(config.billingCycle)
+            ) {
+                cycles.push(config.billingCycle);
+            }
+            return cycles;
+        },
+        [],
+    );
+    const billingCycle = availableBillingCycles.includes(selectedBillingCycle)
+        ? selectedBillingCycle
+        : availableBillingCycles.includes("yearly")
+            ? "yearly"
+            : (availableBillingCycles[0] ?? "monthly");
+    const plans = subscriptionConfigs
+        .filter((config) => config.billingCycle === billingCycle)
         .sort((a, b) => a.price - b.price);
+    const yearlySavePercent = getYearlySavePercent(subscriptionConfigs);
 
     const isCanceled = currentSubscription.status === "canceled";
     const busy = isChanging || isCancelling || isRestoring;
+
+    useEffect(() => {
+        if (!open) return;
+        setSelectedBillingCycle(toBillingCycle(currentSubscription.billingCycle));
+    }, [open, currentSubscription.billingCycle]);
 
     async function handleConfirmCancel() {
         if (isCancelling) return;
@@ -139,7 +179,7 @@ export function ManageSubscriptionDialog({
                     onOpenChange(next);
                 }}
             >
-                <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto border-cc-border bg-cc-surface-white text-cc-text-primary">
+                <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-6xl gap-6 overflow-y-auto border-cc-border bg-cc-surface-white p-6 text-cc-text-primary sm:p-8">
                     <DialogHeader>
                         <DialogTitle>{t("title")}</DialogTitle>
                         <DialogDescription>
@@ -158,12 +198,32 @@ export function ManageSubscriptionDialog({
                         </DialogDescription>
                     </DialogHeader>
 
+                    {availableBillingCycles.length > 1 ? (
+                        <div className="flex justify-center">
+                            <BillingCycleTabs
+                                availableCycles={availableBillingCycles}
+                                monthlyLabel={tPricing("monthly")}
+                                onChange={setSelectedBillingCycle}
+                                saveLabel={
+                                    yearlySavePercent != null
+                                        ? tPricing("savePercent", {
+                                            percent: yearlySavePercent,
+                                        })
+                                        : null
+                                }
+                                value={billingCycle}
+                                yearlyLabel={tPricing("yearly")}
+                            />
+                        </div>
+                    ) : null}
+
                     <SubscriptionPlanCards
                         plans={plans}
                         currentTopupConfigId={currentSubscription.topupConfigId}
                         subscriptionStatus={currentSubscription.status}
                         adjustMode
                         busy={busy}
+                        spacious
                         onSelectPlan={requestChange}
                         onCancelSubscription={
                             isCanceled
