@@ -28,6 +28,9 @@ export async function BlogSection() {
     const supabase = await createServerClient();
     const result = await BlogService.fromSupabase(supabase).listPublishedPosts();
     const posts = (result.data ?? []).slice(0, 3);
+    if (posts.length === 0) {
+        return null;
+    }
 
     return (
         <section className="bg-cc-surface-white py-16">
