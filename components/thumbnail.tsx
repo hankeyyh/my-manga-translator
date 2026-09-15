@@ -48,7 +48,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                                 aria-label={overlayLabel}
                             >
                                 {isUploading && (
-                                    <span className="relative flex size-8 items-center justify-center overflow-hidden">
+                                    <span className="flex size-8 items-center justify-center">
                                         <ArrowBigUp className="size-8 animate-rise text-white" strokeWidth={1.75} />
                                     </span>
                                 )}

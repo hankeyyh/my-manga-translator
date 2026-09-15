@@ -101,14 +101,12 @@ export default {
             },
             keyframes: {
                 rise: {
-                    "0%": { transform: "translateY(100%)", opacity: "0" },
-                    "30%": { opacity: "1" },
-                    "70%": { opacity: "1" },
-                    "100%": { transform: "translateY(-100%)", opacity: "0" },
+                    "0%": { transform: "translateY(0)" },
+                    "100%": { transform: "translateY(-35%)" },
                 },
             },
             animation: {
-                rise: "rise 1.1s ease-in-out infinite",
+                rise: "rise 1s ease-in-out infinite alternate",
             },
         },
     },
