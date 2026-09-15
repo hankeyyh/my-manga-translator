@@ -29,9 +29,10 @@ function pathnameWithoutLocale(pathname: string): string {
 
 type Props = {
     userInfo: UserInfo | null
+    showBlog: boolean
 }
 
-export function ClientSiteHeader({ userInfo }: Props) {
+export function ClientSiteHeader({ userInfo, showBlog }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const locale = useLocale();
@@ -91,9 +92,11 @@ export function ClientSiteHeader({ userInfo }: Props) {
                         <CcButton variant="ghost" size="sm" asChild>
                             <Link href="/#faq">{tHeader("faq")}</Link>
                         </CcButton>
-                        <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/blogs">{tHeader("blog")}</Link>
-                        </CcButton>
+                        {showBlog ? (
+                            <CcButton variant="ghost" size="sm" asChild>
+                                <Link href="/blogs">{tHeader("blog")}</Link>
+                            </CcButton>
+                        ) : null}
                         <CcButton variant="ghost" size="sm" asChild>
                             <Link href="https://discord.gg/qwX9Ygrrg" target="_blank" rel="noopener noreferrer">
                                 <img

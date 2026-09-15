@@ -38,6 +38,19 @@ export class BlogPostsRepository {
         };
     }
 
+    async hasPublished(): Promise<Result<boolean>> {
+        const { data, error } = await this.supabase
+            .from("blog_posts")
+            .select("id")
+            .eq("status", "published")
+            .limit(1);
+
+        if (error) {
+            return { data: null, error };
+        }
+        return { data: (data ?? []).length > 0, error: null };
+    }
+
     async getPublishedBySlug(slug: string): Promise<Result<BlogPost>> {
         const { data, error } = await this.supabase
             .from("blog_posts")

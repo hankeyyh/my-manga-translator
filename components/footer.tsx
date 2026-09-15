@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { hasPublishedBlogPosts } from "@/biz/loaders/has-published-blog-posts";
 import { getTranslations } from "next-intl/server";
 
 const PRODUCT_LINKS = [
@@ -32,6 +33,10 @@ function XIcon({ className }: { className?: string; }) {
 export async function Footer() {
     const t = await getTranslations("footer");
     const tCommon = await getTranslations("common");
+    const showBlog = await hasPublishedBlogPosts();
+    const productLinks = PRODUCT_LINKS.filter(
+        (item) => item.key !== "blog" || showBlog,
+    );
 
     return (
         <footer className="border-t border-cc-border/40 bg-cc-surface-page">
@@ -49,7 +54,7 @@ export async function Footer() {
                     <div>
                         <p className="font-headline font-semibold text-cc-text-primary">{t("product")}</p>
                         <ul className="mt-4 space-y-3 text-sm text-cc-text-secondary">
-                            {PRODUCT_LINKS.map((item) => (
+                            {productLinks.map((item) => (
                                 <li key={item.key}>
                                     <Link
                                         href={item.href}

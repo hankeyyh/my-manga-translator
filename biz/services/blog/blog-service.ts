@@ -26,6 +26,18 @@ export class BlogService {
         );
     }
 
+    async hasPublishedPosts(): Promise<BizResult<boolean>> {
+        const { data, error } = await this.blogPostsRepo.hasPublished();
+        if (error) {
+            console.error(
+                `hasPublishedPosts, blogPostsRepo.hasPublished fail, error: ${error.message}`,
+            );
+            return { code: DB_ERROR_CODE, data: null, error };
+        }
+
+        return { code: SUCCESS_CODE, data: data ?? false, error: null };
+    }
+
     async listPublishedPosts(): Promise<BizResult<BlogPostMetaView[]>> {
         const { data, error } = await this.blogPostsRepo.listPublished();
         if (error) {
