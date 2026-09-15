@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "Đang chờ",
+    "uploading": "Đang tải lên",
     "processing": "Đang xử lý",
     "preview": "Xem trước {name}",
     "remove": "Xóa {name}",

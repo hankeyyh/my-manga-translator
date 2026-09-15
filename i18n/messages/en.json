@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "Waiting",
+    "uploading": "Uploading",
     "processing": "Processing",
     "preview": "Preview {name}",
     "remove": "Remove {name}",

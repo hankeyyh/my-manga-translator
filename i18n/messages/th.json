@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "กำลังรอ",
+    "uploading": "กำลังอัปโหลด",
     "processing": "กำลังประมวลผล",
     "preview": "ดูตัวอย่าง {name}",
     "remove": "ลบ {name}",

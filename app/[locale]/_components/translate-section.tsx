@@ -542,7 +542,7 @@ export function TranslateSection() {
         updateTask(localId, (current) => ({
             ...current,
             submitLoading: true,
-            pages: current.pages.map((page) => ({ ...page, status: "pending" as const })),
+            pages: current.pages.map((page) => ({ ...page, status: "uploading" as const })),
         }));
         try {
             const intent = buildTranslationIntent(task.targetLang, task.translateMode, task.fontStyle);

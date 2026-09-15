@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Download, Eye, Loader2, RotateCcw, X } from "lucide-react";
+import { ArrowUp, Clock, Download, Eye, Loader2, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/components/utils";
@@ -24,9 +24,11 @@ const statusFrameClass: Partial<Record<NonNullable<MangaPage["status"]>, string>
 
 export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry, onContinueWait, onDownload, ...props }: ThumbNailProps) {
     const t = useTranslations("thumbnail");
+    const isUploading = props.status === "uploading";
     const isPending = props.status === "pending";
     const isProcessing = props.status === "processing";
-    const showStatusOverlay = isPending || isProcessing;
+    const showStatusOverlay = isUploading || isPending || isProcessing;
+    const overlayLabel = isUploading ? t("uploading") : isPending ? t("waiting") : t("processing");
     const imageUrl = showTranslated && props.status === "completed" && props.resultUrl ? props.resultUrl : props.originalUrl;
     const frameClass = props.status ? statusFrameClass[props.status] : undefined;
 
@@ -43,8 +45,13 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                         {showStatusOverlay && (
                             <div
                                 className="absolute inset-0 flex items-center justify-center bg-black/50"
-                                aria-label={isPending ? t("waiting") : t("processing")}
+                                aria-label={overlayLabel}
                             >
+                                {isUploading && (
+                                    <span className="relative flex size-8 items-center justify-center overflow-hidden">
+                                        <ArrowUp className="size-8 animate-rise text-white" strokeWidth={1.75} />
+                                    </span>
+                                )}
                                 {isPending && (
                                     <Clock className="size-8 text-white" strokeWidth={1.75} />
                                 )}
@@ -90,6 +97,11 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                                 {props.originalSize}
                             </p>
                         </div>
+                        {isUploading && (
+                            <span className="shrink-0 text-xs text-muted-foreground">
+                                {t("uploading")}
+                            </span>
+                        )}
                         {isPending && (
                             <span className="shrink-0 text-xs text-muted-foreground">
                                 {t("waiting")}

@@ -99,6 +99,17 @@ export default {
                 "cc-panel": "var(--cc-shadow-panel)",
                 "cc-accent": "var(--cc-shadow-accent)",
             },
+            keyframes: {
+                rise: {
+                    "0%": { transform: "translateY(100%)", opacity: "0" },
+                    "30%": { opacity: "1" },
+                    "70%": { opacity: "1" },
+                    "100%": { transform: "translateY(-100%)", opacity: "0" },
+                },
+            },
+            animation: {
+                rise: "rise 1.1s ease-in-out infinite",
+            },
         },
     },
     plugins: [require("tailwindcss-animate")],

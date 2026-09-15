@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "Naghihintay",
+    "uploading": "Ina-upload",
     "processing": "Pinoproseso",
     "preview": "I-preview ang {name}",
     "remove": "Alisin ang {name}",

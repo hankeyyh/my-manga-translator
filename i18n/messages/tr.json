@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "Bekliyor",
+    "uploading": "Yükleniyor",
     "processing": "İşleniyor",
     "preview": "{name} önizle",
     "remove": "{name} kaldır",

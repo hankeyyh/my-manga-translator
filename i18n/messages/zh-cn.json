@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "等待中",
+    "uploading": "上传中",
     "processing": "处理中",
     "preview": "预览 {name}",
     "remove": "移除 {name}",

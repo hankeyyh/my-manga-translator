@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "Ожидание",
+    "uploading": "Загрузка",
     "processing": "Обработка",
     "preview": "Предпросмотр {name}",
     "remove": "Удалить {name}",

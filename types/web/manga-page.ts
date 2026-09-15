@@ -1,7 +1,7 @@
 import { ImageStatus } from "../do/translation-image";
 
 // stalled - 超时
-type WebImageStatus = ImageStatus | "stalled";
+type WebImageStatus = ImageStatus | "stalled" | "uploading";
 
 export interface MangaPage {
     name: string;

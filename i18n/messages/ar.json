@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "قيد الانتظار",
+    "uploading": "جارٍ الرفع",
     "processing": "قيد المعالجة",
     "preview": "معاينة {name}",
     "remove": "إزالة {name}",

@@ -197,6 +197,7 @@
   },
   "thumbnail": {
     "waiting": "대기 중",
+    "uploading": "업로드 중",
     "processing": "처리 중",
     "preview": "{name} 미리보기",
     "remove": "{name} 제거",
