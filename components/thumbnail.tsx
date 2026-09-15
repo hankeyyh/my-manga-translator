@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, Clock, Download, Eye, Loader2, RotateCcw, X } from "lucide-react";
+import { ArrowBigUp, Clock, Download, Eye, Loader2, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/components/utils";
@@ -49,7 +49,7 @@ export function ThumbNail({ showTranslated = true, onRemove, onPreview, onRetry,
                             >
                                 {isUploading && (
                                     <span className="relative flex size-8 items-center justify-center overflow-hidden">
-                                        <ArrowUp className="size-8 animate-rise text-white" strokeWidth={1.75} />
+                                        <ArrowBigUp className="size-8 animate-rise text-white" strokeWidth={1.75} />
                                     </span>
                                 )}
                                 {isPending && (
