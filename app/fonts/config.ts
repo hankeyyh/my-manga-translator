@@ -202,7 +202,6 @@ export const FONT_CONFIG = {
             defaultFont: "noto-sans-tc",
             fonts: [
                 "noto-sans-tc",
-                "genei-late-go-n",
                 "lxgw-wenkai-tc",
             ],
             previewSample: "漫畫",
