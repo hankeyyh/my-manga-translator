@@ -36,6 +36,13 @@ const komikaSlim = localFont({
     preload: false,
 });
 
+const ccWildWords = localFont({
+    src: "./woff2/cc-wild-words.woff2",
+    variable: "--font-preview-cc-wild-words",
+    display: "swap",
+    preload: false,
+});
+
 const caveat = localFont({
     src: "./woff2/caveat.woff2",
     variable: "--font-preview-caveat",
@@ -224,6 +231,7 @@ const PREVIEW_FONTS = {
     "comic-marker-deluxe": comicMarkerDeluxe,
     "bangers": bangers,
     "komika-slim": komikaSlim,
+    "cc-wild-words": ccWildWords,
     "caveat": caveat,
     "noto-sans": notoSans,
     "inter": inter,

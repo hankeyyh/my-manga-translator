@@ -42,6 +42,10 @@ export const FONT_CONFIG = {
             name: "Komika Slim",
             renderName: "komika-slim",
         },
+        "cc-wild-words": {
+            name: "CC Wild Words",
+            renderName: "cc-wild-words",
+        },
         "caveat": {
             name: "Caveat",
             renderName: "caveat",
@@ -177,6 +181,7 @@ export const FONT_CONFIG = {
                 "comic-marker-deluxe",
                 "bangers",
                 "komika-slim",
+                "cc-wild-words",
                 "caveat",
                 "msyh",
             ],
