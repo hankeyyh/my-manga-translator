@@ -1,37 +1,9 @@
 import localFont from "next/font/local";
 import type { FontId } from "@/app/fonts/config";
 
-const animeAce3 = localFont({
-    src: "./woff2/anime-ace-3.woff2",
-    variable: "--font-preview-anime-ace-3",
-    display: "swap",
-    preload: false,
-});
-
-const comicShanns2 = localFont({
-    src: "./woff2/comic-shanns-2.woff2",
-    variable: "--font-preview-comic-shanns-2",
-    display: "swap",
-    preload: false,
-});
-
-const comicMarkerDeluxe = localFont({
-    src: "./woff2/comic-marker-deluxe.woff2",
-    variable: "--font-preview-comic-marker-deluxe",
-    display: "swap",
-    preload: false,
-});
-
 const bangers = localFont({
     src: "./woff2/bangers.woff2",
     variable: "--font-preview-bangers",
-    display: "swap",
-    preload: false,
-});
-
-const komikaSlim = localFont({
-    src: "./woff2/komika-slim.woff2",
-    variable: "--font-preview-komika-slim",
     display: "swap",
     preload: false,
 });
@@ -218,19 +190,8 @@ const qtsManga = localFont({
     preload: false,
 });
 
-const msyh = localFont({
-    src: "./woff2/msyh.woff2",
-    variable: "--font-preview-msyh",
-    display: "swap",
-    preload: false,
-});
-
 const PREVIEW_FONTS = {
-    "anime-ace-3": animeAce3,
-    "comic-shanns-2": comicShanns2,
-    "comic-marker-deluxe": comicMarkerDeluxe,
     "bangers": bangers,
-    "komika-slim": komikaSlim,
     "cc-wild-words": ccWildWords,
     "caveat": caveat,
     "noto-sans": notoSans,
@@ -257,8 +218,7 @@ const PREVIEW_FONTS = {
     "playpen-sans-thai": playpenSansThai,
     "noto-sans-arabic": notoSansArabic,
     "qts-manga": qtsManga,
-    "msyh": msyh,
-} as const satisfies Record<FontId, typeof animeAce3>;
+} as const satisfies Record<FontId, typeof bangers>;
 
 export const PREVIEW_FONT_VARIABLE = Object.fromEntries(
     Object.entries(PREVIEW_FONTS).map(([id, font]) => [id, font.variable]),

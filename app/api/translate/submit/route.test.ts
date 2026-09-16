@@ -19,7 +19,7 @@ type CurrentUserResult = {
 const defaultIntent: TranslationIntent = {
     targetLang: "ENG",
     mode: "quality",
-    fontName: "anime-ace-3",
+    fontName: "noto-sans",
 };
 
 const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
