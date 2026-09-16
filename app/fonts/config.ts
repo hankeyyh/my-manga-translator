@@ -70,10 +70,6 @@ export const FONT_CONFIG = {
             name: "GenEi Antique",
             renderName: "genei-antique",
         },
-        "mplus-rounded-1c": {
-            name: "M PLUS Rounded 1c",
-            renderName: "mplus-rounded-1c",
-        },
         "zen-kurenaido": {
             name: "Zen Kurenaido",
             renderName: "zen-kurenaido",
@@ -113,10 +109,6 @@ export const FONT_CONFIG = {
         "itim": {
             name: "Itim",
             renderName: "itim",
-        },
-        "krub": {
-            name: "Krub",
-            renderName: "krub",
         },
         "playpen-sans-thai": {
             name: "Playpen Sans Thai",
@@ -189,13 +181,12 @@ export const FONT_CONFIG = {
             locales: [
                 "CHS",
             ],
-            defaultFont: "noto-sans-sc",
+            defaultFont: "zcool-kuai-le",
             fonts: [
-                "noto-sans-sc",
                 "zcool-kuai-le",
+                "noto-sans-sc",
                 "long-cang",
                 "ma-shan-zheng",
-                "genei-late-go-n",
             ],
             previewSample: "漫画",
             writing: {
@@ -225,12 +216,11 @@ export const FONT_CONFIG = {
             locales: [
                 "JPN",
             ],
-            defaultFont: "noto-sans-jp",
+            defaultFont: "genei-antique",
             fonts: [
+                "genei-antique",
                 "noto-sans-jp",
                 "genei-late-go-n",
-                "genei-antique",
-                "mplus-rounded-1c",
                 "zen-kurenaido",
             ],
             previewSample: "マンガ",
@@ -244,10 +234,10 @@ export const FONT_CONFIG = {
             locales: [
                 "KOR",
             ],
-            defaultFont: "noto-sans-kr",
+            defaultFont: "komacon",
             fonts: [
-                "noto-sans-kr",
                 "komacon",
+                "noto-sans-kr",
                 "gowun-dodum",
                 "nanum-pen-script",
             ],
@@ -262,12 +252,11 @@ export const FONT_CONFIG = {
             locales: [
                 "THA",
             ],
-            defaultFont: "noto-sans-thai",
+            defaultFont: "itim",
             fonts: [
+                "itim",
                 "noto-sans-thai",
                 "charmonman",
-                "itim",
-                "krub",
                 "playpen-sans-thai",
             ],
             previewSample: "มังงะ",

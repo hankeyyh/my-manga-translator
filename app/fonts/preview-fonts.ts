@@ -85,13 +85,6 @@ const geneiAntique = localFont({
     preload: false,
 });
 
-const mplusRounded1c = localFont({
-    src: "./woff2/mplus-rounded-1c.woff2",
-    variable: "--font-preview-mplus-rounded-1c",
-    display: "swap",
-    preload: false,
-});
-
 const zenKurenaido = localFont({
     src: "./woff2/zen-kurenaido.woff2",
     variable: "--font-preview-zen-kurenaido",
@@ -162,13 +155,6 @@ const itim = localFont({
     preload: false,
 });
 
-const krub = localFont({
-    src: "./woff2/krub.woff2",
-    variable: "--font-preview-krub",
-    display: "swap",
-    preload: false,
-});
-
 const playpenSansThai = localFont({
     src: "./woff2/playpen-sans-thai.woff2",
     variable: "--font-preview-playpen-sans-thai",
@@ -203,7 +189,6 @@ const PREVIEW_FONTS = {
     "noto-sans-jp": notoSansJp,
     "genei-late-go-n": geneiLateGoN,
     "genei-antique": geneiAntique,
-    "mplus-rounded-1c": mplusRounded1c,
     "zen-kurenaido": zenKurenaido,
     "noto-sans-kr": notoSansKr,
     "komacon": komacon,
@@ -214,7 +199,6 @@ const PREVIEW_FONTS = {
     "noto-sans-thai": notoSansThai,
     "charmonman": charmonman,
     "itim": itim,
-    "krub": krub,
     "playpen-sans-thai": playpenSansThai,
     "noto-sans-arabic": notoSansArabic,
     "qts-manga": qtsManga,
