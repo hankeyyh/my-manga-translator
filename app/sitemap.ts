@@ -1,19 +1,9 @@
 import type { MetadataRoute } from "next";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
-import { absoluteUrl, type AppHref } from "@/biz/seo/site";
+import { absoluteUrl, languageAlternateUrls, type AppHref } from "@/biz/seo/site";
 import { routing } from "@/i18n/routing";
 import { LEGAL_SLUGS } from "@/types/do/legal-doc";
-
-function languageAlternates(href: AppHref): NonNullable<MetadataRoute.Sitemap[number]["alternates"]>["languages"] {
-    const languages: Record<string, string> = {
-        "x-default": absoluteUrl(routing.defaultLocale, href),
-    };
-    for (const locale of routing.locales) {
-        languages[locale] = absoluteUrl(locale, href);
-    }
-    return languages;
-}
 
 function localizedEntries(
     href: AppHref,
@@ -21,7 +11,7 @@ function localizedEntries(
 ): MetadataRoute.Sitemap {
     return routing.locales.map((locale) => ({
         url: absoluteUrl(locale, href),
-        alternates: { languages: languageAlternates(href) },
+        alternates: { languages: languageAlternateUrls(href) },
         ...extra,
     }));
 }

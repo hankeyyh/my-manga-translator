@@ -6,10 +6,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocaleDir } from "@/i18n/direction";
+import { getSiteUrl } from "@/biz/seo/site-url";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("meta");
     return {
+        metadataBase: new URL(getSiteUrl()),
         title: t("title"),
         description: t("description"),
     };

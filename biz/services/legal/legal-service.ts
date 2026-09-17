@@ -8,6 +8,19 @@ import {
 import { isLegalSlug, type LegalDoc } from "@/types/do/legal-doc";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+const LEGAL_DOC_FIELDS = [
+    "id",
+    "slug",
+    "locale",
+    "kind",
+    "title",
+    "content",
+    "status",
+    "effectiveAt",
+    "createdAt",
+    "updatedAt",
+] as const satisfies readonly (keyof LegalDoc)[];
+
 /**
  * 法律/说明文档
  */
@@ -19,6 +32,14 @@ export class LegalService {
     }
 
     async getPublishedDocument(slug: string, locale: string): Promise<BizResult<LegalDoc>> {
+        return this.selectPublishedDocument(slug, locale, LEGAL_DOC_FIELDS);
+    }
+
+    async selectPublishedDocument<const K extends keyof LegalDoc>(
+        slug: string,
+        locale: string,
+        selectFields: readonly K[],
+    ): Promise<BizResult<Pick<LegalDoc, K>>> {
         if (!slug || !isLegalSlug(slug)) {
             return {
                 code: CHECK_PARAM_ERROR_CODE,
@@ -33,11 +54,18 @@ export class LegalService {
                 error: new Error("locale is required"),
             };
         }
+        if (selectFields.length === 0) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("selectFields is required"),
+            };
+        }
 
-        const requested = await this.legalDocsRepo.getPublishedBySlug(slug, locale);
+        const requested = await this.legalDocsRepo.selectPublishedBySlug(slug, locale, selectFields);
         if (requested.error) {
             console.error(
-                `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: ${locale}, error: ${requested.error.message}`,
+                `selectPublishedDocument, legalDocsRepo.selectPublishedBySlug fail, slug: ${slug}, locale: ${locale}, error: ${requested.error.message}`,
             );
             return { code: DB_ERROR_CODE, data: null, error: requested.error };
         }
@@ -45,12 +73,12 @@ export class LegalService {
             return { code: SUCCESS_CODE, data: requested.data, error: null };
         }
 
-        // 回退到local=en
+        // 回退到 locale=en
         if (locale !== "en") {
-            const fallback = await this.legalDocsRepo.getPublishedBySlug(slug, "en");
+            const fallback = await this.legalDocsRepo.selectPublishedBySlug(slug, "en", selectFields);
             if (fallback.error) {
                 console.error(
-                    `getPublishedDocument, legalDocsRepo.getPublishedBySlug fail, slug: ${slug}, locale: en, error: ${fallback.error.message}`,
+                    `selectPublishedDocument, legalDocsRepo.selectPublishedBySlug fail, slug: ${slug}, locale: en, error: ${fallback.error.message}`,
                 );
                 return { code: DB_ERROR_CODE, data: null, error: fallback.error };
             }

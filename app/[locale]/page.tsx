@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { Manrope, Inter } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { HeroSection } from "./_components/hero-section";
 import { HowSection } from "./_components/how-section";
@@ -9,7 +11,14 @@ import { BlogSection } from "./_components/blog-section";
 import { Footer } from "@/components/footer";
 import { TranslateSection } from "./_components/translate-section";
 import { HomeJsonLd } from "./_components/seo/home-json-ld";
+import { pageAlternates } from "@/biz/seo/site";
 import { cn } from "@/components/utils";
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        alternates: pageAlternates(await getLocale(), "/"),
+    };
+}
 
 const manrope = Manrope({
     subsets: ["latin"],

@@ -99,6 +99,29 @@ export class BlogService {
         };
     }
 
+    async selectPublishedPost<const K extends keyof BlogPost>(
+        slug: string,
+        selectFields: readonly K[],
+    ): Promise<BizResult<Pick<BlogPost, K>>> {
+        if (!slug || selectFields.length === 0) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error(!slug ? "slug is required" : "selectFields is required"),
+            };
+        }
+
+        const { data, error } = await this.blogPostsRepo.selectPublishedBySlug(slug, selectFields);
+        if (error) {
+            console.error(
+                `selectPublishedPost, blogPostsRepo.selectPublishedBySlug fail, slug: ${slug}, error: ${error.message}`,
+            );
+            return { code: DB_ERROR_CODE, data: null, error };
+        }
+
+        return { code: SUCCESS_CODE, data: data!, error: null };
+    }
+
     private toMetaView(post: BlogPost, coverUrl: string): BlogPostMetaView {
         return {
             slug: post.slug,

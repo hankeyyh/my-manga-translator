@@ -3,6 +3,20 @@ import { Result } from "@/types/do/response";
 import { BlogPost } from "@/types/do/blog-post";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+const BLOG_POST_COLUMNS = {
+    id: "id",
+    slug: "slug",
+    title: "title",
+    description: "description",
+    cover: "cover",
+    content: "content",
+    author: "author",
+    status: "status",
+    publishedAt: "published_at",
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+} as const satisfies Record<keyof BlogPost, keyof Tables<"blog_posts">>;
+
 function mapBlogPostRow(row: Tables<"blog_posts">): BlogPost {
     return {
         id: row.id,
@@ -17,6 +31,17 @@ function mapBlogPostRow(row: Tables<"blog_posts">): BlogPost {
         createdAt: row.created_at,
         updatedAt: row.updated_at,
     };
+}
+
+function mapSelectedBlogPostFields<K extends keyof BlogPost>(
+    row: Record<string, unknown>,
+    selectFields: readonly K[],
+): Pick<BlogPost, K> {
+    const post = {} as Pick<BlogPost, K>;
+    for (const field of selectFields) {
+        post[field] = row[BLOG_POST_COLUMNS[field]] as Pick<BlogPost, K>[K];
+    }
+    return post;
 }
 
 export class BlogPostsRepository {
@@ -66,5 +91,32 @@ export class BlogPostsRepository {
             return { data: null, error: new Error(`blog_posts not found: ${slug}`) };
         }
         return { data: mapBlogPostRow(data as Tables<"blog_posts">), error: null };
+    }
+
+    async selectPublishedBySlug<const K extends keyof BlogPost>(
+        slug: string,
+        selectFields: readonly K[],
+    ): Promise<Result<Pick<BlogPost, K>>> {
+        if (selectFields.length === 0) {
+            return { data: null, error: new Error("selectFields is required") };
+        }
+
+        const { data, error } = await this.supabase
+            .from("blog_posts")
+            .select(selectFields.map((field) => BLOG_POST_COLUMNS[field]).join(","))
+            .eq("slug", slug)
+            .eq("status", "published")
+            .maybeSingle();
+
+        if (error) {
+            return { data: null, error };
+        }
+        if (!data) {
+            return { data: null, error: new Error(`blog_posts not found: ${slug}`) };
+        }
+        return {
+            data: mapSelectedBlogPostFields(data as unknown as Record<string, unknown>, selectFields),
+            error: null,
+        };
     }
 }

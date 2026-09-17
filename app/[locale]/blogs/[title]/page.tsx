@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { pageAlternates } from "@/biz/seo/site";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { BlogPostJsonLd } from "./_components/seo/blog-post-json-ld";
 
@@ -15,14 +16,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { title: slug } = await params;
     const t = await getTranslations("meta");
     const supabase = await createServerClient();
-    const result = await BlogService.fromSupabase(supabase).getPublishedPost(slug);
+    const result = await BlogService.fromSupabase(supabase).selectPublishedPost(slug, ["title"]);
+    const alternates = pageAlternates(await getLocale(), `/blogs/${slug}`);
     if (result.error || !result.data) {
-        return { title: t("blogTitle") };
+        return { title: t("blogTitle"), alternates };
     }
 
     return {
         title: t("blogTitleWithName", { title: result.data.title }),
-        description: result.data.description || undefined,
+        alternates,
     };
 }
 
