@@ -93,6 +93,30 @@ export class BlogPostsRepository {
         return { data: mapBlogPostRow(data as Tables<"blog_posts">), error: null };
     }
 
+    async selectPublished<const K extends keyof BlogPost>(
+        selectFields: readonly K[],
+    ): Promise<Result<Pick<BlogPost, K>[]>> {
+        if (selectFields.length === 0) {
+            return { data: null, error: new Error("selectFields is required") };
+        }
+
+        const { data, error } = await this.supabase
+            .from("blog_posts")
+            .select(selectFields.map((field) => BLOG_POST_COLUMNS[field]).join(","))
+            .eq("status", "published")
+            .order("published_at", { ascending: false, nullsFirst: false });
+
+        if (error) {
+            return { data: null, error };
+        }
+        return {
+            data: (data ?? []).map((row) =>
+                mapSelectedBlogPostFields(row as unknown as Record<string, unknown>, selectFields),
+            ),
+            error: null,
+        };
+    }
+
     async selectPublishedBySlug<const K extends keyof BlogPost>(
         slug: string,
         selectFields: readonly K[],

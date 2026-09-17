@@ -99,6 +99,28 @@ export class BlogService {
         };
     }
 
+    async selectPublishedPosts<const K extends keyof BlogPost>(
+        selectFields: readonly K[],
+    ): Promise<BizResult<Pick<BlogPost, K>[]>> {
+        if (selectFields.length === 0) {
+            return {
+                code: CHECK_PARAM_ERROR_CODE,
+                data: null,
+                error: new Error("selectFields is required"),
+            };
+        }
+
+        const { data, error } = await this.blogPostsRepo.selectPublished(selectFields);
+        if (error) {
+            console.error(
+                `selectPublishedPosts, blogPostsRepo.selectPublished fail, error: ${error.message}`,
+            );
+            return { code: DB_ERROR_CODE, data: null, error };
+        }
+
+        return { code: SUCCESS_CODE, data: data ?? [], error: null };
+    }
+
     async selectPublishedPost<const K extends keyof BlogPost>(
         slug: string,
         selectFields: readonly K[],

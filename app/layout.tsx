@@ -39,6 +39,9 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} dir={dir} className={notoSansArabic.variable} suppressHydrationWarning>
+            <head>
+                <link rel="describedby" href={`${getSiteUrl()}/llms.txt`} />
+            </head>
             <body className={`${geistSans.className} antialiased`}>
                 <NextIntlClientProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
