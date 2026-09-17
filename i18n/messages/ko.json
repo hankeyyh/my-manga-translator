@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "만화 번역",
-    "description": "AI 기반 만화 번역",
+    "title": "AI 만화 번역기 - 온라인 만화 번역 | Manga Sense",
+    "description": "만화 페이지를 업로드하면 클릭 한 번으로 AI 번역. 일본어, 한국어, 중국어 말풍선 텍스트를 감지한 뒤 20개 이상 언어로 원본에 다시 그립니다. 무료로 체험하세요.",
     "blogTitle": "블로그 | Manga Sense",
     "blogTitleWithName": "{title} | Manga Sense",
     "legalFallback": {
