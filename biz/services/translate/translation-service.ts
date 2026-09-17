@@ -133,9 +133,11 @@ export class TranslationService {
         const task = taskResult.data!;
 
         // 4. 并发上传图片
+        const uploadStart = Date.now();
         const uploadResults = await Promise.all(
             images.map((image, i) => this.imageStorage.uploadOriginalImage(user.id, task.id, i, image))
         );
+        console.log(`submitTranslationTask, uploadOriginalImage cost ${Date.now() - uploadStart}ms, imageCount: ${images.length}, taskId: ${task.id}`);
         const failedUpload = uploadResults.find((result) => result.error);
         if (failedUpload?.error) {
             console.error("submitTranslationTask, uploadOriginalImage failed, error: ", failedUpload.error.message);
@@ -152,8 +154,10 @@ export class TranslationService {
             credits: creditPerImage,
         }));
 
-        // 4. 保存图片
+        // 5. 保存图片
+        const createImagesStart = Date.now();
         const imageResult = await this.imageRepo.createImages(createImageParams);
+        console.log(`submitTranslationTask, createImages cost ${Date.now() - createImagesStart}ms, imageCount: ${createImageParams.length}, taskId: ${task.id}`);
         if (imageResult.error) {
             console.error(`submitTranslationTask, repo.createImages failed, error: ${imageResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
