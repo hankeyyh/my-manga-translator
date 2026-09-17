@@ -14,6 +14,8 @@
   },
   "common": {
     "brand": "Manga Sense",
+    "home": "Главная",
+    "breadcrumb": "Навигационная цепочка",
     "loading": "Загрузка…",
     "cancel": "Отмена",
     "processing": "Обработка…",

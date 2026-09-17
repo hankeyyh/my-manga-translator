@@ -14,6 +14,8 @@
   },
   "common": {
     "brand": "Manga Sense",
+    "home": "Trang chủ",
+    "breadcrumb": "Đường dẫn",
     "loading": "Đang tải…",
     "cancel": "Hủy",
     "processing": "Đang xử lý…",

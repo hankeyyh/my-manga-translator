@@ -35,7 +35,7 @@ export async function BlogPostJsonLd({ post, heading }: Props) {
                     author: post.author,
                 }),
                 buildBreadcrumbList([
-                    { name: tCommon("brand"), url: homeUrl },
+                    { name: tCommon("home"), url: homeUrl },
                     { name: t("title"), url: blogsUrl },
                     { name: headline, url: postUrl },
                 ]),

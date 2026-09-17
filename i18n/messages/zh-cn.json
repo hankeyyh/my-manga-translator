@@ -14,6 +14,8 @@
   },
   "common": {
     "brand": "Manga Sense",
+    "home": "首页",
+    "breadcrumb": "面包屑导航",
     "loading": "加载中…",
     "cancel": "取消",
     "processing": "处理中…",

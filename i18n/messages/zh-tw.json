@@ -14,6 +14,8 @@
   },
   "common": {
     "brand": "Manga Sense",
+    "home": "首頁",
+    "breadcrumb": "麵包屑導覽",
     "loading": "載入中…",
     "cancel": "取消",
     "processing": "處理中…",

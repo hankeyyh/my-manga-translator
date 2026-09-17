@@ -19,7 +19,7 @@ export async function BlogIndexJsonLd() {
             data={compactJsonLd([
                 buildCollectionPage({ name: t("title"), url: blogsUrl }),
                 buildBreadcrumbList([
-                    { name: tCommon("brand"), url: homeUrl },
+                    { name: tCommon("home"), url: homeUrl },
                     { name: t("title"), url: blogsUrl },
                 ]),
             ])}

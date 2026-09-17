@@ -29,7 +29,7 @@ export async function LegalDocumentJsonLd({ slug, title }: Props) {
                     locale: appLocale,
                 }),
                 buildBreadcrumbList([
-                    { name: tCommon("brand"), url: homeUrl },
+                    { name: tCommon("home"), url: homeUrl },
                     { name: title, url: pageUrl },
                 ]),
             ])}

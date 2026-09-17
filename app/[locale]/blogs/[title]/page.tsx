@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
-import { CcButton } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getTranslations } from "next-intl/server";
+import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { BlogPostJsonLd } from "./_components/seo/blog-post-json-ld";
 
 type Props = {
@@ -58,13 +57,19 @@ export default async function Page({ params }: Props) {
 
     const post = result.data;
     const { heading, body } = splitLeadingH1(post.content);
+    const tCommon = await getTranslations("common");
+    const pageTitle = heading ?? post.title;
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
             <BlogPostJsonLd heading={heading} post={post} />
-            <CcButton className="mb-8 px-0" variant="link" asChild>
-                <Link href="/blogs">{t("back")}</Link>
-            </CcButton>
+            <PageBreadcrumb
+                items={[
+                    { label: tCommon("home"), href: "/" },
+                    { label: t("title"), href: "/blogs" },
+                    { label: pageTitle },
+                ]}
+            />
             {post.publishedAt ? (
                 <p className="mb-4 text-sm text-cc-text-muted">
                     {formatBlogDate(post.publishedAt, t)}
