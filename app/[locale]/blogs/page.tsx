@@ -4,6 +4,7 @@ import { CcCard, CcSectionHeading } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getTranslations } from "next-intl/server";
+import { BlogIndexJsonLd } from "./_components/seo/blog-index-json-ld";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x400/f8fafc/0053dd?text=Blog";
 
@@ -31,6 +32,7 @@ export default async function Page() {
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+            <BlogIndexJsonLd />
             <CcSectionHeading align="left" className="mb-8" size="md" title={t("title")} />
             <div className="flex flex-col gap-4">
                 {posts.map((post) => (

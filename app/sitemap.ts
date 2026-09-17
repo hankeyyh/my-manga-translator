@@ -1,17 +1,9 @@
 import type { MetadataRoute } from "next";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
-import { getPathname } from "@/i18n/navigation";
-import { routing, type AppLocale } from "@/i18n/routing";
+import { absoluteUrl, type AppHref } from "@/biz/seo/site";
+import { routing } from "@/i18n/routing";
 import { LEGAL_SLUGS } from "@/types/do/legal-doc";
-
-const SITE_URL = process.env.SITE_URL ?? "https://mangasense.xyz";
-
-type AppHref = Parameters<typeof getPathname>[0]["href"];
-
-function absoluteUrl(locale: AppLocale, href: AppHref): string {
-    return `${SITE_URL}${getPathname({ locale, href })}`;
-}
 
 function languageAlternates(href: AppHref): NonNullable<MetadataRoute.Sitemap[number]["alternates"]>["languages"] {
     const languages: Record<string, string> = {

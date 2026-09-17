@@ -8,6 +8,7 @@ import { FaqSection } from "./_components/faq-section";
 import { BlogSection } from "./_components/blog-section";
 import { Footer } from "@/components/footer";
 import { TranslateSection } from "./_components/translate-section";
+import { HomeJsonLd } from "./_components/seo/home-json-ld";
 import { cn } from "@/components/utils";
 
 const manrope = Manrope({
@@ -31,6 +32,7 @@ export default function Page() {
                 "font-body text-cc-text-primary",
             )}
         >
+            <HomeJsonLd />
             <SiteHeader />
             <div className="min-h-screen bg-cc-surface-white">
                 <main>

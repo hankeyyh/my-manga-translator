@@ -2,6 +2,7 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { SiteJsonLd } from "./_components/seo/site-json-ld";
 
 type Props = {
     children: React.ReactNode;
@@ -20,5 +21,10 @@ export default async function LocaleLayout({ children, params }: Props) {
 
     setRequestLocale(locale);
 
-    return children;
+    return (
+        <>
+            <SiteJsonLd />
+            {children}
+        </>
+    );
 }

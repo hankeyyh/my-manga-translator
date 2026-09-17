@@ -6,6 +6,7 @@ import { CcButton } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getTranslations } from "next-intl/server";
+import { BlogPostJsonLd } from "./_components/seo/blog-post-json-ld";
 
 type Props = {
     params: Promise<{ title: string; }>;
@@ -60,6 +61,7 @@ export default async function Page({ params }: Props) {
 
     return (
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+            <BlogPostJsonLd heading={heading} post={post} />
             <CcButton className="mb-8 px-0" variant="link" asChild>
                 <Link href="/blogs">{t("back")}</Link>
             </CcButton>

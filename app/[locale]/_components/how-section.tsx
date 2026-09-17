@@ -4,27 +4,7 @@ import { useState } from "react";
 import { CcSectionHeading } from "@/design/design-system/components";
 import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
-
-const STEPS = [
-    {
-        key: "upload",
-        step: "01",
-        videoSrc: "/how-to-use/01-upload.min.mp4",
-        coverSrc: "/how-to-use/01-upload-cover.jpg",
-    },
-    {
-        key: "language",
-        step: "02",
-        videoSrc: "/how-to-use/02-language.min.mp4",
-        coverSrc: "/how-to-use/02-language-cover.jpg",
-    },
-    {
-        key: "download",
-        step: "03",
-        videoSrc: "/how-to-use/03-result.min.mp4",
-        coverSrc: "/how-to-use/03-result-cover.jpg",
-    },
-] as const;
+import { HOW_STEPS } from "./how-steps";
 
 function HowStepMedia({
     videoSrc,
@@ -70,7 +50,7 @@ export function HowSection() {
             <div className="mx-auto max-w-7xl px-4">
                 <CcSectionHeading className="mb-12 md:mb-20" size="md" title={t("title")} />
                 <div className="flex flex-col gap-16 md:gap-24">
-                    {STEPS.map((item, index) => {
+                    {HOW_STEPS.map((item, index) => {
                         const title = t(`steps.${item.key}.title`);
                         return (
                             <div

@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/biz/seo/site-url";
 import { routing } from "@/i18n/routing";
-
-const SITE_URL = process.env.SITE_URL ?? "https://mangasense.xyz";
 
 function localized(path: string): string[] {
     return routing.locales.map((locale) =>
@@ -10,6 +9,7 @@ function localized(path: string): string[] {
 }
 
 export default function robots(): MetadataRoute.Robots {
+    const siteUrl = getSiteUrl();
     return {
         rules: {
             userAgent: "*",
@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
                 ...localized("/payment"),
             ],
         },
-        sitemap: `${SITE_URL}/sitemap.xml`,
-        host: SITE_URL,
+        sitemap: `${siteUrl}/sitemap.xml`,
+        host: siteUrl,
     };
 }

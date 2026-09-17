@@ -5,20 +5,7 @@ import {
     CcSectionHeading,
 } from "@/design/design-system/components";
 import { useTranslations } from "next-intl";
-
-const FAQ_KEYS = [
-    "japanese",
-    "korean",
-    "chinese",
-    "ai",
-    "duration",
-    "formats",
-    "expiry",
-    "languages",
-    "privacy",
-    "refund",
-    "plugin",
-] as const;
+import { FAQ_KEYS } from "./faq-keys";
 
 export function FaqSection() {
     const t = useTranslations("faq");
