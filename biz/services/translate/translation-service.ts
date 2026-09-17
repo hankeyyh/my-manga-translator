@@ -155,9 +155,7 @@ export class TranslationService {
         }));
 
         // 5. 保存图片
-        const createImagesStart = Date.now();
         const imageResult = await this.imageRepo.createImages(createImageParams);
-        console.log(`submitTranslationTask, createImages cost ${Date.now() - createImagesStart}ms, imageCount: ${createImageParams.length}, taskId: ${task.id}`);
         if (imageResult.error) {
             console.error(`submitTranslationTask, repo.createImages failed, error: ${imageResult.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: imageResult.error };
