@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
-import { languageAlternateUrls, pageAlternates } from "./site";
+import { buildOpenGraph, buildPageMetadata, languageAlternateUrls, pageAlternates } from "./site";
 
 jest.mock("@/i18n/navigation", () => ({
     getPathname: ({ locale, href }: { locale: string; href: string; }) => {
@@ -53,5 +53,65 @@ describe("languageAlternateUrls", () => {
         expect(languages["x-default"]).toBe("https://mangasense.xyz/legal/privacy");
         expect(languages["zh-CN"]).toBe("https://mangasense.xyz/zh-cn/legal/privacy");
         expect(languages).not.toHaveProperty("zh-cn");
+    });
+});
+
+describe("buildOpenGraph", () => {
+    test("emits absolute og fields for the English home", () => {
+        process.env.SITE_URL = "https://mangasense.xyz";
+        const og = buildOpenGraph({
+            locale: "en",
+            href: "/",
+            title: "AI Manga Translator | MangaSense",
+            description: "Translate manga online",
+        });
+
+        expect(og).toEqual({
+            type: "website",
+            locale: "en_US",
+            url: "https://mangasense.xyz",
+            siteName: "MangaSense",
+            title: "AI Manga Translator | MangaSense",
+            description: "Translate manga online",
+            images: [
+                {
+                    url: "https://mangasense.xyz/hero_image.webp",
+                    alt: "AI Manga Translator | MangaSense",
+                },
+            ],
+        });
+    });
+
+    test("uses article type, localized url, and a custom image", () => {
+        process.env.SITE_URL = "https://mangasense.xyz";
+        const og = buildOpenGraph({
+            locale: "zh-cn",
+            href: "/blogs/ocr-tips",
+            title: "OCR tips | MangaSense",
+            description: "How manga OCR works",
+            type: "article",
+            imageUrl: "https://cdn.example.com/cover.jpg",
+        });
+
+        expect(og.type).toBe("article");
+        expect(og.locale).toBe("zh_CN");
+        expect(og.url).toBe("https://mangasense.xyz/zh-cn/blogs/ocr-tips");
+        expect(og.images[0]?.url).toBe("https://cdn.example.com/cover.jpg");
+    });
+});
+
+describe("buildPageMetadata", () => {
+    test("attaches openGraph next to canonical alternates", () => {
+        process.env.SITE_URL = "https://mangasense.xyz";
+        const metadata = buildPageMetadata({
+            locale: "en",
+            href: "/",
+            title: "Home",
+            description: "Desc",
+        });
+
+        expect(metadata.alternates.canonical).toBe("https://mangasense.xyz");
+        expect(metadata.openGraph.url).toBe("https://mangasense.xyz");
+        expect(metadata.openGraph.title).toBe("Home");
     });
 });

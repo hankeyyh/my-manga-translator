@@ -7,13 +7,19 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocaleDir } from "@/i18n/direction";
 import { getSiteUrl } from "@/biz/seo/site-url";
+import { buildPageMetadata } from "@/biz/seo/site";
 
 export async function generateMetadata(): Promise<Metadata> {
+    const locale = await getLocale();
     const t = await getTranslations("meta");
     return {
         metadataBase: new URL(getSiteUrl()),
-        title: t("title"),
-        description: t("description"),
+        ...buildPageMetadata({
+            locale,
+            href: "/",
+            title: t("title"),
+            description: t("description"),
+        }),
     };
 }
 

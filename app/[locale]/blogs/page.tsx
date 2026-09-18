@@ -4,17 +4,20 @@ import { CcCard, CcSectionHeading } from "@/design/design-system/components";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getLocale, getTranslations } from "next-intl/server";
-import { pageAlternates } from "@/biz/seo/site";
+import { buildPageMetadata } from "@/biz/seo/site";
 import { BlogIndexJsonLd } from "./_components/seo/blog-index-json-ld";
 
 const PLACEHOLDER_BLOG = "https://placehold.co/400x400/f8fafc/0053dd?text=Blog";
 
 export async function generateMetadata(): Promise<Metadata> {
+    const locale = await getLocale();
     const t = await getTranslations("meta");
-    return {
+    return buildPageMetadata({
+        locale,
+        href: "/blogs",
         title: t("blogTitle"),
-        alternates: pageAlternates(await getLocale(), "/blogs"),
-    };
+        description: t("description"),
+    });
 }
 
 function formatBlogDate(

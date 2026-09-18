@@ -4,7 +4,7 @@ import { MarkdownContent } from "@/components/markdown-content";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getLocale, getTranslations } from "next-intl/server";
-import { pageAlternates } from "@/biz/seo/site";
+import { buildPageMetadata } from "@/biz/seo/site";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { BlogPostJsonLd } from "./_components/seo/blog-post-json-ld";
 
@@ -14,18 +14,29 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { title: slug } = await params;
+    const locale = await getLocale();
     const t = await getTranslations("meta");
     const supabase = await createServerClient();
-    const result = await BlogService.fromSupabase(supabase).selectPublishedPost(slug, ["title"]);
-    const alternates = pageAlternates(await getLocale(), `/blogs/${slug}`);
+    const result = await BlogService.fromSupabase(supabase).selectPublishedPost(
+        slug,
+        ["title", "description"],
+    );
     if (result.error || !result.data) {
-        return { title: t("blogTitle"), alternates };
+        return buildPageMetadata({
+            locale,
+            href: `/blogs/${slug}`,
+            title: t("blogTitle"),
+            description: t("description"),
+        });
     }
 
-    return {
+    return buildPageMetadata({
+        locale,
+        href: `/blogs/${slug}`,
         title: t("blogTitleWithName", { title: result.data.title }),
-        alternates,
-    };
+        description: result.data.description || t("description"),
+        type: "article",
+    });
 }
 
 function formatBlogDate(

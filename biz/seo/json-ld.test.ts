@@ -9,7 +9,7 @@ import {
     compactJsonLd,
     serializeJsonLd,
 } from "./json-ld";
-import { absoluteAssetUrl, getSiteUrl, toSchemaLanguage } from "./site-url";
+import { absoluteAssetUrl, getSiteUrl, toOpenGraphLocale, toSchemaLanguage } from "./site-url";
 
 const originalSiteUrl = process.env.SITE_URL;
 
@@ -23,6 +23,15 @@ describe("toSchemaLanguage", () => {
         expect(toSchemaLanguage("zh-tw")).toBe("zh-TW");
         expect(toSchemaLanguage("en")).toBe("en");
         expect(toSchemaLanguage("ja")).toBe("ja");
+    });
+});
+
+describe("toOpenGraphLocale", () => {
+    test("uses language_TERRITORY tags", () => {
+        expect(toOpenGraphLocale("en")).toBe("en_US");
+        expect(toOpenGraphLocale("zh-cn")).toBe("zh_CN");
+        expect(toOpenGraphLocale("zh-tw")).toBe("zh_TW");
+        expect(toOpenGraphLocale("ja")).toBe("ja");
     });
 });
 
