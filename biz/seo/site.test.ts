@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { buildOpenGraph, buildPageMetadata, languageAlternateUrls, pageAlternates } from "./site";
+import { jest } from "@jest/globals";
 
 jest.mock("@/i18n/navigation", () => ({
     getPathname: ({ locale, href }: { locale: string; href: string; }) => {
@@ -75,7 +76,7 @@ describe("buildOpenGraph", () => {
             description: "Translate manga online",
             images: [
                 {
-                    url: "https://mangasense.xyz/hero_image.webp",
+                    url: "https://mangasense.xyz/hero_img_og.webp",
                     alt: "AI Manga Translator | MangaSense",
                 },
             ],

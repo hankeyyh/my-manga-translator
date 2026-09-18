@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { buildLlmsTxt } from "./llms-txt";
+import { jest } from "@jest/globals";
 
 jest.mock("@/i18n/routing", () => ({
     routing: {

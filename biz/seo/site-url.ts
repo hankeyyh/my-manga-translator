@@ -2,6 +2,7 @@ export const BRAND_NAME = "MangaSense";
 export const BRAND_EMAIL = "support@mangasense.xyz";
 export const DISCORD_URL = "https://discord.gg/qwX9Ygrrg";
 export const HERO_IMAGE_PATH = "/hero_image.webp";
+export const OG_IMAGE_PATH = "/hero_img_og.webp";
 
 const DEFAULT_SITE_URL = "https://mangasense.xyz";
 

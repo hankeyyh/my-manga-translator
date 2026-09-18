@@ -2,7 +2,7 @@ import { getPathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import {
     BRAND_NAME,
-    HERO_IMAGE_PATH,
+    OG_IMAGE_PATH,
     absoluteAssetUrl,
     getSiteUrl,
     toOpenGraphLocale,
@@ -78,7 +78,7 @@ export function buildOpenGraph(input: {
             {
                 url: input.imageUrl
                     ? absoluteAssetUrl(input.imageUrl)
-                    : absoluteAssetUrl(HERO_IMAGE_PATH),
+                    : absoluteAssetUrl(OG_IMAGE_PATH),
                 alt: input.title,
             },
         ],
