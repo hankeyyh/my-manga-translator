@@ -224,7 +224,7 @@ port = 465
 user = "resend"
 pass = "env(SMTP_SERVER_API_KEY)"
 admin_email = "noreply@mangasense.xyz"
-sender_name = "Manga Sense"
+sender_name = "MangaSense"
 
 [auth.email.template.confirmation]
 subject = "Confirm Your Signup"

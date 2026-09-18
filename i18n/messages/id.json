@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Penerjemah manga AI - Terjemahkan manga online | Manga Sense",
+    "title": "Penerjemah manga AI - Terjemahkan manga online | MangaSense",
     "description": "Unggah halaman manga dan dapatkan terjemahan AI dalam satu klik. Mendeteksi teks balon percakapan dalam bahasa Jepang, Korea, dan Tionghoa, lalu menggambar ulang ke 20+ bahasa. Coba gratis.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Ketentuan Penggunaan",
       "privacy": "Kebijakan Privasi",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Beranda",
     "breadcrumb": "Jejak navigasi",
     "loading": "Memuat…",
@@ -84,8 +84,8 @@
     "emailLabel": "Email: ",
     "followUs": "Ikuti kami",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Hak cipta dilindungi.",
-    "disclaimer": "Manga Sense tidak terafiliasi dengan penerbit manga mana pun.",
+    "copyright": "© {year} MangaSense. Hak cipta dilindungi.",
+    "disclaimer": "MangaSense tidak terafiliasi dengan penerbit manga mana pun.",
     "links": {
       "tool": "Alat",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "bahasa",
     "statAccuracy": "akurasi",
     "tryFree": "Coba gratis",
-    "howItWorks": "Cara kerja"
+    "howItWorks": "Cara menggunakan MangaSense"
   },
   "how": {
-    "title": "Cara kerja",
+    "title": "Cara menggunakan MangaSense",
     "demoFallback": "Demo {title}",
     "steps": {
       "upload": {

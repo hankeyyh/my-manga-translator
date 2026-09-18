@@ -1,5 +1,5 @@
 /**
- * ComicCurator Design System — blue-white theme for Manga Sense.
+ * ComicCurator Design System — blue-white theme for MangaSense.
  * Single source of truth for colors, typography, spacing, radii, and shadows.
  */
 

@@ -19,8 +19,8 @@ describe("buildLlmsTxt", () => {
         process.env.SITE_URL = "https://mangasense.xyz";
         const text = buildLlmsTxt();
 
-        expect(text.startsWith("# Manga Sense\n")).toBe(true);
-        expect(text).toContain("\n> Manga Sense is an online AI manga translator.");
+        expect(text.startsWith("# MangaSense\n")).toBe(true);
+        expect(text).toContain("\n> MangaSense is an online AI manga translator.");
         expect(text).toContain("## Pages");
         expect(text).toContain("## Legal");
         expect(text).not.toContain("## Optional");

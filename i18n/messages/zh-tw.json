@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "AI 漫畫翻譯 - 線上翻譯漫畫 | Manga Sense",
+    "title": "AI 漫畫翻譯 - 線上翻譯漫畫 | MangaSense",
     "description": "上傳漫畫即可一鍵 AI 翻譯。自動辨識日、韓、中漫畫氣泡文字，再依原作版面譯成 20 多種語言。免費試用。",
-    "blogTitle": "部落格 | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "部落格 | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "使用條款",
       "privacy": "隱私權政策",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "首頁",
     "breadcrumb": "麵包屑導覽",
     "loading": "載入中…",
@@ -84,8 +84,8 @@
     "emailLabel": "電子郵件：",
     "followUs": "追蹤我們",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. 保留所有權利。",
-    "disclaimer": "Manga Sense 與任何漫畫出版社無關。",
+    "copyright": "© {year} MangaSense. 保留所有權利。",
+    "disclaimer": "MangaSense 與任何漫畫出版社無關。",
     "links": {
       "tool": "工具",
       "blog": "部落格",
@@ -105,10 +105,10 @@
     "statLanguages": "語言",
     "statAccuracy": "準確率",
     "tryFree": "免費試用",
-    "howItWorks": "使用流程"
+    "howItWorks": "如何使用 MangaSense"
   },
   "how": {
-    "title": "使用流程",
+    "title": "如何使用 MangaSense",
     "demoFallback": "{title}示範",
     "steps": {
       "upload": {

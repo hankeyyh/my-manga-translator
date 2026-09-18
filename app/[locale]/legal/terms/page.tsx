@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const supabase = await createServerClient();
     const result = await LegalService.fromSupabase(supabase).selectPublishedDocument("terms", locale, ["title"]);
     return {
-        title: `${result.data?.title ?? t("terms")} | Manga Sense`,
+        title: `${result.data?.title ?? t("terms")} | MangaSense`,
         alternates: pageAlternates(locale, "/legal/terms"),
     };
 }

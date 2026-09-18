@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "ИИ-переводчик манги - Перевод манги онлайн | Manga Sense",
+    "title": "ИИ-переводчик манги - Перевод манги онлайн | MangaSense",
     "description": "Загрузите страницы манги и получите перевод с ИИ в один клик. Распознаёт текст в облачках на японском, корейском и китайском и вписывает его на более чем 20 языках. Попробуйте бесплатно.",
-    "blogTitle": "Блог | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Блог | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Условия использования",
       "privacy": "Политика конфиденциальности",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Главная",
     "breadcrumb": "Навигационная цепочка",
     "loading": "Загрузка…",
@@ -84,8 +84,8 @@
     "emailLabel": "Эл. почта: ",
     "followUs": "Мы в соцсетях",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Все права защищены.",
-    "disclaimer": "Manga Sense не связан ни с одним издательством манги.",
+    "copyright": "© {year} MangaSense. Все права защищены.",
+    "disclaimer": "MangaSense не связан ни с одним издательством манги.",
     "links": {
       "tool": "Инструмент",
       "blog": "Блог",
@@ -105,10 +105,10 @@
     "statLanguages": "языков",
     "statAccuracy": "точность",
     "tryFree": "Попробовать бесплатно",
-    "howItWorks": "Как это работает"
+    "howItWorks": "Как пользоваться MangaSense"
   },
   "how": {
-    "title": "Как это работает",
+    "title": "Как пользоваться MangaSense",
     "demoFallback": "Демо {title}",
     "steps": {
       "upload": {

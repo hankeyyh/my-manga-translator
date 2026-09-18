@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Traducteur de manga IA - Traduire des mangas en ligne | Manga Sense",
+    "title": "Traducteur de manga IA - Traduire des mangas en ligne | MangaSense",
     "description": "Importez des pages de manga et obtenez une traduction IA en un clic. Détecte le texte des bulles en japonais, coréen et chinois, puis le redessine en plus de 20 langues. Essayez gratuitement.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Conditions d’utilisation",
       "privacy": "Politique de confidentialité",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Accueil",
     "breadcrumb": "Fil d'Ariane",
     "loading": "Chargement…",
@@ -84,8 +84,8 @@
     "emailLabel": "E-mail : ",
     "followUs": "Nous suivre",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Tous droits réservés.",
-    "disclaimer": "Manga Sense n’est affilié à aucun éditeur de manga.",
+    "copyright": "© {year} MangaSense. Tous droits réservés.",
+    "disclaimer": "MangaSense n’est affilié à aucun éditeur de manga.",
     "links": {
       "tool": "Outil",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "langues",
     "statAccuracy": "précision",
     "tryFree": "Essayer gratuitement",
-    "howItWorks": "Comment ça marche"
+    "howItWorks": "Comment utiliser MangaSense"
   },
   "how": {
-    "title": "Comment ça marche",
+    "title": "Comment utiliser MangaSense",
     "demoFallback": "Démo {title}",
     "steps": {
       "upload": {

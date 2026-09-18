@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const supabase = await createServerClient();
     const result = await LegalService.fromSupabase(supabase).selectPublishedDocument("dmca", locale, ["title"]);
     return {
-        title: `${result.data?.title ?? t("dmca")} | Manga Sense`,
+        title: `${result.data?.title ?? t("dmca")} | MangaSense`,
         alternates: pageAlternates(locale, "/legal/dmca"),
     };
 }

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Trình dịch manga AI - Dịch manga trực tuyến | Manga Sense",
+    "title": "Trình dịch manga AI - Dịch manga trực tuyến | MangaSense",
     "description": "Tải trang manga lên và nhận bản dịch AI chỉ với một cú nhấp. Nhận diện chữ trong bong bóng thoại tiếng Nhật, Hàn, Trung, rồi vẽ lại sang 20+ ngôn ngữ. Dùng thử miễn phí.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Điều khoản sử dụng",
       "privacy": "Chính sách quyền riêng tư",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Trang chủ",
     "breadcrumb": "Đường dẫn",
     "loading": "Đang tải…",
@@ -84,8 +84,8 @@
     "emailLabel": "Email: ",
     "followUs": "Theo dõi chúng tôi",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Bảo lưu mọi quyền.",
-    "disclaimer": "Manga Sense không liên kết với bất kỳ nhà xuất bản manga nào.",
+    "copyright": "© {year} MangaSense. Bảo lưu mọi quyền.",
+    "disclaimer": "MangaSense không liên kết với bất kỳ nhà xuất bản manga nào.",
     "links": {
       "tool": "Công cụ",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "ngôn ngữ",
     "statAccuracy": "độ chính xác",
     "tryFree": "Dùng thử miễn phí",
-    "howItWorks": "Cách hoạt động"
+    "howItWorks": "Cách sử dụng MangaSense"
   },
   "how": {
-    "title": "Cách hoạt động",
+    "title": "Cách sử dụng MangaSense",
     "demoFallback": "Demo {title}",
     "steps": {
       "upload": {

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "KI-Manga-Übersetzer - Manga online übersetzen | Manga Sense",
+    "title": "KI-Manga-Übersetzer - Manga online übersetzen | MangaSense",
     "description": "Lade Manga-Seiten hoch und erhalte KI-Übersetzungen mit einem Klick. Erkennt Sprechblasentext auf Japanisch, Koreanisch und Chinesisch und zeichnet ihn in über 20 Sprachen neu. Kostenlos testen.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Nutzungsbedingungen",
       "privacy": "Datenschutzrichtlinie",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Startseite",
     "breadcrumb": "Brotkrümelpfad",
     "loading": "Wird geladen…",
@@ -84,8 +84,8 @@
     "emailLabel": "E-Mail: ",
     "followUs": "Folge uns",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Alle Rechte vorbehalten.",
-    "disclaimer": "Manga Sense ist nicht mit einem Manga-Verlag verbunden.",
+    "copyright": "© {year} MangaSense. Alle Rechte vorbehalten.",
+    "disclaimer": "MangaSense ist nicht mit einem Manga-Verlag verbunden.",
     "links": {
       "tool": "Tool",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "Sprachen",
     "statAccuracy": "Genauigkeit",
     "tryFree": "Kostenlos testen",
-    "howItWorks": "So funktioniert’s"
+    "howItWorks": "So verwendest du MangaSense"
   },
   "how": {
-    "title": "So funktioniert’s",
+    "title": "So verwendest du MangaSense",
     "demoFallback": "{title}-Demo",
     "steps": {
       "upload": {

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "AI Manga Translator - Translate Manga Online | Manga Sense",
+    "title": "AI Manga Translator - Translate Manga Online | MangaSense",
     "description": "Upload manga pages and get AI translations in one click. Detects speech-bubble text in Japanese, Korean, and Chinese, then redraws it in 20+ languages. Try it free.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Terms of Use",
       "privacy": "Privacy Policy",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Home",
     "breadcrumb": "Breadcrumb",
     "loading": "Loading…",
@@ -84,8 +84,8 @@
     "emailLabel": "Email: ",
     "followUs": "Follow us",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. All rights reserved.",
-    "disclaimer": "Manga Sense is not affiliated with any manga publisher.",
+    "copyright": "© {year} MangaSense. All rights reserved.",
+    "disclaimer": "MangaSense is not affiliated with any manga publisher.",
     "links": {
       "tool": "Tool",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "languages",
     "statAccuracy": "accuracy",
     "tryFree": "Try for free",
-    "howItWorks": "How it works"
+    "howItWorks": "How to Use MangaSense"
   },
   "how": {
-    "title": "How it works",
+    "title": "How to Use MangaSense",
     "demoFallback": "{title} demo",
     "steps": {
       "upload": {

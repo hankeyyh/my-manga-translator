@@ -56,7 +56,7 @@ describe("absoluteAssetUrl", () => {
 describe("serializeJsonLd", () => {
     test("wraps a graph and escapes script breakers", () => {
         const html = serializeJsonLd([
-            { "@type": "WebSite", name: "Manga Sense</script>" },
+            { "@type": "WebSite", name: "MangaSense</script>" },
         ]);
         expect(html).toContain('"@context":"https://schema.org"');
         expect(html).toContain('"@graph"');
@@ -68,7 +68,7 @@ describe("serializeJsonLd", () => {
 describe("schema builders", () => {
     test("organization points at a stable @id", () => {
         process.env.SITE_URL = "https://mangasense.xyz";
-        const org = buildOrganization("Manga Sense");
+        const org = buildOrganization("MangaSense");
         expect(org["@type"]).toBe("Organization");
         expect(org["@id"]).toBe("https://mangasense.xyz/#organization");
         expect(org.email).toBe("support@mangasense.xyz");
@@ -77,7 +77,7 @@ describe("schema builders", () => {
 
     test("web application uses a free offer without invented ratings", () => {
         const app = buildSoftwareApplication({
-            name: "Manga Sense",
+            name: "MangaSense",
             description: "Translate manga online",
             url: "https://mangasense.xyz",
             inLanguage: ["en", "zh-CN"],
@@ -111,7 +111,7 @@ describe("schema builders", () => {
 
     test("how-to numbers steps", () => {
         const howTo = buildHowTo({
-            name: "How it works",
+            name: "How to Use MangaSense",
             url: "https://mangasense.xyz",
             steps: [
                 { name: "Upload", text: "Drop files" },

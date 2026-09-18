@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "AI 漫画翻译 - 在线翻译漫画 | Manga Sense",
+    "title": "AI 漫画翻译 - 在线翻译漫画 | MangaSense",
     "description": "上传漫画即可一键 AI 翻译。自动识别日、韩、中漫画气泡文字，再按原版排版译成 20 多种语言。免费试用。",
-    "blogTitle": "博客 | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "博客 | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "使用条款",
       "privacy": "隐私政策",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "首页",
     "breadcrumb": "面包屑导航",
     "loading": "加载中…",
@@ -84,8 +84,8 @@
     "emailLabel": "邮箱：",
     "followUs": "关注我们",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. 保留所有权利。",
-    "disclaimer": "Manga Sense 与任何漫画出版社无关。",
+    "copyright": "© {year} MangaSense. 保留所有权利。",
+    "disclaimer": "MangaSense 与任何漫画出版社无关。",
     "links": {
       "tool": "工具",
       "blog": "博客",
@@ -105,10 +105,10 @@
     "statLanguages": "语言",
     "statAccuracy": "准确率",
     "tryFree": "免费试用",
-    "howItWorks": "使用流程"
+    "howItWorks": "如何使用 MangaSense"
   },
   "how": {
-    "title": "使用流程",
+    "title": "如何使用 MangaSense",
     "demoFallback": "{title}演示",
     "steps": {
       "upload": {

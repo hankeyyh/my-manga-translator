@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "Traductor de manga con IA - Traduce manga online | Manga Sense",
+    "title": "Traductor de manga con IA - Traduce manga online | MangaSense",
     "description": "Sube páginas de manga y obtén traducciones con IA en un clic. Detecta el texto de los globos en japonés, coreano y chino, y lo redibuja en más de 20 idiomas. Pruébalo gratis.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Términos de uso",
       "privacy": "Política de privacidad",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Inicio",
     "breadcrumb": "Ruta de navegación",
     "loading": "Cargando…",
@@ -84,8 +84,8 @@
     "emailLabel": "Correo: ",
     "followUs": "Síguenos",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Todos los derechos reservados.",
-    "disclaimer": "Manga Sense no está afiliado a ninguna editorial de manga.",
+    "copyright": "© {year} MangaSense. Todos los derechos reservados.",
+    "disclaimer": "MangaSense no está afiliado a ninguna editorial de manga.",
     "links": {
       "tool": "Herramienta",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "idiomas",
     "statAccuracy": "precisión",
     "tryFree": "Prueba gratis",
-    "howItWorks": "Cómo funciona"
+    "howItWorks": "Cómo usar MangaSense"
   },
   "how": {
-    "title": "Cómo funciona",
+    "title": "Cómo usar MangaSense",
     "demoFallback": "Demo de {title}",
     "steps": {
       "upload": {

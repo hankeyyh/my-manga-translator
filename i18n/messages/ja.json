@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "AIマンガ翻訳 - オンラインで漫画を翻訳 | Manga Sense",
+    "title": "AIマンガ翻訳 - オンラインで漫画を翻訳 | MangaSense",
     "description": "マンガをアップロードするだけでワンクリックAI翻訳。日・韓・中の吹き出しを検出し、20以上の言語で元のページに描き直します。無料でお試し。",
-    "blogTitle": "ブログ | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "ブログ | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "利用規約",
       "privacy": "プライバシーポリシー",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "ホーム",
     "breadcrumb": "パンくずリスト",
     "loading": "読み込み中…",
@@ -84,8 +84,8 @@
     "emailLabel": "メール：",
     "followUs": "フォローする",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. All rights reserved.",
-    "disclaimer": "Manga Sense は、いかなるマンガ出版社とも提携していません。",
+    "copyright": "© {year} MangaSense. All rights reserved.",
+    "disclaimer": "MangaSense は、いかなるマンガ出版社とも提携していません。",
     "links": {
       "tool": "ツール",
       "blog": "ブログ",
@@ -105,10 +105,10 @@
     "statLanguages": "言語",
     "statAccuracy": "精度",
     "tryFree": "無料で試す",
-    "howItWorks": "使い方"
+    "howItWorks": "MangaSense の使い方"
   },
   "how": {
-    "title": "使い方",
+    "title": "MangaSense の使い方",
     "demoFallback": "{title} のデモ",
     "steps": {
       "upload": {

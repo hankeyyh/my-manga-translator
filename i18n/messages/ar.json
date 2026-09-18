@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "مترجم مانغا بالذكاء الاصطناعي - ترجم المانغا أونلاين | Manga Sense",
+    "title": "مترجم مانغا بالذكاء الاصطناعي - ترجم المانغا أونلاين | MangaSense",
     "description": "ارفع صفحات المانغا واحصل على ترجمة بالذكاء الاصطناعي بنقرة واحدة. يكتشف نص فقاعات الحوار باليابانية والكورية والصينية ثم يعيد رسمه بأكثر من 20 لغة. جرّبه مجانًا.",
-    "blogTitle": "المدونة | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "المدونة | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "شروط الاستخدام",
       "privacy": "سياسة الخصوصية",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "الرئيسية",
     "breadcrumb": "مسار التنقل",
     "loading": "جارٍ التحميل…",
@@ -84,8 +84,8 @@
     "emailLabel": "البريد: ",
     "followUs": "تابعنا",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. جميع الحقوق محفوظة.",
-    "disclaimer": "Manga Sense غير مرتبط بأي دار نشر للمانغا.",
+    "copyright": "© {year} MangaSense. جميع الحقوق محفوظة.",
+    "disclaimer": "MangaSense غير مرتبط بأي دار نشر للمانغا.",
     "links": {
       "tool": "الأداة",
       "blog": "المدونة",
@@ -105,10 +105,10 @@
     "statLanguages": "لغات",
     "statAccuracy": "دقة",
     "tryFree": "جرّب مجانًا",
-    "howItWorks": "كيف يعمل"
+    "howItWorks": "كيفية استخدام MangaSense"
   },
   "how": {
-    "title": "كيف يعمل",
+    "title": "كيفية استخدام MangaSense",
     "demoFallback": "عرض {title}",
     "steps": {
       "upload": {

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "AI na tagasalin ng manga - Mag-translate ng manga online | Manga Sense",
+    "title": "AI na tagasalin ng manga - Mag-translate ng manga online | MangaSense",
     "description": "Mag-upload ng mga pahina ng manga at makakuha ng AI translation sa isang click. Natutukoy ang speech-bubble text sa Japanese, Korean, at Chinese, tapos iginuguhit muli sa 20+ na wika. Subukan nang libre.",
-    "blogTitle": "Blog | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "Blog | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "Mga Tuntunin ng Paggamit",
       "privacy": "Patakaran sa Privacy",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "Home",
     "breadcrumb": "Breadcrumb",
     "loading": "Naglo-load…",
@@ -84,8 +84,8 @@
     "emailLabel": "Email: ",
     "followUs": "Sundan kami",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. Reserved ang lahat ng karapatan.",
-    "disclaimer": "Hindi kaakibat ang Manga Sense sa anumang publisher ng manga.",
+    "copyright": "© {year} MangaSense. Reserved ang lahat ng karapatan.",
+    "disclaimer": "Hindi kaakibat ang MangaSense sa anumang publisher ng manga.",
     "links": {
       "tool": "Tool",
       "blog": "Blog",
@@ -105,10 +105,10 @@
     "statLanguages": "mga wika",
     "statAccuracy": "katumpakan",
     "tryFree": "Subukan nang libre",
-    "howItWorks": "Paano ito gumagana"
+    "howItWorks": "Paano gamitin ang MangaSense"
   },
   "how": {
-    "title": "Paano ito gumagana",
+    "title": "Paano gamitin ang MangaSense",
     "demoFallback": "Demo ng {title}",
     "steps": {
       "upload": {

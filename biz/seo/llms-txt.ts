@@ -31,11 +31,11 @@ export function buildLlmsTxt(): string {
         .join(", ");
 
     return [
-        "# Manga Sense",
+        "# MangaSense",
         "",
-        "> Manga Sense is an online AI manga translator. Upload manga or manhwa pages; it detects speech-bubble text, translates it, and redraws the result onto the original artwork while preserving layout and font style.",
+        "> MangaSense is an online AI manga translator. Upload manga or manhwa pages; it detects speech-bubble text, translates it, and redraws the result onto the original artwork while preserving layout and font style.",
         "",
-        "Manga Sense is a web app, not a publisher, and is not affiliated with any manga publisher. Typical source languages are Japanese, Korean, and Chinese. Output covers 20+ languages. Uploads accept JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, and ZIP (images up to 50MB, documents up to 200MB).",
+        "MangaSense is a web app, not a publisher, and is not affiliated with any manga publisher. Typical source languages are Japanese, Korean, and Chinese. Output covers 20+ languages. Uploads accept JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, and ZIP (images up to 50MB, documents up to 200MB).",
         "",
         `Translation is credit-based: Fast mode costs 1 credit per page, Quality mode costs 3. Pay-per-use credits never expire; subscription credits refresh each billing cycle. Uploaded content is used only to run the translation. The default English site has no locale prefix; other UI languages live under a prefix (for example ${localeList}). Contact: ${BRAND_EMAIL}. Community: ${DISCORD_URL}.`,
         "",
@@ -43,7 +43,7 @@ export function buildLlmsTxt(): string {
         "",
         listItem("Home", siteUrl("/"), "Product overview and the online translator"),
         listItem("Translator", siteUrl("/#tool"), "Upload pages, choose a target language, and run a translation"),
-        listItem("How it works", siteUrl("/#how"), "Upload, choose a language, preview and download"),
+        listItem("How to Use MangaSense", siteUrl("/#how"), "Upload, choose a language, preview and download"),
         listItem("Pricing", siteUrl("/#pricing"), "Pay per use and monthly or yearly subscriptions"),
         listItem("FAQ", siteUrl("/#faq"), "Languages, formats, credits, privacy, and refunds"),
         "",

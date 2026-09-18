@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "โปรแกรมแปลมังงะ AI - แปลมังงะออนไลน์ | Manga Sense",
+    "title": "โปรแกรมแปลมังงะ AI - แปลมังงะออนไลน์ | MangaSense",
     "description": "อัปโหลดหน้ามังงะแล้วรับคำแปลด้วย AI ในคลิกเดียว ตรวจจับข้อความในบอลลูนภาษาญี่ปุ่น เกาหลี และจีน แล้ววาดกลับเป็นกว่า 20 ภาษา ทดลองใช้ฟรี",
-    "blogTitle": "บล็อก | Manga Sense",
-    "blogTitleWithName": "{title} | Manga Sense",
+    "blogTitle": "บล็อก | MangaSense",
+    "blogTitleWithName": "{title} | MangaSense",
     "legalFallback": {
       "terms": "ข้อกำหนดการใช้งาน",
       "privacy": "นโยบายความเป็นส่วนตัว",
@@ -13,7 +13,7 @@
     }
   },
   "common": {
-    "brand": "Manga Sense",
+    "brand": "MangaSense",
     "home": "หน้าแรก",
     "breadcrumb": "เส้นทางนำทาง",
     "loading": "กำลังโหลด…",
@@ -84,8 +84,8 @@
     "emailLabel": "อีเมล: ",
     "followUs": "ติดตามเรา",
     "followX": "X",
-    "copyright": "© {year} Manga Sense. สงวนลิขสิทธิ์",
-    "disclaimer": "Manga Sense ไม่มีส่วนเกี่ยวข้องกับสำนักพิมพ์มังงะใด ๆ",
+    "copyright": "© {year} MangaSense. สงวนลิขสิทธิ์",
+    "disclaimer": "MangaSense ไม่มีส่วนเกี่ยวข้องกับสำนักพิมพ์มังงะใด ๆ",
     "links": {
       "tool": "เครื่องมือ",
       "blog": "บล็อก",
@@ -105,10 +105,10 @@
     "statLanguages": "ภาษา",
     "statAccuracy": "ความแม่นยำ",
     "tryFree": "ทดลองใช้ฟรี",
-    "howItWorks": "วิธีใช้งาน"
+    "howItWorks": "วิธีใช้ MangaSense"
   },
   "how": {
-    "title": "วิธีใช้งาน",
+    "title": "วิธีใช้ MangaSense",
     "demoFallback": "เดโม {title}",
     "steps": {
       "upload": {
