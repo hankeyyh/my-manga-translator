@@ -53,4 +53,6 @@ export interface TranslationConfig {
     rendering?: RenderingConfig | null;
     /** webp / png / jpg（jpeg 会被规范成 jpg） */
     output_format?: OutputFormat | null;
+    /** 跳过真实翻译，用占位文本渲染；默认 false */
+    test_mode?: boolean | null;
 }
