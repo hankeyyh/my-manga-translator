@@ -2,7 +2,9 @@ import { getPathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import {
     BRAND_NAME,
+    OG_IMAGE_HEIGHT,
     OG_IMAGE_PATH,
+    OG_IMAGE_WIDTH,
     absoluteAssetUrl,
     getSiteUrl,
     toOpenGraphLocale,
@@ -55,7 +57,7 @@ export type PageOpenGraph = {
     siteName: string;
     title: string;
     description: string;
-    images: Array<{ url: string; alt: string; }>;
+    images: Array<{ url: string; alt: string; width?: number; height?: number; }>;
 };
 
 export function buildOpenGraph(input: {
@@ -67,6 +69,15 @@ export function buildOpenGraph(input: {
     imageUrl?: string;
 }): PageOpenGraph {
     const appLocale = asAppLocale(input.locale);
+    const image = input.imageUrl
+        ? { url: absoluteAssetUrl(input.imageUrl), alt: input.title }
+        : {
+            url: absoluteAssetUrl(OG_IMAGE_PATH),
+            alt: input.title,
+            width: OG_IMAGE_WIDTH,
+            height: OG_IMAGE_HEIGHT,
+        };
+
     return {
         type: input.type ?? "website",
         locale: toOpenGraphLocale(appLocale),
@@ -74,14 +85,7 @@ export function buildOpenGraph(input: {
         siteName: BRAND_NAME,
         title: input.title,
         description: input.description,
-        images: [
-            {
-                url: input.imageUrl
-                    ? absoluteAssetUrl(input.imageUrl)
-                    : absoluteAssetUrl(OG_IMAGE_PATH),
-                alt: input.title,
-            },
-        ],
+        images: [image],
     };
 }
 

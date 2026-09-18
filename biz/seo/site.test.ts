@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { buildOpenGraph, buildPageMetadata, languageAlternateUrls, pageAlternates } from "./site";
-import { jest } from "@jest/globals";
 
 jest.mock("@/i18n/navigation", () => ({
     getPathname: ({ locale, href }: { locale: string; href: string; }) => {
@@ -78,6 +77,8 @@ describe("buildOpenGraph", () => {
                 {
                     url: "https://mangasense.xyz/hero_img_og.webp",
                     alt: "AI Manga Translator | MangaSense",
+                    width: 1200,
+                    height: 632,
                 },
             ],
         });
@@ -98,6 +99,8 @@ describe("buildOpenGraph", () => {
         expect(og.locale).toBe("zh_CN");
         expect(og.url).toBe("https://mangasense.xyz/zh-cn/blogs/ocr-tips");
         expect(og.images[0]?.url).toBe("https://cdn.example.com/cover.jpg");
+        expect(og.images[0]).not.toHaveProperty("width");
+        expect(og.images[0]).not.toHaveProperty("height");
     });
 });
 
