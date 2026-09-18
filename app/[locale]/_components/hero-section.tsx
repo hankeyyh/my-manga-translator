@@ -1,4 +1,4 @@
-import { CcButton } from "@/design/design-system/components";
+import { CcButton } from "@/components/cc";
 import { getTranslations } from "next-intl/server";
 
 export async function HeroSection() {

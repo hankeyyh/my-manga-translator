@@ -3,7 +3,7 @@
 import {
     CcAccordion,
     CcSectionHeading,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import { useTranslations } from "next-intl";
 import { FAQ_KEYS } from "./faq-keys";
 

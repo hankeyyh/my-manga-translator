@@ -1,4 +1,4 @@
-import { CcSectionHeading } from "@/design/design-system/components";
+import { CcSectionHeading } from "@/components/cc";
 import type { AppLocale } from "@/i18n/routing";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ImageCompareSlider } from "./image-compare-slider";

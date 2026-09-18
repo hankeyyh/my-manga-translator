@@ -8,7 +8,7 @@ import {
     CcCard,
     CcCardDescription,
     CcCardTitle,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
 import { useTranslations } from "next-intl";

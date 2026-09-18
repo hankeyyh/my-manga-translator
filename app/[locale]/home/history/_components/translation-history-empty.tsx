@@ -1,6 +1,6 @@
 "use client";
 
-import { CcButton, CcCard } from "@/design/design-system/components";
+import { CcButton, CcCard } from "@/components/cc";
 import { useTranslations } from "next-intl";
 
 type Props = {

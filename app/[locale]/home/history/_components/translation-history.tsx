@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { getUserTranslationHistory } from "@/actions/get-user-translation-history";
-import { CcButton } from "@/design/design-system/components";
+import { CcButton } from "@/components/cc";
 import {
     DateRangeFilter,
     type DateRangeValue,

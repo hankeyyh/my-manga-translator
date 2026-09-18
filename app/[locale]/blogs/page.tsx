@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { CcCard, CcSectionHeading } from "@/design/design-system/components";
+import { CcCard, CcSectionHeading } from "@/components/cc";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { getLocale, getTranslations } from "next-intl/server";

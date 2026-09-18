@@ -7,7 +7,7 @@ import {
     CcCard,
     CcCardDescription,
     CcCardTitle,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import { ImagePreview } from "@/components/image-preview";
 import { ThumbNail } from "@/components/thumbnail";
 import type { ApiTranslationTaskImage } from "@/types/api/translation-image";

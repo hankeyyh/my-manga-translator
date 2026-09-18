@@ -1,4 +1,4 @@
-import { CcCard } from "@/design/design-system/components";
+import { CcCard } from "@/components/cc";
 import { getTranslations } from "next-intl/server";
 
 export type ProfileCardProps = {

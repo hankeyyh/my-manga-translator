@@ -35,7 +35,7 @@ import {
     CcLabel,
     CcSelectTrigger,
     CcSwitch,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/[locale]/_components/upload-zone";

@@ -1,7 +1,7 @@
 /**
  * ComicCurator design tokens as CSS custom properties.
  * Light: blue-white. Dark: navy-blue (`.dark` on html, via next-themes).
- * Import in globals.css; consumed by Tailwind and design-system components.
+ * Import in globals.css; consumed by Tailwind and components/cc.
  */
 :root {
   /* Brand — primary blue */

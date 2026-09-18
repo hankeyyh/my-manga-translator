@@ -3,7 +3,7 @@
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { CcButton } from "@/design/design-system/components";
+import { CcButton } from "@/components/cc";
 import {
     DropdownMenu,
     DropdownMenuContent,

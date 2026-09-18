@@ -1,6 +1,6 @@
 "use client";
 
-import { CcCard } from "@/design/design-system/components";
+import { CcCard } from "@/components/cc";
 import { useTranslations } from "next-intl";
 
 export function TransactionListEmpty() {

@@ -3,7 +3,7 @@
 import {
     CcBadge,
     CcButton,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
     Check,

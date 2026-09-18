@@ -10,7 +10,7 @@ import type { UserSubscription } from "@/types/do/user-subscription";
 import {
     CcSectionHeading,
     CcSegmentedControl,
-} from "@/design/design-system/components";
+} from "@/components/cc";
 import { useTranslations } from "next-intl";
 import {
     BillingCycleTabs,

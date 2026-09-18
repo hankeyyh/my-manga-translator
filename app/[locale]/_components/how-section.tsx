@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CcSectionHeading } from "@/design/design-system/components";
+import { CcSectionHeading } from "@/components/cc";
 import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
 import { HOW_STEPS } from "./how-steps";

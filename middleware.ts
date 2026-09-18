@@ -19,9 +19,6 @@ function shouldHandleI18n(pathname: string) {
     if (pathname.startsWith("/api")) {
         return false;
     }
-    if (pathname.startsWith("/design")) {
-        return false;
-    }
     return true;
 }
 
@@ -123,8 +120,7 @@ export async function updateSession(request: NextRequest) {
         path.startsWith("/auth") ||
         path.startsWith("/api") ||
         path.startsWith("/legal") ||
-        path.startsWith("/blogs") ||
-        path.startsWith("/design");
+        path.startsWith("/blogs");
 
     if (!user && !isPublicPath && !isI18nRedirect) {
         const url = request.nextUrl.clone();

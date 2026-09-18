@@ -16,7 +16,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: "/",
             disallow: [
                 "/api/",
-                "/design",
                 ...localized("/auth"),
                 ...localized("/home"),
                 ...localized("/payment"),

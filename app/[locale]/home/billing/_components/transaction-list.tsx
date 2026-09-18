@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { listUserTransactions } from "@/actions/list-user-transactions";
 import type { ListUserTransactionsPage } from "@/types/dto/user-transaction";
-import { CcBadge, CcButton } from "@/design/design-system/components";
+import { CcBadge, CcButton } from "@/components/cc";
 import { TransactionListEmpty } from "@/app/[locale]/home/billing/_components/transaction-list-empty";
 import type { UserTransaction } from "@/types/do/user-transaction";
 import { SUCCESS_CODE } from "@/types/dto/response";

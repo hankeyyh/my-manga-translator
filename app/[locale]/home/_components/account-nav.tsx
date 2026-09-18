@@ -5,7 +5,7 @@ import { useState } from "react";
 import { CreditCard, History, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { CcButton } from "@/design/design-system/components";
+import { CcButton } from "@/components/cc";
 import { cn } from "@/components/utils";
 
 const NAV_ITEMS = [

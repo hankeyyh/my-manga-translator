@@ -1,4 +1,4 @@
-@import "../design/design-system/tokens.css";
+@import "./tokens.css";
 
 @tailwind base;
 @tailwind components;

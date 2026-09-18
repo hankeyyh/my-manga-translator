@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CcBadge } from "@/design/design-system/components";
+import { CcBadge } from "@/components/cc";
 import { cn } from "@/components/utils";
 
 export type BillingCycle = "monthly" | "yearly";
