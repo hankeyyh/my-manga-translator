@@ -41,6 +41,16 @@ function loginPathname(locale: AppLocale): string {
     return locale === routing.defaultLocale ? "/auth/login" : `/${locale}/auth/login`;
 }
 
+function isPublicCacheablePath(path: string) {
+    return path === "/" || path.startsWith("/legal") || path.startsWith("/blogs");
+}
+
+function hasSupabaseAuthCookie(request: NextRequest) {
+    return request.cookies.getAll().some(
+        (cookie) => cookie.name.startsWith("sb-") && cookie.name.includes("auth-token"),
+    );
+}
+
 export async function updateSession(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     // 轮询接口频率高，这里跳过 JWT 校验；路由内部仍会鉴权。
@@ -67,8 +77,25 @@ export async function updateSession(request: NextRequest) {
         handlei18nRouting(request) :
         NextResponse.next({ request });
 
+    const isI18nRedirect = response.status >= 300 && response.status < 400;
+    const path = pathnameWithoutLocale(request.nextUrl.pathname);
+    if (isI18nRedirect) {
+        response.headers.set("Cache-Control", "private, no-store");
+        return response;
+    }
+
+    // 游客访问营销页：跳过 JWT 刷新，HTML 不含用户态，允许边缘缓存。
+    if (isPublicCacheablePath(path) && !hasSupabaseAuthCookie(request)) {
+        response.headers.set(
+            "Cache-Control",
+            "public, s-maxage=60, stale-while-revalidate=300",
+        );
+        return response;
+    }
+
     // With Fluid compute, don't put this client in a global environment
     // variable. Always create a new one on each request.
+    let supabaseSetCookies = false;
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -78,6 +105,9 @@ export async function updateSession(request: NextRequest) {
                     return request.cookies.getAll();
                 },
                 setAll(cookiesToSet) {
+                    if (cookiesToSet.length > 0) {
+                        supabaseSetCookies = true;
+                    }
                     cookiesToSet.forEach(({ name, value, options }) => {
                         request.cookies.set(name, value);           // 1. 改内存里的 Cookie 头
                         response.cookies.set(name, value, options); // 2. Set-Cookie 给浏览器
@@ -114,12 +144,17 @@ export async function updateSession(request: NextRequest) {
     response.headers.set("x-middleware-override-headers", [...keys].join(","));
     response.headers.set("x-middleware-request-cookie", cookie);
 
-    // Prevent CDN/proxy from caching responses that may include Set-Cookie
-    // after token refresh (see @supabase/ssr createServerClient docs).
-    response.headers.set("Cache-Control", "private, no-store");
+    // Token refresh 会带 Set-Cookie，不能被 CDN 缓存。
+    // 营销页 HTML 已不含用户态；未刷新 cookie 时允许短缓存。
+    if (supabaseSetCookies || !isPublicCacheablePath(path)) {
+        response.headers.set("Cache-Control", "private, no-store");
+    } else {
+        response.headers.set(
+            "Cache-Control",
+            "public, s-maxage=60, stale-while-revalidate=300",
+        );
+    }
 
-    const isI18nRedirect = response.status >= 300 && response.status < 400;
-    const path = pathnameWithoutLocale(request.nextUrl.pathname);
     const isPublicPath = path === "/" ||
         path.startsWith("/login") ||
         path.startsWith("/auth") ||

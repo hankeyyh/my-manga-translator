@@ -1,4 +1,4 @@
-import { Manrope, Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { Footer } from "@/components/footer";
 import { AccountNav } from "@/app/[locale]/home/_components/account-nav";
@@ -10,12 +10,6 @@ const manrope = Manrope({
     subsets: ["latin"],
     weight: ["400", "600", "700", "800"],
     variable: "--font-manrope",
-});
-
-const inter = Inter({
-    subsets: ["latin"],
-    weight: ["400", "500", "600"],
-    variable: "--font-inter",
 });
 
 export default async function HomeLayout({
@@ -32,11 +26,10 @@ export default async function HomeLayout({
         <div
             className={cn(
                 manrope.variable,
-                inter.variable,
                 "flex min-h-screen flex-col font-body text-cc-text-primary",
             )}
         >
-            <SiteHeader />
+            <SiteHeader userInfo={userInfo ?? null} />
             <div className="relative z-10 flex-1 bg-cc-surface-page">
                 <main className="mx-auto max-w-5xl px-4 py-10">
                     <div className="grid gap-8 md:grid-cols-[220px_1fr]">

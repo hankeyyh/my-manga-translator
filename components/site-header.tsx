@@ -1,11 +1,19 @@
-import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { hasPublishedBlogPosts } from "@/biz/loaders/has-published-blog-posts";
 import { ClientSiteHeader } from "./client-site-header";
+import { UserInfo } from "@/types/api/user-info";
 
-export async function SiteHeader() {
-    const [result, showBlog] = await Promise.all([
-        getCurrentUserInfo(),
-        hasPublishedBlogPosts(),
-    ]);
-    return <ClientSiteHeader showBlog={showBlog} userInfo={result.data} />;
+type Props = {
+    userInfo?: UserInfo | null;
+    deferUser?: boolean;
+};
+
+export async function SiteHeader({ userInfo, deferUser = false }: Props = {}) {
+    const showBlog = await hasPublishedBlogPosts();
+    return (
+        <ClientSiteHeader
+            showBlog={showBlog}
+            userInfo={userInfo}
+            deferUser={deferUser}
+        />
+    );
 }

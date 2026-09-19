@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { getLocale, getTranslations } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { HeroSection } from "./_components/hero-section";
@@ -25,16 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
     });
 }
 
+// 页面级 ISR(Incremental Static Regeneration) 配置
+// 告诉服务端，这个路由生成的 HTML/数据缓存 最多 60 秒有效
+export const revalidate = 60;
+
 const manrope = Manrope({
     subsets: ["latin"],
     weight: ["400", "600", "700", "800"],
     variable: "--font-manrope",
-});
-
-const inter = Inter({
-    subsets: ["latin"],
-    weight: ["400", "500", "600"],
-    variable: "--font-inter",
 });
 
 export default function Page() {
@@ -42,12 +40,11 @@ export default function Page() {
         <div
             className={cn(
                 manrope.variable,
-                inter.variable,
                 "font-body text-cc-text-primary",
             )}
         >
             <HomeJsonLd />
-            <SiteHeader />
+            <SiteHeader deferUser={true} />
             <div className="min-h-screen bg-cc-surface-white">
                 <main>
                     <HeroSection />

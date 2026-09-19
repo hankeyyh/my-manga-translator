@@ -17,6 +17,7 @@ import { getPathname, Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { hasLocale, useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 function pathnameWithoutLocale(pathname: string): string {
     const first = pathname.split("/")[1];
@@ -28,11 +29,20 @@ function pathnameWithoutLocale(pathname: string): string {
 }
 
 type Props = {
-    userInfo: UserInfo | null
-    showBlog: boolean
-}
+    userInfo?: UserInfo | null;
+    showBlog: boolean;
+    /**
+     * 营销页（`/`、`/blogs`、`/legal`）设为 true：SSR 只输出占位，挂载后请求 `/api/me` 再渲染积分与 Login/Dashboard。
+     * 服务端不再等 Supabase，HTML 与用户无关，可与 middleware 的游客缓存、`revalidate` 配合。
+     * 
+     * 目的：提升页面响应速度，降低 TTFB。
+     * 
+     * `/home` 等需即时用户态的页面保持 false，使用 `userInfo`。
+     */
+    deferUser?: boolean;
+};
 
-export function ClientSiteHeader({ userInfo, showBlog }: Props) {
+export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, deferUser = false }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const locale = useLocale();
@@ -40,6 +50,31 @@ export function ClientSiteHeader({ userInfo, showBlog }: Props) {
     const tHeader = useTranslations("header");
     const tCommon = useTranslations("common");
     const { resolvedTheme, setTheme } = useTheme();
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(initialUserInfo);
+    const [userReady, setUserReady] = useState(!deferUser);
+
+    useEffect(() => {
+        if (!deferUser) {
+            return;
+        }
+        let cancelled = false;
+        fetch("/api/me")
+            .then((res) => res.json() as Promise<{ data?: UserInfo | null; }>)
+            .then((body) => {
+                if (!cancelled) {
+                    setUserInfo(body.data ?? null);
+                    setUserReady(true);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setUserReady(true);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [deferUser]);
 
     const isLogin = () => {
         return userInfo !== null;
@@ -110,7 +145,11 @@ export function ClientSiteHeader({ userInfo, showBlog }: Props) {
                         </CcButton>
                     </nav>
                     <div className="ms-auto flex items-center gap-2">
-                        <CcBadge variant="accent">{tCommon("creditsCount", { count: totalCredits })}</CcBadge>
+                        {userReady ? (
+                            <CcBadge variant="accent">{tCommon("creditsCount", { count: totalCredits })}</CcBadge>
+                        ) : (
+                            <span className="inline-flex h-6 w-16" aria-hidden />
+                        )}
                         <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <CcButton variant="outline" size="sm">
@@ -131,7 +170,7 @@ export function ClientSiteHeader({ userInfo, showBlog }: Props) {
                                             aria-current={isCurrent ? "true" : undefined}
                                             className={cn(
                                                 isCurrent &&
-                                                    "bg-[var(--cc-brand-tint)] font-medium text-[var(--cc-brand-primary)] focus:bg-[var(--cc-brand-tint)] focus:text-[var(--cc-brand-primary)]",
+                                                "bg-[var(--cc-brand-tint)] font-medium text-[var(--cc-brand-primary)] focus:bg-[var(--cc-brand-tint)] focus:text-[var(--cc-brand-primary)]",
                                             )}
                                             onSelect={() => onSelectLocale(item)}
                                         >
@@ -152,7 +191,9 @@ export function ClientSiteHeader({ userInfo, showBlog }: Props) {
                             <Sun className="size-4 dark:hidden" />
                             <Moon className="hidden size-4 dark:block" />
                         </CcButton>
-                        {isLogin() ? (
+                        {!userReady ? (
+                            <span className="inline-flex h-8 w-[5.5rem]" aria-hidden />
+                        ) : isLogin() ? (
                             <CcButton size="sm" onClick={onClickDashboard}>{tHeader("dashboard")}</CcButton>
                         ) : (
                             <CcButton size="sm" onClick={onClickLogin}>{tHeader("login")}</CcButton>
