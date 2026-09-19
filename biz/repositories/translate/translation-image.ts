@@ -16,6 +16,16 @@ export interface CreateImageParams {
     credits: number;
 }
 
+export interface TranslationImageLiteRecord {
+    id: string;
+    status: ImageStatus;
+    filename: string;
+    taskId: string;
+    imageIndex: number;
+    resultImagePath?: string;
+    errorMessage?: string;
+}
+
 // 更新图片参数
 export interface UpdateImageParams {
     status?: ImageStatus;
@@ -168,6 +178,34 @@ export class TranslationImageRepository {
         }
         return {
             data: data.map((value) => mapTranslationImageRowToTranslationImage(value)),
+            error: null,
+        };
+    }
+
+    async batchGetImagesLite(imageIds: string[]): Promise<Result<TranslationImageLiteRecord[]>> {
+        const { data, error } = await this.supabase
+            .from('translation_images')
+            .select('id, status, filename, task_id, image_index, result_image_path, error_message')
+            .in('id', imageIds);
+        if (error) {
+            return {
+                data: null,
+                error: new Error(`获取图片详情失败: ${error.message}`),
+            };
+        }
+        if (!data || data.length === 0) {
+            return { data: [], error: null };
+        }
+        return {
+            data: data.map((row) => ({
+                id: row.id,
+                status: row.status as ImageStatus,
+                filename: row.filename,
+                taskId: row.task_id,
+                imageIndex: row.image_index,
+                resultImagePath: row.result_image_path ?? undefined,
+                errorMessage: row.error_message ?? undefined,
+            })),
             error: null,
         };
     }

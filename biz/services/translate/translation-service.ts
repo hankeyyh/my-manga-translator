@@ -6,7 +6,7 @@ import { CreateImageParams, TranslationImageRepository } from "@/biz/repositorie
 import { TranslationStorageRepository } from "@/biz/repositories/translate/translation-storage";
 import { UserRepository } from "@/biz/repositories/auth/user-repository";
 import { SubmitTaskData, TranslationHistoryPage, TranslationTaskDetailView, TranslationTaskLiteView } from "@/types/dto/translation-task";
-import { TranslationImageView, TranslationImageLiteView } from "@/types/dto/translation-image";
+import { TranslationImageView, TranslationImageLiteView, TranslationImagePollView } from "@/types/dto/translation-image";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
 import { TaskStatus, TranslationTask } from "@/types/do/translation-task";
 import { packZip } from "@/biz/utils/pack";
@@ -361,18 +361,17 @@ export class TranslationService {
      * Lightweight batch image fetch for polling: skip original image signed URLs;
      * only sign result images that already have a storage path.
      */
-    async batchGetTranslationImageLite(imageIds: string[]): Promise<BizResult<TranslationImageLiteView[]>> {
+    async batchGetTranslationImageLite(imageIds: string[]): Promise<BizResult<TranslationImagePollView[]>> {
         const userResult = await this.userRepo.getCurrentUser();
         if (userResult.error || !userResult.data) {
             return { code: UNAUTHORIZED_ERROR_CODE, data: null, error: userResult.error };
         }
-        const user = userResult.data!;
 
         if (imageIds.length === 0) {
             return { code: SUCCESS_CODE, data: [], error: null };
         }
 
-        const imagesResult = await this.imageRepo.batchGetImages(imageIds);
+        const imagesResult = await this.imageRepo.batchGetImagesLite(imageIds);
         if (imagesResult.error) {
             return { code: DB_ERROR_CODE, data: null, error: imagesResult.error };
         }
@@ -402,9 +401,14 @@ export class TranslationService {
             });
         }
 
-        const imageViews = images.map((img, i): TranslationImageLiteView => ({
-            ...img,
+        const imageViews = images.map((img, i): TranslationImagePollView => ({
+            id: img.id,
+            status: img.status,
+            filename: img.filename,
+            taskId: img.taskId,
+            imageIndex: img.imageIndex,
             resultImageUrl: resultSignedUrls[i],
+            errorMessage: img.errorMessage,
         }));
 
         return { code: SUCCESS_CODE, data: imageViews, error: null };

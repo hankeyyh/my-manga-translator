@@ -2,10 +2,10 @@ import { TranslationService } from "@/biz/services/translate/translation-service
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { ApiTranslationTaskLiteImage } from "@/types/api/translation-image";
 import { SUCCESS_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
-import { TranslationImageLiteView } from "@/types/dto/translation-image";
+import { TranslationImagePollView } from "@/types/dto/translation-image";
 import { NextRequest, NextResponse } from "next/server";
 
-function toApiTranslationTaskLiteImage(img: TranslationImageLiteView): ApiTranslationTaskLiteImage {
+function toApiTranslationTaskLiteImage(img: TranslationImagePollView): ApiTranslationTaskLiteImage {
     return {
         id: img.id,
         status: img.status,

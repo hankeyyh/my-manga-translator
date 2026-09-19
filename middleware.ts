@@ -4,9 +4,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing, type AppLocale } from "./i18n/routing";
 
+// batch-image-lite 是高频接口，鉴权service接口也会做，只做一次就行
 export const config = {
     matcher: [
-        "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"
+        "/((?!_next/static|_next/image|favicon.ico|api/translate/batch-image-lite|.*\\..*).*)"
     ],
 };
 const handlei18nRouting = createMiddleware(routing);
@@ -42,6 +43,10 @@ function loginPathname(locale: AppLocale): string {
 
 export async function updateSession(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
+    // 轮询接口频率高，这里跳过 JWT 校验；路由内部仍会鉴权。
+    if (pathname.startsWith("/api/translate/batch-image-lite")) {
+        return NextResponse.next({ request });
+    }
     /** 
      * 先交由next-intl middleware：
      * 1. 判定locale

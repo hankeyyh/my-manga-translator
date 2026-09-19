@@ -64,6 +64,9 @@ const DEFAULT_FONT_STYLE: FontId = resolveFontId(DEFAULT_LANG_CODE);
 const MAX_PAGES = 20;
 const POLL_INTERVAL_MS = 1000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
+const POLL_BACKOFF_MAX_MS = 8000;
+
+type PollLiteResponse = { error?: string; images?: ApiTranslationTaskLiteImage[]; };
 
 function asLangCode(code: string): SupportedLangCode {
     return SUPPORTED_LANGS.some((lang) => lang.code === code)
@@ -131,6 +134,26 @@ function deriveTaskKind(task: WorkspaceTask): TaskKind {
 
 function collectPollIds(tasks: WorkspaceTask[]): string[] {
     return tasks.flatMap((task) => task.pages).filter(isPagePollable).map((page) => page.imageId!);
+}
+
+// 指数退避
+function pollBackoffMs(consecutiveErrors: number): number {
+    if (consecutiveErrors <= 0) {
+        return POLL_INTERVAL_MS;
+    }
+    return Math.min(POLL_INTERVAL_MS * 2 ** consecutiveErrors, POLL_BACKOFF_MAX_MS);
+}
+
+async function readPollJson(response: Response): Promise<PollLiteResponse | null> {
+    const contentType = (response.headers.get("content-type") ?? "").toLowerCase();
+    if (contentType && !contentType.includes("application/json")) {
+        return null;
+    }
+    try {
+        return await response.json() as PollLiteResponse;
+    } catch {
+        return null;
+    }
 }
 
 function filesToPages(files: File[], existingNames: Set<string>): MangaPage[] {
@@ -660,15 +683,16 @@ export function TranslateSection() {
 
         const abortController = new AbortController();
         let cancelled = false;
+        let consecutiveTransientErrors = 0;
 
         // poll->scheduleNext->poll循环，不setTimeout(scheduleNext)，是因为：
         // 终止轮询的条件有多个：图片处理结束，超时，abort signal。如果写成setTimeout(scheduleNext)，
         // 需要poll在每种终止情况下，都显示设置cancelled=true，如果后续增加终止分支，也要设置
         // 而将是否进行下一轮的决定权交给poll，只需要在决定轮询的地方调用scheduleNext即可。关键在：谁有权决定还要不要下一轮
-        const scheduleNext = () => {
+        const scheduleNext = (delay = POLL_INTERVAL_MS) => {
             if (cancelled) return;
             clearPollTimeout();
-            pollTimeoutRef.current = setTimeout(() => void poll(), POLL_INTERVAL_MS);
+            pollTimeoutRef.current = setTimeout(() => void poll(), delay);
         };
 
         const applyTimeout = (current: WorkspaceTask[], now: number): { next: WorkspaceTask[]; timedOut: boolean; } => {
@@ -694,6 +718,36 @@ export function TranslateSection() {
             return { next, timedOut };
         };
 
+        const commitPollState = (next: WorkspaceTask[], timedOut: boolean) => {
+            tasksRef.current = next;
+            /**
+             * 注意区分两种setTasks:
+             * - poll闭包外，其他代码都使用函数式更新，本质是以上一份React state为源
+             * - poll闭包中，不使用函数式更新，本质是以tasksRef为源，tasks是setup那一刻的旧状态，不能以它为源
+             */
+            setTasks(next);
+            if (timedOut) {
+                toast.error(t("timeout"));
+                console.error("Translation timeout");
+            }
+            if (collectPollIds(next).length === 0) {
+                clearPollTimeout();
+                setPolling(false);
+                return false;
+            }
+            return true;
+        };
+
+        const continueAfterTransient = (reason: string) => {
+            consecutiveTransientErrors += 1;
+            console.error(reason);
+            const applied = applyTimeout(tasksRef.current, Date.now());
+            if (!commitPollState(applied.next, applied.timedOut)) {
+                return;
+            }
+            scheduleNext(pollBackoffMs(consecutiveTransientErrors));
+        };
+
         const poll = async () => {
             if (cancelled) return;
 
@@ -705,14 +759,24 @@ export function TranslateSection() {
             }
 
             try {
-                const response = await fetch(
-                    `/api/translate/batch-image-lite?imageIds=${encodeURIComponent(imageIds.join(","))}`,
+                const response = await fetch(`/api/translate/batch-image-lite?imageIds=${encodeURIComponent(imageIds.join(","))}`,
                     { signal: abortController.signal },
                 );
-                const data = await response.json() as { error?: string; images?: ApiTranslationTaskLiteImage[]; };
-                if (!response.ok) {
-                    throw new Error(data.error);
+                const data = await readPollJson(response);
+                if (response.status === 401 || response.status === 403) {
+                    const errMsg = data?.error ?? tCommon("unknownError");
+                    toast.error(errMsg);
+                    console.error(errMsg);
+                    clearPollTimeout();
+                    setPolling(false);
+                    return;
                 }
+                // CF CPU limit 等会返回 HTML 错误页；5xx/网络抖动也不该打断轮询
+                if (!data || !response.ok) {
+                    continueAfterTransient(data?.error ?? `poll transient failure: status=${response.status} json=${Boolean(data)}`);
+                    return;
+                }
+                consecutiveTransientErrors = 0;
                 const images = data.images ?? [];
                 // 合并，更新page.status，如果成功，更新resultUrl
                 const merged = tasksRef.current.map((task) => ({
@@ -721,34 +785,16 @@ export function TranslateSection() {
                 }));
                 // 检查是否有任务是否超时，如果超时page.status=stalled
                 const applied = applyTimeout(merged, Date.now());
-                tasksRef.current = applied.next;
-                /**
-                 * 注意区分两种setTasks:
-                 * - poll闭包外，其他代码都使用函数式更新，本质是以上一份React state为源
-                 * - poll闭包中，不使用函数式更新，本质是以tasksRef为源，tasks是setup那一刻的旧状态，不能以它为源
-                 */
-                setTasks(applied.next);
-                if (applied.timedOut) {
-                    toast.error(t("timeout"));
-                    console.error("Translation timeout");
-                }
-                // 所有图片处理结束
-                if (collectPollIds(applied.next).length === 0) {
-                    clearPollTimeout();
-                    setPolling(false);
+                if (!commitPollState(applied.next, applied.timedOut)) {
                     return;
                 }
-                // 还有图片在处理中，需要继续轮询
                 scheduleNext();
             } catch (err) {
                 if (err instanceof Error && err.name === "AbortError") {
                     return;
                 }
                 const errMsg = err instanceof Error ? err.message : tCommon("unknownError");
-                toast.error(errMsg);
-                console.error(errMsg);
-                clearPollTimeout();
-                setPolling(false);
+                continueAfterTransient(errMsg);
             }
         };
 
