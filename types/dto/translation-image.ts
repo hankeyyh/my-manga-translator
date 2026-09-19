@@ -5,10 +5,6 @@ export interface TranslationImageView extends TranslationImage {
     resultImageUrl: string;
 }
 
-export interface TranslationImageLiteView extends TranslationImage {
-    resultImageUrl: string;
-}
-
 /** Polling-only image fields; skip original image and unused row data. */
 export interface TranslationImagePollView {
     id: string;
