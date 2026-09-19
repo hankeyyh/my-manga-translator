@@ -1,17 +1,21 @@
+import { preload } from "react-dom";
 import { CcButton } from "@/components/cc";
+import { HERO_IMAGE_PATH } from "@/biz/seo/site-url";
 import { getTranslations } from "next-intl/server";
 
 export async function HeroSection() {
     const t = await getTranslations("hero");
+    preload(HERO_IMAGE_PATH, { as: "image", fetchPriority: "high" });
 
     return (
         <section className="relative flex min-h-[60vh] items-center">
             {/* 固定于 header 下方、高度对齐 hero；后续不透明层滚动盖过 */}
             <div className="pointer-events-none fixed inset-x-0 top-14 z-0 h-[60vh]">
                 <img
-                    src="/hero_image.webp"
+                    src={HERO_IMAGE_PATH}
                     alt=""
                     aria-hidden
+                    fetchPriority="high"
                     className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-[var(--cc-overlay-hero)]" />

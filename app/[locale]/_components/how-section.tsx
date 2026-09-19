@@ -4,35 +4,39 @@ import { useState } from "react";
 import { CcSectionHeading } from "@/components/cc";
 import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
-import { HOW_STEPS } from "./how-steps";
+import { HOW_COVER_SIZES, HOW_STEPS } from "./how-steps";
 
 function HowStepMedia({
     videoSrc,
     coverSrc,
+    coverSrcSet,
     fallback,
 }: {
     videoSrc: string;
     coverSrc: string;
+    coverSrcSet: string;
     fallback: string;
 }) {
     const [failed, setFailed] = useState(false);
 
     return (
-        <div className="w-full overflow-hidden rounded-2xl border border-cc-border/50 bg-cc-surface-white shadow-[var(--cc-shadow-card)] md:w-[58%]">
-            {failed ? (
-                <img
-                    src={coverSrc}
-                    alt={fallback}
-                    className="aspect-[16/10] w-full object-cover"
-                />
-            ) : (
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-cc-border/50 bg-cc-surface-white shadow-[var(--cc-shadow-card)] md:w-[58%]">
+            <img
+                src={coverSrc}
+                srcSet={coverSrcSet}
+                sizes={HOW_COVER_SIZES}
+                alt={fallback}
+                width={750}
+                height={469}
+                className="absolute inset-0 h-full w-full object-cover"
+            />
+            {failed ? null : (
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
-                    poster={coverSrc}
-                    className="aspect-[16/10] w-full object-cover"
+                    className="absolute inset-0 z-[1] h-full w-full object-cover"
                     onError={() => setFailed(true)}
                 >
                     <source src={videoSrc} type="video/mp4" />
@@ -74,6 +78,7 @@ export function HowSection() {
                                 <HowStepMedia
                                     videoSrc={item.videoSrc}
                                     coverSrc={item.coverSrc}
+                                    coverSrcSet={item.coverSrcSet}
                                     fallback={t("demoFallback", { title })}
                                 />
                             </div>
