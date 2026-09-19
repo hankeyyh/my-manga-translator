@@ -6,6 +6,10 @@
     "compatibility_flags": [
         "nodejs_compat"
     ],
+    // esbuild keep-names injects __name() into next-themes' inline script.toString();
+    // the helper exists only in the worker bundle, so the browser throws ReferenceError.
+    // https://opennext.js.org/cloudflare/howtos/keep_names
+    "keep_names": false,
     "assets": {
         "directory": ".open-next/assets",
         "binding": "ASSETS"
