@@ -4,7 +4,7 @@ export function estimateCreditPerImage(intent: TranslationIntent): number {
     if (intent.mode === "fast") {
         return 1;
     } else if (intent.mode === "quality") {
-        return 3;
+        return 2;
     }
     return 0;
 }
