@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "Schnelle Übersetzung (1 Credit)",
-      "quality": "Qualitätsübersetzung (3 Credits)"
+      "quality": "Qualitätsübersetzung (2 Credits)"
     },
     "draftLabel": "Entwurf · {count} Seiten",
     "taskLabel": "Aufgabe {id}",

@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "高速翻訳（1 クレジット）",
-      "quality": "高品質翻訳（3 クレジット）"
+      "quality": "高品質翻訳（2 クレジット）"
     },
     "draftLabel": "下書き · {count} ページ",
     "taskLabel": "タスク {id}",

@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "快速翻译 (1 credit)",
-      "quality": "高质量翻译 (3 credits)"
+      "quality": "高质量翻译 (2 credits)"
     },
     "draftLabel": "草稿 · {count} 页",
     "taskLabel": "任务 {id}",

@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "Traduction rapide (1 crédit)",
-      "quality": "Traduction qualité (3 crédits)"
+      "quality": "Traduction qualité (2 crédits)"
     },
     "draftLabel": "Brouillon · {count} pages",
     "taskLabel": "Tâche {id}",

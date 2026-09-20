@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "快速翻譯 (1 credit)",
-      "quality": "高品質翻譯 (3 credits)"
+      "quality": "高品質翻譯 (2 credits)"
     },
     "draftLabel": "草稿 · {count} 頁",
     "taskLabel": "任務 {id}",

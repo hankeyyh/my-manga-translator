@@ -165,7 +165,7 @@
     },
     "modes": {
       "fast": "Terjemahan cepat (1 kredit)",
-      "quality": "Terjemahan berkualitas (3 kredit)"
+      "quality": "Terjemahan berkualitas (2 kredit)"
     },
     "draftLabel": "Draf · {count} halaman",
     "taskLabel": "Tugas {id}",
