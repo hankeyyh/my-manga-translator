@@ -22,6 +22,8 @@ export type Provider =
 export interface DetectionConfig {
     /** 气泡检测模型，默认 yolo_2 */
     bubble_detector_model?: string;
+    /** 是否按分镜排序气泡阅读顺序；fast 关以省检测成本 */
+    use_panel_sorting?: boolean;
 }
 
 /** 与 `OutsideTextConfigIn` 对齐的框外文字处理选项 */
@@ -29,6 +31,12 @@ export interface OutsideTextConfig {
     enabled?: boolean;
     /** lama_large / opencv / none */
     inpainting_method?: InpaintingMethod;
+    /** LaMa 笔画 mask 是否跑 CRF 精修 */
+    lama_use_crf?: boolean;
+    /** DBNet：OSB crop 笔画 mask 推理最长边上限 */
+    lama_detect_size?: number;
+    /** LaMa：OSB 擦字 patch 推理最长边上限 */
+    lama_inpainting_size?: number;
 }
 
 /** 与 `RenderingConfigIn` 对齐的排版选项 */

@@ -223,9 +223,9 @@ export class MangaTranslatorBackend implements TranslationBackend {
     }
 
     private toTranslationConfig(intent: TranslationIntent): TranslationConfig {
-        // TODO 缺少input_language, rtl
+        const isFast = intent.mode === "fast";
         return {
-            input_language: "Japanese",
+            input_language: "", 
             output_language: toMtOutputLanguage(intent.targetLang),
             provider: "deepl",
             model_name: "deepl",
@@ -233,11 +233,15 @@ export class MangaTranslatorBackend implements TranslationBackend {
             ocr_method: "manga-ocr",
             font_name: intent.fontName,
             detection: {
-                bubble_detector_model: "yolo_2"
+                bubble_detector_model: "yolo_2",
+                use_panel_sorting: !isFast,
             },
             outside_text: {
                 enabled: true,
                 inpainting_method: "lama_large",
+                lama_use_crf: !isFast,
+                lama_detect_size: isFast ? 1024 : 2048,
+                lama_inpainting_size: isFast ? 1024 : 2048,
             },
             rendering: {
                 rtl: true,  // 控制的是气泡/分镜的阅读顺序。true：日漫默认；false：美漫 / 韩漫 / 国漫
