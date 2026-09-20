@@ -247,6 +247,7 @@ export class MangaTranslatorBackend implements TranslationBackend {
                 rtl: true,  // 控制的是气泡/分镜的阅读顺序。true：日漫默认；false：美漫 / 韩漫 / 国漫
             },
             output_format: "webp",
+            test_mode: true,
         };
     }
 

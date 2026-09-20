@@ -1,3 +1,6 @@
+/**
+ * Nextjs 约定路由 /robots.txt。robots.ts 需要放到app目录下
+ */
 import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/biz/seo/site-url";
 import { routing } from "@/i18n/routing";

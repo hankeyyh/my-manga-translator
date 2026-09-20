@@ -1,3 +1,6 @@
+/**
+ * Nextjs 约定路由 /sitemap.xml。sitemap.ts 需要放到app目录下
+ */
 import type { MetadataRoute } from "next";
 import { BlogService } from "@/biz/services/blog/blog-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
