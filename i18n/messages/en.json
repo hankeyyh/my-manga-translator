@@ -10,7 +10,11 @@
       "about": "About",
       "refund": "Refund Policy",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "AI Manga Translator Pricing | MangaSense",
+    "pricingDescription": "Pay per use or subscribe. Fast mode is 1 credit per page, Quality mode is 2. Pay-per-use credits never expire. Cancel a subscription anytime.",
+    "faqTitle": "AI Manga Translator FAQ | MangaSense",
+    "faqDescription": "Answers about Japanese, Korean, and Chinese manga translation, supported formats, credits, privacy, and refunds."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Auto refill every year",
       "Smart OCR, translation, and in-place typesetting",
       "Cancel anytime"
-    ]
+    ],
+    "pageTitle": "AI Manga Translator Pricing",
+    "pageDescription": "Choose pay-per-use credits or a monthly or yearly subscription. Translate Japanese, Korean, and Chinese manga into 20+ languages while keeping the original layout.",
+    "creditsTitle": "How credits work",
+    "creditsIntro": "Every translated page costs credits. Pick Fast or Quality depending on the accuracy you need.",
+    "creditsFastTitle": "Fast mode",
+    "creditsFastBody": "1 credit per page. Faster results for everyday reading.",
+    "creditsQualityTitle": "Quality mode",
+    "creditsQualityBody": "2 credits per page. Higher accuracy for dense or stylized text.",
+    "compareTitle": "Which plan is right for you?",
+    "comparePayToUseTitle": "Pay Per Use",
+    "comparePayToUseBody": "Buy credits once and use them anytime. Best if you translate occasionally. Credits never expire.",
+    "compareSubscriptionTitle": "Subscription",
+    "compareSubscriptionBody": "Credits refresh every billing cycle. Better value if you translate regularly. Cancel anytime.",
+    "faqTitle": "Pricing FAQ",
+    "faq": {
+      "credits": {
+        "question": "How many credits does a page cost?",
+        "answer": "Fast mode costs 1 credit per page. Quality mode costs 2 credits per page."
+      },
+      "expiry": {
+        "question": "Do credits expire?",
+        "answer": "Pay Per Use credits never expire. Subscription credits refresh at the start of each billing cycle."
+      },
+      "cancel": {
+        "question": "Can I cancel a subscription?",
+        "answer": "Yes. You can cancel anytime. Remaining subscription credits stay available until the current period ends."
+      },
+      "refund": {
+        "question": "Can I get a refund?",
+        "answer": "Unused paid credits can be refunded according to our refund policy."
+      },
+      "languages": {
+        "question": "What languages and formats are included?",
+        "answer": "Every plan includes OCR, translation, and in-place typesetting for 20+ languages, plus JPG, PNG, PDF, EPUB, CBZ, and more."
+      }
+    },
+    "ctaTitle": "Ready to translate?",
+    "ctaBody": "Upload a page and try MangaSense for free."
   },
   "changePlan": {
     "title": "Change your subscription plan?",
@@ -314,7 +356,11 @@
         "question": "Is there a browser extension?",
         "answer": "A browser extension is coming soon. For now, please upload and translate on the web app."
       }
-    }
+    },
+    "pageTitle": "Frequently Asked Questions",
+    "pageDescription": "Common questions about translating manga online with MangaSense: languages, file formats, credits, privacy, and refunds.",
+    "ctaTitle": "Still have a question?",
+    "ctaBody": "Upload a page and try it, or compare plans on the pricing page."
   },
   "blog": {
     "title": "Blog",

@@ -10,7 +10,11 @@
       "about": "Über uns",
       "refund": "Rückerstattungsrichtlinie",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Preise für den KI-Manga-Übersetzer | MangaSense",
+    "pricingDescription": "Pay-per-Use oder Abo. Fast kostet 1 Credit pro Seite, Quality 2. Pay-per-Use-Credits verfallen nicht. Abo jederzeit kündbar.",
+    "faqTitle": "FAQ zum KI-Manga-Übersetzer | MangaSense",
+    "faqDescription": "Fragen zur Übersetzung japanischer, koreanischer und chinesischer Manga sowie zu Formaten, Credits, Datenschutz und Rückerstattung."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Jährliche automatische Aufladung",
       "Intelligentes OCR, Übersetzung und Satzspiegel",
       "Jederzeit kündbar"
-    ]
+    ],
+    "pageTitle": "Preise für den KI-Manga-Übersetzer",
+    "pageDescription": "Wähle Pay-per-Use-Credits oder ein monatliches bzw. jährliches Abo. Übersetze japanische, koreanische und chinesische Manga in über 20 Sprachen und behalte das Original-Layout.",
+    "creditsTitle": "So funktionieren Credits",
+    "creditsIntro": "Jede übersetzte Seite kostet Credits. Wähle Fast oder Quality je nach gewünschter Genauigkeit.",
+    "creditsFastTitle": "Fast-Modus",
+    "creditsFastBody": "1 Credit pro Seite. Schnellere Ergebnisse fürs alltägliche Lesen.",
+    "creditsQualityTitle": "Quality-Modus",
+    "creditsQualityBody": "2 Credits pro Seite. Höhere Genauigkeit bei dichtem oder stilisiertem Text.",
+    "compareTitle": "Welcher Plan passt zu dir?",
+    "comparePayToUseTitle": "Pay per Use",
+    "comparePayToUseBody": "Credits einmal kaufen und jederzeit nutzen. Ideal, wenn du nur gelegentlich übersetzt. Credits verfallen nicht.",
+    "compareSubscriptionTitle": "Abo",
+    "compareSubscriptionBody": "Credits werden in jedem Abrechnungszeitraum erneuert. Günstiger, wenn du regelmäßig übersetzt. Jederzeit kündbar.",
+    "faqTitle": "Preise FAQ",
+    "faq": {
+      "credits": {
+        "question": "Wie viele Credits kostet eine Seite?",
+        "answer": "Der Fast-Modus kostet 1 Credit pro Seite. Der Quality-Modus kostet 2 Credits pro Seite."
+      },
+      "expiry": {
+        "question": "Verfallen Credits?",
+        "answer": "Pay-per-Use-Credits verfallen nicht. Abo-Credits werden zu Beginn jedes Abrechnungszeitraums erneuert."
+      },
+      "cancel": {
+        "question": "Kann ich ein Abo kündigen?",
+        "answer": "Ja. Du kannst jederzeit kündigen. Verbleibende Abo-Credits bleiben bis zum Ende des aktuellen Zeitraums verfügbar."
+      },
+      "refund": {
+        "question": "Kann ich eine Rückerstattung erhalten?",
+        "answer": "Ungenutzte bezahlte Credits können gemäß unserer Rückerstattungsrichtlinie erstattet werden."
+      },
+      "languages": {
+        "question": "Welche Sprachen und Formate sind enthalten?",
+        "answer": "Jeder Plan enthält OCR, Übersetzung und originales Lettering für über 20 Sprachen sowie JPG, PNG, PDF, EPUB, CBZ und mehr."
+      }
+    },
+    "ctaTitle": "Bereit zum Übersetzen?",
+    "ctaBody": "Lade eine Seite hoch und teste MangaSense kostenlos."
   },
   "changePlan": {
     "title": "Abo-Plan ändern?",
@@ -314,7 +356,11 @@
         "question": "Gibt es eine Browser-Erweiterung?",
         "answer": "Eine Browser-Erweiterung kommt bald. Bitte lade vorerst in der Web-App hoch und übersetze dort."
       }
-    }
+    },
+    "pageTitle": "Häufig gestellte Fragen",
+    "pageDescription": "Häufige Fragen zum Online-Übersetzen von Manga mit MangaSense: Sprachen, Dateiformate, Credits, Datenschutz und Rückerstattung.",
+    "ctaTitle": "Noch eine Frage?",
+    "ctaBody": "Lade eine Seite hoch und teste es, oder vergleiche die Pläne auf der Preisseite."
   },
   "blog": {
     "title": "Blog",

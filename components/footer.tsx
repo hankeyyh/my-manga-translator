@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 const PRODUCT_LINKS = [
     { key: "tool", href: "/#tool" },
     { key: "blog", href: "/blogs" },
-    { key: "pricing", href: "/#pricing" },
+    { key: "pricing", href: "/pricing" },
 ] as const;
 
 const LEGAL_LINKS = [
@@ -13,7 +13,7 @@ const LEGAL_LINKS = [
     { key: "privacy", href: "/legal/privacy" },
     { key: "terms", href: "/legal/terms" },
     { key: "refund", href: "/legal/refund" },
-    { key: "faq", href: "/#faq" },
+    { key: "faq", href: "/faq" },
     { key: "dmca", href: "/legal/dmca" },
 ] as const;
 

@@ -1,0 +1,29 @@
+import { Manrope } from "next/font/google";
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
+import { cn } from "@/components/utils";
+
+const manrope = Manrope({
+    subsets: ["latin"],
+    weight: ["400", "600", "700", "800"],
+    variable: "--font-manrope",
+});
+
+export default function FaqLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <div
+            className={cn(
+                manrope.variable,
+                "flex min-h-screen flex-col font-body text-cc-text-primary",
+            )}
+        >
+            <SiteHeader deferUser={true} />
+            <main className="relative z-10 flex-1 bg-cc-surface-white">{children}</main>
+            <Footer />
+        </div>
+    );
+}

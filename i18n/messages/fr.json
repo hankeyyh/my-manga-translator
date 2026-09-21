@@ -10,7 +10,11 @@
       "about": "À propos",
       "refund": "Politique de remboursement",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Tarifs du traducteur de manga IA | MangaSense",
+    "pricingDescription": "Paiement à l’usage ou abonnement. Fast coûte 1 crédit par page, Quality 2. Les crédits à l’usage n’expirent pas. Résiliez l’abonnement à tout moment.",
+    "faqTitle": "FAQ du traducteur de manga IA | MangaSense",
+    "faqDescription": "Questions sur la traduction de mangas japonais, coréens et chinois, les formats, les crédits, la confidentialité et les remboursements."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Recharge automatique chaque année",
       "OCR intelligent, traduction et remise en page",
       "Résiliation à tout moment"
-    ]
+    ],
+    "pageTitle": "Tarifs du traducteur de manga IA",
+    "pageDescription": "Choisissez des crédits à l’usage ou un abonnement mensuel ou annuel. Traduisez des mangas japonais, coréens et chinois dans plus de 20 langues tout en conservant la mise en page.",
+    "creditsTitle": "Fonctionnement des crédits",
+    "creditsIntro": "Chaque page traduite consomme des crédits. Choisissez Fast ou Quality selon la précision dont vous avez besoin.",
+    "creditsFastTitle": "Mode Fast",
+    "creditsFastBody": "1 crédit par page. Plus rapide pour une lecture quotidienne.",
+    "creditsQualityTitle": "Mode Quality",
+    "creditsQualityBody": "2 crédits par page. Plus précis pour un texte dense ou stylisé.",
+    "compareTitle": "Quel forfait vous convient ?",
+    "comparePayToUseTitle": "Paiement à l’usage",
+    "comparePayToUseBody": "Achetez des crédits une fois et utilisez-les quand vous voulez. Idéal pour traduire de temps en temps. Les crédits n’expirent pas.",
+    "compareSubscriptionTitle": "Abonnement",
+    "compareSubscriptionBody": "Les crédits se renouvellent à chaque cycle de facturation. Plus avantageux si vous traduisez régulièrement. Résiliation à tout moment.",
+    "faqTitle": "FAQ tarifs",
+    "faq": {
+      "credits": {
+        "question": "Combien de crédits coûte une page ?",
+        "answer": "Le mode Fast coûte 1 crédit par page. Le mode Quality coûte 2 crédits par page."
+      },
+      "expiry": {
+        "question": "Les crédits expirent-ils ?",
+        "answer": "Les crédits à l’usage n’expirent pas. Les crédits d’abonnement se renouvellent au début de chaque cycle de facturation."
+      },
+      "cancel": {
+        "question": "Puis-je résilier un abonnement ?",
+        "answer": "Oui. Vous pouvez résilier à tout moment. Les crédits d’abonnement restants restent disponibles jusqu’à la fin de la période en cours."
+      },
+      "refund": {
+        "question": "Puis-je obtenir un remboursement ?",
+        "answer": "Les crédits payants non utilisés peuvent être remboursés selon notre politique de remboursement."
+      },
+      "languages": {
+        "question": "Quelles langues et quels formats sont inclus ?",
+        "answer": "Chaque forfait inclut l’OCR, la traduction et le lettrage in situ pour plus de 20 langues, ainsi que JPG, PNG, PDF, EPUB, CBZ, etc."
+      }
+    },
+    "ctaTitle": "Prêt à traduire ?",
+    "ctaBody": "Importez une page et essayez MangaSense gratuitement."
   },
   "changePlan": {
     "title": "Changer de forfait d’abonnement ?",
@@ -314,7 +356,11 @@
         "question": "Existe-t-il une extension de navigateur ?",
         "answer": "Une extension de navigateur arrive bientôt. Pour l’instant, importez et traduisez sur l’application web."
       }
-    }
+    },
+    "pageTitle": "Foire aux questions",
+    "pageDescription": "Questions fréquentes sur la traduction de mangas en ligne avec MangaSense : langues, formats, crédits, confidentialité et remboursements.",
+    "ctaTitle": "Une autre question ?",
+    "ctaBody": "Importez une page pour essayer, ou comparez les forfaits sur la page tarifs."
   },
   "blog": {
     "title": "Blog",

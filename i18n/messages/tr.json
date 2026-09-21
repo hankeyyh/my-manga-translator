@@ -10,7 +10,11 @@
       "about": "Hakkında",
       "refund": "İade Politikası",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Yapay zeka manga çevirmeni fiyatları | MangaSense",
+    "pricingDescription": "Kullandıkça öde veya abone ol. Fast sayfa başına 1 kredi, Quality 2 kredi. Kullandıkça öde kredileri süresi dolmaz. Aboneliği istediğin zaman iptal et.",
+    "faqTitle": "Yapay zeka manga çevirmeni SSS | MangaSense",
+    "faqDescription": "Japon, Kore ve Çin mangası çevirisi, desteklenen biçimler, krediler, gizlilik ve iadeler hakkında sorular."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Her yıl otomatik yükleme",
       "Akıllı OCR, çeviri ve orijinal sayfa dizgisi",
       "İstediğiniz zaman iptal"
-    ]
+    ],
+    "pageTitle": "Yapay zeka manga çevirmeni fiyatları",
+    "pageDescription": "Kullandıkça öde kredileri veya aylık/yıllık abonelik seç. Japon, Kore ve Çin mangasını 20’den fazla dile çevirirken orijinal yerleşimi koru.",
+    "creditsTitle": "Krediler nasıl işler",
+    "creditsIntro": "Çevrilen her sayfa kredi harcar. İhtiyacın olan doğruluğa göre Fast veya Quality’yi seç.",
+    "creditsFastTitle": "Fast modu",
+    "creditsFastBody": "Sayfa başına 1 kredi. Günlük okuma için daha hızlı sonuç.",
+    "creditsQualityTitle": "Quality modu",
+    "creditsQualityBody": "Sayfa başına 2 kredi. Yoğun veya stilize metinde daha yüksek doğruluk.",
+    "compareTitle": "Hangi plan sana uygun?",
+    "comparePayToUseTitle": "Kullandıkça öde",
+    "comparePayToUseBody": "Kredileri bir kez al, istediğin zaman kullan. Ara sıra çeviri yapıyorsan uygundur. Kredilerin süresi dolmaz.",
+    "compareSubscriptionTitle": "Abonelik",
+    "compareSubscriptionBody": "Krediler her fatura döneminde yenilenir. Düzenli çeviri yapıyorsan daha avantajlıdır. İstediğin zaman iptal et.",
+    "faqTitle": "Fiyat SSS",
+    "faq": {
+      "credits": {
+        "question": "Bir sayfa kaç kredi tutar?",
+        "answer": "Fast modu sayfa başına 1 kredi, Quality modu sayfa başına 2 kredi tutar."
+      },
+      "expiry": {
+        "question": "Kredilerin süresi dolar mı?",
+        "answer": "Kullandıkça öde kredilerinin süresi dolmaz. Abonelik kredileri her fatura döneminin başında yenilenir."
+      },
+      "cancel": {
+        "question": "Aboneliği iptal edebilir miyim?",
+        "answer": "Evet. İstediğin zaman iptal edebilirsin. Kalan abonelik kredileri mevcut dönem bitene kadar kullanılabilir."
+      },
+      "refund": {
+        "question": "İade alabilir miyim?",
+        "answer": "Kullanılmayan ücretli krediler iade politikamıza göre iade edilebilir."
+      },
+      "languages": {
+        "question": "Hangi diller ve biçimler dahil?",
+        "answer": "Her planda 20’den fazla dil için OCR, çeviri ve yerinde lettering ile JPG, PNG, PDF, EPUB, CBZ ve daha fazlası vardır."
+      }
+    },
+    "ctaTitle": "Çevirmeye hazır mısın?",
+    "ctaBody": "Bir sayfa yükle ve MangaSense’i ücretsiz dene."
   },
   "changePlan": {
     "title": "Abonelik planınız değiştirilsin mi?",
@@ -314,7 +356,11 @@
         "question": "Tarayıcı eklentisi var mı?",
         "answer": "Tarayıcı eklentisi yakında geliyor. Şimdilik web uygulamasında yükleyip çevirin."
       }
-    }
+    },
+    "pageTitle": "Sıkça sorulan sorular",
+    "pageDescription": "MangaSense ile çevrimiçi manga çevirisine dair sık sorulan sorular: diller, dosya biçimleri, krediler, gizlilik ve iadeler.",
+    "ctaTitle": "Başka sorunuz var mı?",
+    "ctaBody": "Denemek için bir sayfa yükleyin veya fiyat sayfasında planları karşılaştırın."
   },
   "blog": {
     "title": "Blog",

@@ -10,7 +10,11 @@
       "about": "關於",
       "refund": "退款政策",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "AI 漫畫翻譯價格 | MangaSense",
+    "pricingDescription": "按量付費或訂閱。Fast 模式每頁 1 點數，Quality 模式每頁 2 點數。按量點數永不過期，訂閱可隨時取消。",
+    "faqTitle": "AI 漫畫翻譯常見問題 | MangaSense",
+    "faqDescription": "關於日漫、韓漫、中漫翻譯，以及支援格式、點數、隱私和退款的常見問題。"
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "每年自動補充點數",
       "智慧 OCR、翻譯與原圖重繪排版",
       "可隨時取消"
-    ]
+    ],
+    "pageTitle": "AI 漫畫翻譯價格",
+    "pageDescription": "可按量購買點數，或選擇按月 / 按年訂閱。將日漫、韓漫、中漫翻譯成 20 多種語言，並保留原作版面。",
+    "creditsTitle": "點數如何計算",
+    "creditsIntro": "每翻譯一頁都會消耗點數。依你需要的精度選擇 Fast 或 Quality。",
+    "creditsFastTitle": "Fast 模式",
+    "creditsFastBody": "每頁 1 點數。速度較快，適合日常閱讀。",
+    "creditsQualityTitle": "Quality 模式",
+    "creditsQualityBody": "每頁 2 點數。精度較高，適合文字密集或字體風格較強的頁面。",
+    "compareTitle": "如何選擇方案",
+    "comparePayToUseTitle": "按量付費",
+    "comparePayToUseBody": "一次購買，隨時使用。適合偶爾翻譯。點數永不過期。",
+    "compareSubscriptionTitle": "訂閱",
+    "compareSubscriptionBody": "每個帳單週期自動補充點數。適合經常翻譯，可隨時取消。",
+    "faqTitle": "價格常見問題",
+    "faq": {
+      "credits": {
+        "question": "翻譯一頁要多少點數？",
+        "answer": "Fast 模式每頁 1 點數，Quality 模式每頁 2 點數。"
+      },
+      "expiry": {
+        "question": "點數會過期嗎？",
+        "answer": "按量付費點數永不過期。訂閱點數會在每個帳單週期開始時刷新。"
+      },
+      "cancel": {
+        "question": "可以取消訂閱嗎？",
+        "answer": "可以，隨時取消。剩餘訂閱點數在當前週期結束前仍可使用。"
+      },
+      "refund": {
+        "question": "可以退款嗎？",
+        "answer": "未使用的付費點數可依退款政策申請退款。"
+      },
+      "languages": {
+        "question": "方案包含哪些語言和格式？",
+        "answer": "所有方案都包含 OCR、翻譯和原圖排版，支援 20 多種語言，以及 JPG、PNG、PDF、EPUB、CBZ 等格式。"
+      }
+    },
+    "ctaTitle": "開始翻譯",
+    "ctaBody": "上傳一頁漫畫，免費試用 MangaSense。"
   },
   "changePlan": {
     "title": "確認調整訂閱方案？",
@@ -314,7 +356,11 @@
         "question": "有瀏覽器外掛嗎？",
         "answer": "瀏覽器外掛即將推出，目前請使用網頁版上傳翻譯。"
       }
-    }
+    },
+    "pageTitle": "常見問題",
+    "pageDescription": "關於使用 MangaSense 線上翻譯漫畫的常見問題：語言、檔案格式、點數、隱私與退款。",
+    "ctaTitle": "還有其他問題？",
+    "ctaBody": "上傳一頁漫畫免費試用，或到價格頁比較方案。"
   },
   "blog": {
     "title": "部落格",

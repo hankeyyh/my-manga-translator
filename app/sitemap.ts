@@ -22,6 +22,8 @@ function localizedEntries(
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const entries: MetadataRoute.Sitemap = [
         ...localizedEntries("/", { changeFrequency: "weekly", priority: 1 }),
+        ...localizedEntries("/pricing", { changeFrequency: "weekly", priority: 0.9 }),
+        ...localizedEntries("/faq", { changeFrequency: "monthly", priority: 0.8 }),
         ...localizedEntries("/blogs", { changeFrequency: "weekly", priority: 0.8 }),
         ...LEGAL_SLUGS.flatMap((slug) =>
             localizedEntries(`/legal/${slug}`, { changeFrequency: "yearly", priority: 0.4 }),

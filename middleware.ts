@@ -42,7 +42,7 @@ function loginPathname(locale: AppLocale): string {
 }
 
 function isPublicCacheablePath(path: string) {
-    return path === "/" || path.startsWith("/legal") || path.startsWith("/blogs");
+    return path === "/" || path === "/pricing" || path === "/faq" || path.startsWith("/legal") || path.startsWith("/blogs");
 }
 
 function hasSupabaseAuthCookie(request: NextRequest) {
@@ -156,6 +156,8 @@ export async function updateSession(request: NextRequest) {
     }
 
     const isPublicPath = path === "/" ||
+        path === "/pricing" ||
+        path === "/faq" ||
         path.startsWith("/login") ||
         path.startsWith("/auth") ||
         path.startsWith("/api") ||

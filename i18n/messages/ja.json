@@ -10,7 +10,11 @@
       "about": "私たちについて",
       "refund": "返金ポリシー",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "AIマンガ翻訳の料金 | MangaSense",
+    "pricingDescription": "従量課金またはサブスク。Fast は1ページ1クレジット、Quality は2クレジット。従量クレジットは無期限。サブスクはいつでも解約できます。",
+    "faqTitle": "AIマンガ翻訳のよくある質問 | MangaSense",
+    "faqDescription": "日・韓・中マンガの翻訳、対応形式、クレジット、プライバシー、返金に関するよくある質問。"
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "毎年自動でチャージ",
       "スマート OCR、翻訳、吹き出しへの組み込み",
       "いつでも解約可能"
-    ]
+    ],
+    "pageTitle": "AIマンガ翻訳の料金",
+    "pageDescription": "従量クレジットか、月額・年額サブスクを選べます。日・韓・中のマンガを20以上の言語に翻訳し、元のレイアウトを保ちます。",
+    "creditsTitle": "クレジットの仕組み",
+    "creditsIntro": "翻訳したページごとにクレジットを消費します。必要な精度に応じて Fast か Quality を選んでください。",
+    "creditsFastTitle": "Fast モード",
+    "creditsFastBody": "1ページあたり1クレジット。日常の読書向けで、より速く仕上がります。",
+    "creditsQualityTitle": "Quality モード",
+    "creditsQualityBody": "1ページあたり2クレジット。文字が多いページや特殊な字体で、より高い精度が得られます。",
+    "compareTitle": "プランの選び方",
+    "comparePayToUseTitle": "従量課金",
+    "comparePayToUseBody": "一度購入すればいつでも利用できます。たまに翻訳する場合に最適で、クレジットは無期限です。",
+    "compareSubscriptionTitle": "サブスクリプション",
+    "compareSubscriptionBody": "請求サイクルごとにクレジットが更新されます。よく使う場合にお得で、いつでも解約できます。",
+    "faqTitle": "料金に関するよくある質問",
+    "faq": {
+      "credits": {
+        "question": "1ページあたり何クレジット必要ですか？",
+        "answer": "Fast モードは1ページ1クレジット、Quality モードは1ページ2クレジットです。"
+      },
+      "expiry": {
+        "question": "クレジットに有効期限はありますか？",
+        "answer": "従量課金のクレジットは無期限です。サブスクのクレジットは各請求サイクルの開始時に更新されます。"
+      },
+      "cancel": {
+        "question": "サブスクは解約できますか？",
+        "answer": "はい、いつでも解約できます。残りのサブスククレジットは、現在の期間が終わるまで利用できます。"
+      },
+      "refund": {
+        "question": "返金できますか？",
+        "answer": "未使用の有料クレジットは、返金ポリシーに従って返金できます。"
+      },
+      "languages": {
+        "question": "対応言語と形式は含まれますか？",
+        "answer": "すべてのプランに OCR、翻訳、吹き出しへの組み込みが含まれ、20以上の言語と JPG、PNG、PDF、EPUB、CBZ などに対応します。"
+      }
+    },
+    "ctaTitle": "翻訳を始める",
+    "ctaBody": "ページをアップロードして、MangaSense を無料でお試しください。"
   },
   "changePlan": {
     "title": "サブスクリプションプランを変更しますか？",
@@ -314,7 +356,11 @@
         "question": "ブラウザ拡張機能はありますか？",
         "answer": "ブラウザ拡張機能は近日公開予定です。現在はウェブアプリでアップロードして翻訳してください。"
       }
-    }
+    },
+    "pageTitle": "よくある質問",
+    "pageDescription": "MangaSense でマンガをオンライン翻訳する際のよくある質問です。言語、ファイル形式、クレジット、プライバシー、返金をまとめています。",
+    "ctaTitle": "ほかに質問がありますか？",
+    "ctaBody": "ページをアップロードして試すか、料金ページでプランを比較してください。"
   },
   "blog": {
     "title": "ブログ",

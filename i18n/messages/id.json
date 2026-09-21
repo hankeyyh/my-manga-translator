@@ -10,7 +10,11 @@
       "about": "Tentang",
       "refund": "Kebijakan Pengembalian Dana",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Harga penerjemah manga AI | MangaSense",
+    "pricingDescription": "Bayar sesuai pemakaian atau berlangganan. Mode Fast 1 kredit per halaman, Quality 2. Kredit pay-per-use tidak kedaluwarsa. Batalkan langganan kapan saja.",
+    "faqTitle": "FAQ penerjemah manga AI | MangaSense",
+    "faqDescription": "Pertanyaan tentang terjemahan manga Jepang, Korea, dan Tiongkok, format, kredit, privasi, dan refund."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Isi ulang otomatis setiap tahun",
       "OCR cerdas, terjemahan, dan penataan di halaman asli",
       "Batalkan kapan saja"
-    ]
+    ],
+    "pageTitle": "Harga penerjemah manga AI",
+    "pageDescription": "Pilih kredit bayar sesuai pemakaian atau langganan bulanan/tahunan. Terjemahkan manga Jepang, Korea, dan Tiongkok ke 20+ bahasa sambil menjaga tata letak asli.",
+    "creditsTitle": "Cara kerja kredit",
+    "creditsIntro": "Setiap halaman yang diterjemahkan memakai kredit. Pilih Fast atau Quality sesuai akurasi yang Anda butuhkan.",
+    "creditsFastTitle": "Mode Fast",
+    "creditsFastBody": "1 kredit per halaman. Hasil lebih cepat untuk bacaan sehari-hari.",
+    "creditsQualityTitle": "Mode Quality",
+    "creditsQualityBody": "2 kredit per halaman. Akurasi lebih tinggi untuk teks rapat atau bergaya khas.",
+    "compareTitle": "Paket mana yang cocok?",
+    "comparePayToUseTitle": "Bayar sesuai pemakaian",
+    "comparePayToUseBody": "Beli kredit sekali dan pakai kapan saja. Cocok jika Anda menerjemahkan sesekali. Kredit tidak kedaluwarsa.",
+    "compareSubscriptionTitle": "Langganan",
+    "compareSubscriptionBody": "Kredit diperbarui setiap siklus penagihan. Lebih hemat jika Anda menerjemahkan secara rutin. Batalkan kapan saja.",
+    "faqTitle": "FAQ harga",
+    "faq": {
+      "credits": {
+        "question": "Berapa kredit untuk satu halaman?",
+        "answer": "Mode Fast memakai 1 kredit per halaman. Mode Quality memakai 2 kredit per halaman."
+      },
+      "expiry": {
+        "question": "Apakah kredit kedaluwarsa?",
+        "answer": "Kredit bayar sesuai pemakaian tidak kedaluwarsa. Kredit langganan diperbarui di awal setiap siklus penagihan."
+      },
+      "cancel": {
+        "question": "Bisakah saya membatalkan langganan?",
+        "answer": "Ya. Anda dapat membatalkan kapan saja. Sisa kredit langganan tetap tersedia hingga periode berjalan berakhir."
+      },
+      "refund": {
+        "question": "Bisakah saya mendapat refund?",
+        "answer": "Kredit berbayar yang belum dipakai dapat di-refund sesuai kebijakan refund kami."
+      },
+      "languages": {
+        "question": "Bahasa dan format apa yang termasuk?",
+        "answer": "Setiap paket mencakup OCR, terjemahan, dan penataan teks di tempat untuk 20+ bahasa, plus JPG, PNG, PDF, EPUB, CBZ, dan lainnya."
+      }
+    },
+    "ctaTitle": "Siap menerjemahkan?",
+    "ctaBody": "Unggah satu halaman dan coba MangaSense secara gratis."
   },
   "changePlan": {
     "title": "Ubah paket langganan Anda?",
@@ -314,7 +356,11 @@
         "question": "Apakah ada ekstensi browser?",
         "answer": "Ekstensi browser akan segera hadir. Untuk saat ini, unggah dan terjemahkan di aplikasi web."
       }
-    }
+    },
+    "pageTitle": "Pertanyaan yang sering diajukan",
+    "pageDescription": "Pertanyaan umum tentang menerjemahkan manga online dengan MangaSense: bahasa, format file, kredit, privasi, dan refund.",
+    "ctaTitle": "Masih ada pertanyaan?",
+    "ctaBody": "Unggah satu halaman untuk mencoba, atau bandingkan paket di halaman harga."
   },
   "blog": {
     "title": "Blog",

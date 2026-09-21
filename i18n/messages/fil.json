@@ -10,7 +10,11 @@
       "about": "Tungkol sa Amin",
       "refund": "Patakaran sa Refund",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Presyo ng AI manga translator | MangaSense",
+    "pricingDescription": "Pay per use o subscription. 1 credit ang Fast bawat page, 2 ang Quality. Hindi nag-e-expire ang pay-per-use credits. Kanselahin ang subscription anytime.",
+    "faqTitle": "FAQ ng AI manga translator | MangaSense",
+    "faqDescription": "Mga tanong tungkol sa pagsasalin ng Japanese, Korean, at Chinese manga, mga format, credits, privacy, at refunds."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Auto refill bawat taon",
       "Smart OCR, translation, at typesetting sa orihinal na page",
       "Kanselahin anytime"
-    ]
+    ],
+    "pageTitle": "Presyo ng AI manga translator",
+    "pageDescription": "Pumili ng pay-per-use credits o buwanan/taunang subscription. Isalin ang Japanese, Korean, at Chinese manga sa 20+ na wika habang pinapanatili ang orihinal na layout.",
+    "creditsTitle": "Paano gumagana ang credits",
+    "creditsIntro": "Bawat naisalin na page ay gumagamit ng credits. Piliin ang Fast o Quality ayon sa kailangan mong accuracy.",
+    "creditsFastTitle": "Fast mode",
+    "creditsFastBody": "1 credit bawat page. Mas mabilis para sa pang-araw-araw na pagbabasa.",
+    "creditsQualityTitle": "Quality mode",
+    "creditsQualityBody": "2 credits bawat page. Mas tumpak para sa masiksik o istilong teksto.",
+    "compareTitle": "Aling plan ang bagay sa’yo?",
+    "comparePayToUseTitle": "Pay Per Use",
+    "comparePayToUseBody": "Bumili ng credits minsan at gamitin anytime. Mainam kung paminsan-minsan lang nagsasalin. Hindi nag-e-expire ang credits.",
+    "compareSubscriptionTitle": "Subscription",
+    "compareSubscriptionBody": "Nagre-refresh ang credits bawat billing cycle. Mas sulit kung regular kang nagsasalin. Kanselahin anytime.",
+    "faqTitle": "Mga tanong sa presyo",
+    "faq": {
+      "credits": {
+        "question": "Ilang credits ang isang page?",
+        "answer": "1 credit bawat page ang Fast mode. 2 credits bawat page ang Quality mode."
+      },
+      "expiry": {
+        "question": "Nag-e-expire ba ang credits?",
+        "answer": "Hindi nag-e-expire ang Pay Per Use credits. Nagre-refresh ang subscription credits sa simula ng bawat billing cycle."
+      },
+      "cancel": {
+        "question": "Pwede ko bang kanselahin ang subscription?",
+        "answer": "Oo. Pwede kang mag-cancel anytime. Available pa ang natitirang subscription credits hanggang matapos ang kasalukuyang period."
+      },
+      "refund": {
+        "question": "Pwede ba akong magpa-refund?",
+        "answer": "Ang hindi nagamit na bayad na credits ay maaaring i-refund ayon sa aming refund policy."
+      },
+      "languages": {
+        "question": "Anong mga wika at format ang kasama?",
+        "answer": "Kasama sa bawat plan ang OCR, translation, at in-place typesetting para sa 20+ na wika, pati JPG, PNG, PDF, EPUB, CBZ, at iba pa."
+      }
+    },
+    "ctaTitle": "Handa ka na bang magsalin?",
+    "ctaBody": "Mag-upload ng isang page at subukan ang MangaSense nang libre."
   },
   "changePlan": {
     "title": "Palitan ang subscription plan?",
@@ -314,7 +356,11 @@
         "question": "May browser extension ba?",
         "answer": "Malapit nang magkaroon ng browser extension. Sa ngayon, mag-upload at mag-translate sa web app."
       }
-    }
+    },
+    "pageTitle": "Mga Madalas Itanong",
+    "pageDescription": "Mga karaniwang tanong sa online na pagsasalin ng manga gamit ang MangaSense: wika, file formats, credits, privacy, at refunds.",
+    "ctaTitle": "May iba pa kayong tanong?",
+    "ctaBody": "Mag-upload ng isang page para subukan, o ikumpara ang mga plan sa pricing page."
   },
   "blog": {
     "title": "Blog",

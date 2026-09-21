@@ -32,7 +32,7 @@ type Props = {
     userInfo?: UserInfo | null;
     showBlog: boolean;
     /**
-     * 营销页（`/`、`/blogs`、`/legal`）设为 true：SSR 只输出占位，挂载后请求 `/api/me` 再渲染积分与 Login/Dashboard。
+     * 营销页（`/`、`/pricing`、`/faq`、`/blogs`、`/legal`）设为 true：SSR 只输出占位，挂载后请求 `/api/me` 再渲染积分与 Login/Dashboard。
      * 服务端不再等 Supabase，HTML 与用户无关，可与 middleware 的游客缓存、`revalidate` 配合。
      * 
      * 目的：提升页面响应速度，降低 TTFB。
@@ -122,10 +122,10 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                             <Link href="/#tool">{tHeader("mangaTranslate")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/#pricing">{tHeader("pricing")}</Link>
+                            <Link href="/pricing">{tHeader("pricing")}</Link>
                         </CcButton>
                         <CcButton variant="ghost" size="sm" asChild>
-                            <Link href="/#faq">{tHeader("faq")}</Link>
+                            <Link href="/faq">{tHeader("faq")}</Link>
                         </CcButton>
                         {showBlog ? (
                             <CcButton variant="ghost" size="sm" asChild>

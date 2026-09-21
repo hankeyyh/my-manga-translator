@@ -125,7 +125,7 @@ export function SubscriptionStatus({ subscription, topUpConfigs }: Props) {
                 </div>
                 <div className="shrink-0">
                     <CcButton size="sm" type="button" asChild>
-                        <Link href="/#pricing">{t("subscribe")}</Link>
+                        <Link href="/pricing">{t("subscribe")}</Link>
                     </CcButton>
                 </div>
             </div>

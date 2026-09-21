@@ -10,7 +10,11 @@
       "about": "关于",
       "refund": "退款政策",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "AI 漫画翻译价格 | MangaSense",
+    "pricingDescription": "按量付费或订阅。Fast 模式每页 1 积分，Quality 模式每页 2 积分。按量积分永不过期，订阅可随时取消。",
+    "faqTitle": "AI 漫画翻译常见问题 | MangaSense",
+    "faqDescription": "关于日漫、韩漫、中漫翻译，以及支持格式、积分、隐私和退款的常见问题。"
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "每年自动补充积分",
       "智能 OCR、翻译与原图重绘排版",
       "可随时取消"
-    ]
+    ],
+    "pageTitle": "AI 漫画翻译价格",
+    "pageDescription": "可按量购买积分，或选择按月 / 按年订阅。将日漫、韩漫、中漫翻译成 20 多种语言，并保留原作排版。",
+    "creditsTitle": "积分如何计算",
+    "creditsIntro": "每翻译一页都会消耗积分。按你需要的精度选择 Fast 或 Quality。",
+    "creditsFastTitle": "Fast 模式",
+    "creditsFastBody": "每页 1 积分。速度更快，适合日常阅读。",
+    "creditsQualityTitle": "Quality 模式",
+    "creditsQualityBody": "每页 2 积分。精度更高，适合文字密集或字体风格较强的页面。",
+    "compareTitle": "如何选择方案",
+    "comparePayToUseTitle": "按量付费",
+    "comparePayToUseBody": "一次购买，随时使用。适合偶尔翻译。积分永不过期。",
+    "compareSubscriptionTitle": "订阅",
+    "compareSubscriptionBody": "每个账单周期自动补充积分。适合经常翻译，可随时取消。",
+    "faqTitle": "价格常见问题",
+    "faq": {
+      "credits": {
+        "question": "翻译一页要多少积分？",
+        "answer": "Fast 模式每页 1 积分，Quality 模式每页 2 积分。"
+      },
+      "expiry": {
+        "question": "积分会过期吗？",
+        "answer": "按量付费积分永不过期。订阅积分会在每个账单周期开始时刷新。"
+      },
+      "cancel": {
+        "question": "可以取消订阅吗？",
+        "answer": "可以，随时取消。剩余订阅积分在当前周期结束前仍可使用。"
+      },
+      "refund": {
+        "question": "可以退款吗？",
+        "answer": "未使用的付费积分可按退款政策申请退款。"
+      },
+      "languages": {
+        "question": "方案包含哪些语言和格式？",
+        "answer": "所有方案都包含 OCR、翻译和原图排版，支持 20 多种语言，以及 JPG、PNG、PDF、EPUB、CBZ 等格式。"
+      }
+    },
+    "ctaTitle": "开始翻译",
+    "ctaBody": "上传一页漫画，免费试用 MangaSense。"
   },
   "changePlan": {
     "title": "确认调整订阅计划？",
@@ -314,7 +356,11 @@
         "question": "有浏览器插件吗？",
         "answer": "浏览器插件即将推出，当前请使用网页版上传翻译。"
       }
-    }
+    },
+    "pageTitle": "常见问题",
+    "pageDescription": "关于使用 MangaSense 在线翻译漫画的常见问题：语言、文件格式、积分、隐私与退款。",
+    "ctaTitle": "还有其他问题？",
+    "ctaBody": "上传一页漫画免费试用，或到价格页比较方案。"
   },
   "blog": {
     "title": "博客",

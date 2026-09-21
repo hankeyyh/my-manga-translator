@@ -14,6 +14,20 @@ export function getPlanName(config: TopUpConfig, t: PricingT) {
     return tier ?? t("planFallback");
 }
 
+export function getOfferDisplayName(config: TopUpConfig, t: PricingT) {
+    const name = getPlanName(config, t);
+    if (config.transactionType === "pay-to-use") {
+        return `${name} · ${t("payAsNeeded")}`;
+    }
+    if (config.billingCycle === "yearly") {
+        return `${name} · ${t("yearly")}`;
+    }
+    if (config.billingCycle === "monthly") {
+        return `${name} · ${t("monthly")}`;
+    }
+    return name;
+}
+
 export function isFeatured(config: TopUpConfig) {
     const tier =
         config.transactionType === "subscription"

@@ -35,11 +35,13 @@ function getInitialBillingCycle(configs: TopUpConfig[]): BillingCycle {
 type Props = {
     topUpConfigs: TopUpConfig[];
     currentSubscription: UserSubscription | null;
+    showHeading?: boolean;
 };
 
 export function ClientPricingSection({
     topUpConfigs,
     currentSubscription,
+    showHeading = true,
 }: Props) {
     const [pricingTab, setPricingTab] = useState<PricingTab>("subscription");
     const [selectedBillingCycle, setSelectedBillingCycle] =
@@ -135,9 +137,18 @@ export function ClientPricingSection({
     }
 
     return (
-        <section id="pricing" className="scroll-mt-16 bg-cc-surface-page py-16">
+        <section
+            id={showHeading ? "pricing" : undefined}
+            className={
+                showHeading
+                    ? "scroll-mt-16 bg-cc-surface-page py-16"
+                    : "bg-cc-surface-white pb-16 pt-10"
+            }
+        >
             <div className="mx-auto max-w-7xl px-4">
-                <CcSectionHeading className="mb-6" size="md" title={t("title")} />
+                {showHeading ? (
+                    <CcSectionHeading className="mb-6" size="md" title={t("title")} />
+                ) : null}
                 <div className="mb-8 flex flex-col items-center gap-4">
                     <CcSegmentedControl
                         onChange={setPricingTab}

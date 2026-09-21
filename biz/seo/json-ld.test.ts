@@ -4,6 +4,7 @@ import {
     buildBreadcrumbList,
     buildFaqPage,
     buildHowTo,
+    buildOfferCatalog,
     buildOrganization,
     buildSoftwareApplication,
     compactJsonLd,
@@ -159,6 +160,44 @@ describe("schema builders", () => {
         expect(post.author).toEqual({ "@type": "Person", name: "Ada" });
         expect(post.image).toBe("https://cdn.example.com/cover.jpg");
         expect(post.datePublished).toBe("2026-01-01T00:00:00.000Z");
+    });
+
+    test("offer catalog maps paid plans without invented ratings", () => {
+        process.env.SITE_URL = "https://mangasense.xyz";
+        const catalog = buildOfferCatalog({
+            name: "AI Manga Translator Pricing",
+            url: "https://mangasense.xyz/pricing",
+            offers: [
+                {
+                    name: "Pro · Yearly",
+                    description: "1200 credits / year",
+                    price: 99,
+                    url: "https://mangasense.xyz/pricing",
+                    billingCycle: "yearly",
+                },
+            ],
+        });
+        expect(catalog?.["@type"]).toBe("OfferCatalog");
+        expect(catalog?.["@id"]).toBe("https://mangasense.xyz/pricing#offers");
+        const offers = catalog?.itemListElement as Array<Record<string, unknown>>;
+        expect(offers).toHaveLength(1);
+        expect(offers[0]).toMatchObject({
+            "@type": "Offer",
+            name: "Pro · Yearly",
+            price: "99",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+        });
+        expect(offers[0]?.eligibleDuration).toEqual({
+            "@type": "QuantitativeValue",
+            value: 1,
+            unitCode: "ANN",
+        });
+        expect(catalog).not.toHaveProperty("aggregateRating");
+    });
+
+    test("empty offer catalog is omitted", () => {
+        expect(buildOfferCatalog({ name: "Pricing", url: "/", offers: [] })).toBeNull();
     });
 
     test("compactJsonLd drops empty nodes", () => {

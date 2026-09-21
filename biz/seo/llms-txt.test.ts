@@ -35,8 +35,8 @@ describe("buildLlmsTxt", () => {
 
         expect(text).toContain("- [Home](https://mangasense.xyz): Product overview and the online translator");
         expect(text).toContain("- [Translator](https://mangasense.xyz/#tool):");
-        expect(text).toContain("- [Pricing](https://mangasense.xyz/#pricing):");
-        expect(text).toContain("- [FAQ](https://mangasense.xyz/#faq):");
+        expect(text).toContain("- [Pricing](https://mangasense.xyz/pricing):");
+        expect(text).toContain("- [FAQ](https://mangasense.xyz/faq):");
         expect(text).toContain("- [Privacy Policy](https://mangasense.xyz/legal/privacy)");
         expect(text).toContain("support@mangasense.xyz");
         expect(text).toContain("https://discord.gg/qwX9Ygrrg");

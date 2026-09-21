@@ -10,7 +10,11 @@
       "about": "Giới thiệu",
       "refund": "Chính sách hoàn tiền",
       "dmca": "DMCA"
-    }
+    },
+    "pricingTitle": "Bảng giá dịch manga AI | MangaSense",
+    "pricingDescription": "Trả theo lượt hoặc đăng ký. Fast tốn 1 credit/trang, Quality tốn 2. Credit trả theo lượt không hết hạn. Hủy đăng ký bất cứ lúc nào.",
+    "faqTitle": "Câu hỏi thường gặp về dịch manga AI | MangaSense",
+    "faqDescription": "Câu hỏi về dịch manga Nhật, Hàn, Trung, định dạng hỗ trợ, credit, quyền riêng tư và hoàn tiền."
   },
   "common": {
     "brand": "MangaSense",
@@ -252,7 +256,45 @@
       "Tự động nạp lại mỗi năm",
       "OCR thông minh, dịch và sắp chữ trên trang gốc",
       "Hủy bất cứ lúc nào"
-    ]
+    ],
+    "pageTitle": "Bảng giá dịch manga AI",
+    "pageDescription": "Chọn credit trả theo lượt hoặc gói tháng/năm. Dịch manga Nhật, Hàn, Trung sang hơn 20 ngôn ngữ và giữ nguyên bố cục gốc.",
+    "creditsTitle": "Credit hoạt động thế nào",
+    "creditsIntro": "Mỗi trang dịch sẽ trừ credit. Chọn Fast hoặc Quality tùy độ chính xác bạn cần.",
+    "creditsFastTitle": "Chế độ Fast",
+    "creditsFastBody": "1 credit mỗi trang. Nhanh hơn cho việc đọc hàng ngày.",
+    "creditsQualityTitle": "Chế độ Quality",
+    "creditsQualityBody": "2 credit mỗi trang. Chính xác hơn với trang chữ dày hoặc kiểu chữ đặc biệt.",
+    "compareTitle": "Nên chọn gói nào?",
+    "comparePayToUseTitle": "Trả theo lượt",
+    "comparePayToUseBody": "Mua credit một lần và dùng bất cứ lúc nào. Phù hợp khi bạn dịch thỉnh thoảng. Credit không hết hạn.",
+    "compareSubscriptionTitle": "Đăng ký",
+    "compareSubscriptionBody": "Credit được làm mới mỗi chu kỳ thanh toán. Tiết kiệm hơn nếu bạn dịch thường xuyên. Hủy bất cứ lúc nào.",
+    "faqTitle": "Câu hỏi về giá",
+    "faq": {
+      "credits": {
+        "question": "Một trang tốn bao nhiêu credit?",
+        "answer": "Chế độ Fast tốn 1 credit mỗi trang. Chế độ Quality tốn 2 credit mỗi trang."
+      },
+      "expiry": {
+        "question": "Credit có hết hạn không?",
+        "answer": "Credit trả theo lượt không hết hạn. Credit đăng ký được làm mới vào đầu mỗi chu kỳ thanh toán."
+      },
+      "cancel": {
+        "question": "Tôi có thể hủy đăng ký không?",
+        "answer": "Có. Bạn có thể hủy bất cứ lúc nào. Credit đăng ký còn lại vẫn dùng được đến hết kỳ hiện tại."
+      },
+      "refund": {
+        "question": "Tôi có thể được hoàn tiền không?",
+        "answer": "Credit đã mua nhưng chưa dùng có thể được hoàn theo chính sách hoàn tiền."
+      },
+      "languages": {
+        "question": "Gói gồm những ngôn ngữ và định dạng nào?",
+        "answer": "Mọi gói đều gồm OCR, dịch và sắp chữ tại chỗ cho hơn 20 ngôn ngữ, cùng JPG, PNG, PDF, EPUB, CBZ và nhiều định dạng khác."
+      }
+    },
+    "ctaTitle": "Sẵn sàng dịch?",
+    "ctaBody": "Tải lên một trang và dùng thử MangaSense miễn phí."
   },
   "changePlan": {
     "title": "Đổi gói đăng ký?",
@@ -314,7 +356,11 @@
         "question": "Có tiện ích trình duyệt không?",
         "answer": "Tiện ích trình duyệt sắp ra mắt. Hiện hãy tải lên và dịch trên ứng dụng web."
       }
-    }
+    },
+    "pageTitle": "Câu hỏi thường gặp",
+    "pageDescription": "Các câu hỏi thường gặp khi dịch manga online với MangaSense: ngôn ngữ, định dạng tệp, credit, quyền riêng tư và hoàn tiền.",
+    "ctaTitle": "Còn câu hỏi khác?",
+    "ctaBody": "Tải lên một trang để dùng thử, hoặc so sánh gói trên trang giá."
   },
   "blog": {
     "title": "Blog",

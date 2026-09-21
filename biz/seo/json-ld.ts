@@ -202,14 +202,81 @@ export function buildWebPage(input: {
     name: string;
     url: string;
     locale: string;
+    description?: string;
 }): JsonLdNode {
-    return {
+    const node: JsonLdNode = {
         "@type": input.type ?? "WebPage",
         name: input.name,
         url: input.url,
         inLanguage: toSchemaLanguage(input.locale),
         isPartOf: { "@id": websiteId() },
     };
+    if (input.description) {
+        node.description = input.description;
+    }
+    return node;
+}
+
+export type OfferInput = {
+    name: string;
+    description?: string;
+    price: number | string;
+    priceCurrency?: string;
+    url: string;
+    billingCycle?: "monthly" | "yearly" | null;
+};
+
+export function buildOfferCatalog(input: {
+    name: string;
+    url: string;
+    description?: string;
+    offers: OfferInput[];
+}): JsonLdNode | null {
+    if (input.offers.length === 0) return null;
+    const node: JsonLdNode = {
+        "@type": "OfferCatalog",
+        "@id": `${input.url}#offers`,
+        name: input.name,
+        url: input.url,
+        itemListElement: input.offers.map((offer, index) => {
+            const item: JsonLdNode = {
+                "@type": "Offer",
+                position: index + 1,
+                name: offer.name,
+                url: offer.url,
+                price: String(offer.price),
+                priceCurrency: offer.priceCurrency ?? "USD",
+                availability: "https://schema.org/InStock",
+                itemOffered: {
+                    "@type": "Service",
+                    name: offer.name,
+                    ...(offer.description ? { description: offer.description } : {}),
+                },
+            };
+            if (offer.description) {
+                item.description = offer.description;
+            }
+            if (offer.billingCycle === "monthly") {
+                item.eligibleDuration = {
+                    "@type": "QuantitativeValue",
+                    value: 1,
+                    unitCode: "MON",
+                };
+            } else if (offer.billingCycle === "yearly") {
+                item.eligibleDuration = {
+                    "@type": "QuantitativeValue",
+                    value: 1,
+                    unitCode: "ANN",
+                };
+            }
+            return item;
+        }),
+        isPartOf: { "@id": websiteId() },
+    };
+    if (input.description) {
+        node.description = input.description;
+    }
+    return node;
 }
 
 export function buildBreadcrumbList(items: BreadcrumbItem[]): JsonLdNode | null {
