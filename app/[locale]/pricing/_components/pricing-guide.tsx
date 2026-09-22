@@ -1,4 +1,3 @@
-import { Plus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CcButton, CcCard, CcCardDescription, CcCardTitle } from "@/components/cc";
@@ -16,75 +15,23 @@ export async function PricingGuide() {
     return (
         <>
             <section className="bg-cc-surface-page py-16">
-                <div className="mx-auto max-w-7xl px-4">
-                    <div className="mx-auto max-w-3xl text-center">
-                        <h2 className="font-headline text-2xl font-bold text-cc-text-primary md:text-3xl">
-                            {t("creditsTitle")}
-                        </h2>
-                        <p className="mt-3 text-cc-text-secondary">{t("creditsIntro")}</p>
-                    </div>
-                    <div className="mx-auto mt-8 grid max-w-4xl gap-4 md:grid-cols-2">
-                        <CcCard variant="outlined" className="p-6 lg:p-8">
-                            <CcCardTitle>{t("creditsFastTitle")}</CcCardTitle>
-                            <CcCardDescription className="mt-2">
-                                {t("creditsFastBody")}
-                            </CcCardDescription>
-                        </CcCard>
-                        <CcCard variant="outlined" className="p-6 lg:p-8">
-                            <CcCardTitle>{t("creditsQualityTitle")}</CcCardTitle>
-                            <CcCardDescription className="mt-2">
-                                {t("creditsQualityBody")}
-                            </CcCardDescription>
-                        </CcCard>
-                    </div>
-                </div>
-            </section>
-
-            <section className="bg-cc-surface-page py-16">
-                <div className="mx-auto max-w-7xl px-4">
-                    <h2 className="text-center font-headline text-2xl font-bold text-cc-text-primary md:text-3xl">
-                        {t("compareTitle")}
-                    </h2>
-                    <div className="mx-auto mt-8 grid max-w-4xl gap-4 md:grid-cols-2">
-                        <CcCard variant="outlined" className="p-6 lg:p-8">
-                            <CcCardTitle>{t("comparePayToUseTitle")}</CcCardTitle>
-                            <p className="mt-3 text-sm leading-relaxed text-cc-text-secondary">
-                                {t("comparePayToUseBody")}
-                            </p>
-                        </CcCard>
-                        <CcCard variant="outlined" className="p-6 lg:p-8">
-                            <CcCardTitle>{t("compareSubscriptionTitle")}</CcCardTitle>
-                            <p className="mt-3 text-sm leading-relaxed text-cc-text-secondary">
-                                {t("compareSubscriptionBody")}
-                            </p>
-                        </CcCard>
-                    </div>
-                </div>
-            </section>
-
-            <section className="bg-cc-surface-page py-16">
                 <div className="mx-auto max-w-3xl px-4">
                     <h2 className="mb-8 text-center font-headline text-2xl font-bold text-cc-text-primary md:text-3xl">
                         {t("faqTitle")}
                     </h2>
-                    <div className="overflow-hidden rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)]">
-                        {faqs.map((faq, index) => (
-                            <details
+                    <div className="overflow-hidden rounded-xl border border-[var(--cc-border-default)] bg-[var(--cc-surface-white)] px-4 sm:px-6">
+                        {faqs.map((faq) => (
+                            <article
                                 key={faq.question}
-                                className="group border-b border-[var(--cc-border-light)] last:border-b-0"
-                                open={index === 0}
+                                className="border-b border-[var(--cc-border-light)] py-5 last:border-b-0 last:pb-5"
                             >
-                                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 font-body text-sm font-medium text-[var(--cc-text-primary)] transition-colors hover:bg-[var(--cc-brand-tint)] [&::-webkit-details-marker]:hidden">
+                                <h3 className="font-body text-sm font-medium text-[var(--cc-text-primary)]">
                                     {faq.question}
-                                    <Plus
-                                        className="size-4 shrink-0 text-[var(--cc-brand-primary)] transition-transform group-open:rotate-45"
-                                        aria-hidden
-                                    />
-                                </summary>
-                                <p className="px-4 pb-4 font-body text-sm text-[var(--cc-text-secondary)]">
+                                </h3>
+                                <p className="mt-2 font-body text-sm leading-relaxed text-[var(--cc-text-secondary)]">
                                     {faq.answer}
                                 </p>
-                            </details>
+                            </article>
                         ))}
                     </div>
                     <p className="mt-4 text-center text-sm text-cc-text-muted">
