@@ -1,535 +1,545 @@
 {
-  "meta": {
-    "title": "AI na tagasalin ng manga - Mag-translate ng manga online | MangaSense",
-    "description": "Mag-upload ng mga pahina ng manga at makakuha ng AI translation sa isang click. Natutukoy ang speech-bubble text sa Japanese, Korean, at Chinese, tapos iginuguhit muli sa 20+ na wika. Subukan nang libre.",
-    "blogTitle": "Blog | MangaSense",
-    "blogTitleWithName": "{title} | MangaSense",
-    "legalFallback": {
-      "terms": "Mga Tuntunin ng Paggamit",
-      "privacy": "Patakaran sa Privacy",
-      "about": "Tungkol sa Amin",
-      "refund": "Patakaran sa Refund",
-      "dmca": "DMCA"
+    "meta": {
+        "title": "AI na tagasalin ng manga - Mag-translate ng manga online | MangaSense",
+        "description": "Mag-upload ng mga pahina ng manga at makakuha ng AI translation sa isang click. Natutukoy ang speech-bubble text sa Japanese, Korean, at Chinese, tapos iginuguhit muli sa 20+ na wika. Subukan nang libre.",
+        "blogTitle": "Blog | MangaSense",
+        "blogTitleWithName": "{title} | MangaSense",
+        "legalFallback": {
+            "terms": "Mga Tuntunin ng Paggamit",
+            "privacy": "Patakaran sa Privacy",
+            "about": "Tungkol sa Amin",
+            "refund": "Patakaran sa Refund",
+            "dmca": "DMCA"
+        },
+        "pricingTitle": "Presyo ng AI manga translator | MangaSense",
+        "pricingDescription": "Pay per use o subscription. 1 credit ang Fast bawat page, 2 ang Quality. Hindi nag-e-expire ang pay-per-use credits. Kanselahin ang subscription anytime.",
+        "faqTitle": "FAQ ng AI manga translator | MangaSense",
+        "faqDescription": "Mga tanong tungkol sa pagsasalin ng Japanese, Korean, at Chinese manga, mga format, credits, privacy, at refunds."
     },
-    "pricingTitle": "Presyo ng AI manga translator | MangaSense",
-    "pricingDescription": "Pay per use o subscription. 1 credit ang Fast bawat page, 2 ang Quality. Hindi nag-e-expire ang pay-per-use credits. Kanselahin ang subscription anytime.",
-    "faqTitle": "FAQ ng AI manga translator | MangaSense",
-    "faqDescription": "Mga tanong tungkol sa pagsasalin ng Japanese, Korean, at Chinese manga, mga format, credits, privacy, at refunds."
-  },
-  "common": {
-    "brand": "MangaSense",
-    "home": "Home",
-    "breadcrumb": "Breadcrumb",
-    "loading": "Naglo-load…",
-    "cancel": "Kanselahin",
-    "processing": "Pinoproseso…",
-    "unknownError": "Hindi kilalang error",
-    "credits": "Credits",
-    "creditsCount": "Credits · {count}",
-    "pages": "{count} na pahina",
-    "email": "Email",
-    "password": "Password",
-    "pleaseWait": "Pakihintay…"
-  },
-  "status": {
-    "all": "Lahat",
-    "pending": "Nakabinbin",
-    "processing": "Pinoproseso",
-    "completed": "Tapos na",
-    "failed": "Nabigo",
-    "partial": "Bahagya",
-    "stalled": "Na-timeout",
-    "success": "Tagumpay",
-    "canceled": "Nakansela"
-  },
-  "header": {
-    "mangaTranslate": "Isalin ang manga",
-    "pricing": "Presyo",
-    "faq": "FAQ",
-    "blog": "Blog",
-    "joinDiscord": "Sumali sa Discord",
-    "dashboard": "Dashboard",
-    "login": "Mag-log in",
-    "toggleTheme": "Palitan ang tema"
-  },
-  "locales": {
-    "en": "English",
-    "zh-cn": "简体中文",
-    "zh-tw": "繁體中文",
-    "cs": "Čeština",
-    "nl": "Nederlands",
-    "fr": "Français",
-    "de": "Deutsch",
-    "hu": "Magyar",
-    "it": "Italiano",
-    "ja": "日本語",
-    "ko": "한국어",
-    "pl": "Polski",
-    "pt-br": "Português (Brasil)",
-    "ro": "Română",
-    "ru": "Русский",
-    "es": "Español",
-    "tr": "Türkçe",
-    "uk": "Українська",
-    "vi": "Tiếng Việt",
-    "ar": "العربية",
-    "cnr": "Crnogorski",
-    "sr": "Српски",
-    "hr": "Hrvatski",
-    "th": "ไทย",
-    "id": "Bahasa Indonesia",
-    "fil": "Filipino"
-  },
-  "footer": {
-    "tagline": "Mag-upload ng manga at makakuha ng tumpak na pagsasalin mula sa AI. Matalinong OCR, tapat na pagsasalin, seamless na typesetting.",
-    "product": "Produkto",
-    "legal": "Legal",
-    "contact": "Makipag-ugnayan sa amin",
-    "emailLabel": "Email: ",
-    "followUs": "Sundan kami",
-    "followX": "X",
-    "copyright": "© {year} MangaSense. Reserved ang lahat ng karapatan.",
-    "disclaimer": "Hindi kaakibat ang MangaSense sa anumang publisher ng manga.",
-    "links": {
-      "tool": "Tool",
-      "blog": "Blog",
-      "pricing": "Presyo",
-      "about": "Tungkol sa Amin",
-      "privacy": "Patakaran sa Privacy",
-      "terms": "Mga Tuntunin ng Paggamit",
-      "refund": "Patakaran sa Refund",
-      "faq": "FAQ",
-      "dmca": "DMCA"
-    }
-  },
-  "hero": {
-    "title": "Pagsasalin ng manga gamit ang AI, isang click lang",
-    "subtitle": "Awtomatikong natutukoy ang teksto sa speech bubble, isinasalin, at iginuguhit muli sa orihinal na pahina. Sumusuporta sa Japanese, Korean, at Chinese manga habang pinapanatili ang layout at istilo ng font.",
-    "statPages": "mga pahina",
-    "statLanguages": "mga wika",
-    "statAccuracy": "katumpakan",
-    "tryFree": "Subukan nang libre",
-    "howItWorks": "Paano gamitin ang MangaSense"
-  },
-  "how": {
-    "title": "Paano gamitin ang MangaSense",
-    "demoFallback": "Demo ng {title}",
-    "steps": {
-      "upload": {
-        "title": "Mag-upload ng manga",
-        "desc": "I-drag and drop, i-paste, o pumili ng mga file. Sumusuporta sa JPG, PNG, WebP, PDF, EPUB, at CBZ — isang pahina o buong volume."
-      },
-      "language": {
-        "title": "Pumili ng wika",
-        "desc": "Pumili ng target na wika at istilo ng font. Mataas na katumpakan ng pagsasalin sa 20+ na wika."
-      },
-      "download": {
-        "title": "I-preview at i-download",
-        "desc": "I-preview ang naisalin na manga at i-export ang high-resolution na resulta nang buo ang orihinal na layout."
-      }
-    }
-  },
-  "showcase": {
-    "title": "Mga halimbawa ng pagsasalin",
-    "description": "I-drag ang slider para ikumpara ang orihinal / naisalin",
-    "beforeAlt": "Orihinal na larawan bago ang pagsasalin",
-    "afterAlt": "Resulta pagkatapos ng pagsasalin",
-    "compareAria": "Paghahambing bago at pagkatapos ng pagsasalin",
-    "originalAlt": "Orihinal",
-    "translatedAlt": "Naisalin"
-  },
-  "translate": {
-    "languages": {
-      "CHS": "Simplified Chinese",
-      "CHT": "Traditional Chinese",
-      "CSY": "Czech",
-      "NLD": "Dutch",
-      "ENG": "English",
-      "FRA": "French",
-      "DEU": "German",
-      "HUN": "Hungarian",
-      "ITA": "Italian",
-      "JPN": "Japanese",
-      "KOR": "Korean",
-      "POL": "Polish",
-      "PTB": "Portuguese (Brazil)",
-      "ROM": "Romanian",
-      "RUS": "Russian",
-      "ESP": "Spanish",
-      "TRK": "Turkish",
-      "UKR": "Ukrainian",
-      "VIN": "Vietnamese",
-      "ARA": "Arabic",
-      "CNR": "Montenegrin",
-      "SRP": "Serbian",
-      "HRV": "Croatian",
-      "THA": "Thai",
-      "IND": "Indonesian",
-      "FIL": "Filipino (Tagalog)"
+    "common": {
+        "brand": "MangaSense",
+        "home": "Home",
+        "breadcrumb": "Breadcrumb",
+        "loading": "Naglo-load…",
+        "cancel": "Kanselahin",
+        "processing": "Pinoproseso…",
+        "unknownError": "Hindi kilalang error",
+        "credits": "Credits",
+        "creditsCount": "Credits · {count}",
+        "pages": "{count} na pahina",
+        "email": "Email",
+        "password": "Password",
+        "pleaseWait": "Pakihintay…"
     },
-    "modes": {
-      "fast": "Mabilis na pagsasalin (1 credit)",
-      "quality": "De-kalidad na pagsasalin (2 credits)"
+    "status": {
+        "all": "Lahat",
+        "pending": "Nakabinbin",
+        "processing": "Pinoproseso",
+        "completed": "Tapos na",
+        "failed": "Nabigo",
+        "partial": "Bahagya",
+        "stalled": "Na-timeout",
+        "success": "Tagumpay",
+        "canceled": "Nakansela"
     },
-    "draftLabel": "Draft · {count} na pahina",
-    "taskLabel": "Gawain {id}",
-    "closeTask": "Isara ang {label}",
-    "closeOthers": "Isara ang iba",
-    "settingsTitle": "Mga setting",
-    "translateTo": "Isalin sa",
-    "translateMode": "Mode ng pagsasalin",
-    "fontStyle": "Istilo ng font",
-    "fontPreview": "Preview",
-    "downloadAll": "I-download lahat",
-    "submit": "Isumite ang pagsasalin",
-    "previewTitle": "Preview ng larawan ({count} na larawan)",
-    "showTranslated": "Tingnan ang naisalin na larawan",
-    "showOriginal": "Tingnan ang orihinal na larawan",
-    "clearAll": "I-clear lahat",
-    "addImage": "Magdagdag ng mga larawan",
-    "hint": "✦ Awtomatikong natutukoy ng AI ang Japanese, Chinese, English, Korean, at iba pa",
-    "timeout": "Na-timeout ang pagsasalin. Subukan ulit.",
-    "closeConfirmTitle": "Isara ang gawaing ginagawa pa?",
-    "closeConfirmDescription": "Tumatakbo pa ang pagsasaling ito. Ang pagsasara ay inaalis lang ito sa kasalukuyang workspace. Magpapatuloy ang background processing, at hindi ire-refund ang nagamit na credits.",
-    "confirmClose": "Isara pa rin"
-  },
-  "upload": {
-    "dropHint": "I-drop dito ang mga pahina ng manga, o",
-    "browse": "mag-browse ng mga file",
-    "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Mga larawan hanggang 50MB, mga dokumento hanggang 200MB",
-    "quota": "Na-upload {uploaded}/{max} na pahina · {remaining} ang natitira",
-    "addOrDrop": "Magdagdag ng mga larawan / i-drop para mag-upload",
-    "compactQuota": "{uploaded} / {max} na pahina"
-  },
-  "thumbnail": {
-    "waiting": "Naghihintay",
-    "uploading": "Ina-upload",
-    "processing": "Pinoproseso",
-    "preview": "I-preview ang {name}",
-    "remove": "Alisin ang {name}",
-    "continueWait": "Maghintay pa",
-    "retry": "Subukan ulit",
-    "download": "I-download"
-  },
-  "imagePreview": {
-    "close": "Isara ang preview",
-    "prev": "Nakaraang larawan, o pindutin ang left arrow",
-    "next": "Susunod na larawan, o pindutin ang right arrow",
-    "zoomIn": "Palakihin",
-    "zoomOut": "Paliitin"
-  },
-  "pricing": {
-    "title": "Presyo",
-    "payAsNeeded": "Bayad ayon sa paggamit",
-    "subscription": "Subscription",
-    "monthly": "Buwanan",
-    "yearly": "Taunan",
-    "savePercent": "TIPID {percent}%",
-    "getStarted": "Magsimula",
-    "restore": "Ibalik ang subscription",
-    "cancel": "Kanselahin ang subscription",
-    "subscribed": "Naka-subscribe",
-    "adjustPlan": "Palitan ang plan",
-    "planFallback": "Plan",
-    "priceMonthlySuffix": "/ buwan",
-    "priceYearlySuffix": "/ taon",
-    "creditsPayToUse": "{count} credits",
-    "creditsMonthly": "{count} credits / buwan",
-    "creditsYearly": "{count} credits / taon",
-    "promoPayToUse": "Magbayad nang minsan, gamitin anytime. Hindi mag-e-expire ang credits.",
-    "promoMonthly": "Nire-refresh ang credits bawat buwan. Kanselahin anytime.",
-    "promoYearly": "Mas sulit ang yearly. Nire-refresh ang credits bawat taon.",
-    "featuresPayToUse": [
-      "Smart OCR, translation, at typesetting sa orihinal na page",
-      "20+ wika, kasama ang Japanese, Korean, at Chinese",
-      "JPG, PNG, PDF, EPUB, CBZ, at iba pa",
-      "Hindi mag-e-expire ang credits"
-    ],
-    "featuresMonthly": [
-      "Auto refill sa bawat billing cycle",
-      "Smart OCR, translation, at typesetting sa orihinal na page",
-      "20+ wika, kasama ang Japanese, Korean, at Chinese",
-      "Kanselahin anytime"
-    ],
-    "featuresYearly": [
-      "Mas mura kaysa buwanang bayad",
-      "Auto refill bawat taon",
-      "Smart OCR, translation, at typesetting sa orihinal na page",
-      "Kanselahin anytime"
-    ],
-    "pageTitle": "Presyo ng AI manga translator",
-    "pageDescription": "Pumili ng pay-per-use credits o buwanan/taunang subscription. Isalin ang Japanese, Korean, at Chinese manga sa 20+ na wika habang pinapanatili ang orihinal na layout.",
-    "creditsTitle": "Paano gumagana ang credits",
-    "creditsIntro": "Bawat naisalin na page ay gumagamit ng credits. Piliin ang Fast o Quality ayon sa kailangan mong accuracy.",
-    "creditsFastTitle": "Fast mode",
-    "creditsFastBody": "1 credit bawat page. Mas mabilis para sa pang-araw-araw na pagbabasa.",
-    "creditsQualityTitle": "Quality mode",
-    "creditsQualityBody": "2 credits bawat page. Mas tumpak para sa masiksik o istilong teksto.",
-    "compareTitle": "Aling plan ang bagay sa’yo?",
-    "comparePayToUseTitle": "Pay Per Use",
-    "comparePayToUseBody": "Bumili ng credits minsan at gamitin anytime. Mainam kung paminsan-minsan lang nagsasalin. Hindi nag-e-expire ang credits.",
-    "compareSubscriptionTitle": "Subscription",
-    "compareSubscriptionBody": "Nagre-refresh ang credits bawat billing cycle. Mas sulit kung regular kang nagsasalin. Kanselahin anytime.",
-    "faqTitle": "Mga tanong sa presyo",
+    "header": {
+        "mangaTranslate": "Isalin ang manga",
+        "pricing": "Presyo",
+        "faq": "FAQ",
+        "blog": "Blog",
+        "joinDiscord": "Sumali sa Discord",
+        "dashboard": "Dashboard",
+        "login": "Mag-log in",
+        "toggleTheme": "Palitan ang tema"
+    },
+    "locales": {
+        "en": "English",
+        "zh-cn": "简体中文",
+        "zh-tw": "繁體中文",
+        "cs": "Čeština",
+        "nl": "Nederlands",
+        "fr": "Français",
+        "de": "Deutsch",
+        "hu": "Magyar",
+        "it": "Italiano",
+        "ja": "日本語",
+        "ko": "한국어",
+        "pl": "Polski",
+        "pt-br": "Português (Brasil)",
+        "ro": "Română",
+        "ru": "Русский",
+        "es": "Español",
+        "tr": "Türkçe",
+        "uk": "Українська",
+        "vi": "Tiếng Việt",
+        "ar": "العربية",
+        "cnr": "Crnogorski",
+        "sr": "Српски",
+        "hr": "Hrvatski",
+        "th": "ไทย",
+        "id": "Bahasa Indonesia",
+        "fil": "Filipino"
+    },
+    "footer": {
+        "tagline": "Mag-upload ng manga at makakuha ng tumpak na pagsasalin mula sa AI. Matalinong OCR, tapat na pagsasalin, seamless na typesetting.",
+        "product": "Produkto",
+        "legal": "Legal",
+        "contact": "Makipag-ugnayan sa amin",
+        "emailLabel": "Email: ",
+        "followUs": "Sundan kami",
+        "followX": "X",
+        "copyright": "© {year} MangaSense. Reserved ang lahat ng karapatan.",
+        "disclaimer": "Hindi kaakibat ang MangaSense sa anumang publisher ng manga.",
+        "links": {
+            "tool": "Tool",
+            "blog": "Blog",
+            "pricing": "Presyo",
+            "about": "Tungkol sa Amin",
+            "privacy": "Patakaran sa Privacy",
+            "terms": "Mga Tuntunin ng Paggamit",
+            "refund": "Patakaran sa Refund",
+            "faq": "FAQ",
+            "dmca": "DMCA"
+        }
+    },
+    "hero": {
+        "title": "Pagsasalin ng manga gamit ang AI, isang click lang",
+        "subtitle": "Awtomatikong natutukoy ang teksto sa speech bubble, isinasalin, at iginuguhit muli sa orihinal na pahina. Sumusuporta sa Japanese, Korean, at Chinese manga habang pinapanatili ang layout at istilo ng font.",
+        "statPages": "mga pahina",
+        "statLanguages": "mga wika",
+        "statAccuracy": "katumpakan",
+        "tryFree": "Subukan nang libre",
+        "howItWorks": "Paano gamitin ang MangaSense"
+    },
+    "how": {
+        "title": "Paano gamitin ang MangaSense",
+        "demoFallback": "Demo ng {title}",
+        "steps": {
+            "upload": {
+                "title": "Mag-upload ng manga",
+                "desc": "I-drag and drop, i-paste, o pumili ng mga file. Sumusuporta sa JPG, PNG, WebP, PDF, EPUB, at CBZ — isang pahina o buong volume."
+            },
+            "language": {
+                "title": "Pumili ng wika",
+                "desc": "Pumili ng target na wika at istilo ng font. Mataas na katumpakan ng pagsasalin sa 20+ na wika."
+            },
+            "download": {
+                "title": "I-preview at i-download",
+                "desc": "I-preview ang naisalin na manga at i-export ang high-resolution na resulta nang buo ang orihinal na layout."
+            }
+        }
+    },
+    "showcase": {
+        "title": "Mga halimbawa ng pagsasalin",
+        "description": "I-drag ang slider para ikumpara ang orihinal / naisalin",
+        "beforeAlt": "Orihinal na larawan bago ang pagsasalin",
+        "afterAlt": "Resulta pagkatapos ng pagsasalin",
+        "compareAria": "Paghahambing bago at pagkatapos ng pagsasalin",
+        "originalAlt": "Orihinal",
+        "translatedAlt": "Naisalin"
+    },
+    "translate": {
+        "languages": {
+            "CHS": "Simplified Chinese",
+            "CHT": "Traditional Chinese",
+            "CSY": "Czech",
+            "NLD": "Dutch",
+            "ENG": "English",
+            "FRA": "French",
+            "DEU": "German",
+            "HUN": "Hungarian",
+            "ITA": "Italian",
+            "JPN": "Japanese",
+            "KOR": "Korean",
+            "POL": "Polish",
+            "PTB": "Portuguese (Brazil)",
+            "ROM": "Romanian",
+            "RUS": "Russian",
+            "ESP": "Spanish",
+            "TRK": "Turkish",
+            "UKR": "Ukrainian",
+            "VIN": "Vietnamese",
+            "ARA": "Arabic",
+            "CNR": "Montenegrin",
+            "SRP": "Serbian",
+            "HRV": "Croatian",
+            "THA": "Thai",
+            "IND": "Indonesian",
+            "FIL": "Filipino (Tagalog)"
+        },
+        "modes": {
+            "fast": "Mabilis na pagsasalin (1 credit)",
+            "quality": "De-kalidad na pagsasalin (2 credits)"
+        },
+        "draftLabel": "Draft · {count} na pahina",
+        "taskLabel": "Gawain {id}",
+        "closeTask": "Isara ang {label}",
+        "closeOthers": "Isara ang iba",
+        "settingsTitle": "Mga setting",
+        "translateTo": "Isalin sa",
+        "translateMode": "Mode ng pagsasalin",
+        "fontStyle": "Istilo ng font",
+        "fontPreview": "Preview",
+        "downloadAll": "I-download lahat",
+        "submit": "Isumite ang pagsasalin",
+        "previewTitle": "Preview ng larawan ({count} na larawan)",
+        "showTranslated": "Tingnan ang naisalin na larawan",
+        "showOriginal": "Tingnan ang orihinal na larawan",
+        "clearAll": "I-clear lahat",
+        "addImage": "Magdagdag ng mga larawan",
+        "hint": "✦ Awtomatikong natutukoy ng AI ang Japanese, Chinese, English, Korean, at iba pa",
+        "timeout": "Na-timeout ang pagsasalin. Subukan ulit.",
+        "closeConfirmTitle": "Isara ang gawaing ginagawa pa?",
+        "closeConfirmDescription": "Tumatakbo pa ang pagsasaling ito. Ang pagsasara ay inaalis lang ito sa kasalukuyang workspace. Magpapatuloy ang background processing, at hindi ire-refund ang nagamit na credits.",
+        "confirmClose": "Isara pa rin"
+    },
+    "upload": {
+        "dropHint": "I-drop dito ang mga pahina ng manga, o",
+        "browse": "mag-browse ng mga file",
+        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Mga larawan hanggang 50MB, mga dokumento hanggang 200MB",
+        "quota": "Na-upload {uploaded}/{max} na pahina · {remaining} ang natitira",
+        "addOrDrop": "Magdagdag ng mga larawan / i-drop para mag-upload",
+        "compactQuota": "{uploaded} / {max} na pahina"
+    },
+    "thumbnail": {
+        "waiting": "Naghihintay",
+        "uploading": "Ina-upload",
+        "processing": "Pinoproseso",
+        "preview": "I-preview ang {name}",
+        "remove": "Alisin ang {name}",
+        "continueWait": "Maghintay pa",
+        "retry": "Subukan ulit",
+        "download": "I-download"
+    },
+    "imagePreview": {
+        "close": "Isara ang preview",
+        "prev": "Nakaraang larawan, o pindutin ang left arrow",
+        "next": "Susunod na larawan, o pindutin ang right arrow",
+        "zoomIn": "Palakihin",
+        "zoomOut": "Paliitin"
+    },
+    "pricing": {
+        "title": "Presyo",
+        "payAsNeeded": "Credit packs",
+        "payAsNeededDescription": "Pay as you go — hindi nag-e-expire.",
+        "subscription": "Subscription",
+        "subscriptionDescription": "Pinakamahusay para sa regular na pagsasalin — pinaka-matipid na opsyon.",
+        "monthly": "Buwanan",
+        "yearly": "Taunan",
+        "savePercent": "TIPID {percent}%",
+        "getStarted": "Magsimula",
+        "restore": "Ibalik ang subscription",
+        "cancel": "Kanselahin ang subscription",
+        "subscribed": "Naka-subscribe",
+        "adjustPlan": "Palitan ang plan",
+        "planFallback": "Plan",
+        "priceMonthlySuffix": "/ buwan",
+        "priceYearlySuffix": "/ taon",
+        "creditsPayToUse": "{count} credits",
+        "creditsMonthly": "{count} credits / buwan",
+        "creditsYearly": "{count} credits / taon",
+        "promoPayToUse": "Magbayad nang minsan, gamitin anytime. Hindi mag-e-expire ang credits.",
+        "promoMonthly": "Nire-refresh ang credits bawat buwan. Kanselahin anytime.",
+        "promoYearly": "Mas sulit ang yearly. Nire-refresh ang credits bawat taon.",
+        "featuresPayToUse": [
+            "Smart OCR, translation, at typesetting sa orihinal na page",
+            "20+ wika, kasama ang Japanese, Korean, at Chinese",
+            "JPG, PNG, PDF, EPUB, CBZ, at iba pa",
+            "Hindi mag-e-expire ang credits"
+        ],
+        "featuresMonthly": [
+            "Auto refill sa bawat billing cycle",
+            "Smart OCR, translation, at typesetting sa orihinal na page",
+            "20+ wika, kasama ang Japanese, Korean, at Chinese",
+            "Kanselahin anytime"
+        ],
+        "featuresYearly": [
+            "Mas mura kaysa buwanang bayad",
+            "Auto refill bawat taon",
+            "Smart OCR, translation, at typesetting sa orihinal na page",
+            "Kanselahin anytime"
+        ],
+        "pageTitle": "Presyo",
+        "pageDescription": "Mag-translate nang higit pa gamit ang credit packs o subscription.",
+        "pageBenefits": [
+            "Advanced AI translation na naka-tune sa manga — mas natural kaysa tradisyonal na MT",
+            "Awtomatikong speech-bubble at background text detection",
+            "Smart inpainting at typesetting na naka-align sa orihinal na artwork",
+            "Dalawang mode — para sa karamihan ng manga pages at complex artwork",
+            "Hindi nag-e-expire ang credit packs",
+            "Ang subscription credits ay nagre-refresh bawat billing cycle"
+        ],
+        "creditsTitle": "Paano gumagana ang credits",
+        "creditsIntro": "Bawat naisalin na page ay gumagamit ng credits. Piliin ang Fast o Quality ayon sa kailangan mong accuracy.",
+        "creditsFastTitle": "Fast mode",
+        "creditsFastBody": "1 credit bawat page. Mas mabilis para sa pang-araw-araw na pagbabasa.",
+        "creditsQualityTitle": "Quality mode",
+        "creditsQualityBody": "2 credits bawat page. Mas tumpak para sa masiksik o istilong teksto.",
+        "compareTitle": "Aling plan ang bagay sa’yo?",
+        "comparePayToUseTitle": "Credit packs",
+        "comparePayToUseBody": "Bumili ng credits minsan at gamitin anytime. Mainam kung paminsan-minsan lang nagsasalin. Hindi nag-e-expire ang credits.",
+        "compareSubscriptionTitle": "Subscription",
+        "compareSubscriptionBody": "Nagre-refresh ang credits bawat billing cycle. Mas sulit kung regular kang nagsasalin. Kanselahin anytime.",
+        "faqTitle": "Mga tanong sa presyo",
+        "faq": {
+            "credits": {
+                "question": "Ilang credits ang isang page?",
+                "answer": "1 credit bawat page ang Fast mode. 2 credits bawat page ang Quality mode."
+            },
+            "expiry": {
+                "question": "Nag-e-expire ba ang credits?",
+                "answer": "Hindi nag-e-expire ang Pay Per Use credits. Nagre-refresh ang subscription credits sa simula ng bawat billing cycle."
+            },
+            "cancel": {
+                "question": "Pwede ko bang kanselahin ang subscription?",
+                "answer": "Oo. Pwede kang mag-cancel anytime. Available pa ang natitirang subscription credits hanggang matapos ang kasalukuyang period."
+            },
+            "refund": {
+                "question": "Pwede ba akong magpa-refund?",
+                "answer": "Ang hindi nagamit na bayad na credits ay maaaring i-refund ayon sa aming refund policy."
+            },
+            "languages": {
+                "question": "Anong mga wika at format ang kasama?",
+                "answer": "Kasama sa bawat plan ang OCR, translation, at in-place typesetting para sa 20+ na wika, pati JPG, PNG, PDF, EPUB, CBZ, at iba pa."
+            }
+        },
+        "ctaTitle": "Handa ka na bang magsalin?",
+        "ctaBody": "Mag-upload ng isang page at subukan ang MangaSense nang libre."
+    },
+    "changePlan": {
+        "title": "Palitan ang subscription plan?",
+        "description": "Lilipat ka sa {planName} ({price}). Hindi ire-refund ang pagkakaiba sa presyo. Pananatilihin ang umiiral na credits, at sisingilin agad ang bagong presyo ng plan pagkatapos kumpirmahin.",
+        "confirm": "Kumpirmahin ang pagbabago",
+        "failed": "Hindi napalitan ang plan",
+        "missingPaymentInfo": "Kulang ang detalye ng kumpirmasyon ng bayad. Subukan ulit mamaya.",
+        "stripeLoadFailed": "Hindi na-load ang payment component. Subukan ulit mamaya.",
+        "needCardVerification": "Kailangan ang beripikasyon ng card bago magkabisa ang pagbabago. Sundin ang mga prompt.",
+        "cardVerificationFailed": "Nabigo ang beripikasyon ng card",
+        "verified": "Nagtagumpay ang beripikasyon. Naisumite na ang pagbabago ng plan, at darating ang credits sa ilang saglit.",
+        "paymentStatus": "Status ng bayad: {status}. I-refresh mamaya para tingnan.",
+        "submitted": "Naisumite ang pagbabago ng plan. Darating ang credits sa ilang saglit."
+    },
     "faq": {
-      "credits": {
-        "question": "Ilang credits ang isang page?",
-        "answer": "1 credit bawat page ang Fast mode. 2 credits bawat page ang Quality mode."
-      },
-      "expiry": {
-        "question": "Nag-e-expire ba ang credits?",
-        "answer": "Hindi nag-e-expire ang Pay Per Use credits. Nagre-refresh ang subscription credits sa simula ng bawat billing cycle."
-      },
-      "cancel": {
-        "question": "Pwede ko bang kanselahin ang subscription?",
-        "answer": "Oo. Pwede kang mag-cancel anytime. Available pa ang natitirang subscription credits hanggang matapos ang kasalukuyang period."
-      },
-      "refund": {
-        "question": "Pwede ba akong magpa-refund?",
-        "answer": "Ang hindi nagamit na bayad na credits ay maaaring i-refund ayon sa aming refund policy."
-      },
-      "languages": {
-        "question": "Anong mga wika at format ang kasama?",
-        "answer": "Kasama sa bawat plan ang OCR, translation, at in-place typesetting para sa 20+ na wika, pati JPG, PNG, PDF, EPUB, CBZ, at iba pa."
-      }
+        "title": "FAQ",
+        "items": {
+            "japanese": {
+                "question": "Pwede ba ninyong isalin ang Japanese manga?",
+                "answer": "Oo. Sinusuportahan namin ang awtomatikong pagkilala at pagsasalin ng Japanese manga habang pinapanatili ang layout ng speech bubble at istilo ng sining."
+            },
+            "korean": {
+                "question": "Pwede ba ninyong isalin ang Korean manhwa?",
+                "answer": "Oo. Sinusuportahan namin ang vertically read na Korean comics at karaniwang layout ng webtoon."
+            },
+            "chinese": {
+                "question": "Pwede ba ninyong isalin ang Chinese manga?",
+                "answer": "Oo. Sinusuportahan namin ang cross-language na pagsasalin ng Simplified at Traditional Chinese comics."
+            },
+            "ai": {
+                "question": "Anong AI ang ginagamit ninyo?",
+                "answer": "Gumagamit kami ng multi-model pipeline na optimized para sa manga, na sumasaklaw sa text detection, pagsasalin, at inpainting."
+            },
+            "duration": {
+                "question": "Gaano katagal ang pagsasalin?",
+                "answer": "Karaniwang tumatagal ang isang pahina ng ilang segundo hanggang sampu-sampung segundo, depende sa laki ng larawan at load ng pila."
+            },
+            "formats": {
+                "question": "Anong mga format ang sinusuportahan?",
+                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, at ZIP."
+            },
+            "expiry": {
+                "question": "May expiration ba ang credits?",
+                "answer": "Hindi mag-e-expire ang Pay Per Use credits. Nire-refresh ang subscription credits sa bawat billing cycle."
+            },
+            "languages": {
+                "question": "Anong mga wika ang sinusuportahan?",
+                "answer": "Sinusuportahan namin ang 20+ na wika, kabilang ang Japanese, Chinese, English, Korean, at iba pang karaniwang wika ng manga."
+            },
+            "privacy": {
+                "question": "Ligtas ba ang data ko?",
+                "answer": "Ang na-upload na content ay ginagamit lang para sa pagsasalin. Hindi ito ginagamit sa pampublikong training o ibinabahagi sa iba."
+            },
+            "refund": {
+                "question": "Paano gumagana ang refund?",
+                "answer": "Ang hindi nagamit na bayad na credits ay maaaring i-refund ayon sa aming patakaran. Tingnan ang terms of service para sa detalye."
+            },
+            "plugin": {
+                "question": "May browser extension ba?",
+                "answer": "Malapit nang magkaroon ng browser extension. Sa ngayon, mag-upload at mag-translate sa web app."
+            }
+        },
+        "pageTitle": "Mga Madalas Itanong",
+        "pageDescription": "Mga karaniwang tanong sa online na pagsasalin ng manga gamit ang MangaSense: wika, file formats, credits, privacy, at refunds.",
+        "ctaTitle": "May iba pa kayong tanong?",
+        "ctaBody": "Mag-upload ng isang page para subukan, o ikumpara ang mga plan sa pricing page."
     },
-    "ctaTitle": "Handa ka na bang magsalin?",
-    "ctaBody": "Mag-upload ng isang page at subukan ang MangaSense nang libre."
-  },
-  "changePlan": {
-    "title": "Palitan ang subscription plan?",
-    "description": "Lilipat ka sa {planName} ({price}). Hindi ire-refund ang pagkakaiba sa presyo. Pananatilihin ang umiiral na credits, at sisingilin agad ang bagong presyo ng plan pagkatapos kumpirmahin.",
-    "confirm": "Kumpirmahin ang pagbabago",
-    "failed": "Hindi napalitan ang plan",
-    "missingPaymentInfo": "Kulang ang detalye ng kumpirmasyon ng bayad. Subukan ulit mamaya.",
-    "stripeLoadFailed": "Hindi na-load ang payment component. Subukan ulit mamaya.",
-    "needCardVerification": "Kailangan ang beripikasyon ng card bago magkabisa ang pagbabago. Sundin ang mga prompt.",
-    "cardVerificationFailed": "Nabigo ang beripikasyon ng card",
-    "verified": "Nagtagumpay ang beripikasyon. Naisumite na ang pagbabago ng plan, at darating ang credits sa ilang saglit.",
-    "paymentStatus": "Status ng bayad: {status}. I-refresh mamaya para tingnan.",
-    "submitted": "Naisumite ang pagbabago ng plan. Darating ang credits sa ilang saglit."
-  },
-  "faq": {
-    "title": "FAQ",
-    "items": {
-      "japanese": {
-        "question": "Pwede ba ninyong isalin ang Japanese manga?",
-        "answer": "Oo. Sinusuportahan namin ang awtomatikong pagkilala at pagsasalin ng Japanese manga habang pinapanatili ang layout ng speech bubble at istilo ng sining."
-      },
-      "korean": {
-        "question": "Pwede ba ninyong isalin ang Korean manhwa?",
-        "answer": "Oo. Sinusuportahan namin ang vertically read na Korean comics at karaniwang layout ng webtoon."
-      },
-      "chinese": {
-        "question": "Pwede ba ninyong isalin ang Chinese manga?",
-        "answer": "Oo. Sinusuportahan namin ang cross-language na pagsasalin ng Simplified at Traditional Chinese comics."
-      },
-      "ai": {
-        "question": "Anong AI ang ginagamit ninyo?",
-        "answer": "Gumagamit kami ng multi-model pipeline na optimized para sa manga, na sumasaklaw sa text detection, pagsasalin, at inpainting."
-      },
-      "duration": {
-        "question": "Gaano katagal ang pagsasalin?",
-        "answer": "Karaniwang tumatagal ang isang pahina ng ilang segundo hanggang sampu-sampung segundo, depende sa laki ng larawan at load ng pila."
-      },
-      "formats": {
-        "question": "Anong mga format ang sinusuportahan?",
-        "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, at ZIP."
-      },
-      "expiry": {
-        "question": "May expiration ba ang credits?",
-        "answer": "Hindi mag-e-expire ang Pay Per Use credits. Nire-refresh ang subscription credits sa bawat billing cycle."
-      },
-      "languages": {
-        "question": "Anong mga wika ang sinusuportahan?",
-        "answer": "Sinusuportahan namin ang 20+ na wika, kabilang ang Japanese, Chinese, English, Korean, at iba pang karaniwang wika ng manga."
-      },
-      "privacy": {
-        "question": "Ligtas ba ang data ko?",
-        "answer": "Ang na-upload na content ay ginagamit lang para sa pagsasalin. Hindi ito ginagamit sa pampublikong training o ibinabahagi sa iba."
-      },
-      "refund": {
-        "question": "Paano gumagana ang refund?",
-        "answer": "Ang hindi nagamit na bayad na credits ay maaaring i-refund ayon sa aming patakaran. Tingnan ang terms of service para sa detalye."
-      },
-      "plugin": {
-        "question": "May browser extension ba?",
-        "answer": "Malapit nang magkaroon ng browser extension. Sa ngayon, mag-upload at mag-translate sa web app."
-      }
+    "blog": {
+        "title": "Blog",
+        "latest": "Pinakabagong post",
+        "viewAll": "Tingnan ang lahat ng post →",
+        "readMore": "Magbasa pa →",
+        "back": "← Bumalik sa blog",
+        "date": "{month} {day}, {year}"
     },
-    "pageTitle": "Mga Madalas Itanong",
-    "pageDescription": "Mga karaniwang tanong sa online na pagsasalin ng manga gamit ang MangaSense: wika, file formats, credits, privacy, at refunds.",
-    "ctaTitle": "May iba pa kayong tanong?",
-    "ctaBody": "Mag-upload ng isang page para subukan, o ikumpara ang mga plan sa pricing page."
-  },
-  "blog": {
-    "title": "Blog",
-    "latest": "Pinakabagong post",
-    "viewAll": "Tingnan ang lahat ng post →",
-    "readMore": "Magbasa pa →",
-    "back": "← Bumalik sa blog",
-    "date": "{month} {day}, {year}"
-  },
-  "auth": {
-    "login": {
-      "title": "Mag-log in",
-      "description": "Mag-sign in sa iyong account gamit ang email at password",
-      "emailPlaceholder": "Email",
-      "passwordPlaceholder": "Password",
-      "forgotPassword": "Nakalimutan ang password?",
-      "submit": "Mag-log in",
-      "noAccount": "Wala pang account?",
-      "goSignUp": "Mag-sign up",
-      "orUse": "O magpatuloy gamit ang",
-      "google": "Magpatuloy sa Google",
-      "failed": "Nabigo ang pag-log in",
-      "genericError": "May nangyaring mali. Subukan ulit."
+    "auth": {
+        "login": {
+            "title": "Mag-log in",
+            "description": "Mag-sign in sa iyong account gamit ang email at password",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "forgotPassword": "Nakalimutan ang password?",
+            "submit": "Mag-log in",
+            "noAccount": "Wala pang account?",
+            "goSignUp": "Mag-sign up",
+            "orUse": "O magpatuloy gamit ang",
+            "google": "Magpatuloy sa Google",
+            "failed": "Nabigo ang pag-log in",
+            "genericError": "May nangyaring mali. Subukan ulit."
+        },
+        "signUp": {
+            "title": "Mag-sign up",
+            "description": "Gumawa ng account at magsimula",
+            "emailPlaceholder": "your@email.com",
+            "passwordPlaceholder": "Hindi bababa sa 8 character",
+            "confirmPassword": "Kumpirmahin ang password",
+            "confirmPasswordPlaceholder": "Ilagay ulit ang password",
+            "submit": "Mag-sign up",
+            "hasAccount": "May account na?",
+            "goLogin": "Mag-log in",
+            "passwordMismatch": "Hindi magkatugma ang mga password",
+            "failed": "Nabigo ang pag-sign up",
+            "genericError": "May nangyaring mali. Subukan ulit."
+        },
+        "signUpSuccess": {
+            "title": "Salamat sa pag-sign up!",
+            "description": "Suriin ang iyong email para kumpirmahin",
+            "body": "Matagumpay kang nag-sign up. Suriin ang iyong email para kumpirmahin ang account bago mag-sign in."
+        },
+        "forgotPassword": {
+            "title": "I-reset ang password",
+            "description": "I-type ang iyong email at magpapadala kami ng link para i-reset ang password",
+            "email": "Email",
+            "emailPlaceholder": "m@example.com",
+            "submit": "Ipadala ang reset email",
+            "sending": "Ipinapadala...",
+            "hasAccount": "May account na?",
+            "goLogin": "Mag-log in",
+            "successTitle": "Suriin ang iyong email",
+            "successDescription": "Naipadala ang mga instruksiyon sa pag-reset ng password",
+            "successBody": "Kung nag-register ka gamit ang email at password, makakatanggap ka ng password reset email.",
+            "genericError": "May naganap na error"
+        },
+        "updatePassword": {
+            "title": "I-reset ang password",
+            "description": "Ilagay ang iyong bagong password sa ibaba.",
+            "newPassword": "Bagong password",
+            "placeholder": "Bagong password",
+            "submit": "I-save ang bagong password",
+            "saving": "Sine-save...",
+            "genericError": "May naganap na error"
+        },
+        "confirm": {
+            "verifyingTitle": "Bine-verify ang iyong email…",
+            "verifyingDescription": "Pakihintay habang tinatapos namin ang kumpirmasyon ng iyong sign-up.",
+            "successTitle": "Nakumpirma ang email",
+            "successDescription": "Dadalin ka sa home page sa loob ng {seconds} segundo, o maaari ka nang magsimulang mag-translate.",
+            "errorTitle": "Nabigo ang beripikasyon",
+            "errorDescription": "Hindi namin makumpirma ang iyong email.",
+            "missingParams": "Kulang ang mga parameter ng kumpirmasyon. Buksan ulit ang link mula sa iyong email.",
+            "invalidLink": "Nabigo ang beripikasyon. Maaaring expired na ang link.",
+            "networkError": "Error sa network. Subukan ulit mamaya.",
+            "startTranslate": "Magsimulang mag-translate",
+            "backToLogin": "Bumalik sa login"
+        },
+        "error": {
+            "title": "Paumanhin, may nangyaring mali.",
+            "codeError": "Error code: {error}",
+            "unspecified": "May naganap na hindi tinukoy na error."
+        }
     },
-    "signUp": {
-      "title": "Mag-sign up",
-      "description": "Gumawa ng account at magsimula",
-      "emailPlaceholder": "your@email.com",
-      "passwordPlaceholder": "Hindi bababa sa 8 character",
-      "confirmPassword": "Kumpirmahin ang password",
-      "confirmPasswordPlaceholder": "Ilagay ulit ang password",
-      "submit": "Mag-sign up",
-      "hasAccount": "May account na?",
-      "goLogin": "Mag-log in",
-      "passwordMismatch": "Hindi magkatugma ang mga password",
-      "failed": "Nabigo ang pag-sign up",
-      "genericError": "May nangyaring mali. Subukan ulit."
+    "home": {
+        "navAria": "Account",
+        "history": "Kasaysayan ng pagsasalin",
+        "billing": "Billing at subscription",
+        "signOut": "Mag-sign out",
+        "email": "Email",
+        "creditBalance": "Balanse ng credits"
     },
-    "signUpSuccess": {
-      "title": "Salamat sa pag-sign up!",
-      "description": "Suriin ang iyong email para kumpirmahin",
-      "body": "Matagumpay kang nag-sign up. Suriin ang iyong email para kumpirmahin ang account bago mag-sign in."
+    "history": {
+        "title": "Kasaysayan ng pagsasalin",
+        "empty": "Walang kasaysayan ng pagsasalin / walang tumutugmang resulta",
+        "clearFilters": "I-clear ang mga filter",
+        "loadMore": "Mag-load pa",
+        "loading": "Naglo-load…",
+        "sourceAuto": "Auto",
+        "dateRange": {
+            "1d": "Huling 1 araw",
+            "7d": "Huling 7 araw",
+            "1m": "Huling 1 buwan",
+            "all": "Lahat"
+        }
     },
-    "forgotPassword": {
-      "title": "I-reset ang password",
-      "description": "I-type ang iyong email at magpapadala kami ng link para i-reset ang password",
-      "email": "Email",
-      "emailPlaceholder": "m@example.com",
-      "submit": "Ipadala ang reset email",
-      "sending": "Ipinapadala...",
-      "hasAccount": "May account na?",
-      "goLogin": "Mag-log in",
-      "successTitle": "Suriin ang iyong email",
-      "successDescription": "Naipadala ang mga instruksiyon sa pag-reset ng password",
-      "successBody": "Kung nag-register ka gamit ang email at password, makakatanggap ka ng password reset email.",
-      "genericError": "May naganap na error"
+    "billing": {
+        "title": "Billing at subscription",
+        "currentPlan": "Kasalukuyang plan",
+        "manage": "I-manage",
+        "unsubscribed": "Walang subscription",
+        "unsubscribedHint": "Mag-subscribe para makatanggap ng credits sa bawat billing cycle at i-unlock ang benepisyo ng plan",
+        "subscribe": "Mag-subscribe",
+        "resetsOn": "Nire-reset sa {date}",
+        "resetsOnWithDays": "Nire-reset sa {date} ({days} araw)",
+        "monthDay": "{month}/{day}",
+        "priceMonthlySuffix": "/ buwan",
+        "priceYearlySuffix": "/ taon",
+        "transactions": "Mga transaksyon",
+        "emptyTransactions": "Wala pang billing record",
+        "columns": {
+            "createdAt": "Nilikha noong",
+            "amount": "Halaga",
+            "credits": "Credits",
+            "type": "Uri",
+            "status": "Status"
+        },
+        "transactionType": {
+            "pay-to-use": "Bayad ayon sa paggamit",
+            "subscription": "Subscription"
+        }
     },
-    "updatePassword": {
-      "title": "I-reset ang password",
-      "description": "Ilagay ang iyong bagong password sa ibaba.",
-      "newPassword": "Bagong password",
-      "placeholder": "Bagong password",
-      "submit": "I-save ang bagong password",
-      "saving": "Sine-save...",
-      "genericError": "May naganap na error"
+    "manageSubscription": {
+        "title": "I-manage ang subscription",
+        "currentPlan": "Kasalukuyang plan: {plan} {price}, panahon hanggang {date}",
+        "cancelTitle": "Kanselahin ang subscription?",
+        "cancelDescription": "Magtatapos ang iyong subscription pagkatapos ng {date}. Maaari mong patuloy na gamitin ang kasalukuyang plan hanggang noon, at pananatilihin ang umiiral na credits.",
+        "thinkAgain": "Panatilihin ang subscription",
+        "confirmCancel": "Kumpirmahin ang pagkansela",
+        "cancelFailed": "Hindi nakansela ang subscription",
+        "cancelSubmitted": "Naisumite ang pagkansela",
+        "restoreFailed": "Hindi naibalik ang subscription",
+        "restored": "Naibalik ang subscription"
     },
-    "confirm": {
-      "verifyingTitle": "Bine-verify ang iyong email…",
-      "verifyingDescription": "Pakihintay habang tinatapos namin ang kumpirmasyon ng iyong sign-up.",
-      "successTitle": "Nakumpirma ang email",
-      "successDescription": "Dadalin ka sa home page sa loob ng {seconds} segundo, o maaari ka nang magsimulang mag-translate.",
-      "errorTitle": "Nabigo ang beripikasyon",
-      "errorDescription": "Hindi namin makumpirma ang iyong email.",
-      "missingParams": "Kulang ang mga parameter ng kumpirmasyon. Buksan ulit ang link mula sa iyong email.",
-      "invalidLink": "Nabigo ang beripikasyon. Maaaring expired na ang link.",
-      "networkError": "Error sa network. Subukan ulit mamaya.",
-      "startTranslate": "Magsimulang mag-translate",
-      "backToLogin": "Bumalik sa login"
-    },
-    "error": {
-      "title": "Paumanhin, may nangyaring mali.",
-      "codeError": "Error code: {error}",
-      "unspecified": "May naganap na hindi tinukoy na error."
+    "payment": {
+        "loading": "Naglo-load…",
+        "error": "Error: {message}",
+        "success": {
+            "title": "Tagumpay ang subscription",
+            "thanks": "Salamat sa iyong subscription! Ipapadala ang confirmation email sa {email}.",
+            "redirecting": "Nire-redirect sa translator sa {seconds}s…",
+            "start": "Magsimulang mag-translate"
+        },
+        "pending": {
+            "title": "Pinoproseso ang bayad",
+            "body": "Kinukumpirma ang iyong bayad. Idadagdag ang credits sa iyong account kapag natapos ang bayad.",
+            "notify": "Aabisuhan namin ang {email} kapag tapos na.",
+            "hint": "Maaaring tumagal ito ng ilang minuto o mas matagal depende sa paraan ng bayad. Pwede kang umalis sa page na ito nang ligtas.",
+            "backHome": "Bumalik sa home"
+        },
+        "incomplete": {
+            "title": "Hindi kumpleto ang bayad",
+            "expired": "Nag-expire na ang checkout session na ito. Magsimula ng bagong pagbili kung nais mo pang magpatuloy.",
+            "noPaymentRequired": "Walang kinakailangang bayad para sa session na ito. Kung inaasahan mong may singil, makipag-ugnayan sa support.",
+            "generic": "Hindi namin makumpirma ang iyong bayad. Hindi ka siningil, o hindi matagumpay na natapos ang bayad.",
+            "hint": "Kung sa tingin mo ay pagkakamali ito, subukan ulit o makipag-ugnayan sa support kasama ang detalye ng bayad.",
+            "tryAgain": "Subukan ulit",
+            "backHome": "Bumalik sa home"
+        }
     }
-  },
-  "home": {
-    "navAria": "Account",
-    "history": "Kasaysayan ng pagsasalin",
-    "billing": "Billing at subscription",
-    "signOut": "Mag-sign out",
-    "email": "Email",
-    "creditBalance": "Balanse ng credits"
-  },
-  "history": {
-    "title": "Kasaysayan ng pagsasalin",
-    "empty": "Walang kasaysayan ng pagsasalin / walang tumutugmang resulta",
-    "clearFilters": "I-clear ang mga filter",
-    "loadMore": "Mag-load pa",
-    "loading": "Naglo-load…",
-    "sourceAuto": "Auto",
-    "dateRange": {
-      "1d": "Huling 1 araw",
-      "7d": "Huling 7 araw",
-      "1m": "Huling 1 buwan",
-      "all": "Lahat"
-    }
-  },
-  "billing": {
-    "title": "Billing at subscription",
-    "currentPlan": "Kasalukuyang plan",
-    "manage": "I-manage",
-    "unsubscribed": "Walang subscription",
-    "unsubscribedHint": "Mag-subscribe para makatanggap ng credits sa bawat billing cycle at i-unlock ang benepisyo ng plan",
-    "subscribe": "Mag-subscribe",
-    "resetsOn": "Nire-reset sa {date}",
-    "resetsOnWithDays": "Nire-reset sa {date} ({days} araw)",
-    "monthDay": "{month}/{day}",
-    "priceMonthlySuffix": "/ buwan",
-    "priceYearlySuffix": "/ taon",
-    "transactions": "Mga transaksyon",
-    "emptyTransactions": "Wala pang billing record",
-    "columns": {
-      "createdAt": "Nilikha noong",
-      "amount": "Halaga",
-      "credits": "Credits",
-      "type": "Uri",
-      "status": "Status"
-    },
-    "transactionType": {
-      "pay-to-use": "Bayad ayon sa paggamit",
-      "subscription": "Subscription"
-    }
-  },
-  "manageSubscription": {
-    "title": "I-manage ang subscription",
-    "currentPlan": "Kasalukuyang plan: {plan} {price}, panahon hanggang {date}",
-    "cancelTitle": "Kanselahin ang subscription?",
-    "cancelDescription": "Magtatapos ang iyong subscription pagkatapos ng {date}. Maaari mong patuloy na gamitin ang kasalukuyang plan hanggang noon, at pananatilihin ang umiiral na credits.",
-    "thinkAgain": "Panatilihin ang subscription",
-    "confirmCancel": "Kumpirmahin ang pagkansela",
-    "cancelFailed": "Hindi nakansela ang subscription",
-    "cancelSubmitted": "Naisumite ang pagkansela",
-    "restoreFailed": "Hindi naibalik ang subscription",
-    "restored": "Naibalik ang subscription"
-  },
-  "payment": {
-    "loading": "Naglo-load…",
-    "error": "Error: {message}",
-    "success": {
-      "title": "Tagumpay ang subscription",
-      "thanks": "Salamat sa iyong subscription! Ipapadala ang confirmation email sa {email}.",
-      "redirecting": "Nire-redirect sa translator sa {seconds}s…",
-      "start": "Magsimulang mag-translate"
-    },
-    "pending": {
-      "title": "Pinoproseso ang bayad",
-      "body": "Kinukumpirma ang iyong bayad. Idadagdag ang credits sa iyong account kapag natapos ang bayad.",
-      "notify": "Aabisuhan namin ang {email} kapag tapos na.",
-      "hint": "Maaaring tumagal ito ng ilang minuto o mas matagal depende sa paraan ng bayad. Pwede kang umalis sa page na ito nang ligtas.",
-      "backHome": "Bumalik sa home"
-    },
-    "incomplete": {
-      "title": "Hindi kumpleto ang bayad",
-      "expired": "Nag-expire na ang checkout session na ito. Magsimula ng bagong pagbili kung nais mo pang magpatuloy.",
-      "noPaymentRequired": "Walang kinakailangang bayad para sa session na ito. Kung inaasahan mong may singil, makipag-ugnayan sa support.",
-      "generic": "Hindi namin makumpirma ang iyong bayad. Hindi ka siningil, o hindi matagumpay na natapos ang bayad.",
-      "hint": "Kung sa tingin mo ay pagkakamali ito, subukan ulit o makipag-ugnayan sa support kasama ang detalye ng bayad.",
-      "tryAgain": "Subukan ulit",
-      "backHome": "Bumalik sa home"
-    }
-  }
 }

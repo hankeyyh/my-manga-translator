@@ -5,8 +5,9 @@ import { BillingService } from "@/biz/services/billing/billing-service";
 import { CreditService } from "@/biz/services/credit/credit-service";
 import { createServerClient } from "@/biz/utils/supabase/server";
 import { buildPageMetadata } from "@/biz/seo/site";
-import { ClientPricingSection } from "../_components/client-pricing-section";
+import { PricingBenefits } from "./_components/pricing-benefits";
 import { PricingGuide } from "./_components/pricing-guide";
+import { PricingPlansSection } from "./_components/pricing-plans-section";
 import { PricingJsonLd } from "./_components/seo/pricing-json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,16 +47,16 @@ export default async function Page() {
                     <h1 className="font-headline text-3xl font-extrabold tracking-tight text-cc-text-primary sm:text-5xl">
                         {t("pageTitle")}
                     </h1>
-                    <p className="mx-auto mt-4 max-w-2xl text-cc-text-secondary">
+                    <p className="mx-auto mt-4 max-w-2xl text-base text-cc-text-secondary">
                         {t("pageDescription")}
                     </p>
                 </header>
+                <PricingBenefits />
             </div>
             {configs.length > 0 ? (
-                <ClientPricingSection
-                    topUpConfigs={configs}
+                <PricingPlansSection
                     currentSubscription={subscriptionResult.data}
-                    showHeading={false}
+                    topUpConfigs={configs}
                 />
             ) : null}
             <PricingGuide />
