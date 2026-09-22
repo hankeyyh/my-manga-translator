@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "マンガのページをここにドロップ、または",
         "browse": "ファイルを参照",
-        "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 画像は最大 50MB、文書は最大 200MB",
+        "formats": "JPG、PNG、WebP、GIF、AVIF · 画像は最大 10MB",
         "quota": "アップロード済み {uploaded}/{max} ページ · 残り {remaining}",
         "addOrDrop": "画像を追加 / ドロップしてアップロード",
         "compactQuota": "{uploaded} / {max} ページ"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "サブスクリプション",
         "compareSubscriptionBody": "請求サイクルごとにクレジットが更新されます。よく使う場合にお得で、いつでも解約できます。",
         "faqTitle": "料金に関するよくある質問",
-        "faq": {
-            "credits": {
-                "question": "1ページあたり何クレジット必要ですか？",
-                "answer": "Fast モードは1ページ1クレジット、Quality モードは1ページ2クレジットです。"
-            },
-            "expiry": {
-                "question": "クレジットに有効期限はありますか？",
-                "answer": "従量課金のクレジットは無期限です。サブスクのクレジットは各請求サイクルの開始時に更新されます。"
-            },
-            "cancel": {
-                "question": "サブスクは解約できますか？",
-                "answer": "はい、いつでも解約できます。残りのサブスククレジットは、現在の期間が終わるまで利用できます。"
-            },
-            "refund": {
-                "question": "返金できますか？",
-                "answer": "未使用の有料クレジットは、返金ポリシーに従って返金できます。"
-            },
-            "languages": {
-                "question": "対応言語と形式は含まれますか？",
-                "answer": "すべてのプランに OCR、翻訳、吹き出しへの組み込みが含まれ、20以上の言語と JPG、PNG、PDF、EPUB、CBZ などに対応します。"
-            }
-        },
         "ctaTitle": "翻訳を始める",
+        "ctaUnsure": "支払うか迷っていますか？",
         "ctaBody": "ページをアップロードして、MangaSense を無料でお試しください。"
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "韓国のウェブトゥーンは翻訳できますか？",
-                "answer": "はい。縦読みの韓国漫画や一般的なウェブトゥーンのレイアウトに対応しています。"
+                "answer": "韓国漫画（ウェブトゥーン）は現在まだ対応していません。"
             },
             "chinese": {
                 "question": "中国語のマンガは翻訳できますか？",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "対応フォーマットは？",
-                "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP です。"
+                "answer": "JPG、PNG、WebP、GIF、AVIF です。"
+            },
+            "credits": {
+                "question": "1ページあたり何クレジット必要ですか？",
+                "answer": "Fast モードは1ページ1クレジット、Quality モードは1ページ2クレジットです。"
+            },
+            "cancel": {
+                "question": "サブスクは解約できますか？",
+                "answer": "はい、いつでも解約できます。残りのサブスククレジットは、現在の期間が終わるまで利用できます。"
             },
             "expiry": {
                 "question": "クレジットに有効期限はありますか？",
@@ -359,16 +346,13 @@
                 "answer": "アップロードされた内容は翻訳処理にのみ使用します。公開トレーニングや第三者への共有は行いません。"
             },
             "refund": {
-                "question": "返金はどうなりますか？",
-                "answer": "未使用の有料クレジットはポリシーに従って返金できます。詳細は利用規約をご確認ください。"
-            },
-            "plugin": {
-                "question": "ブラウザ拡張機能はありますか？",
-                "answer": "ブラウザ拡張機能は近日公開予定です。現在はウェブアプリでアップロードして翻訳してください。"
+                "question": "返金できますか？",
+                "answer": "翻訳に失敗したページは、自動的にアカウント残高へ返金されます。その他の問題は support@mangasense.xyz までご連絡ください。速やかに対応します。"
             }
         },
         "pageTitle": "よくある質問",
         "pageDescription": "MangaSense でマンガをオンライン翻訳する際のよくある質問です。言語、ファイル形式、クレジット、プライバシー、返金をまとめています。",
+        "tryHint": "今すぐ試す · 登録不要",
         "ctaTitle": "ほかに質問がありますか？",
         "ctaBody": "ページをアップロードして試すか、料金ページでプランを比較してください。"
     },

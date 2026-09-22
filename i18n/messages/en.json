@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Drop manga pages here, or",
         "browse": "browse files",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Images up to 50MB, documents up to 200MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Images up to 10MB",
         "quota": "Uploaded {uploaded}/{max} pages · {remaining} remaining",
         "addOrDrop": "Add images / drop to upload",
         "compactQuota": "{uploaded} / {max} pages"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Subscription",
         "compareSubscriptionBody": "Credits refresh every billing cycle. Better value if you translate regularly. Cancel anytime.",
         "faqTitle": "Pricing FAQ",
-        "faq": {
-            "credits": {
-                "question": "How many credits does a page cost?",
-                "answer": "Fast mode costs 1 credit per page. Quality mode costs 2 credits per page."
-            },
-            "expiry": {
-                "question": "Do credits expire?",
-                "answer": "Pay Per Use credits never expire. Subscription credits refresh at the start of each billing cycle."
-            },
-            "cancel": {
-                "question": "Can I cancel a subscription?",
-                "answer": "Yes. You can cancel anytime. Remaining subscription credits stay available until the current period ends."
-            },
-            "refund": {
-                "question": "Can I get a refund?",
-                "answer": "Unused paid credits can be refunded according to our refund policy."
-            },
-            "languages": {
-                "question": "What languages and formats are included?",
-                "answer": "Every plan includes OCR, translation, and in-place typesetting for 20+ languages, plus JPG, PNG, PDF, EPUB, CBZ, and more."
-            }
-        },
         "ctaTitle": "Ready to translate?",
+        "ctaUnsure": "Not sure to pay?",
         "ctaBody": "Upload a page and try MangaSense for free."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "Can you translate Korean manhwa?",
-                "answer": "Yes. We support vertically read Korean comics and common webtoon layouts."
+                "answer": "Korean manhwa is not supported yet."
             },
             "chinese": {
                 "question": "Can you translate Chinese manga?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "Which formats are supported?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, and ZIP."
+                "answer": "JPG, PNG, WebP, GIF, and AVIF."
+            },
+            "credits": {
+                "question": "How many credits does a page cost?",
+                "answer": "Fast mode costs 1 credit per page. Quality mode costs 2 credits per page."
+            },
+            "cancel": {
+                "question": "Can I cancel a subscription?",
+                "answer": "Yes. You can cancel anytime. Remaining subscription credits stay available until the current period ends."
             },
             "expiry": {
                 "question": "Do credits expire?",
@@ -359,16 +346,13 @@
                 "answer": "Uploaded content is used only for translation. It is not used for public training or shared with others."
             },
             "refund": {
-                "question": "How do refunds work?",
-                "answer": "Unused paid credits can be refunded according to our policy. See the terms of service for details."
-            },
-            "plugin": {
-                "question": "Is there a browser extension?",
-                "answer": "A browser extension is coming soon. For now, please upload and translate on the web app."
+                "question": "Can I get a refund?",
+                "answer": "Failed translation pages are automatically refunded to your account balance. For other issues, please contact us at support@mangasense.xyz and we will resolve it promptly."
             }
         },
         "pageTitle": "Frequently Asked Questions",
         "pageDescription": "Common questions about translating manga online with MangaSense: languages, file formats, credits, privacy, and refunds.",
+        "tryHint": "Try it now · No signup required",
         "ctaTitle": "Still have a question?",
         "ctaBody": "Upload a page and try it, or compare plans on the pricing page."
     },

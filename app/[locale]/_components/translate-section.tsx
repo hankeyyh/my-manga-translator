@@ -1123,7 +1123,7 @@ export function TranslateSection() {
                                 <input
                                     ref={addInputRef}
                                     type="file"
-                                    accept=".jpg,.jpeg,.png,.webp,.gif,.avif,.heic,image/*"
+                                    accept=".jpg,.jpeg,.png,.webp,.gif,.avif,image/jpeg,image/png,image/webp,image/gif,image/avif"
                                     multiple
                                     className="hidden"
                                     onChange={(e) => {

@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "将漫画页拖放到此处，或",
         "browse": "浏览文件",
-        "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 图片最大 50MB，文档最大 200MB",
+        "formats": "JPG、PNG、WebP、GIF、AVIF · 图片最大 10MB",
         "quota": "已上传 {uploaded}/{max} 页 · 剩余 {remaining} 页",
         "addOrDrop": "添加图片 / 拖拽上传",
         "compactQuota": "{uploaded} / {max} 页"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "订阅",
         "compareSubscriptionBody": "每个账单周期自动补充积分。适合经常翻译，可随时取消。",
         "faqTitle": "价格常见问题",
-        "faq": {
-            "credits": {
-                "question": "翻译一页要多少积分？",
-                "answer": "Fast 模式每页 1 积分，Quality 模式每页 2 积分。"
-            },
-            "expiry": {
-                "question": "积分会过期吗？",
-                "answer": "按量付费积分永不过期。订阅积分会在每个账单周期开始时刷新。"
-            },
-            "cancel": {
-                "question": "可以取消订阅吗？",
-                "answer": "可以，随时取消。剩余订阅积分在当前周期结束前仍可使用。"
-            },
-            "refund": {
-                "question": "可以退款吗？",
-                "answer": "未使用的付费积分可按退款政策申请退款。"
-            },
-            "languages": {
-                "question": "方案包含哪些语言和格式？",
-                "answer": "所有方案都包含 OCR、翻译和原图排版，支持 20 多种语言，以及 JPG、PNG、PDF、EPUB、CBZ 等格式。"
-            }
-        },
         "ctaTitle": "开始翻译",
+        "ctaUnsure": "还不确定要不要付费？",
         "ctaBody": "上传一页漫画，免费试用 MangaSense。"
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "可以翻译韩漫吗？",
-                "answer": "可以。支持韩语竖向阅读漫画，并适配常见条漫版式。"
+                "answer": "目前暂不支持韩漫。"
             },
             "chinese": {
                 "question": "可以翻译中漫吗？",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "支持哪些格式？",
-                "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
+                "answer": "JPG、PNG、WebP、GIF、AVIF。"
+            },
+            "credits": {
+                "question": "翻译一页要多少积分？",
+                "answer": "Fast 模式每页 1 积分，Quality 模式每页 2 积分。"
+            },
+            "cancel": {
+                "question": "可以取消订阅吗？",
+                "answer": "可以，随时取消。剩余订阅积分在当前周期结束前仍可使用。"
             },
             "expiry": {
                 "question": "积分会过期吗？",
@@ -359,16 +346,13 @@
                 "answer": "上传内容仅用于翻译处理，不会用于公开训练或对外分享。"
             },
             "refund": {
-                "question": "如何退款？",
-                "answer": "未使用的付费额度可按政策申请退款，详情见服务条款。"
-            },
-            "plugin": {
-                "question": "有浏览器插件吗？",
-                "answer": "浏览器插件即将推出，当前请使用网页版上传翻译。"
+                "question": "可以退款吗？",
+                "answer": "翻译失败的页面会自动退回到你的账户余额。如有其他问题，请联系 support@mangasense.xyz，我们会尽快处理。"
             }
         },
         "pageTitle": "常见问题",
         "pageDescription": "关于使用 MangaSense 在线翻译漫画的常见问题：语言、文件格式、积分、隐私与退款。",
+        "tryHint": "立即试用 · 无需注册",
         "ctaTitle": "还有其他问题？",
         "ctaBody": "上传一页漫画免费试用，或到价格页比较方案。"
     },

@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Thả trang manga vào đây, hoặc",
         "browse": "duyệt tệp",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Ảnh tối đa 50MB, tài liệu tối đa 200MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Ảnh tối đa 10MB",
         "quota": "Đã tải {uploaded}/{max} trang · còn {remaining}",
         "addOrDrop": "Thêm ảnh / thả để tải lên",
         "compactQuota": "{uploaded} / {max} trang"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Đăng ký",
         "compareSubscriptionBody": "Credit được làm mới mỗi chu kỳ thanh toán. Tiết kiệm hơn nếu bạn dịch thường xuyên. Hủy bất cứ lúc nào.",
         "faqTitle": "Câu hỏi về giá",
-        "faq": {
-            "credits": {
-                "question": "Một trang tốn bao nhiêu credit?",
-                "answer": "Chế độ Fast tốn 1 credit mỗi trang. Chế độ Quality tốn 2 credit mỗi trang."
-            },
-            "expiry": {
-                "question": "Credit có hết hạn không?",
-                "answer": "Credit trả theo lượt không hết hạn. Credit đăng ký được làm mới vào đầu mỗi chu kỳ thanh toán."
-            },
-            "cancel": {
-                "question": "Tôi có thể hủy đăng ký không?",
-                "answer": "Có. Bạn có thể hủy bất cứ lúc nào. Credit đăng ký còn lại vẫn dùng được đến hết kỳ hiện tại."
-            },
-            "refund": {
-                "question": "Tôi có thể được hoàn tiền không?",
-                "answer": "Credit đã mua nhưng chưa dùng có thể được hoàn theo chính sách hoàn tiền."
-            },
-            "languages": {
-                "question": "Gói gồm những ngôn ngữ và định dạng nào?",
-                "answer": "Mọi gói đều gồm OCR, dịch và sắp chữ tại chỗ cho hơn 20 ngôn ngữ, cùng JPG, PNG, PDF, EPUB, CBZ và nhiều định dạng khác."
-            }
-        },
         "ctaTitle": "Sẵn sàng dịch?",
+        "ctaUnsure": "Chưa chắc có nên trả phí không?",
         "ctaBody": "Tải lên một trang và dùng thử MangaSense miễn phí."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "Có dịch được manhwa Hàn không?",
-                "answer": "Có. Chúng tôi hỗ trợ truyện tranh Hàn đọc dọc và bố cục webtoon phổ biến."
+                "answer": "Hiện chưa hỗ trợ manhwa Hàn."
             },
             "chinese": {
                 "question": "Có dịch được manga Trung không?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "Hỗ trợ định dạng nào?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ và ZIP."
+                "answer": "JPG, PNG, WebP, GIF và AVIF."
+            },
+            "credits": {
+                "question": "Một trang tốn bao nhiêu credit?",
+                "answer": "Chế độ Fast tốn 1 credit mỗi trang. Chế độ Quality tốn 2 credit mỗi trang."
+            },
+            "cancel": {
+                "question": "Tôi có thể hủy đăng ký không?",
+                "answer": "Có. Bạn có thể hủy bất cứ lúc nào. Credit đăng ký còn lại vẫn dùng được đến hết kỳ hiện tại."
             },
             "expiry": {
                 "question": "Tín dụng có hết hạn không?",
@@ -359,16 +346,13 @@
                 "answer": "Nội dung tải lên chỉ dùng để dịch. Không dùng để huấn luyện công khai hay chia sẻ với người khác."
             },
             "refund": {
-                "question": "Hoàn tiền hoạt động thế nào?",
-                "answer": "Tín dụng trả phí chưa dùng có thể được hoàn theo chính sách. Xem điều khoản dịch vụ để biết chi tiết."
-            },
-            "plugin": {
-                "question": "Có tiện ích trình duyệt không?",
-                "answer": "Tiện ích trình duyệt sắp ra mắt. Hiện hãy tải lên và dịch trên ứng dụng web."
+                "question": "Tôi có thể được hoàn tiền không?",
+                "answer": "Các trang dịch thất bại sẽ được hoàn tự động vào số dư tài khoản. Với vấn đề khác, hãy liên hệ support@mangasense.xyz, chúng tôi sẽ xử lý nhanh chóng."
             }
         },
         "pageTitle": "Câu hỏi thường gặp",
         "pageDescription": "Các câu hỏi thường gặp khi dịch manga online với MangaSense: ngôn ngữ, định dạng tệp, credit, quyền riêng tư và hoàn tiền.",
+        "tryHint": "Dùng thử ngay · Không cần đăng ký",
         "ctaTitle": "Còn câu hỏi khác?",
         "ctaBody": "Tải lên một trang để dùng thử, hoặc so sánh gói trên trang giá."
     },

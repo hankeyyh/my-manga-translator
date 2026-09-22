@@ -6,7 +6,7 @@ import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
 
 const ACCEPT =
-    ".jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.pdf,.epub,.cbz,.zip,image/*,application/pdf,application/epub+zip,application/zip";
+    ".jpg,.jpeg,.png,.webp,.gif,.avif,image/jpeg,image/png,image/webp,image/gif,image/avif";
 
 export function UploadZone(props: {
     uploaded: number;

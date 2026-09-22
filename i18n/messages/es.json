@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Suelta aquí las páginas de manga, o",
         "browse": "explora archivos",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Imágenes hasta 50 MB, documentos hasta 200 MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Imágenes hasta 10 MB",
         "quota": "Subidas {uploaded}/{max} páginas · {remaining} restantes",
         "addOrDrop": "Añadir imágenes / soltar para subir",
         "compactQuota": "{uploaded} / {max} páginas"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Suscripción",
         "compareSubscriptionBody": "Los créditos se renuevan en cada ciclo de facturación. Mejor valor si traduces con regularidad. Cancela cuando quieras.",
         "faqTitle": "Preguntas sobre precios",
-        "faq": {
-            "credits": {
-                "question": "¿Cuántos créditos cuesta una página?",
-                "answer": "El modo Fast cuesta 1 crédito por página. El modo Quality cuesta 2 créditos por página."
-            },
-            "expiry": {
-                "question": "¿Caducan los créditos?",
-                "answer": "Los créditos de pago por uso no caducan. Los créditos de suscripción se renuevan al inicio de cada ciclo de facturación."
-            },
-            "cancel": {
-                "question": "¿Puedo cancelar la suscripción?",
-                "answer": "Sí. Puedes cancelar en cualquier momento. Los créditos restantes de la suscripción siguen disponibles hasta que termine el periodo actual."
-            },
-            "refund": {
-                "question": "¿Puedo pedir un reembolso?",
-                "answer": "Los créditos de pago no usados se pueden reembolsar según nuestra política de reembolso."
-            },
-            "languages": {
-                "question": "¿Qué idiomas y formatos incluye?",
-                "answer": "Todos los planes incluyen OCR, traducción y rotulación in situ para más de 20 idiomas, además de JPG, PNG, PDF, EPUB, CBZ y más."
-            }
-        },
         "ctaTitle": "¿Listo para traducir?",
+        "ctaUnsure": "¿No estás seguro de pagar?",
         "ctaBody": "Sube una página y prueba MangaSense gratis."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "¿Pueden traducir manhwa coreano?",
-                "answer": "Sí. Admitimos cómics coreanos de lectura vertical y maquetaciones habituales de webtoon."
+                "answer": "El manhwa coreano aún no está disponible."
             },
             "chinese": {
                 "question": "¿Pueden traducir manga chino?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "¿Qué formatos se admiten?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ y ZIP."
+                "answer": "JPG, PNG, WebP, GIF y AVIF."
+            },
+            "credits": {
+                "question": "¿Cuántos créditos cuesta una página?",
+                "answer": "El modo Fast cuesta 1 crédito por página. El modo Quality cuesta 2 créditos por página."
+            },
+            "cancel": {
+                "question": "¿Puedo cancelar la suscripción?",
+                "answer": "Sí. Puedes cancelar en cualquier momento. Los créditos restantes de la suscripción siguen disponibles hasta que termine el periodo actual."
             },
             "expiry": {
                 "question": "¿Caducan los créditos?",
@@ -359,16 +346,13 @@
                 "answer": "El contenido subido solo se usa para traducir. No se usa para entrenamiento público ni se comparte con terceros."
             },
             "refund": {
-                "question": "¿Cómo funcionan los reembolsos?",
-                "answer": "Los créditos de pago no usados se pueden reembolsar según nuestra política. Consulta los términos del servicio para más detalles."
-            },
-            "plugin": {
-                "question": "¿Hay una extensión de navegador?",
-                "answer": "Una extensión de navegador llegará pronto. Por ahora, sube y traduce en la aplicación web."
+                "question": "¿Puedo pedir un reembolso?",
+                "answer": "Las páginas cuya traducción falla se reembolsan automáticamente al saldo de tu cuenta. Para otros problemas, escríbenos a support@mangasense.xyz y lo resolveremos cuanto antes."
             }
         },
         "pageTitle": "Preguntas frecuentes",
         "pageDescription": "Preguntas habituales sobre traducir manga online con MangaSense: idiomas, formatos, créditos, privacidad y reembolsos.",
+        "tryHint": "Pruébalo ahora · Sin registro",
         "ctaTitle": "¿Tienes otra pregunta?",
         "ctaBody": "Sube una página para probarlo o compara los planes en la página de precios."
     },

@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Manga sayfalarını buraya bırakın veya",
         "browse": "dosyalara göz atın",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Görseller 50MB’a, belgeler 200MB’a kadar",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Görseller 10MB’a kadar",
         "quota": "{uploaded}/{max} sayfa yüklendi · {remaining} kaldı",
         "addOrDrop": "Görsel ekle / yüklemek için bırak",
         "compactQuota": "{uploaded} / {max} sayfa"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Abonelik",
         "compareSubscriptionBody": "Krediler her fatura döneminde yenilenir. Düzenli çeviri yapıyorsan daha avantajlıdır. İstediğin zaman iptal et.",
         "faqTitle": "Fiyat SSS",
-        "faq": {
-            "credits": {
-                "question": "Bir sayfa kaç kredi tutar?",
-                "answer": "Fast modu sayfa başına 1 kredi, Quality modu sayfa başına 2 kredi tutar."
-            },
-            "expiry": {
-                "question": "Kredilerin süresi dolar mı?",
-                "answer": "Kullandıkça öde kredilerinin süresi dolmaz. Abonelik kredileri her fatura döneminin başında yenilenir."
-            },
-            "cancel": {
-                "question": "Aboneliği iptal edebilir miyim?",
-                "answer": "Evet. İstediğin zaman iptal edebilirsin. Kalan abonelik kredileri mevcut dönem bitene kadar kullanılabilir."
-            },
-            "refund": {
-                "question": "İade alabilir miyim?",
-                "answer": "Kullanılmayan ücretli krediler iade politikamıza göre iade edilebilir."
-            },
-            "languages": {
-                "question": "Hangi diller ve biçimler dahil?",
-                "answer": "Her planda 20’den fazla dil için OCR, çeviri ve yerinde lettering ile JPG, PNG, PDF, EPUB, CBZ ve daha fazlası vardır."
-            }
-        },
         "ctaTitle": "Çevirmeye hazır mısın?",
+        "ctaUnsure": "Ödeme yapmak istediğinden emin değil misin?",
         "ctaBody": "Bir sayfa yükle ve MangaSense’i ücretsiz dene."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "Kore manhwasını çevirebiliyor musunuz?",
-                "answer": "Evet. Dikey okunan Kore çizgi romanlarını ve yaygın webtoon yerleşimlerini destekliyoruz."
+                "answer": "Kore manhwası şu anda henüz desteklenmiyor."
             },
             "chinese": {
                 "question": "Çin mangasını çevirebiliyor musunuz?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "Hangi biçimler desteklenir?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ ve ZIP."
+                "answer": "JPG, PNG, WebP, GIF ve AVIF."
+            },
+            "credits": {
+                "question": "Bir sayfa kaç kredi tutar?",
+                "answer": "Fast modu sayfa başına 1 kredi, Quality modu sayfa başına 2 kredi tutar."
+            },
+            "cancel": {
+                "question": "Aboneliği iptal edebilir miyim?",
+                "answer": "Evet. İstediğin zaman iptal edebilirsin. Kalan abonelik kredileri mevcut dönem bitene kadar kullanılabilir."
             },
             "expiry": {
                 "question": "Kredilerin süresi doluyor mu?",
@@ -359,16 +346,13 @@
                 "answer": "Yüklenen içerik yalnızca çeviri için kullanılır. Herkese açık eğitimde kullanılmaz ve başkalarıyla paylaşılmaz."
             },
             "refund": {
-                "question": "İadeler nasıl işler?",
-                "answer": "Kullanılmayan ücretli krediler politikamıza göre iade edilebilir. Ayrıntılar için hizmet koşullarına bakın."
-            },
-            "plugin": {
-                "question": "Tarayıcı eklentisi var mı?",
-                "answer": "Tarayıcı eklentisi yakında geliyor. Şimdilik web uygulamasında yükleyip çevirin."
+                "question": "İade alabilir miyim?",
+                "answer": "Çevirisi başarısız olan sayfalar hesap bakiyenize otomatik olarak iade edilir. Diğer konular için support@mangasense.xyz adresinden bize yazın, en kısa sürede çözeceğiz."
             }
         },
         "pageTitle": "Sıkça sorulan sorular",
         "pageDescription": "MangaSense ile çevrimiçi manga çevirisine dair sık sorulan sorular: diller, dosya biçimleri, krediler, gizlilik ve iadeler.",
+        "tryHint": "Hemen dene · Kayıt gerekmez",
         "ctaTitle": "Başka sorunuz var mı?",
         "ctaBody": "Denemek için bir sayfa yükleyin veya fiyat sayfasında planları karşılaştırın."
     },

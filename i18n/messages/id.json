@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Lepaskan halaman manga di sini, atau",
         "browse": "telusuri file",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Gambar hingga 50MB, dokumen hingga 200MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Gambar hingga 10MB",
         "quota": "Terunggah {uploaded}/{max} halaman · sisa {remaining}",
         "addOrDrop": "Tambah gambar / lepas untuk mengunggah",
         "compactQuota": "{uploaded} / {max} halaman"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Langganan",
         "compareSubscriptionBody": "Kredit diperbarui setiap siklus penagihan. Lebih hemat jika Anda menerjemahkan secara rutin. Batalkan kapan saja.",
         "faqTitle": "FAQ harga",
-        "faq": {
-            "credits": {
-                "question": "Berapa kredit untuk satu halaman?",
-                "answer": "Mode Fast memakai 1 kredit per halaman. Mode Quality memakai 2 kredit per halaman."
-            },
-            "expiry": {
-                "question": "Apakah kredit kedaluwarsa?",
-                "answer": "Kredit bayar sesuai pemakaian tidak kedaluwarsa. Kredit langganan diperbarui di awal setiap siklus penagihan."
-            },
-            "cancel": {
-                "question": "Bisakah saya membatalkan langganan?",
-                "answer": "Ya. Anda dapat membatalkan kapan saja. Sisa kredit langganan tetap tersedia hingga periode berjalan berakhir."
-            },
-            "refund": {
-                "question": "Bisakah saya mendapat refund?",
-                "answer": "Kredit berbayar yang belum dipakai dapat di-refund sesuai kebijakan refund kami."
-            },
-            "languages": {
-                "question": "Bahasa dan format apa yang termasuk?",
-                "answer": "Setiap paket mencakup OCR, terjemahan, dan penataan teks di tempat untuk 20+ bahasa, plus JPG, PNG, PDF, EPUB, CBZ, dan lainnya."
-            }
-        },
         "ctaTitle": "Siap menerjemahkan?",
+        "ctaUnsure": "Belum yakin untuk membayar?",
         "ctaBody": "Unggah satu halaman dan coba MangaSense secara gratis."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "Bisakah Anda menerjemahkan manhwa Korea?",
-                "answer": "Ya. Kami mendukung komik Korea yang dibaca vertikal dan tata letak webtoon yang umum."
+                "answer": "Manhwa Korea belum didukung saat ini."
             },
             "chinese": {
                 "question": "Bisakah Anda menerjemahkan manga Tiongkok?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "Format apa yang didukung?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, dan ZIP."
+                "answer": "JPG, PNG, WebP, GIF, dan AVIF."
+            },
+            "credits": {
+                "question": "Berapa kredit untuk satu halaman?",
+                "answer": "Mode Fast memakai 1 kredit per halaman. Mode Quality memakai 2 kredit per halaman."
+            },
+            "cancel": {
+                "question": "Bisakah saya membatalkan langganan?",
+                "answer": "Ya. Anda dapat membatalkan kapan saja. Sisa kredit langganan tetap tersedia hingga periode berjalan berakhir."
             },
             "expiry": {
                 "question": "Apakah kredit kedaluwarsa?",
@@ -359,16 +346,13 @@
                 "answer": "Konten yang diunggah hanya digunakan untuk terjemahan. Tidak digunakan untuk pelatihan publik atau dibagikan kepada orang lain."
             },
             "refund": {
-                "question": "Bagaimana pengembalian dana bekerja?",
-                "answer": "Kredit berbayar yang belum digunakan dapat dikembalikan sesuai kebijakan kami. Lihat ketentuan layanan untuk detailnya."
-            },
-            "plugin": {
-                "question": "Apakah ada ekstensi browser?",
-                "answer": "Ekstensi browser akan segera hadir. Untuk saat ini, unggah dan terjemahkan di aplikasi web."
+                "question": "Bisakah saya mendapat refund?",
+                "answer": "Halaman yang gagal diterjemahkan otomatis dikembalikan ke saldo akun Anda. Untuk masalah lain, hubungi support@mangasense.xyz dan kami akan menanganinya segera."
             }
         },
         "pageTitle": "Pertanyaan yang sering diajukan",
         "pageDescription": "Pertanyaan umum tentang menerjemahkan manga online dengan MangaSense: bahasa, format file, kredit, privasi, dan refund.",
+        "tryHint": "Coba sekarang · Tanpa daftar",
         "ctaTitle": "Masih ada pertanyaan?",
         "ctaBody": "Unggah satu halaman untuk mencoba, atau bandingkan paket di halaman harga."
     },

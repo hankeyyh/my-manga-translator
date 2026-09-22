@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "만화 페이지를 여기에 놓거나",
         "browse": "파일 찾아보기",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · 이미지 최대 50MB, 문서 최대 200MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · 이미지 최대 10MB",
         "quota": "{uploaded}/{max}페이지 업로드됨 · {remaining}페이지 남음",
         "addOrDrop": "이미지 추가 / 드롭하여 업로드",
         "compactQuota": "{uploaded} / {max}페이지"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "구독",
         "compareSubscriptionBody": "결제 주기마다 크레딧이 갱신됩니다. 자주 번역할 때 더 유리하며 언제든 해지할 수 있습니다.",
         "faqTitle": "요금 FAQ",
-        "faq": {
-            "credits": {
-                "question": "한 페이지에 크레딧이 얼마나 드나요?",
-                "answer": "Fast 모드는 페이지당 1크레딧, Quality 모드는 페이지당 2크레딧입니다."
-            },
-            "expiry": {
-                "question": "크레딧이 만료되나요?",
-                "answer": "종량제 크레딧은 만료되지 않습니다. 구독 크레딧은 각 결제 주기가 시작될 때 갱신됩니다."
-            },
-            "cancel": {
-                "question": "구독을 해지할 수 있나요?",
-                "answer": "네, 언제든 해지할 수 있습니다. 남은 구독 크레딧은 현재 기간이 끝날 때까지 사용할 수 있습니다."
-            },
-            "refund": {
-                "question": "환불받을 수 있나요?",
-                "answer": "사용하지 않은 유료 크레딧은 환불 정책에 따라 환불할 수 있습니다."
-            },
-            "languages": {
-                "question": "언어와 형식은 모두 포함되나요?",
-                "answer": "모든 플랜에 OCR, 번역, 말풍선 재배치가 포함되며 20개 이상 언어와 JPG, PNG, PDF, EPUB, CBZ 등을 지원합니다."
-            }
-        },
         "ctaTitle": "번역 시작하기",
+        "ctaUnsure": "결제할지 고민 중이신가요?",
         "ctaBody": "페이지를 업로드하고 MangaSense를 무료로 체험하세요."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "한국 웹툰도 번역할 수 있나요?",
-                "answer": "네. 세로 읽기 한국 만화와 일반적인 웹툰 레이아웃을 지원합니다."
+                "answer": "현재 한국 웹툰은 아직 지원하지 않습니다."
             },
             "chinese": {
                 "question": "중국 만화도 번역할 수 있나요?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "어떤 형식을 지원하나요?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP입니다."
+                "answer": "JPG, PNG, WebP, GIF, AVIF입니다."
+            },
+            "credits": {
+                "question": "한 페이지에 크레딧이 얼마나 드나요?",
+                "answer": "Fast 모드는 페이지당 1크레딧, Quality 모드는 페이지당 2크레딧입니다."
+            },
+            "cancel": {
+                "question": "구독을 해지할 수 있나요?",
+                "answer": "네, 언제든 해지할 수 있습니다. 남은 구독 크레딧은 현재 기간이 끝날 때까지 사용할 수 있습니다."
             },
             "expiry": {
                 "question": "크레딧에 만료일이 있나요?",
@@ -359,16 +346,13 @@
                 "answer": "업로드된 콘텐츠는 번역에만 사용됩니다. 공개 학습에 쓰이거나 타인과 공유되지 않습니다."
             },
             "refund": {
-                "question": "환불은 어떻게 되나요?",
-                "answer": "사용하지 않은 유료 크레딧은 정책에 따라 환불할 수 있습니다. 자세한 내용은 이용약관을 확인하세요."
-            },
-            "plugin": {
-                "question": "브라우저 확장 프로그램이 있나요?",
-                "answer": "브라우저 확장 프로그램이 곧 출시됩니다. 지금은 웹 앱에서 업로드하고 번역해 주세요."
+                "question": "환불받을 수 있나요?",
+                "answer": "번역에 실패한 페이지는 계정 잔액으로 자동 환불됩니다. 그 밖의 문제는 support@mangasense.xyz로 연락해 주시면 신속히 처리해 드리겠습니다."
             }
         },
         "pageTitle": "자주 묻는 질문",
         "pageDescription": "MangaSense로 만화를 온라인 번역할 때 자주 묻는 질문입니다. 언어, 파일 형식, 크레딧, 개인정보, 환불을 모았습니다.",
+        "tryHint": "지금 사용해 보세요 · 가입 불필요",
         "ctaTitle": "다른 질문이 있나요?",
         "ctaBody": "페이지를 업로드해 체험하거나 요금 페이지에서 플랜을 비교하세요."
     },

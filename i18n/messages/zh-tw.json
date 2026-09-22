@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "將漫畫頁拖放到此處，或",
         "browse": "瀏覽檔案",
-        "formats": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP · 圖片最大 50MB，文件最大 200MB",
+        "formats": "JPG、PNG、WebP、GIF、AVIF · 圖片最大 10MB",
         "quota": "已上傳 {uploaded}/{max} 頁 · 剩餘 {remaining} 頁",
         "addOrDrop": "新增圖片 / 拖曳上傳",
         "compactQuota": "{uploaded} / {max} 頁"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "訂閱",
         "compareSubscriptionBody": "每個帳單週期自動補充點數。適合經常翻譯，可隨時取消。",
         "faqTitle": "價格常見問題",
-        "faq": {
-            "credits": {
-                "question": "翻譯一頁要多少點數？",
-                "answer": "Fast 模式每頁 1 點數，Quality 模式每頁 2 點數。"
-            },
-            "expiry": {
-                "question": "點數會過期嗎？",
-                "answer": "按量付費點數永不過期。訂閱點數會在每個帳單週期開始時刷新。"
-            },
-            "cancel": {
-                "question": "可以取消訂閱嗎？",
-                "answer": "可以，隨時取消。剩餘訂閱點數在當前週期結束前仍可使用。"
-            },
-            "refund": {
-                "question": "可以退款嗎？",
-                "answer": "未使用的付費點數可依退款政策申請退款。"
-            },
-            "languages": {
-                "question": "方案包含哪些語言和格式？",
-                "answer": "所有方案都包含 OCR、翻譯和原圖排版，支援 20 多種語言，以及 JPG、PNG、PDF、EPUB、CBZ 等格式。"
-            }
-        },
         "ctaTitle": "開始翻譯",
+        "ctaUnsure": "還不確定要不要付費？",
         "ctaBody": "上傳一頁漫畫，免費試用 MangaSense。"
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "可以翻譯韓漫嗎？",
-                "answer": "可以。支援韓語直式閱讀漫畫，並適配常見條漫版式。"
+                "answer": "目前暫不支援韓漫。"
             },
             "chinese": {
                 "question": "可以翻譯中漫嗎？",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "支援哪些格式？",
-                "answer": "JPG、PNG、WebP、GIF、AVIF、HEIC、PDF、EPUB、CBZ、ZIP。"
+                "answer": "JPG、PNG、WebP、GIF、AVIF。"
+            },
+            "credits": {
+                "question": "翻譯一頁要多少點數？",
+                "answer": "Fast 模式每頁 1 點數，Quality 模式每頁 2 點數。"
+            },
+            "cancel": {
+                "question": "可以取消訂閱嗎？",
+                "answer": "可以，隨時取消。剩餘訂閱點數在當前週期結束前仍可使用。"
             },
             "expiry": {
                 "question": "積分會過期嗎？",
@@ -359,16 +346,13 @@
                 "answer": "上傳內容僅用於翻譯處理，不會用於公開訓練或對外分享。"
             },
             "refund": {
-                "question": "如何退款？",
-                "answer": "未使用的付費額度可依政策申請退款，詳情見服務條款。"
-            },
-            "plugin": {
-                "question": "有瀏覽器外掛嗎？",
-                "answer": "瀏覽器外掛即將推出，目前請使用網頁版上傳翻譯。"
+                "question": "可以退款嗎？",
+                "answer": "翻譯失敗的頁面會自動退回你的帳戶餘額。如有其他問題，請聯繫 support@mangasense.xyz，我們會盡快處理。"
             }
         },
         "pageTitle": "常見問題",
         "pageDescription": "關於使用 MangaSense 線上翻譯漫畫的常見問題：語言、檔案格式、點數、隱私與退款。",
+        "tryHint": "立即試用 · 無需註冊",
         "ctaTitle": "還有其他問題？",
         "ctaBody": "上傳一頁漫畫免費試用，或到價格頁比較方案。"
     },

@@ -5,11 +5,12 @@ import { PRICING_FAQ_KEYS } from "./pricing-faq-keys";
 
 export async function PricingGuide() {
     const t = await getTranslations("pricing");
+    const tFaq = await getTranslations("faq");
     const tHero = await getTranslations("hero");
     const tFooter = await getTranslations("footer");
     const faqs = PRICING_FAQ_KEYS.map((key) => ({
-        question: t(`faq.${key}.question`),
-        answer: t(`faq.${key}.answer`),
+        question: tFaq(`items.${key}.question`),
+        answer: tFaq(`items.${key}.answer`),
     }));
 
     return (
@@ -48,7 +49,7 @@ export async function PricingGuide() {
             <section className="bg-cc-surface-white py-16">
                 <div className="mx-auto max-w-3xl px-4 text-center">
                     <h2 className="font-headline text-2xl font-bold text-cc-text-primary md:text-3xl">
-                        {t("ctaTitle")}
+                        {t("ctaUnsure")}
                     </h2>
                     <p className="mt-3 text-cc-text-secondary">{t("ctaBody")}</p>
                     <CcButton className="mt-6" asChild>

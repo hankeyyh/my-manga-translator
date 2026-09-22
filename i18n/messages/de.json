@@ -196,7 +196,7 @@
     "upload": {
         "dropHint": "Manga-Seiten hier ablegen oder",
         "browse": "Dateien durchsuchen",
-        "formats": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ, ZIP · Bilder bis 50 MB, Dokumente bis 200 MB",
+        "formats": "JPG, PNG, WebP, GIF, AVIF · Bilder bis 10 MB",
         "quota": "{uploaded}/{max} Seiten hochgeladen · {remaining} übrig",
         "addOrDrop": "Bilder hinzufügen / zum Hochladen ablegen",
         "compactQuota": "{uploaded} / {max} Seiten"
@@ -281,29 +281,8 @@
         "compareSubscriptionTitle": "Abo",
         "compareSubscriptionBody": "Credits werden in jedem Abrechnungszeitraum erneuert. Günstiger, wenn du regelmäßig übersetzt. Jederzeit kündbar.",
         "faqTitle": "Preise FAQ",
-        "faq": {
-            "credits": {
-                "question": "Wie viele Credits kostet eine Seite?",
-                "answer": "Der Fast-Modus kostet 1 Credit pro Seite. Der Quality-Modus kostet 2 Credits pro Seite."
-            },
-            "expiry": {
-                "question": "Verfallen Credits?",
-                "answer": "Pay-per-Use-Credits verfallen nicht. Abo-Credits werden zu Beginn jedes Abrechnungszeitraums erneuert."
-            },
-            "cancel": {
-                "question": "Kann ich ein Abo kündigen?",
-                "answer": "Ja. Du kannst jederzeit kündigen. Verbleibende Abo-Credits bleiben bis zum Ende des aktuellen Zeitraums verfügbar."
-            },
-            "refund": {
-                "question": "Kann ich eine Rückerstattung erhalten?",
-                "answer": "Ungenutzte bezahlte Credits können gemäß unserer Rückerstattungsrichtlinie erstattet werden."
-            },
-            "languages": {
-                "question": "Welche Sprachen und Formate sind enthalten?",
-                "answer": "Jeder Plan enthält OCR, Übersetzung und originales Lettering für über 20 Sprachen sowie JPG, PNG, PDF, EPUB, CBZ und mehr."
-            }
-        },
         "ctaTitle": "Bereit zum Übersetzen?",
+        "ctaUnsure": "Unsicher, ob du zahlen sollst?",
         "ctaBody": "Lade eine Seite hoch und teste MangaSense kostenlos."
     },
     "changePlan": {
@@ -328,7 +307,7 @@
             },
             "korean": {
                 "question": "Könnt ihr koreanische Manhwa übersetzen?",
-                "answer": "Ja. Wir unterstützen vertikal gelesene koreanische Comics und gängige Webtoon-Layouts."
+                "answer": "Koreanische Manhwa werden derzeit noch nicht unterstützt."
             },
             "chinese": {
                 "question": "Könnt ihr chinesische Manga übersetzen?",
@@ -344,7 +323,15 @@
             },
             "formats": {
                 "question": "Welche Formate werden unterstützt?",
-                "answer": "JPG, PNG, WebP, GIF, AVIF, HEIC, PDF, EPUB, CBZ und ZIP."
+                "answer": "JPG, PNG, WebP, GIF und AVIF."
+            },
+            "credits": {
+                "question": "Wie viele Credits kostet eine Seite?",
+                "answer": "Der Fast-Modus kostet 1 Credit pro Seite. Der Quality-Modus kostet 2 Credits pro Seite."
+            },
+            "cancel": {
+                "question": "Kann ich ein Abo kündigen?",
+                "answer": "Ja. Du kannst jederzeit kündigen. Verbleibende Abo-Credits bleiben bis zum Ende des aktuellen Zeitraums verfügbar."
             },
             "expiry": {
                 "question": "Verfallen Credits?",
@@ -359,16 +346,13 @@
                 "answer": "Hochgeladene Inhalte werden nur zur Übersetzung verwendet. Sie werden nicht für öffentliches Training genutzt oder an Dritte weitergegeben."
             },
             "refund": {
-                "question": "Wie funktionieren Rückerstattungen?",
-                "answer": "Unverbrauchte bezahlte Credits können gemäß unserer Richtlinie erstattet werden. Details findest du in den Nutzungsbedingungen."
-            },
-            "plugin": {
-                "question": "Gibt es eine Browser-Erweiterung?",
-                "answer": "Eine Browser-Erweiterung kommt bald. Bitte lade vorerst in der Web-App hoch und übersetze dort."
+                "question": "Kann ich eine Rückerstattung erhalten?",
+                "answer": "Fehlgeschlagene Übersetzungsseiten werden automatisch deinem Kontoguthaben gutgeschrieben. Bei anderen Anliegen schreib uns an support@mangasense.xyz, wir kümmern uns zeitnah darum."
             }
         },
         "pageTitle": "Häufig gestellte Fragen",
         "pageDescription": "Häufige Fragen zum Online-Übersetzen von Manga mit MangaSense: Sprachen, Dateiformate, Credits, Datenschutz und Rückerstattung.",
+        "tryHint": "Jetzt testen · Keine Anmeldung nötig",
         "ctaTitle": "Noch eine Frage?",
         "ctaBody": "Lade eine Seite hoch und teste es, oder vergleiche die Pläne auf der Preisseite."
     },

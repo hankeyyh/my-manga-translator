@@ -27,13 +27,14 @@ type Props = {
 export async function PricingJsonLd({ configs }: Props) {
     const appLocale = asAppLocale(await getLocale());
     const t = await getTranslations("pricing");
+    const tFaq = await getTranslations("faq");
     const tCommon = await getTranslations("common");
     const homeUrl = absoluteUrl(appLocale, "/");
     const pageUrl = absoluteUrl(appLocale, "/pricing");
 
     const faqs = PRICING_FAQ_KEYS.map((key) => ({
-        question: t(`faq.${key}.question`),
-        answer: t(`faq.${key}.answer`),
+        question: tFaq(`items.${key}.question`),
+        answer: tFaq(`items.${key}.answer`),
     }));
 
     const offers = [...configs]

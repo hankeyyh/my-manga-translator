@@ -5,9 +5,10 @@ export const FAQ_KEYS = [
     "ai",
     "duration",
     "formats",
+    "credits",
     "expiry",
+    "cancel",
     "languages",
     "privacy",
     "refund",
-    "plugin",
 ] as const;
