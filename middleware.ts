@@ -41,8 +41,20 @@ function loginPathname(locale: AppLocale): string {
     return locale === routing.defaultLocale ? "/auth/login" : `/${locale}/auth/login`;
 }
 
-function isPublicCacheablePath(path: string) {
-    return path === "/" || path === "/pricing" || path === "/faq" || path.startsWith("/legal") || path.startsWith("/blogs");
+// 落地页，没有用户态，可cdn缓存
+function isLandingPath(path: string) {
+    return path === "/" ||
+        path === "/pricing" ||
+        path === "/faq" ||
+        path.startsWith("/legal") ||
+        path.startsWith("/blogs");
+}
+
+function isPublicPath(path: string) {
+    return isLandingPath(path) ||
+        path.startsWith("/login") ||
+        path.startsWith("/auth") ||
+        path.startsWith("/api");
 }
 
 function hasSupabaseAuthCookie(request: NextRequest) {
@@ -84,18 +96,30 @@ export async function updateSession(request: NextRequest) {
         return response;
     }
 
-    // 游客访问营销页：跳过 JWT 刷新，HTML 不含用户态，允许边缘缓存。
-    if (isPublicCacheablePath(path) && !hasSupabaseAuthCookie(request)) {
-        response.headers.set(
-            "Cache-Control",
-            "public, s-maxage=60, stale-while-revalidate=300",
-        );
+    // 营销页 HTML 不含用户态，直接返回。会话刷新留给随后的 /api/me。
+    // 没有 auth cookie 才允许 CDN 缓存；有 cookie 的响应可能带 Set-Cookie，不能进公共缓存。
+    if (isLandingPath(path)) {
+        if (!hasSupabaseAuthCookie(request)) {
+            /**
+             * public: cdn可以缓存html
+             * s-maxage: cdn最大缓存时间
+             * stale-while-revalidate: 过期后接下来的300s内，cdn仍可把过期页返回给用户，同时在后台请求新资源
+             */
+            response.headers.set(
+                "Cache-Control",
+                "public, s-maxage=60, stale-while-revalidate=300",
+            );
+        } else {
+            response.headers.set("Cache-Control", "private, no-store");
+        }
         return response;
     }
 
+    // 营销页已在上面返回。之后都是需要登录态的路径，token 刷新会带 Set-Cookie。
+    response.headers.set("Cache-Control", "private, no-store");
+
     // With Fluid compute, don't put this client in a global environment
     // variable. Always create a new one on each request.
-    let supabaseSetCookies = false;
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -105,9 +129,6 @@ export async function updateSession(request: NextRequest) {
                     return request.cookies.getAll();
                 },
                 setAll(cookiesToSet) {
-                    if (cookiesToSet.length > 0) {
-                        supabaseSetCookies = true;
-                    }
                     cookiesToSet.forEach(({ name, value, options }) => {
                         request.cookies.set(name, value);           // 1. 改内存里的 Cookie 头
                         response.cookies.set(name, value, options); // 2. Set-Cookie 给浏览器
@@ -124,6 +145,7 @@ export async function updateSession(request: NextRequest) {
     // with the Supabase client, your users may be randomly logged out.
     const { data } = await supabase.auth.getClaims();
     const user = data?.claims;
+    const isAnonymous = user?.is_anonymous === true;
 
     /**  
      * 经过auth.getClaims，request auth cookie可能更新。
@@ -134,7 +156,7 @@ export async function updateSession(request: NextRequest) {
      * NextResponse.next({request}) 原理：
      * 1. 会将所有request header设置到response header，key: x-middleware-request-*。request cookie -> x-middleware-request-cookie。
      * 2. x-middleware-override-headers 记录所有key。
-     */ 
+     */
     const cookie = request.headers.get("cookie") ?? "";
     const override = response.headers.get("x-middleware-override-headers");
     const keys = new Set(
@@ -144,27 +166,10 @@ export async function updateSession(request: NextRequest) {
     response.headers.set("x-middleware-override-headers", [...keys].join(","));
     response.headers.set("x-middleware-request-cookie", cookie);
 
-    // Token refresh 会带 Set-Cookie，不能被 CDN 缓存。
-    // 营销页 HTML 已不含用户态；未刷新 cookie 时允许短缓存。
-    if (supabaseSetCookies || !isPublicCacheablePath(path)) {
-        response.headers.set("Cache-Control", "private, no-store");
-    } else {
-        response.headers.set(
-            "Cache-Control",
-            "public, s-maxage=60, stale-while-revalidate=300",
-        );
-    }
+    // 匿名会话可以留在营销页并走登录，但不能进 /home。
+    const anonymousBlocked = isAnonymous && path.startsWith("/home");
 
-    const isPublicPath = path === "/" ||
-        path === "/pricing" ||
-        path === "/faq" ||
-        path.startsWith("/login") ||
-        path.startsWith("/auth") ||
-        path.startsWith("/api") ||
-        path.startsWith("/legal") ||
-        path.startsWith("/blogs");
-
-    if (!user && !isPublicPath && !isI18nRedirect) {
+    if ((!user || anonymousBlocked) && !isPublicPath(path) && !isI18nRedirect) {
         const url = request.nextUrl.clone();
         url.pathname = loginPathname(getPathLocale(request.nextUrl.pathname));
         const redirectResponse = NextResponse.redirect(url);

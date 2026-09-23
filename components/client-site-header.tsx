@@ -97,7 +97,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
     }, [deferUser]);
 
     const isLogin = () => {
-        return userInfo !== null;
+        return userInfo !== null && userInfo.user?.isAnonymous !== true;
     };
 
     const onClickLogin = () => {
