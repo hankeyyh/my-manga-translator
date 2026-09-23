@@ -257,4 +257,14 @@ export class CreditService {
         }
         return { code: SUCCESS_CODE, data: null, error: null };
     }
+
+    // 发放匿名用户试用积分
+    async grantDailyAnonymousBonus(userId: string): Promise<BizResult<void>> {
+        const result = await this.userCreditRepo.grantDailyAnonymousBonus(userId, BONUS_CREDITS);
+        if (result.error) {
+            console.error(`grantDailyAnonymousBonus, repo.grantDailyAnonymousBonus fail, userId: ${userId}, error: ${result.error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error: result.error };
+        }
+        return { code: SUCCESS_CODE, data: null, error: null };
+    }
 }

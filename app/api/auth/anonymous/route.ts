@@ -1,5 +1,7 @@
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { AuthService } from "@/biz/services/auth/auth-service";
+import { CreditService } from "@/biz/services/credit/credit-service";
+import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
 import { createServerClientForAnonymous } from "@/biz/utils/supabase/server";
 import { API_SUCCESS_CODE } from "@/types/api/response";
 import { DB_ERROR_CODE, UNAUTHORIZED_ERROR_CODE } from "@/types/dto/response";
@@ -10,9 +12,11 @@ export async function POST(request: NextRequest) {
     if (result.error) {
         return NextResponse.json({ code: result.code, error: result.error.message }, { status: 500 });
     }
-    let userInfo = result.data;
     // 已登录
     if (result.data) {
+        if (result.data.user?.isAnonymous) {
+            await grantDailyAnonymousBonus(result.data.user.id);
+        }
         return NextResponse.json({ code: API_SUCCESS_CODE }, { status: 200 });
     }
     // 注册匿名用户
@@ -23,7 +27,15 @@ export async function POST(request: NextRequest) {
         if (signInResult.error) {
             return NextResponse.json({ code: DB_ERROR_CODE, error: "Internal Server Error" }, { status: 500 });
         }
+        // 发放试用积分
+        await grantDailyAnonymousBonus(signInResult.data?.id!);
     }
     console.debug(`/api/auth/anonymous success!`);
+  
     return NextResponse.json({ code: API_SUCCESS_CODE }, { status: 200 });
+}
+
+async function grantDailyAnonymousBonus(uid: string) {
+    const serviceSupabase = createServiceRoleClient();
+    await CreditService.fromSupabase(serviceSupabase).grantDailyAnonymousBonus(uid);
 }

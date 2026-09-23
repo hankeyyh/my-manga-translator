@@ -23,7 +23,7 @@ export async function createServerClient() {
                             cookieStore.set(name, value, options),
                         );
                     } catch {
-                        console.error("setAll error", cookiesToSet);
+                        // console.error("setAll error", cookiesToSet);
                         // The `setAll` method was called from a Server Component.
                         // This can be ignored if you have proxy refreshing
                         // user sessions.
@@ -46,6 +46,7 @@ export async function createServerClientForAnonymous() {
     const cookieStore = await cookies();
     // Cloudflare 在到达 Worker 前写入，客户端改不了。本地 next dev 没有这个头。
     const clientIp = (await headers()).get("cf-connecting-ip");
+    console.debug(`createServerClientForAnonymous, cf-connecting-ip: ${clientIp}`)
 
     return clientRealServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,

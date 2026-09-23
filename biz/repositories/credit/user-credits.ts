@@ -79,4 +79,13 @@ export class UserCreditsRepository {
         });
         return handleRpcResult(result);
     }
+
+    // 发放匿名试用积分
+    async grantDailyAnonymousBonus(userId: string, credits: number) : Promise<Result<boolean>> {
+        const result = await this.supabase.rpc("grant_daily_anonymous_bonus", {
+            p_user_id: userId,
+            p_credits: credits,
+        });
+        return handleRpcResult(result);
+    }
 }
