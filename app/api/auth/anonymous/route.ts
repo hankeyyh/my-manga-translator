@@ -14,10 +14,11 @@ export async function POST(request: NextRequest) {
     }
     // 已登录
     if (result.data) {
-        if (result.data.user?.isAnonymous) {
-            await grantDailyAnonymousBonus(result.data.user.id);
+        const isAnonymous = result.data.user?.isAnonymous;
+        if (isAnonymous) {
+            await grantDailyAnonymousBonus(result.data.user?.id!);
         }
-        return NextResponse.json({ code: API_SUCCESS_CODE }, { status: 200 });
+        return NextResponse.json({ code: API_SUCCESS_CODE, data: { isAnonymous: isAnonymous } }, { status: 200 });
     }
     // 注册匿名用户
     if (result.code === UNAUTHORIZED_ERROR_CODE) {
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
         await grantDailyAnonymousBonus(signInResult.data?.id!);
     }
   
-    return NextResponse.json({ code: API_SUCCESS_CODE }, { status: 200 });
+    return NextResponse.json({ code: API_SUCCESS_CODE, data: { isAnonymous: true } }, { status: 200 });
 }
 
 async function grantDailyAnonymousBonus(uid: string) {
