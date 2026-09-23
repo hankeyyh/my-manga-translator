@@ -23,6 +23,7 @@ function mapRawUserToUserEntity(user: SupabaseUser): UserEntity {
     return new UserEntity(
         user.id,
         user.email!,
+        user.is_anonymous,
     );
 }
 
@@ -30,6 +31,7 @@ function mapRawClaimToUserEntity(claims: JwtPayload): UserEntity {
     return new UserEntity(
         claims.sub,
         claims.email!,
+        claims.is_anonymous
     );
 }
 
@@ -120,6 +122,30 @@ export class UserRepository {
         console.debug('OAuth 登录成功: ', data);
         return {
             data: data?.url ?? null,
+            error: null,
+        };
+    }
+
+    async signInAnonymous() {
+        const { data, error } = await this.supabase.auth.signInAnonymously();
+        if (error) {
+            console.error(`signInAnonymous, supabase.signInAnonymous failed, error: ${error.message}`);
+            return {
+                data: null,
+                error: new Error(`signInAnonymous failed`),
+            };
+        }
+
+        if (!data?.user) {
+            console.error('signInAnonymous, supabase.signInAnonymous not return user data');
+            return {
+                data: null,
+                error: new Error('signInAnonymous, supabase.signInAnonymous not return user data'),
+            };
+        }
+
+        return {
+            data: mapRawUserToUserEntity(data.user),
             error: null,
         };
     }

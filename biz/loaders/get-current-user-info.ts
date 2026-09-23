@@ -48,6 +48,7 @@ export const getCurrentUserInfo = cache(async (): Promise<BizResult<UserInfo>> =
                 user: {
                     id: userResult.data.id,
                     email: userResult.data.email,
+                    isAnonymous: userResult.data.isAnonymous,
                 },
             },
             error: null,

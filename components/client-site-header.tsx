@@ -58,19 +58,39 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
             return;
         }
         let cancelled = false;
-        fetch("/api/me")
-            .then((res) => res.json() as Promise<{ data?: UserInfo | null; }>)
-            .then((body) => {
+        // anonymous 接口检查是否已登录，若未登录将创建匿名用户
+        fetch("/api/auth/anonymous", { method: "POST" }).then(async (response) => {
+            if (!response.ok) {
+                console.error(`/api/auth/anonymous failed, status: ${response.status}, error: ${response.statusText}`);
+                if (!cancelled) {
+                    setUserReady(true);
+                }
+                return;
+            }
+
+            // body.data 可能是已登录用户 or 匿名用户
+            try {
+                const res = await fetch("/api/me");
+                const body = await (res.json() as Promise<{ data?: UserInfo | null; }>);
                 if (!cancelled) {
                     setUserInfo(body.data ?? null);
                     setUserReady(true);
                 }
-            })
-            .catch(() => {
+            } catch (err) {
+                const errMsg = err instanceof Error ? err.message : "Unknown Error";
+                console.error(`/api/me failed, error: ${errMsg}`);
                 if (!cancelled) {
                     setUserReady(true);
                 }
-            });
+            }
+        }).catch((err) => {
+            const errMsg = err instanceof Error ? err.message : "Unknown Error";
+            console.error(`/api/auth/anonymous failed, error: ${errMsg}`);
+            if (!cancelled) {
+                setUserReady(true);
+            }
+        });
+
         return () => {
             cancelled = true;
         };

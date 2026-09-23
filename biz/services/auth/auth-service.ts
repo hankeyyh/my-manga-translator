@@ -7,7 +7,7 @@
 import { UserRepository } from '@/biz/repositories/auth/user-repository';
 import { UserEntity } from "@/types/entity/user";
 import { Result } from "@/types/do/response";
-import { EmailOtpType } from '@supabase/supabase-js';
+import { EmailOtpType, SupabaseClient } from '@supabase/supabase-js';
 
 // 设置confirm邮件中的next重定向链接
 function emailConfirmRedirectUrl(): string | undefined {
@@ -39,6 +39,12 @@ export interface UserMetadata {
 export class AuthService {
     constructor(private userRepo: UserRepository) { }
 
+    static fromSupabase(supabase: SupabaseClient) {
+        return new AuthService(
+            new UserRepository(supabase)
+        );
+    }
+
     async signUp(email: string, password: string, metadata?: UserMetadata): Promise<Result<UserEntity>> {
         const emailValidation = UserEntity.validateEmail(email);
         if (!emailValidation.valid) {
@@ -62,12 +68,16 @@ export class AuthService {
         });
     }
 
+    async signInAnonymous(): Promise<Result<UserEntity>> {
+        return await this.userRepo.signInAnonymous();
+    }
+
     async signOut(): Promise<Result<void>> {
         return await this.userRepo.signOut();
     }
 
     async getCurrentUser(): Promise<Result<UserEntity>> {
-        const result =  await this.userRepo.getCurrentUser();
+        const result = await this.userRepo.getCurrentUser();
         if (result.error) {
             console.error(`getCurrentUser, repo.getCurrentUser fail, error: ${result.error.message}`);
         }
