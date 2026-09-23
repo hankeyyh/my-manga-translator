@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
         // 发放试用积分
         await grantDailyAnonymousBonus(signInResult.data?.id!);
     }
-    console.debug(`/api/auth/anonymous success!`);
   
     return NextResponse.json({ code: API_SUCCESS_CODE }, { status: 200 });
 }
