@@ -1,7 +1,8 @@
 /**
- * 检查是否登录，
  * 1. 如果是匿名用户，补发当日积分
  * 2. 如果未登录，创建匿名用户并发放试用积分
+ * 
+ * 接口会设置anonymous_trial cookie，正常情况下一天只请求一次
  */
 import { getCurrentUserInfo } from "@/biz/loaders/get-current-user-info";
 import { AuthService } from "@/biz/services/auth/auth-service";

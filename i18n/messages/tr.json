@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "Manga yükle",
-                "desc": "Sürükleyip bırakın, yapıştırın veya dosya seçin. JPG, PNG, WebP, PDF, EPUB ve CBZ desteklenir — tek sayfa veya tam cilt."
+                "desc": "Sürükleyip bırakın, yapıştırın veya dosya seçin. JPG, PNG, WebP, GIF ve AVIF desteklenir — tek sayfa veya tam cilt."
             },
             "language": {
                 "title": "Dil seç",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "Akıllı OCR, çeviri ve orijinal sayfa dizgisi",
             "Japonca, Korece ve Çince dahil 20+ dil",
-            "JPG, PNG, PDF, EPUB, CBZ ve daha fazlası",
+            "JPG, PNG, WebP, GIF, AVIF",
             "Krediler süresi dolmaz"
         ],
         "featuresMonthly": [

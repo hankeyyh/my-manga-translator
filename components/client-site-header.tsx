@@ -80,7 +80,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                 }
                 const isFormalLogin = user != null && user.user?.isAnonymous === false;
                 const isAnonymousLogin = user != null && user.user?.isAnonymous === true;
-                // 正式用户 or 匿名用户且今日已发放过积分，直接返回
+                // 正式用户 or 匿名用户且今日已发放过积分（设置过cookie），直接返回
                 if (isFormalLogin || (isAnonymousLogin && hasTodayAnonymousTrialCookie(document.cookie))) {
                     applyUser(user);
                     return;

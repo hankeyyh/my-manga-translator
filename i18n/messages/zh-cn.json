@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "上传漫画",
-                "desc": "拖放、粘贴或选择文件，支持 JPG、PNG、WebP、PDF、EPUB、CBZ，一次可上传单页或整卷。"
+                "desc": "拖放、粘贴或选择文件，支持 JPG、PNG、WebP、GIF、AVIF，一次可上传单页或整卷。"
             },
             "language": {
                 "title": "选择语言",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "智能 OCR、翻译与原图重绘排版",
             "支持 20+ 语言，覆盖日漫、韩漫、中漫",
-            "支持 JPG、PNG、PDF、EPUB、CBZ 等格式",
+            "支持 JPG、PNG、WebP、GIF、AVIF",
             "积分永不过期"
         ],
         "featuresMonthly": [

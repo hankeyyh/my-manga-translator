@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "Tải manga lên",
-                "desc": "Kéo thả, dán hoặc chọn tệp. Hỗ trợ JPG, PNG, WebP, PDF, EPUB và CBZ — một trang hoặc cả tập."
+                "desc": "Kéo thả, dán hoặc chọn tệp. Hỗ trợ JPG, PNG, WebP, GIF, AVIF — một trang hoặc cả tập."
             },
             "language": {
                 "title": "Chọn ngôn ngữ",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "OCR thông minh, dịch và sắp chữ trên trang gốc",
             "Hơn 20 ngôn ngữ, gồm tiếng Nhật, Hàn và Trung",
-            "JPG, PNG, PDF, EPUB, CBZ và nhiều định dạng khác",
+            "JPG, PNG, WebP, GIF, AVIF",
             "Tín dụng không hết hạn"
         ],
         "featuresMonthly": [

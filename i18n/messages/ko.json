@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "만화 업로드",
-                "desc": "드래그 앤 드롭, 붙여넣기 또는 파일 선택. JPG, PNG, WebP, PDF, EPUB, CBZ를 지원하며 한 페이지부터 전권까지 가능합니다."
+                "desc": "드래그 앤 드롭, 붙여넣기 또는 파일 선택. JPG, PNG, WebP, GIF, AVIF를 지원하며 한 페이지부터 전권까지 가능합니다."
             },
             "language": {
                 "title": "언어 선택",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "스마트 OCR, 번역, 원본 말풍선 조판",
             "일본어·한국어·중국어 포함 20개 이상 언어",
-            "JPG, PNG, PDF, EPUB, CBZ 등 지원",
+            "JPG, PNG, WebP, GIF, AVIF 지원",
             "크레딧 만료 없음"
         ],
         "featuresMonthly": [

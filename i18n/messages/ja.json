@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "マンガをアップロード",
-                "desc": "ドラッグ＆ドロップ、貼り付け、またはファイル選択。JPG、PNG、WebP、PDF、EPUB、CBZ に対応。1ページでも巻全体でも。"
+                "desc": "ドラッグ＆ドロップ、貼り付け、またはファイル選択。JPG、PNG、WebP、GIF、AVIF に対応。1ページでも巻全体でも。"
             },
             "language": {
                 "title": "言語を選ぶ",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "スマート OCR、翻訳、吹き出しへの組み込み",
             "日・韓・中を含む 20 以上の言語",
-            "JPG、PNG、PDF、EPUB、CBZ などに対応",
+            "JPG、PNG、WebP、GIF、AVIF に対応",
             "クレジットは無期限"
         ],
         "featuresMonthly": [

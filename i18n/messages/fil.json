@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "Mag-upload ng manga",
-                "desc": "I-drag and drop, i-paste, o pumili ng mga file. Sumusuporta sa JPG, PNG, WebP, PDF, EPUB, at CBZ — isang pahina o buong volume."
+                "desc": "I-drag and drop, i-paste, o pumili ng mga file. Sumusuporta sa JPG, PNG, WebP, GIF, at AVIF — isang pahina o buong volume."
             },
             "language": {
                 "title": "Pumili ng wika",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "Smart OCR, translation, at typesetting sa orihinal na page",
             "20+ wika, kasama ang Japanese, Korean, at Chinese",
-            "JPG, PNG, PDF, EPUB, CBZ, at iba pa",
+            "JPG, PNG, WebP, GIF, AVIF",
             "Hindi mag-e-expire ang credits"
         ],
         "featuresMonthly": [

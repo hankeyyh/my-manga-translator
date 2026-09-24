@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "Sube el manga",
-                "desc": "Arrastra y suelta, pega o elige archivos. Compatible con JPG, PNG, WebP, PDF, EPUB y CBZ: una página o un tomo completo."
+                "desc": "Arrastra y suelta, pega o elige archivos. Compatible con JPG, PNG, WebP, GIF y AVIF: una página o un tomo completo."
             },
             "language": {
                 "title": "Elige un idioma",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "OCR inteligente, traducción y maquetación original",
             "Más de 20 idiomas, incluidos japonés, coreano y chino",
-            "JPG, PNG, PDF, EPUB, CBZ y más",
+            "JPG, PNG, WebP, GIF y AVIF",
             "Los créditos no caducan"
         ],
         "featuresMonthly": [

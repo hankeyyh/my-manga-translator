@@ -117,7 +117,7 @@
         "steps": {
             "upload": {
                 "title": "Upload manga",
-                "desc": "Drag and drop, paste, or choose files. Supports JPG, PNG, WebP, PDF, EPUB, and CBZ — a single page or a full volume."
+                "desc": "Drag and drop, paste, or choose files. Supports JPG, PNG, WebP, GIF, and AVIF — a single page or a full volume."
             },
             "language": {
                 "title": "Choose a language",
@@ -244,7 +244,7 @@
         "featuresPayToUse": [
             "Smart OCR, translation, and in-place typesetting",
             "20+ languages, including Japanese, Korean, and Chinese",
-            "JPG, PNG, PDF, EPUB, CBZ, and more",
+            "JPG, PNG, WebP, GIF, and AVIF",
             "Credits never expire"
         ],
         "featuresMonthly": [
