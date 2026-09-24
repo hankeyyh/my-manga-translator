@@ -81,10 +81,11 @@ export class UserCreditsRepository {
     }
 
     // 发放匿名试用积分
-    async grantDailyAnonymousBonus(userId: string, credits: number) : Promise<Result<boolean>> {
+    async grantDailyAnonymousBonus(userId: string, credits: number, ipHash: string | null): Promise<Result<boolean>> {
         const result = await this.supabase.rpc("grant_daily_anonymous_bonus", {
             p_user_id: userId,
             p_credits: credits,
+            ...(ipHash ? { p_ip_hash: ipHash } : {}),
         });
         return handleRpcResult(result);
     }

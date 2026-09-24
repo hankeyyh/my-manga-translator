@@ -46,19 +46,8 @@ export class MyWorkFlow extends WorkflowEntrypoint<Env, WorkflowParams> {
     async run(event: WorkflowEvent<WorkflowParams>, step: WorkflowStep) {
         const { userId, taskId, imageIds } = event.payload;
         const supabase = createServiceRoleClient();
-        const translationService = new TranslationService(
-            new UserRepository(supabase),
-            new TranslationTaskRepository(supabase),
-            new TranslationImageRepository(supabase),
-            new TranslationStorageRepository(supabase),
-            new PricingConfigRepository(supabase),
-        );
-        const creditService = new CreditService(
-            new TopUpConfigRepository(supabase),
-            new UserTransactionsRepository(supabase),
-            new PricingConfigRepository(supabase),
-            new UserCreditsRepository(supabase),
-        );
+        const translationService = TranslationService.fromSupabase(supabase);
+        const creditService = CreditService.fromSupabase(supabase);
 
         // step1: 获取图片
         const images = await step.do("get_pending_images_for_processing", NO_RETRY, async () => {
@@ -206,12 +195,7 @@ export default {
                 return Response.json({ success: false, message: "No failed images found" }, { status: 400 });
             }
             const supabase = createServiceRoleClient();
-            const creditService = new CreditService(
-                new TopUpConfigRepository(supabase),
-                new UserTransactionsRepository(supabase),
-                new PricingConfigRepository(supabase),
-                new UserCreditsRepository(supabase),
-            );
+            const creditService = CreditService.fromSupabase(supabase);
 
             // 重试
             const prepareResult = await creditService.prepareImagesForRetry(userId, taskId, imageIds);

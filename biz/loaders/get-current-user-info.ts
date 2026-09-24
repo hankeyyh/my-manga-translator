@@ -30,13 +30,7 @@ export const getCurrentUserInfo = cache(async (): Promise<BizResult<UserInfo>> =
             return { data: null, error: null, code: UNAUTHORIZED_ERROR_CODE };
         }
 
-        const creditService = new CreditService(
-            new TopUpConfigRepository(supabase),
-            new UserTransactionsRepository(supabase),
-            new PricingConfigRepository(supabase),
-            new UserCreditsRepository(supabase),
-        );
-        const creditsResult = await creditService.getCreditBalance(userResult.data.id);
+        const creditsResult = await CreditService.fromSupabase(supabase).getCreditBalance(userResult.data.id);
         if (creditsResult.error) {
             console.error(`getCurrentUserInfo getCreditBalance fail: ${creditsResult.error.message}`);
             return { data: null, error: creditsResult.error, code: DB_ERROR_CODE };

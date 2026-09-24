@@ -43,11 +43,7 @@ export async function POST(request: NextRequest) {
 
         // 3. 获取充值配置
         const { id } = parseResult.data;
-        creditService = new CreditService(new TopUpConfigRepository(supabase),
-            new UserTransactionsRepository(supabase),
-            new PricingConfigRepository(supabase),
-            new UserCreditsRepository(supabase),
-        );
+        creditService = CreditService.fromSupabase(supabase)
         const topupConfigResult = await creditService.getTopUpConfig(id);
         if (topupConfigResult.code === INACTIVE_TOPUP_CONFIG) {
             return NextResponse.json({ error: "Inactive Plan" }, { status: 400 });

@@ -62,7 +62,7 @@ export async function createServerClientForAnonymous() {
                             cookieStore.set(name, value, options),
                         );
                     } catch {
-                        console.error("setAll error", cookiesToSet);
+                        // console.error("setAll error", cookiesToSet);
                         // The `setAll` method was called from a Server Component.
                         // This can be ignored if you have proxy refreshing
                         // user sessions.

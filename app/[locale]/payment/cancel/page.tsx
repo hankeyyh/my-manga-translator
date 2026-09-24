@@ -37,13 +37,7 @@ async function PaymentCancelDetail({ searchParams }: { searchParams: Promise<{ s
 
     const { transactionId } = stripeSessionResult.data!;
     // 2. 取消交易
-    const creditService = new CreditService(
-        new TopUpConfigRepository(supabase),
-        new UserTransactionsRepository(supabase),
-        new PricingConfigRepository(supabase),
-        new UserCreditsRepository(supabase),
-    );
-    const transResult = await creditService.cancelUserTransaction(transactionId!);
+    const transResult = await CreditService.fromSupabase(supabase).cancelUserTransaction(transactionId!);
     if (transResult.error) {
         const t = await getTranslations("payment");
         return <div>{t("error", { message: transResult.error.message })}</div>;

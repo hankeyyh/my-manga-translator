@@ -1,3 +1,4 @@
+import { AnonymousTrialGrantsRepository } from "@/biz/repositories/credit/anonymous-trial-grants";
 import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
 import { CREDIT_BALANCE_NOT_ENOUGH_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE_NAME, CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND_NAME } from "@/types/do/response";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
@@ -9,6 +10,7 @@ import { BizResult } from "@/types/dto/response";
 import { PricingConfig } from "@/types/do/pricing-config";
 import { TopUpConfig } from "@/types/do/topup-config";
 import { UserTransaction } from "@/types/do/user-transaction";
+import { AnonymousTrialGrant } from "@/types/do/anonymous-trial-grant";
 import { UserCredit } from "@/types/do/user-credit";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -48,6 +50,7 @@ export class CreditService {
         private userTransRepo: UserTransactionsRepository,
         private pricingConfigRepo: PricingConfigRepository,
         private userCreditRepo: UserCreditsRepository,
+        private anonymousTrialGrantRepo: AnonymousTrialGrantsRepository,
     ) {
 
     }
@@ -58,6 +61,7 @@ export class CreditService {
             new UserTransactionsRepository(supabase),
             new PricingConfigRepository(supabase),
             new UserCreditsRepository(supabase),
+            new AnonymousTrialGrantsRepository(supabase),
         );
     }
 
@@ -258,13 +262,23 @@ export class CreditService {
         return { code: SUCCESS_CODE, data: null, error: null };
     }
 
-    // 发放匿名用户试用积分
-    async grantDailyAnonymousBonus(userId: string): Promise<BizResult<void>> {
-        const result = await this.userCreditRepo.grantDailyAnonymousBonus(userId, BONUS_CREDITS);
+    // 按 IP 哈希和上海日期查匿名试用发放记录。没有记录时 data 为 null。
+    async findAnonymousTrialGrant(ipHash: string, grantDate: string): Promise<BizResult<AnonymousTrialGrant>> {
+        const { data, error } = await this.anonymousTrialGrantRepo.findByIpHashAndGrantDate(ipHash, grantDate);
+        if (error) {
+            console.error(`findAnonymousTrialGrant, repo.findByIpHashAndGrantDate fail, ipHash: ${ipHash}, grantDate: ${grantDate}, error: ${error.message}`);
+            return { code: DB_ERROR_CODE, data: null, error };
+        }
+        return { code: SUCCESS_CODE, data, error: null };
+    }
+
+    // 发放匿名用户试用积分。ipHash 为空时只发积分，不写 IP 记录。返回 false 表示当天 IP 名额已被占用。
+    async grantDailyAnonymousBonus(userId: string, ipHash: string | null): Promise<BizResult<boolean>> {
+        const result = await this.userCreditRepo.grantDailyAnonymousBonus(userId, BONUS_CREDITS, ipHash);
         if (result.error) {
             console.error(`grantDailyAnonymousBonus, repo.grantDailyAnonymousBonus fail, userId: ${userId}, error: ${result.error.message}`);
             return { code: DB_ERROR_CODE, data: null, error: result.error };
         }
-        return { code: SUCCESS_CODE, data: null, error: null };
+        return { code: SUCCESS_CODE, data: result.data, error: null };
     }
 }

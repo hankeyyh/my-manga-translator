@@ -10,6 +10,7 @@ import { CreditService } from "@/biz/services/credit/credit-service";
 import { TopUpConfigRepository } from "@/biz/repositories/topup/topup-config";
 import { UserTransactionsRepository } from "@/biz/repositories/topup/user-transactions";
 import { PricingConfigRepository } from "@/biz/repositories/pricing/pricing-config";
+import { AnonymousTrialGrantsRepository } from "@/biz/repositories/credit/anonymous-trial-grants";
 import { UserCreditsRepository } from "@/biz/repositories/credit/user-credits";
 import { AuthService } from "@/biz/services/auth/auth-service";
 import { createServiceRoleClient } from "@/biz/utils/supabase/admin";
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
         new UserTransactionsRepository(supabase),
         new PricingConfigRepository(supabase),
         new UserCreditsRepository(serviceRoleClient),
+        new AnonymousTrialGrantsRepository(serviceRoleClient),
     );
     // 计算积分
     const creditCost = estimateCreditCost(images.length, intent);

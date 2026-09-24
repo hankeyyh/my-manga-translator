@@ -17,6 +17,7 @@ import { getPathname, Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { hasLocale, useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { hasTodayAnonymousTrialCookie } from "@/biz/utils/anonymous-trial-cookie";
 import { useEffect, useState } from "react";
 
 function pathnameWithoutLocale(pathname: string): string {
@@ -58,38 +59,50 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
             return;
         }
         let cancelled = false;
-        // anonymous 接口检查是否已登录，若未登录将创建匿名用户
-        fetch("/api/auth/anonymous", { method: "POST" }).then(async (response) => {
-            if (!response.ok) {
-                console.error(`/api/auth/anonymous failed, status: ${response.status}, error: ${response.statusText}`);
-                if (!cancelled) {
-                    setUserReady(true);
-                }
+        const fetchUser = async (): Promise<UserInfo | null> => {
+            const res = await fetch("/api/me");
+            const body = await (res.json() as Promise<{ data?: UserInfo | null; }>);
+            return body.data ?? null;
+        };
+        const applyUser = (user: UserInfo | null) => {
+            if (cancelled) {
                 return;
             }
+            setUserInfo(user);
+            setUserReady(true);
+        };
 
-            // body.data 可能是已登录用户 or 匿名用户
+        void (async () => {
             try {
-                const res = await fetch("/api/me");
-                const body = await (res.json() as Promise<{ data?: UserInfo | null; }>);
-                if (!cancelled) {
-                    setUserInfo(body.data ?? null);
-                    setUserReady(true);
+                const user = await fetchUser();
+                if (cancelled) {
+                    return;
                 }
+                const isFormalLogin = user != null && user.user?.isAnonymous === false;
+                const isAnonymousLogin = user != null && user.user?.isAnonymous === true;
+                // 正式用户 or 匿名用户且今日已发放过积分，直接返回
+                if (isFormalLogin || (isAnonymousLogin && hasTodayAnonymousTrialCookie(document.cookie))) {
+                    applyUser(user);
+                    return;
+                }
+
+                // 未登录 or 匿名用户且今日还未检查积分发放
+                const response = await fetch("/api/auth/anonymous", { method: "POST" });
+                if (!response.ok) {
+                    console.error(`/api/auth/anonymous failed, status: ${response.status}, error: ${response.statusText}`);
+                    applyUser(user);
+                    return;
+                }
+                const body = await (response.json() as Promise<{ data?: UserInfo | null; }>);
+                applyUser(body.data ?? user);
             } catch (err) {
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
-                console.error(`/api/me failed, error: ${errMsg}`);
+                console.error(`load header user failed, error: ${errMsg}`);
                 if (!cancelled) {
                     setUserReady(true);
                 }
             }
-        }).catch((err) => {
-            const errMsg = err instanceof Error ? err.message : "Unknown Error";
-            console.error(`/api/auth/anonymous failed, error: ${errMsg}`);
-            if (!cancelled) {
-                setUserReady(true);
-            }
-        });
+        })();
 
         return () => {
             cancelled = true;

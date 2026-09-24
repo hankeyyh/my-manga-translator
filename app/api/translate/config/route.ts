@@ -17,13 +17,7 @@ function toApiPricingConfig(config: PricingConfig): ApiPricingConfig {
 
 export async function GET() {
     const supabase = await createServerClient();
-    const creditService = new CreditService(
-        new TopUpConfigRepository(supabase),
-        new UserTransactionsRepository(supabase),
-        new PricingConfigRepository(supabase),
-        new UserCreditsRepository(supabase)
-    );
-    const result = await creditService.getAllPricingConfig();
+    const result = await CreditService.fromSupabase(supabase).getAllPricingConfig();
     if (result.error || result.code !== SUCCESS_CODE || !result.data) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }

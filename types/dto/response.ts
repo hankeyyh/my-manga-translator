@@ -38,6 +38,7 @@ export const REMOTE_LOGIC_ERROR_CODE = 4002; // 下游业务/响应异常（如 
 export const CREDIT_BALANCE_NOT_ENOUGH = 5001; // 用户积分不足
 export const CREDIT_FROZEN_NOT_ENOUGH_TO_CAPTURE = 5002; // 冻结积分不足以核销
 export const CREDIT_FROZEN_NOT_ENOUGH_TO_REFUND = 5003; // 冻结积分不足以退还
+export const ANONYMOUS_TRIAL_ALREADY_USED = 5004; // 该 IP 当天已领过匿名试用
 
 // 6xxx 计费 / 充值 / 定价域
 export const UNSUPPORTED_TRANSACTION_TYPE = 6001; // 不支持的充值类型

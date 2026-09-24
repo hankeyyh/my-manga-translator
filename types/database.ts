@@ -34,6 +34,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      anonymous_trial_grants: {
+        Row: {
+          created_at: string
+          grant_date: string
+          id: string
+          ip_hash: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          grant_date: string
+          id?: string
+          ip_hash: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          grant_date?: string
+          id?: string
+          ip_hash?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string | null
@@ -556,6 +583,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      credit_log_shanghai_date: {
+        Args: { p_created_at: string }
+        Returns: string
+      }
       expire_subscription_cycle: {
         Args: { p_stripe_subscription_id: string }
         Returns: boolean
@@ -572,6 +603,10 @@ export type Database = {
       freeze_task_credits: {
         Args: { p_credits: number; p_task_id: string; p_user_id: string }
         Returns: undefined
+      }
+      grant_daily_anonymous_bonus: {
+        Args: { p_credits: number; p_ip_hash?: string; p_user_id: string }
+        Returns: boolean
       }
       grant_signup_bonus: {
         Args: { p_credits: number; p_user_id: string }
