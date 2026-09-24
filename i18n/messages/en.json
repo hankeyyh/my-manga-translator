@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Images up to 10MB",
         "quota": "Uploaded {uploaded}/{max} pages · {remaining} remaining",
         "addOrDrop": "Add images / drop to upload",
-        "compactQuota": "{uploaded} / {max} pages"
+        "compactQuota": "{uploaded} / {max} pages",
+        "trialTitle": "Free trial today · {n} credits left",
+        "trialSubtitle": "Translate up to {n} pages, no login needed",
+        "exhaustedTitle": "Today's credits are used up",
+        "exhaustedSubtitle": "Log in to keep translating",
+        "loginContinue": "Log in to continue"
     },
     "thumbnail": {
         "waiting": "Waiting",

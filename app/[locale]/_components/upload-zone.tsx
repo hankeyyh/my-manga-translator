@@ -4,6 +4,10 @@ import { useRef, useState } from "react";
 import { Plus, Upload } from "lucide-react";
 import { cn } from "@/components/utils";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { isFormalLogin, totalCredits } from "@/components/site-user";
+import { useSiteUserSnapshot } from "@/components/site-user-store";
+import { deriveUploadEmptyReminder } from "@/app/[locale]/_components/upload-empty-reminder";
 
 const ACCEPT =
     ".jpg,.jpeg,.png,.webp,.gif,.avif,image/jpeg,image/png,image/webp,image/gif,image/avif";
@@ -17,10 +21,29 @@ export function UploadZone(props: {
     const inputRef = useRef<HTMLInputElement>(null);
     const dragDepthRef = useRef(0);
     const [isDragging, setIsDragging] = useState(false);
+    const router = useRouter();
+    const snapshot = useSiteUserSnapshot();
     const remaining = Math.max(0, props.maxPages - props.uploaded);
+    const balance = totalCredits(snapshot.userInfo);
+    const reminder = deriveUploadEmptyReminder({
+        userReady: snapshot.userReady,
+        compact: props.compact,
+        isFormalLogin: isFormalLogin(snapshot.userInfo),
+        balance,
+    });
+    const exhausted = reminder === "exhausted";
+    const showReminder = reminder === "trial" || reminder === "exhausted";
     const t = useTranslations("upload");
 
+    function goToLogin() {
+        router.push("/auth/login");
+    }
+
     function openFilePicker() {
+        if (exhausted) {
+            goToLogin();
+            return;
+        }
         inputRef.current?.click();
     }
 
@@ -34,6 +57,9 @@ export function UploadZone(props: {
         // FileList 是 input 的实时视图，清空 value 后会变空；先拷成 File[]
         const files = Array.from(e.target.files ?? []);
         e.target.value = "";
+        if (exhausted) {
+            return;
+        }
         emitFiles(files);
     }
 
@@ -75,6 +101,10 @@ export function UploadZone(props: {
         e.stopPropagation();
         dragDepthRef.current = 0;
         setIsDragging(false);
+        if (exhausted) {
+            goToLogin();
+            return;
+        }
         emitFiles(Array.from(e.dataTransfer.files));
     }
 
@@ -99,6 +129,7 @@ export function UploadZone(props: {
             }}
             role="button"
             tabIndex={0}
+            aria-label={exhausted ? t("loginContinue") : undefined}
         >
             <div
                 className={cn(
@@ -113,13 +144,33 @@ export function UploadZone(props: {
                             props.compact ? "opacity-0" : "opacity-100",
                         )}
                     >
+                        {showReminder ? (
+                            <div className="flex flex-col items-center gap-1">
+                                <p className="font-headline text-base font-bold text-cc-text-primary">
+                                    {reminder === "trial"
+                                        ? t("trialTitle", { n: balance })
+                                        : t("exhaustedTitle")}
+                                </p>
+                                <p className="text-sm text-cc-text-secondary">
+                                    {reminder === "trial"
+                                        ? t("trialSubtitle", { n: balance })
+                                        : t("exhaustedSubtitle")}
+                                </p>
+                            </div>
+                        ) : null}
                         <div className="flex size-14 items-center justify-center rounded-full bg-[var(--cc-brand-tint)]">
                             <Upload className="size-7 text-cc-brand-primary" />
                         </div>
-                        <p className="font-headline text-sm font-semibold text-cc-text-primary">
-                            {t("dropHint")}{" "}
-                            <span className="text-cc-brand-primary underline">{t("browse")}</span>
-                        </p>
+                        {exhausted ? (
+                            <p className="font-headline text-sm font-semibold text-cc-brand-primary underline">
+                                {t("loginContinue")}
+                            </p>
+                        ) : (
+                            <p className="font-headline text-sm font-semibold text-cc-text-primary">
+                                {t("dropHint")}{" "}
+                                <span className="text-cc-brand-primary underline">{t("browse")}</span>
+                            </p>
+                        )}
                         <p className="text-xs text-cc-text-muted">
                             {t("formats")}
                         </p>

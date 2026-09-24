@@ -39,6 +39,8 @@ import {
 import { ThumbNail } from "@/components/thumbnail";
 import { ImagePreview } from "@/components/image-preview";
 import { UploadZone } from "@/app/[locale]/_components/upload-zone";
+import { shouldRefreshCreditsAfterPoll } from "@/app/[locale]/_components/poll-credit-refresh";
+import { refreshSiteUser } from "@/components/site-user-store";
 import { MangaPage } from "@/types/web/manga-page";
 import {
     FONT_CONFIG,
@@ -567,6 +569,7 @@ export function TranslateSection() {
             submitLoading: true,
             pages: current.pages.map((page) => ({ ...page, status: "uploading" as const })),
         }));
+        let requestSettled = false;
         try {
             const intent = buildTranslationIntent(task.targetLang, task.translateMode, task.fontStyle);
             const formData = new FormData();
@@ -581,6 +584,7 @@ export function TranslateSection() {
                 method: "POST",
                 body: formData,
             });
+            requestSettled = true;
             const data: ApiSubmitTaskResponse & { error?: string; } = await response.json();
             if (!response.ok || data.error) {
                 throw new Error(data.error);
@@ -609,6 +613,10 @@ export function TranslateSection() {
                     page.status === "completed" ? page : { ...page, status: "failed" as const }
                 )),
             }));
+        } finally {
+            if (requestSettled) {
+                void refreshSiteUser();
+            }
         }
     };
 
@@ -778,14 +786,23 @@ export function TranslateSection() {
                 }
                 consecutiveTransientErrors = 0;
                 const images = data.images ?? [];
+                const previousTasks = tasksRef.current;
                 // 合并，更新page.status，如果成功，更新resultUrl
-                const merged = tasksRef.current.map((task) => ({
+                const merged = previousTasks.map((task) => ({
                     ...task,
                     pages: mergeLiteImages(task.pages, images),
                 }));
                 // 检查是否有任务是否超时，如果超时page.status=stalled
                 const applied = applyTimeout(merged, Date.now());
-                if (!commitPollState(applied.next, applied.timedOut)) {
+                const continuing = commitPollState(applied.next, applied.timedOut);
+                if (shouldRefreshCreditsAfterPoll(
+                    previousTasks.flatMap((task) => task.pages),
+                    applied.next.flatMap((task) => task.pages),
+                    !continuing,
+                )) {
+                    void refreshSiteUser();
+                }
+                if (!continuing) {
                     return;
                 }
                 scheduleNext();
