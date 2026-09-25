@@ -25,10 +25,11 @@ export function UploadZone(props: {
     const snapshot = useSiteUserSnapshot();
     const remaining = Math.max(0, props.maxPages - props.uploaded);
     const balance = totalCredits(snapshot.userInfo);
+    const formalLogin = isFormalLogin(snapshot.userInfo);
     const reminder = deriveUploadEmptyReminder({
         userReady: snapshot.userReady,
         compact: props.compact,
-        isFormalLogin: isFormalLogin(snapshot.userInfo),
+        isFormalLogin: formalLogin,
         balance,
     });
     const exhausted = reminder === "exhausted";
@@ -115,6 +116,7 @@ export function UploadZone(props: {
                 isDragging
                     ? "border-cc-brand-primary bg-[var(--cc-brand-tint)]"
                     : "border-cc-brand-primary/30",
+                !formalLogin && "upload-zone-beam",
             )}
             onClick={openFilePicker}
             onDragEnter={onDragEnter}
@@ -131,6 +133,11 @@ export function UploadZone(props: {
             tabIndex={0}
             aria-label={exhausted ? t("loginContinue") : undefined}
         >
+            {!formalLogin ? (
+                <span className="upload-zone-beam-glow" aria-hidden="true">
+                    <span className="upload-zone-beam-ring" />
+                </span>
+            ) : null}
             <div
                 className={cn(
                     "grid transition-[grid-template-rows] duration-300 ease-out",
