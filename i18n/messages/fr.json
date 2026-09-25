@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Images jusqu’à 10 Mo",
         "quota": "{uploaded}/{max} pages importées · {remaining} restantes",
         "addOrDrop": "Ajouter des images / déposer pour importer",
-        "compactQuota": "{uploaded} / {max} pages"
+        "compactQuota": "{uploaded} / {max} pages",
+        "trialTitle": "Essai gratuit du jour · {n} crédits restants",
+        "trialSubtitle": "Traduisez jusqu’à {n} pages, sans connexion",
+        "exhaustedTitle": "Le quota du jour est épuisé",
+        "exhaustedSubtitle": "Connectez-vous pour continuer à traduire",
+        "loginContinue": "Se connecter pour continuer"
     },
     "thumbnail": {
         "waiting": "En attente",

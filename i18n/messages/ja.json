@@ -199,7 +199,12 @@
         "formats": "JPG、PNG、WebP、GIF、AVIF · 画像は最大 10MB",
         "quota": "アップロード済み {uploaded}/{max} ページ · 残り {remaining}",
         "addOrDrop": "画像を追加 / ドロップしてアップロード",
-        "compactQuota": "{uploaded} / {max} ページ"
+        "compactQuota": "{uploaded} / {max} ページ",
+        "trialTitle": "本日の無料トライアル · 残り {n} クレジット",
+        "trialSubtitle": "{n} ページまで翻訳できます。ログイン不要",
+        "exhaustedTitle": "本日の無料枠を使い切りました",
+        "exhaustedSubtitle": "ログインして翻訳を続ける",
+        "loginContinue": "ログインして続ける"
     },
     "thumbnail": {
         "waiting": "待機中",

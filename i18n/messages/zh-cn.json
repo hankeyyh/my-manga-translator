@@ -199,7 +199,12 @@
         "formats": "JPG、PNG、WebP、GIF、AVIF · 图片最大 10MB",
         "quota": "已上传 {uploaded}/{max} 页 · 剩余 {remaining} 页",
         "addOrDrop": "添加图片 / 拖拽上传",
-        "compactQuota": "{uploaded} / {max} 页"
+        "compactQuota": "{uploaded} / {max} 页",
+        "trialTitle": "今日免费试用 · 还剩 {n} 积分",
+        "trialSubtitle": "可翻 {n} 页，无需登录",
+        "exhaustedTitle": "今日额度已用完",
+        "exhaustedSubtitle": "登录后继续翻译",
+        "loginContinue": "登录继续"
     },
     "thumbnail": {
         "waiting": "等待中",

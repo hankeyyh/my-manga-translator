@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Bilder bis 10 MB",
         "quota": "{uploaded}/{max} Seiten hochgeladen · {remaining} übrig",
         "addOrDrop": "Bilder hinzufügen / zum Hochladen ablegen",
-        "compactQuota": "{uploaded} / {max} Seiten"
+        "compactQuota": "{uploaded} / {max} Seiten",
+        "trialTitle": "Heute kostenlos testen · noch {n} Credits",
+        "trialSubtitle": "Bis zu {n} Seiten übersetzen, ohne Anmeldung",
+        "exhaustedTitle": "Das heutige Kontingent ist aufgebraucht",
+        "exhaustedSubtitle": "Melden Sie sich an, um weiter zu übersetzen",
+        "loginContinue": "Anmelden und fortfahren"
     },
     "thumbnail": {
         "waiting": "Wartend",

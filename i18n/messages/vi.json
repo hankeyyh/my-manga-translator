@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Ảnh tối đa 10MB",
         "quota": "Đã tải {uploaded}/{max} trang · còn {remaining}",
         "addOrDrop": "Thêm ảnh / thả để tải lên",
-        "compactQuota": "{uploaded} / {max} trang"
+        "compactQuota": "{uploaded} / {max} trang",
+        "trialTitle": "Dùng thử miễn phí hôm nay · còn {n} tín dụng",
+        "trialSubtitle": "Dịch được {n} trang, không cần đăng nhập",
+        "exhaustedTitle": "Đã hết hạn mức hôm nay",
+        "exhaustedSubtitle": "Đăng nhập để tiếp tục dịch",
+        "loginContinue": "Đăng nhập để tiếp tục"
     },
     "thumbnail": {
         "waiting": "Đang chờ",

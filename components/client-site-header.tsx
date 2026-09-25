@@ -18,6 +18,8 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { hasLocale, useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { hasTodayAnonymousTrialCookie } from "@/biz/utils/anonymous-trial-cookie";
+import { isFormalLogin, totalCredits } from "@/components/site-user";
+import { applySiteUser, useSiteUserSnapshot } from "@/components/site-user-store";
 import { useEffect, useState } from "react";
 
 function pathnameWithoutLocale(pathname: string): string {
@@ -51,11 +53,17 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
     const tHeader = useTranslations("header");
     const tCommon = useTranslations("common");
     const { resolvedTheme, setTheme } = useTheme();
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(initialUserInfo);
-    const [userReady, setUserReady] = useState(!deferUser);
+    const snapshot = useSiteUserSnapshot();
+    // 拉取抛错时顶栏仍显示 0 和登录；这份本地标记不写入快照，空态因此保持未就绪。
+    const [headerErrorReady, setHeaderErrorReady] = useState(false);
+    const displayUser = !deferUser
+        ? (initialUserInfo ?? null)
+        : (snapshot.userReady ? snapshot.userInfo : null);
+    const displayReady = !deferUser || snapshot.userReady || headerErrorReady;
 
     useEffect(() => {
         if (!deferUser) {
+            applySiteUser(initialUserInfo ?? null);
             return;
         }
         let cancelled = false;
@@ -68,8 +76,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
             if (cancelled) {
                 return;
             }
-            setUserInfo(user);
-            setUserReady(true);
+            applySiteUser(user);
         };
 
         void (async () => {
@@ -78,10 +85,10 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                 if (cancelled) {
                     return;
                 }
-                const isFormalLogin = user != null && user.user?.isAnonymous === false;
-                const isAnonymousLogin = user != null && user.user?.isAnonymous === true;
+                const formalUser = user != null && user.user?.isAnonymous === false;
+                const anonymousUser = user != null && user.user?.isAnonymous === true;
                 // 正式用户 or 匿名用户且今日已发放过积分（设置过cookie），直接返回
-                if (isFormalLogin || (isAnonymousLogin && hasTodayAnonymousTrialCookie(document.cookie))) {
+                if (formalUser || (anonymousUser && hasTodayAnonymousTrialCookie(document.cookie))) {
                     applyUser(user);
                     return;
                 }
@@ -99,7 +106,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
                 console.error(`load header user failed, error: ${errMsg}`);
                 if (!cancelled) {
-                    setUserReady(true);
+                    setHeaderErrorReady(true);
                 }
             }
         })();
@@ -107,11 +114,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
         return () => {
             cancelled = true;
         };
-    }, [deferUser]);
-
-    const isLogin = () => {
-        return userInfo !== null && userInfo.user?.isAnonymous !== true;
-    };
+    }, [deferUser, initialUserInfo]);
 
     const onClickLogin = () => {
         router.push("/auth/login");
@@ -137,7 +140,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
         window.location.replace(`${href}${window.location.search}${window.location.hash}`);
     };
 
-    const totalCredits = (userInfo?.credit?.payToUseBalance ?? 0) + (userInfo?.credit?.subscriptionBalance ?? 0);
+    const credits = totalCredits(displayUser);
 
     return (
         <>
@@ -178,8 +181,8 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                         </CcButton>
                     </nav>
                     <div className="ms-auto flex items-center gap-2">
-                        {userReady ? (
-                            <CcBadge variant="accent">{tCommon("creditsCount", { count: totalCredits })}</CcBadge>
+                        {displayReady ? (
+                            <CcBadge variant="accent">{tCommon("creditsCount", { count: credits })}</CcBadge>
                         ) : (
                             <span className="inline-flex h-6 w-16" aria-hidden />
                         )}
@@ -224,9 +227,9 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                             <Sun className="size-4 dark:hidden" />
                             <Moon className="hidden size-4 dark:block" />
                         </CcButton>
-                        {!userReady ? (
+                        {!displayReady ? (
                             <span className="inline-flex h-8 w-[5.5rem]" aria-hidden />
-                        ) : isLogin() ? (
+                        ) : isFormalLogin(displayUser) ? (
                             <CcButton size="sm" onClick={onClickDashboard}>{tHeader("dashboard")}</CcButton>
                         ) : (
                             <CcButton size="sm" onClick={onClickLogin}>{tHeader("login")}</CcButton>

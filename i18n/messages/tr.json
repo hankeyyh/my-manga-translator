@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Görseller 10MB’a kadar",
         "quota": "{uploaded}/{max} sayfa yüklendi · {remaining} kaldı",
         "addOrDrop": "Görsel ekle / yüklemek için bırak",
-        "compactQuota": "{uploaded} / {max} sayfa"
+        "compactQuota": "{uploaded} / {max} sayfa",
+        "trialTitle": "Bugünün ücretsiz denemesi · {n} kredi kaldı",
+        "trialSubtitle": "{n} sayfa çevrilebilir, giriş gerekmez",
+        "exhaustedTitle": "Bugünkü kota doldu",
+        "exhaustedSubtitle": "Çevirmeye devam etmek için giriş yapın",
+        "loginContinue": "Devam etmek için giriş yap"
     },
     "thumbnail": {
         "waiting": "Bekliyor",

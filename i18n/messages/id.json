@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Gambar hingga 10MB",
         "quota": "Terunggah {uploaded}/{max} halaman · sisa {remaining}",
         "addOrDrop": "Tambah gambar / lepas untuk mengunggah",
-        "compactQuota": "{uploaded} / {max} halaman"
+        "compactQuota": "{uploaded} / {max} halaman",
+        "trialTitle": "Uji coba gratis hari ini · sisa {n} kredit",
+        "trialSubtitle": "Bisa menerjemahkan {n} halaman, tanpa masuk",
+        "exhaustedTitle": "Kuota hari ini sudah habis",
+        "exhaustedSubtitle": "Masuk untuk lanjut menerjemahkan",
+        "loginContinue": "Masuk untuk lanjut"
     },
     "thumbnail": {
         "waiting": "Menunggu",

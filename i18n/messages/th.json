@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · รูปสูงสุด 10MB",
         "quota": "อัปโหลดแล้ว {uploaded}/{max} หน้า · เหลือ {remaining}",
         "addOrDrop": "เพิ่มรูป / วางเพื่ออัปโหลด",
-        "compactQuota": "{uploaded} / {max} หน้า"
+        "compactQuota": "{uploaded} / {max} หน้า",
+        "trialTitle": "ทดลองใช้ฟรีวันนี้ · เหลือ {n} เครดิต",
+        "trialSubtitle": "แปลได้ {n} หน้า โดยไม่ต้องเข้าสู่ระบบ",
+        "exhaustedTitle": "ใช้โควตาของวันนี้ครบแล้ว",
+        "exhaustedSubtitle": "เข้าสู่ระบบเพื่อแปลต่อ",
+        "loginContinue": "เข้าสู่ระบบเพื่อดำเนินการต่อ"
     },
     "thumbnail": {
         "waiting": "กำลังรอ",

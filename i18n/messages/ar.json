@@ -199,7 +199,12 @@
         "formats": "JPG وPNG وWebP وGIF وAVIF · الصور حتى 10 ميجابايت",
         "quota": "تم رفع {uploaded}/{max} صفحات · متبقٍ {remaining}",
         "addOrDrop": "أضف صورًا / أفلت للرفع",
-        "compactQuota": "{uploaded} / {max} صفحات"
+        "compactQuota": "{uploaded} / {max} صفحات",
+        "trialTitle": "تجربة مجانية اليوم · متبقٍ {n} من الرصيد",
+        "trialSubtitle": "يمكنك ترجمة {n} صفحات دون تسجيل الدخول",
+        "exhaustedTitle": "نفد رصيد اليوم",
+        "exhaustedSubtitle": "سجّل الدخول لمتابعة الترجمة",
+        "loginContinue": "تسجيل الدخول للمتابعة"
     },
     "thumbnail": {
         "waiting": "قيد الانتظار",

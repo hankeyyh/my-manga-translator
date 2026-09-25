@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Mga larawan hanggang 10MB",
         "quota": "Na-upload {uploaded}/{max} na pahina · {remaining} ang natitira",
         "addOrDrop": "Magdagdag ng mga larawan / i-drop para mag-upload",
-        "compactQuota": "{uploaded} / {max} na pahina"
+        "compactQuota": "{uploaded} / {max} na pahina",
+        "trialTitle": "Libreng trial ngayon · {n} credits ang natitira",
+        "trialSubtitle": "Makakapagsalin ng {n} pahina, hindi kailangang mag-log in",
+        "exhaustedTitle": "Naubos na ang quota ngayong araw",
+        "exhaustedSubtitle": "Mag-log in para magpatuloy sa pagsasalin",
+        "loginContinue": "Mag-log in para magpatuloy"
     },
     "thumbnail": {
         "waiting": "Naghihintay",

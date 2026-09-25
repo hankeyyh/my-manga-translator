@@ -199,7 +199,12 @@
         "formats": "JPG, PNG, WebP, GIF, AVIF · Изображения до 10 МБ",
         "quota": "Загружено {uploaded}/{max} стр. · осталось {remaining}",
         "addOrDrop": "Добавить изображения / перетащить для загрузки",
-        "compactQuota": "{uploaded} / {max} стр."
+        "compactQuota": "{uploaded} / {max} стр.",
+        "trialTitle": "Бесплатная пробная версия сегодня · осталось {n} кредитов",
+        "trialSubtitle": "Можно перевести до {n} стр., без входа",
+        "exhaustedTitle": "Дневной лимит исчерпан",
+        "exhaustedSubtitle": "Войдите, чтобы продолжить перевод",
+        "loginContinue": "Войти и продолжить"
     },
     "thumbnail": {
         "waiting": "Ожидание",
