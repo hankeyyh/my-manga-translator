@@ -96,7 +96,9 @@ export async function Footer() {
                         </p>
                         <p className="mt-6 text-sm font-medium text-cc-text-primary">{t("followUs")}</p>
                         <Link
-                            href="#"
+                            href="https://x.com/jansnowy6"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             aria-label={t("followX")}
                             className="mt-3 inline-flex text-cc-text-primary transition-colors hover:text-cc-brand-primary"
                         >
