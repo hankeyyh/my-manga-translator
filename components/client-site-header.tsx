@@ -60,7 +60,7 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
         }
         let cancelled = false;
         const fetchUser = async (): Promise<UserInfo | null> => {
-            const res = await fetch("/api/me");
+            const res = await fetch("/api/me", { cache: "no-store" });
             const body = await (res.json() as Promise<{ data?: UserInfo | null; }>);
             return body.data ?? null;
         };
@@ -87,14 +87,26 @@ export function ClientSiteHeader({ userInfo: initialUserInfo = null, showBlog, d
                 }
 
                 // 未登录 or 匿名用户且今日还未检查积分发放
-                const response = await fetch("/api/auth/anonymous", { method: "POST" });
+                const response = await fetch("/api/auth/anonymous", { method: "POST", cache: "no-store" });
                 if (!response.ok) {
                     console.error(`/api/auth/anonymous failed, status: ${response.status}, error: ${response.statusText}`);
                     applyUser(user);
                     return;
                 }
-                const body = await (response.json() as Promise<{ data?: UserInfo | null; }>);
-                applyUser(body.data ?? user);
+                let anonymousData: UserInfo | null = null;
+                try {
+                    const body = await (response.json() as Promise<{ data?: UserInfo | null; }>);
+                    anonymousData = body.data ?? null;
+                } catch {
+                    anonymousData = null;
+                }
+                // 补发结果在 anonymous 响应里。不要回退到调用前的 /api/me 余额。
+                if (anonymousData) {
+                    applyUser(anonymousData);
+                    return;
+                }
+                const refreshed = await fetchUser();
+                applyUser(refreshed ?? user);
             } catch (err) {
                 const errMsg = err instanceof Error ? err.message : "Unknown Error";
                 console.error(`load header user failed, error: ${errMsg}`);

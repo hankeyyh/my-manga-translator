@@ -27,12 +27,13 @@ export async function POST(request: NextRequest) {
     if (result.data) {
         const isAnonymous = result.data.user?.isAnonymous;
         if (isAnonymous && result.data.user) {
+            // 已有匿名会话必须走每日补发。缺少 cf-connecting-ip（本地 next dev / preview）
+            // 不能在这里直接返回发放前的余额，否则会把昨日剩余写进响应，并顺手把 cookie 盖成今天。
             const trialIp = trialIpHash(request.headers.get("cf-connecting-ip"));
-            if (!trialIp.ok) {
-                return anonymousTrialJson({ code: API_SUCCESS_CODE, data: result.data });
-            }
-            // 发放今日试用机分
-            const granted = await grantDailyAnonymousBonus(result.data.user.id, trialIp.ipHash);
+            const granted = await grantDailyAnonymousBonus(
+                result.data.user.id,
+                trialIp.ok ? trialIp.ipHash : null,
+            );
             return responseForGrant(granted, result.data.user);
         }
         return anonymousTrialJson({ code: API_SUCCESS_CODE, data: result.data });
@@ -78,7 +79,7 @@ async function responseForGrant(granted: BizResult<boolean>, user: UserBasicInfo
     if (!info) {
         return NextResponse.json({ code: DB_ERROR_CODE, error: "Internal Server Error" }, { status: 500 });
     }
-    // 今日已经发放过积分，拒绝
+    // false：该 IP 今天的名额属于另一个匿名用户，不重置当前余额。
     if (granted.data === false) {
         return anonymousTrialJson({ code: String(ANONYMOUS_TRIAL_ALREADY_USED), data: info });
     }
