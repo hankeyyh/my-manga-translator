@@ -32,7 +32,7 @@ export function UploadZone(props: {
         balance,
     });
     const exhausted = reminder === "exhausted";
-    const showReminder = reminder === "trial" || reminder === "exhausted";
+    const trial = reminder === "trial";
     const t = useTranslations("upload");
 
     function goToLogin() {
@@ -144,24 +144,29 @@ export function UploadZone(props: {
                             props.compact ? "opacity-0" : "opacity-100",
                         )}
                     >
-                        {showReminder ? (
+                        {exhausted ? (
                             <div className="flex flex-col items-center gap-1">
                                 <p className="font-headline text-base font-bold text-cc-text-primary">
-                                    {reminder === "trial"
-                                        ? t("trialTitle", { n: balance })
-                                        : t("exhaustedTitle")}
+                                    {t("exhaustedTitle")}
                                 </p>
                                 <p className="text-sm text-cc-text-secondary">
-                                    {reminder === "trial"
-                                        ? t("trialSubtitle", { n: balance })
-                                        : t("exhaustedSubtitle")}
+                                    {t("exhaustedSubtitle")}
                                 </p>
                             </div>
                         ) : null}
                         <div className="flex size-14 items-center justify-center rounded-full bg-[var(--cc-brand-tint)]">
                             <Upload className="size-7 text-cc-brand-primary" />
                         </div>
-                        {exhausted ? (
+                        {trial ? (
+                            <div className="flex flex-col items-center gap-1">
+                                <p className="font-headline text-base font-bold text-cc-text-primary">
+                                    {t("trialTitle", { n: balance })}
+                                </p>
+                                <p className="text-sm text-cc-text-secondary">
+                                    {t("trialSubtitle", { n: balance })}
+                                </p>
+                            </div>
+                        ) : exhausted ? (
                             <p className="font-headline text-sm font-semibold text-cc-brand-primary underline">
                                 {t("loginContinue")}
                             </p>
@@ -174,9 +179,11 @@ export function UploadZone(props: {
                         <p className="text-xs text-cc-text-muted">
                             {t("formats")}
                         </p>
-                        <p className="text-xs text-cc-text-muted">
-                            {t("quota", { uploaded: props.uploaded, max: props.maxPages, remaining })}
-                        </p>
+                        {trial ? null : (
+                            <p className="text-xs text-cc-text-muted">
+                                {t("quota", { uploaded: props.uploaded, max: props.maxPages, remaining })}
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
