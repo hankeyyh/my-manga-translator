@@ -1,20 +1,47 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { NextRequest } from "next/server";
-import { UserEntity } from "@/types/entity/user";
+import { SUCCESS_CODE } from "@/types/dto/response";
 import { loadRouteMethod } from "../helper.test";
 
 type CurrentUserResult = {
-    data: UserEntity | null;
+    data: { id: string; email: string; isAnonymous?: boolean } | null;
     error: Error | null;
 };
 
-const checkoutSessionsCreate = jest.fn<
-    (...args: unknown[]) => Promise<{ url: string; }>
->();
+const PLAN_ID = "11111111-1111-4111-8111-111111111111";
 
 const getCurrentUserMock = jest.fn<() => Promise<CurrentUserResult>>();
-
 const createClientMock = jest.fn<() => Promise<Record<string, unknown>>>();
+const getTopUpConfigMock = jest.fn<(id: string) => Promise<{
+    code: number;
+    data: Record<string, unknown> | null;
+    error: Error | null;
+}>>();
+const startUserTransactionMock = jest.fn<(
+    userId: string,
+    topupConfig: Record<string, unknown>,
+    transactionType: string,
+) => Promise<{
+    code: number;
+    data: { id: string; transactionType: string } | null;
+    error: Error | null;
+}>>();
+const updateStripeSessionIdMock = jest.fn<(
+    transactionId: string,
+    sessionId: string,
+) => Promise<{ code: number; data: null; error: Error | null }>>();
+const failUserTransactionMock = jest.fn<(transactionId: string) => Promise<unknown>>();
+const createCheckoutSessionMock = jest.fn<(
+    transactionId: string,
+    priceId: string,
+    transactionType: string,
+    successUrl: string,
+    cancelUrl: string,
+) => Promise<{
+    code: number;
+    data: { sessionId: string; url: string } | null;
+    error: Error | null;
+}>>();
 
 function buildCheckoutRequest(body: Record<string, unknown>) {
     return new NextRequest("http://localhost/api/checkout-sessions", {
@@ -30,17 +57,44 @@ async function loadPost() {
         "POST",
         [
             {
-                moduleName: "@/lib/utils/supabase/server",
+                moduleName: "@/biz/utils/supabase/server",
                 factory: () => ({
                     createServerClient: createClientMock,
                 }),
             },
             {
-                moduleName: "@/lib/repositories/auth/user-repository",
+                moduleName: "@/biz/services/auth/auth-service",
                 factory: () => ({
-                    UserRepository: jest.fn().mockImplementation(() => ({
+                    AuthService: jest.fn().mockImplementation(() => ({
                         getCurrentUser: getCurrentUserMock,
                     })),
+                }),
+            },
+            {
+                moduleName: "@/biz/services/credit/credit-service",
+                factory: () => ({
+                    CreditService: {
+                        fromSupabase: () => ({
+                            getTopUpConfig: getTopUpConfigMock,
+                            startUserTransaction: startUserTransactionMock,
+                            updateStripeSessionId: updateStripeSessionIdMock,
+                            failUserTransaction: failUserTransactionMock,
+                        }),
+                    },
+                }),
+            },
+            {
+                moduleName: "@/biz/services/payment/payment-service",
+                factory: () => ({
+                    PaymentService: jest.fn().mockImplementation(() => ({
+                        createCheckoutSession: createCheckoutSessionMock,
+                    })),
+                }),
+            },
+            {
+                moduleName: "@/biz/utils/stripe/server",
+                factory: () => ({
+                    createStripeClient: () => ({}),
                 }),
             },
             {
@@ -52,64 +106,69 @@ async function loadPost() {
                     }),
                 }),
             },
-            {
-                moduleName: "stripe",
-                factory: () =>
-                    jest.fn().mockImplementation(() => ({
-                        checkout: {
-                            sessions: {
-                                create: checkoutSessionsCreate,
-                            },
-                        },
-                    })),
-            },
-        ]
+        ],
     );
 }
 
 describe("POST /api/checkout-sessions", () => {
     beforeEach(() => {
-        process.env.STRIPE_PRICE_BASIC_MONTHLY = "price_basic_m";
-        process.env.STRIPE_PRICE_BASIC_YEARLY = "price_basic_y";
-        process.env.STRIPE_PRICE_PRO_MONTHLY = "price_pro_m";
-        process.env.STRIPE_PRICE_PRO_YEARLY = "price_pro_y";
-        process.env.STRIPE_PRICE_ULTRA_MONTHLY = "price_ultra_m";
-        process.env.STRIPE_PRICE_ULTRA_YEARLY = "price_ultra_y";
+        getCurrentUserMock.mockReset();
+        createClientMock.mockReset();
+        getTopUpConfigMock.mockReset();
+        startUserTransactionMock.mockReset();
+        updateStripeSessionIdMock.mockReset();
+        failUserTransactionMock.mockReset();
+        createCheckoutSessionMock.mockReset();
 
-        checkoutSessionsCreate.mockResolvedValue({
-            url: "https://checkout.stripe.com/c/pay/cs_test_123",
-        });
         getCurrentUserMock.mockResolvedValue({
-            data: new UserEntity("uid", "u@test.com"),
+            data: { id: "uid", email: "u@test.com", isAnonymous: false },
             error: null,
         });
         createClientMock.mockResolvedValue({});
+        getTopUpConfigMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: {
+                id: PLAN_ID,
+                transactionType: "subscription",
+                stripePriceId: "price_pro_m",
+                isActive: true,
+            },
+            error: null,
+        });
+        startUserTransactionMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: { id: "tx-1", transactionType: "subscription" },
+            error: null,
+        });
+        updateStripeSessionIdMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: null,
+            error: null,
+        });
+        createCheckoutSessionMock.mockResolvedValue({
+            code: SUCCESS_CODE,
+            data: {
+                sessionId: "cs_test_123",
+                url: "https://checkout.stripe.com/c/pay/cs_test_123",
+            },
+            error: null,
+        });
     });
 
-    test("在存在 Origin 时按档位返回 Stripe Checkout URL", async () => {
+    test("正式登录时返回 Stripe Checkout URL", async () => {
         const POST = await loadPost();
-        const response = await POST(
-            buildCheckoutRequest({ tier: "pro", billing: "monthly" })
-        );
+        const response = await POST(buildCheckoutRequest({ id: PLAN_ID }));
 
         expect(response.status).toBe(200);
         await expect(response.json()).resolves.toEqual({
             url: "https://checkout.stripe.com/c/pay/cs_test_123",
         });
-        expect(checkoutSessionsCreate).toHaveBeenCalledWith(
-            expect.objectContaining({
-                mode: "subscription",
-                client_reference_id: "uid",
-                line_items: [{ price: "price_pro_m", quantity: 1 }],
-                metadata: {
-                    tier: "pro",
-                    billing: "monthly",
-                    userId: "uid",
-                },
-                success_url:
-                    "http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url: "http://localhost:3000/",
-            })
+        expect(createCheckoutSessionMock).toHaveBeenCalledWith(
+            "tx-1",
+            "price_pro_m",
+            "subscription",
+            "http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}",
+            "http://localhost:3000/payment/cancel?session_id={CHECKOUT_SESSION_ID}",
         );
     });
 
@@ -119,21 +178,33 @@ describe("POST /api/checkout-sessions", () => {
             error: new Error("未授权"),
         });
         const POST = await loadPost();
-        const response = await POST(
-            buildCheckoutRequest({ tier: "basic", billing: "monthly" })
-        );
+        const response = await POST(buildCheckoutRequest({ id: PLAN_ID }));
 
         expect(response.status).toBe(401);
-        expect(checkoutSessionsCreate).not.toHaveBeenCalled();
+        await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
+        expect(createCheckoutSessionMock).not.toHaveBeenCalled();
+        expect(startUserTransactionMock).not.toHaveBeenCalled();
     });
 
-    test("tier 或 billing 非法时返回 400", async () => {
+    test("匿名会话时返回 401", async () => {
+        getCurrentUserMock.mockResolvedValueOnce({
+            data: { id: "anon", email: "", isAnonymous: true },
+            error: null,
+        });
         const POST = await loadPost();
-        const response = await POST(
-            buildCheckoutRequest({ tier: "enterprise", billing: "monthly" })
-        );
+        const response = await POST(buildCheckoutRequest({ id: PLAN_ID }));
+
+        expect(response.status).toBe(401);
+        await expect(response.json()).resolves.toEqual({ error: "Unauthorized" });
+        expect(createCheckoutSessionMock).not.toHaveBeenCalled();
+        expect(startUserTransactionMock).not.toHaveBeenCalled();
+    });
+
+    test("套餐 id 非法时返回 400", async () => {
+        const POST = await loadPost();
+        const response = await POST(buildCheckoutRequest({ id: "not-a-uuid" }));
 
         expect(response.status).toBe(400);
-        expect(checkoutSessionsCreate).not.toHaveBeenCalled();
+        expect(createCheckoutSessionMock).not.toHaveBeenCalled();
     });
 });

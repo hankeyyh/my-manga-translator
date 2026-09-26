@@ -5,6 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { changeSubscription } from "@/actions/change-subscription";
+import { continueCheckoutOrRedirect } from "@/components/checkout-login-gate";
 import { loadStripeClient } from "@/biz/utils/stripe/client";
 import {
     SUCCESS_CODE,
@@ -30,6 +31,10 @@ export function useChangeSubscription() {
         if (!pendingPlan || isChanging) return;
         setIsChanging(true);
         try {
+            if (!(await continueCheckoutOrRedirect(() => router.push("/auth/login")))) {
+                setPendingPlan(null);
+                return;
+            }
             const result = await changeSubscription({
                 topupConfigId: pendingPlan.id,
             });

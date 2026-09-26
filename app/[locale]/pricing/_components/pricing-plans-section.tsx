@@ -8,6 +8,7 @@ import { SUCCESS_CODE } from "@/types/dto/response";
 import type { TopUpConfig } from "@/types/do/topup-config";
 import type { UserSubscription } from "@/types/do/user-subscription";
 import { CcSectionHeading } from "@/components/cc";
+import { continueCheckoutOrRedirect } from "@/components/checkout-login-gate";
 import { useTranslations } from "next-intl";
 import {
     BillingCycleTabs,
@@ -86,6 +87,9 @@ export function PricingPlansSection({
     const isCanceled = currentSubscription?.status === "canceled";
 
     async function handlePayment(id: string) {
+        if (!(await continueCheckoutOrRedirect(() => router.push("/auth/login")))) {
+            return;
+        }
         try {
             const res = await fetch("/api/checkout-sessions", {
                 method: "POST",
@@ -109,8 +113,11 @@ export function PricingPlansSection({
         }
     }
 
-    function handleSubscriptionPlanClick(plan: TopUpConfig) {
+    async function handleSubscriptionPlanClick(plan: TopUpConfig) {
         if (currentSubscription) {
+            if (!(await continueCheckoutOrRedirect(() => router.push("/auth/login")))) {
+                return;
+            }
             requestChange(plan);
             return;
         }
