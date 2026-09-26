@@ -144,16 +144,6 @@ export function UploadZone(props: {
                             props.compact ? "opacity-0" : "opacity-100",
                         )}
                     >
-                        {exhausted ? (
-                            <div className="flex flex-col items-center gap-1">
-                                <p className="font-headline text-base font-bold text-cc-text-primary">
-                                    {t("exhaustedTitle")}
-                                </p>
-                                <p className="text-sm text-cc-text-secondary">
-                                    {t("exhaustedSubtitle")}
-                                </p>
-                            </div>
-                        ) : null}
                         <div className="flex size-14 items-center justify-center rounded-full bg-[var(--cc-brand-tint)]">
                             <Upload className="size-7 text-cc-brand-primary" />
                         </div>
@@ -167,22 +157,31 @@ export function UploadZone(props: {
                                 </p>
                             </div>
                         ) : exhausted ? (
-                            <p className="font-headline text-sm font-semibold text-cc-brand-primary underline">
-                                {t("loginContinue")}
-                            </p>
+                            <div className="flex flex-col items-center gap-1">
+                                <p className="font-headline text-base font-bold text-cc-text-primary">
+                                    {t("exhaustedTitle")}
+                                </p>
+                                <p className="font-headline text-sm font-semibold text-cc-brand-primary underline">
+                                    {t("loginContinue")}
+                                </p>
+                            </div>
                         ) : (
                             <p className="font-headline text-sm font-semibold text-cc-text-primary">
                                 {t("dropHint")}{" "}
                                 <span className="text-cc-brand-primary underline">{t("browse")}</span>
                             </p>
                         )}
-                        <p className="text-xs text-cc-text-muted">
-                            {t("formats")}
-                        </p>
-                        {trial ? null : (
-                            <p className="text-xs text-cc-text-muted">
-                                {t("quota", { uploaded: props.uploaded, max: props.maxPages, remaining })}
-                            </p>
+                        {exhausted ? null : (
+                            <>
+                                <p className="text-xs text-cc-text-muted">
+                                    {t("formats")}
+                                </p>
+                                {trial ? null : (
+                                    <p className="text-xs text-cc-text-muted">
+                                        {t("quota", { uploaded: props.uploaded, max: props.maxPages, remaining })}
+                                    </p>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
