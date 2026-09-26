@@ -27,9 +27,11 @@ export async function POST(request: NextRequest) {
         const supabase = await createServerClient();
         const authService = new AuthService(new UserRepository(supabase));
         const userResult = await authService.getCurrentUser();
-        if (userResult.error || !userResult.data) {
+        // 匿名会话与未登录相同：不能创建 Stripe Checkout。
+        if (userResult.error || !userResult.data || userResult.data.isAnonymous === true) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+        const user = userResult.data;
 
         // 2. 解析请求体
         const body = await request.json();
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 4. 创建交易记录
-        const userTransResult = await creditService.startUserTransaction(userResult.data.id, topupConfig, topupConfig.transactionType);
+        const userTransResult = await creditService.startUserTransaction(user.id, topupConfig, topupConfig.transactionType);
         if (userTransResult.error) {
             return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
         }

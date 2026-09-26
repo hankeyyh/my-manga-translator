@@ -11,6 +11,7 @@ import {
     CcSectionHeading,
     CcSegmentedControl,
 } from "@/components/cc";
+import { continueCheckoutOrRedirect } from "@/components/checkout-login-gate";
 import { useTranslations } from "next-intl";
 import {
     BillingCycleTabs,
@@ -86,6 +87,9 @@ export function ClientPricingSection({
     const isCanceled = currentSubscription?.status === "canceled";
 
     async function handlePayment(id: string) {
+        if (!(await continueCheckoutOrRedirect(() => router.push("/auth/login")))) {
+            return;
+        }
         try {
             const res = await fetch("/api/checkout-sessions", {
                 method: "POST",
@@ -109,8 +113,11 @@ export function ClientPricingSection({
         }
     }
 
-    function handlePlanClick(plan: TopUpConfig) {
+    async function handlePlanClick(plan: TopUpConfig) {
         if (currentSubscription && pricingTab === "subscription") {
+            if (!(await continueCheckoutOrRedirect(() => router.push("/auth/login")))) {
+                return;
+            }
             requestChange(plan);
             return;
         }
